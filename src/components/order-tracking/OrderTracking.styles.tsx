@@ -13,6 +13,10 @@ export const OrderTrackingContainer = styled.div`
 
   .order {
     &__header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
       border-bottom: 1px solid black;
       padding: 32px;
     }
@@ -20,26 +24,44 @@ export const OrderTrackingContainer = styled.div`
     &__body {
       padding: 32px;
 
-      &__shipping {
+      &__grid {
         display: flex;
-        align-items: center;
-
+        width: 100%;
+        justify-content: space-between;
         margin-bottom: 32px;
-        gap: 4px;
 
-        &--postal-service {
-          font-weight: 600;
+        ${mobile(css`
+          flex-direction: column;
+          gap: 16px;
+        `)}
+
+        &__ending-date,
+        &__left-to-pay,
+        &__shipping,
+        &__shipping-code,
+        &__status {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
         }
 
-        &--code {
+        &__shipping {
           display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 0;
+          flex-direction: column;
 
-          &--copy-icon {
-            padding: 0;
+          &--postal-service {
+            font-weight: 600;
           }
+
+          &--code {
+            &--copy-icon {
+              padding: 0;
+            }
+          }
+        }
+
+        .value {
+          font-weight: 600;
         }
       }
     }

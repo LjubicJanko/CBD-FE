@@ -6,6 +6,7 @@ import { OrderTracking } from '../../types/Order';
 import { xxsMax } from '../../util/breakpoints';
 import { statuses } from '../../util/util';
 import * as Styled from './OrderTracking.styles';
+import classNames from 'classnames';
 
 export type OrderCardComponentProps = {
   order: OrderTracking;
@@ -30,40 +31,62 @@ const OrderTrackingComponent = ({ order }: OrderCardComponentProps) => {
   return (
     <Styled.OrderTrackingContainer className="order">
       <div className="order__header">
-        <h2>{order.name} info</h2>
-        <h3>{order.description}</h3>
+        <h2>
+          {t('order-tracking')}
+          {order.name} info
+        </h2>
+        <h3>
+          {t('description')}
+          {order.description}
+        </h3>
       </div>
       <div className="order__body">
-        {order.status === 'SHIPPED' && (
-          <div className="order__body__shipping">
-            {t('Shipped via: ')}
-            <p className="order__body__shipping--postal-service">
-              {order.postalService} -
-            </p>
-            <p className="order__body__shipping--code">{order.postalCode}</p>
-            {/* <IconButton
+        <div className="order__body__grid">
+          <div className="order__body__grid__left-to-pay">
+            <p>{t('left-to-pay')}</p>
+            <p className={classNames('value')}>{order.amountLeftToPay}</p>
+          </div>
+          {order.status === 'SHIPPED' && (
+            <>
+              <div className="order__body__grid__shipping">
+                <p>{t('shipped-via')}</p>
+                <p
+                  className={classNames(
+                    'value',
+                    'order__body__grid__shipping--postal-service'
+                  )}
+                >
+                  {order.postalService}
+                </p>
+                {/* <IconButton
               className="order__body__shipping--code--copy-icon"
               onClick={() => navigator.clipboard.writeText(order.postalCode)}
               edge="end"
             >
               <ContentCopyIcon />
             </IconButton> */}
+              </div>
+              <div className="order__body__grid__shipping-code">
+                <p>{t('shipping-code')}</p>
+                <p className={classNames('value')}>{order.postalCode}</p>
+              </div>
+            </>
+          )}
+          <div className="order__body__grid__status">
+            <p>{t('status')}</p>
+            <p className={classNames('value')}>{order.status}</p>
           </div>
-        )}
+          <div className="order__body__grid__ending-date">
+            <p>{t('expected')}</p>
+            <p className={classNames('value')}>{order.plannedEndingDate}</p>
+          </div>
+        </div>
         <Stepper
           activeStep={statuses.indexOf(order.status)}
           orientation={width < xxsMax ? 'vertical' : 'horizontal'}
         >
           {steps}
         </Stepper>
-        <div className="order__body__ending-date">
-          {t('Planned ending: ')}
-          <p>{order.plannedEndingDate}</p>
-        </div>
-        <div className="order__body__left-to-pay">
-          {t('Amount left to pay: ')}
-          <p>{order.amountLeftToPay}</p>
-        </div>
       </div>
     </Styled.OrderTrackingContainer>
   );

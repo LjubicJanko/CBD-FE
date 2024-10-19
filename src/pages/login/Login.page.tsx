@@ -4,7 +4,6 @@ import {
   InputAdornment,
   OutlinedInput,
   TextField,
-  Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useContext, useState } from 'react';
@@ -12,6 +11,8 @@ import AuthContext from '../../store/AuthProvider/Auth.context';
 import { LoginData } from '../../types/Auth';
 import * as Styled from './Login.styles';
 import { useNavigate } from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const initialValues: LoginData = {
   username: '',
@@ -50,45 +51,46 @@ const LoginComponent = () => {
   return (
     <Styled.LoginContainer className="login-container">
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
-        <Typography variant="h5" fontWeight={600} mb={2}>
+        {/* <Typography variant="h5" fontWeight={600} mb={2}>
           Login Form
-        </Typography>
-        <TextField
-          label="username"
-          variant="outlined"
-          color="primary"
-          type="text"
-          name="username"
-          placeholder="username"
-          sx={{ mb: 3 }}
-          fullWidth
-          value={formik.values.username}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
-        />
-        <OutlinedInput
-          id="outlined-adornment-password"
-          type={showPassword ? 'text' : 'password'}
-          name="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                onMouseUp={handleMouseUpPassword}
-                edge="end"
-              >
-                {showPassword ? <>off</> : <>on</>}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Password"
-        />
+        </Typography> */}
+        <div className="fields">
+          <TextField
+            label="username"
+            variant="outlined"
+            color="primary"
+            type="text"
+            name="username"
+            placeholder="username"
+            fullWidth
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
+          />
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  onMouseUp={handleMouseUpPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </div>
         <Button
           variant="contained"
           color="primary"

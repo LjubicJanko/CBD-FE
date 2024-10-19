@@ -8,5 +8,12 @@
   "logout": "Излогуј се",
   "enter-order-id": "Унеси идентификациони број",
   "order-tracking-id": "Идентификациони број",
-  "search": "ПРЕТРАЖИ"
+  "search": "ПРЕТРАЖИ",
+  "order-tracking": "Праћење пошиљке: ",
+  "description": "Опис: ",
+  "left-to-pay": "За плаћање",
+  "shipped-via": "Послато преко",
+  "shipping-code": "Код пошиљке",
+  "expected": "Очекивано",
+  "status": "Статус"
 }

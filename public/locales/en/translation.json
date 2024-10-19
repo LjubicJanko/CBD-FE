@@ -8,5 +8,12 @@
   "logout": "Logout",
   "enter-order-id": "Please enter your order id",
   "order-tracking-id": "Order tracking id",
-  "search": "SEARCH"
+  "search": "SEARCH",
+  "order-tracking": "Order tracking: ",
+  "description": "Description: ",
+  "left-to-pay": "Left to pay",
+  "shipped-via": "Shipped via",
+  "shipping-code": "Shipping code",
+  "expected": "Expected",
+  "status": "Status"
 }
