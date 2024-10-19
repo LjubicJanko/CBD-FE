@@ -1,10 +1,10 @@
 import { Chip } from '@mui/material';
 import classNames from 'classnames';
-import { Order } from '../../types/Order';
+import { OrderOverview } from '../../types/Order';
 import * as Styled from './OrderCard.styles';
 
 export type OrderCardComponentProps = {
-  order: Order;
+  order: OrderOverview;
   isSelected?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
@@ -22,7 +22,10 @@ const OrderCardComponent = ({
     >
       <h2 className="title">{order.name}</h2>
       <h3 className="description">{order.description}</h3>
-      <Chip className="status" label={order.status} />
+      <div className="order-card__footer">
+        <p>{order.plannedEndingDate}</p>
+        <Chip className="status" label={order.status} />
+      </div>
     </Styled.OrderCardContainer>
   );
 };

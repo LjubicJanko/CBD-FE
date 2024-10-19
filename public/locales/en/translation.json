@@ -1,0 +1,12 @@
+{
+  "key": "value",
+  "change-language": "Change language",
+  "home": "Home",
+  "menu": "Menu",
+  "about": "About",
+  "go-to-login": "Go to login",
+  "logout": "Logout",
+  "enter-order-id": "Please enter your order id",
+  "order-tracking-id": "Order tracking id",
+  "search": "SEARCH"
+}

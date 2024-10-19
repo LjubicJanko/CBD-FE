@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { tablet } from '../../util/breakpoints';
 
 export const DashboardContainer = styled.div`
   width: 100%;
@@ -7,15 +8,10 @@ export const DashboardContainer = styled.div`
   flex-direction: column;
 
   &.dashboard-page {
-    display: grid;
-    grid-template-areas:
-      'filters search'
-      'orders details';
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 16px;
     padding: 16px;
     padding-left: 32px;
     padding-right: 32px;
+    gap: 32px;
 
     .loader-wrapper {
       display: flex;
@@ -26,7 +22,6 @@ export const DashboardContainer = styled.div`
     }
 
     .filters {
-      grid-area: filters;
       display: flex;
       gap: 8px;
       margin-bottom: 16px;
@@ -44,7 +39,6 @@ export const DashboardContainer = styled.div`
     }
 
     .search {
-      grid-area: search;
       height: 40px;
       display: flex;
       justify-self: end;
@@ -56,14 +50,13 @@ export const DashboardContainer = styled.div`
       .input-base {
         margin-left: 1px;
         flex: 1;
-      };
+      }
       .icon-button {
         padding: 10px;
       }
     }
 
     .orders {
-      grid-area: orders;
       display: flex;
       flex-direction: column;
       gap: 32px;
@@ -71,11 +64,31 @@ export const DashboardContainer = styled.div`
     }
 
     .details {
-      grid-area: details;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       padding: 8px;
       padding-bottom: 16px;
       height: fit-content;
+    }
+  }
+
+  .dashboard-page {
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      ${tablet(css`
+        flex-direction: column;
+      `)}
+    }
+
+    &__body {
+      display: flex;
+      justify-content: space-between;
+      ${tablet(css`
+        flex-direction: column;
+      `)}
     }
   }
 `;

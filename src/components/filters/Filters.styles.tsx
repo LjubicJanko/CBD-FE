@@ -5,6 +5,10 @@ export const FiltersComponentContainer = styled.div`
   gap: 8px;
   margin-bottom: 16px;
 
+  .add-button {
+    margin-right: 32px;
+  };
+
   .filter-button,
   .reset-filters {
     border-radius: 16px;

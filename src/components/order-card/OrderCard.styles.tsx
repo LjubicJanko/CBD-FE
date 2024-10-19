@@ -5,16 +5,13 @@ export const OrderCardContainer = styled.div`
   flex-direction: column;
   padding: 8px;
   gap: 4px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
   max-width: 400px;
   cursor: pointer;
 
   &.order-card {
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
+    min-width: 300px;
 
     .title {
       font-size: 22px;
@@ -35,7 +32,19 @@ export const OrderCardContainer = styled.div`
     }
 
     &--selected {
-      border: 2px solid red;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+
+      border: 1px solid rgba(32, 38, 42, 0.15);
+    }
+  }
+
+  .order-card {
+    &__footer {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 `;

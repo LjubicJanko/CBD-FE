@@ -23,9 +23,6 @@ export const OrderDetailsContainer = styled.div`
     width: fit-content;
     padding: 4px;
     border-radius: 10px;
-    p {
-      background-color: #dcabab;
-    }
   }
 
   button {

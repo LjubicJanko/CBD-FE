@@ -22,6 +22,51 @@ export type OrderStatusHistory = {
   user: string;
 };
 
+export type Payment = {
+  id: number;
+  name: string;
+  amount: number;
+  date: string;
+  type: string;
+  note: string;
+};
+
+export type CreateOrder = {
+  name: string;
+  description: string;
+  plannedEndingDate: string | number;
+  legalEntity: boolean;
+  acquisitionCost: number;
+  salePrice: number;
+};
+
+// export type CreateOrder = {
+//   id: number;
+//   name: string;
+//   description: string;
+//   plannedEndingDate: string;
+//   trackingId: string;
+//   isLegalEntity: boolean;
+//   acquisitionCost: number;
+//   salePrice: number;
+//   salePriceWithTax: number;
+//   priceDifference: number;
+//   amountPaid: number;
+//   amountLeftToPay: number;
+//   amountLeftToPayWithTax: number;
+//   status: OrderStatus;
+//   statusHistory: OrderStatusHistory[];
+//   payments: Payment[];
+// };
+
+export type OrderOverview = {
+  id: number;
+  name: string;
+  description: string;
+  status: OrderStatus;
+  plannedEndingDate: string;
+};
+
 export type Order = {
   id: number;
   trackingId: string;
@@ -29,4 +74,24 @@ export type Order = {
   description: string;
   status: OrderStatus;
   statusHistory: OrderStatusHistory[];
+};
+
+export type OrderTracking = {
+  id: number;
+  trackingId: string;
+  name: string;
+  description: string;
+  status: OrderStatus;
+  statusHistory: OrderStatusHistory[];
+  postalService: string;
+  postalCode: string;
+  plannedEndingDate: string;
+  amountLeftToPay: number;
+};
+
+export type GetAllPaginatedResponse = {
+  page: number;
+  perPage: number;
+  total: number;
+  data: OrderOverview[];
 };

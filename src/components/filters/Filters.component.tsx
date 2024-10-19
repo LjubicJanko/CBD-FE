@@ -5,10 +5,13 @@ import useQueryParams from '../../hooks/useQueryParams';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import * as Styled from './Filters.styles';
 import { OrderStatus } from '../../types/Order';
+import AddIcon from '@mui/icons-material/Add';
+import { useNavigate } from 'react-router-dom';
 
 const FiltersComponent = () => {
   const { params, setQParam, removeQParam, removeMultipleQParams } =
     useQueryParams();
+  const navigate = useNavigate();
 
   const filterButtonsConfig: {
     label: string;
@@ -25,6 +28,11 @@ const FiltersComponent = () => {
         label: 'Print ready',
         key: 'PRINT_READY',
         variant: 'PRINT_READY' in params ? 'contained' : 'outlined',
+      },
+      {
+        label: 'Printing',
+        key: 'PRINTING',
+        variant: 'PRINTING' in params ? 'contained' : 'outlined',
       },
       {
         label: 'Printed',
@@ -58,6 +66,14 @@ const FiltersComponent = () => {
 
   return (
     <Styled.FiltersComponentContainer className="filters">
+      <Button
+        variant="contained"
+        size="large"
+        className="add-button"
+        onClick={() => navigate('/createOrder')}
+      >
+        <AddIcon />
+      </Button>
       {filterButtonsConfig.map(({ key, label, variant }) => (
         <Button
           key={key}

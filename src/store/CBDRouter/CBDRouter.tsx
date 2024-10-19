@@ -16,6 +16,9 @@ import {
 import PrivateRouteWrapper from './PrivateRouteWrapper';
 import { isAuthenticated } from './helpers';
 import { HeaderComponent } from '../../components';
+import OrdersProvider from '../OrdersProvider/Orders.provider';
+import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
+import ErrorPage from './error/ErrorPage';
 // type Route = {
 //   path: string;
 //   component: React.FC | any;
@@ -48,9 +51,9 @@ import { HeaderComponent } from '../../components';
 const Layout: React.FC = () => {
   return (
     <>
-      <HeaderComponent /> {/* Always visible */}
+      <HeaderComponent />
       <main>
-        <Outlet /> {/* Render the routed component here */}
+        <Outlet />
       </main>
     </>
   );
@@ -80,8 +83,16 @@ const CBDRouter: React.FC = (): JSX.Element => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
-        <Route element={<PrivateRouteWrapper />}>
-          <Route path="dashboard" element={<DashboardPage />} />
+        <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
+          <Route
+            path="dashboard"
+            element={
+              <OrdersProvider>
+                <DashboardPage />
+              </OrdersProvider>
+            }
+          />
+          <Route path="createOrder" element={<CreateOrderPage />} />
         </Route>
         <Route
           index

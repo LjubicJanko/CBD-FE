@@ -2,12 +2,16 @@ import { Button, TextField } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { orderService } from '../../api';
 import OrderTrackingComponent from '../../components/order-tracking/OrderTracking.component';
-import { Order } from '../../types/Order';
+import { OrderTracking } from '../../types/Order';
 import * as Styled from './Home.styles';
+import { useTranslation } from 'react-i18next';
 
 const HomeComponent = () => {
-  const [trackingOrderId, setTrackingOrderId] = useState<string | undefined>();
-  const [order, setOrder] = useState<Order>();
+  const { t } = useTranslation();
+  const [trackingOrderId, setTrackingOrderId] = useState<string | undefined>(
+    '56d6ab5a-0905-40d1-a514-33b109990860'
+  );
+  const [order, setOrder] = useState<OrderTracking>();
 
   const trackOrder = useCallback(async () => {
     if (!trackingOrderId) return;
@@ -18,12 +22,11 @@ const HomeComponent = () => {
 
   console.log(trackingOrderId);
   return (
-    <Styled.HomeContainer className="home-page">
-      <h1>Please enter your order id</h1>
-      <div className="search-container">
+    <Styled.HomeContainer className="home">
+      <div className="home__search-container">
         <TextField
           className="order-id-input"
-          label="Order tracking id"
+          label={t('order-tracking-id')}
           value={trackingOrderId}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setTrackingOrderId(event.target.value);
@@ -36,7 +39,7 @@ const HomeComponent = () => {
           variant="outlined"
           onClick={trackOrder}
         >
-          SEARCH
+          {t('search')}
         </Button>
       </div>
       {order && <OrderTrackingComponent order={order} />}

@@ -18,6 +18,7 @@ import ChangeHistoryComponent from './components/ChangeHistory.component';
 export type OrderDetailsProps = {
   order?: Order;
 };
+
 const initialData: Order = {
   id: 0,
   trackingId: '',

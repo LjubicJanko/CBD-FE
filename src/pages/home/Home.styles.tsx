@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { mobile } from '../../util/breakpoints';
 
 export const HomeContainer = styled.div`
   width: 100%;
@@ -7,20 +8,56 @@ export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
   padding-top: 62px;
   gap: 32px;
 
-  .search-container {
+  ${mobile(css`
+    padding: 16px;
+    gap: 16px;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    width: 600px;
-    .order-id-input {
-      color: white;
-      width: 100%;
+    gap: 32px;
+    align-items: center;
+  `)}
+
+  &.home {
+  }
+
+  .home {
+
+    &__title {
+      font-size: 36px;
+      word-break: break-word;
+      text-align: center;
+      ${mobile(css`
+        font-size: 24px;
+      `)}
     }
-    .order-id-search {
-      width: 100%;
+
+    &__search-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      width: 50%;
+
+      ${mobile(css`
+        width: 100%;
+        justify-content: flex-start;
+      `)}
+
+      .order-id-input {
+        color: white;
+        width: 100%;
+      }
+
+      .order-id-search {
+        width: 50%;
+        ${mobile(css`
+          width: 100%;
+        `)}
+      }
     }
   }
 `;
