@@ -1,10 +1,13 @@
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { useFormik } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { orderService } from '../../api';
 import { CreateOrder } from '../../types/Order';
 import * as Styled from './CreateOrder.styles';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { BasicDatePicker } from '../../components';
+import { Dayjs } from 'dayjs';
 
 const emptyOrderData: CreateOrder = {
   name: '',
@@ -17,18 +20,24 @@ const emptyOrderData: CreateOrder = {
 
 const CreateOrderPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const initialValues = useMemo(() => emptyOrderData, []);
+
+  const [plannedEndingDate, setPlannedEndingDate] = useState('');
 
   const onSubmit = useCallback(
     async (values: CreateOrder) => {
       try {
-        await orderService.createOrder(values);
+        await orderService.createOrder({
+          ...values,
+          plannedEndingDate: plannedEndingDate,
+        });
         navigate('/');
       } catch (error) {
         console.error(error);
       }
     },
-    [navigate]
+    [navigate, plannedEndingDate]
   );
 
   const formik = useFormik<CreateOrder>({
@@ -36,9 +45,19 @@ const CreateOrderPage = () => {
     onSubmit,
   });
 
+  const handleDateChange = useCallback((newValue: Dayjs | null) => {
+    console.log(
+      'Selected Date:',
+      newValue ? newValue.format('YYYY-MM-DD') : 'No date selected'
+    );
+    if (newValue) {
+      setPlannedEndingDate(newValue?.format('YYYY-MM-DD'));
+    }
+  }, []);
+
   return (
     <Styled.CreateOrderPageContainer>
-      <h2 className="title">Create new order</h2>
+      {/* <h2 className="title">Create new order</h2> */}
       <form
         autoComplete="off"
         onSubmit={formik.handleSubmit}
@@ -67,14 +86,15 @@ const CreateOrderPage = () => {
           maxRows={4}
         />
 
-        <input
+        <BasicDatePicker label={t('expected')} onChange={handleDateChange} />
+        {/* <input
           type="date"
           className="create-order--ending-date-input"
           id="plannedEndingDate"
           name="plannedEndingDate"
           onChange={formik.handleChange}
           value={formik.values.plannedEndingDate}
-        />
+        /> */}
 
         <TextField
           name="salePrice"

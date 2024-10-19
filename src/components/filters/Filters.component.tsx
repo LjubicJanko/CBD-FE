@@ -1,14 +1,16 @@
 import { Button } from '@mui/material';
 import classNames from 'classnames';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import useQueryParams from '../../hooks/useQueryParams';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import * as Styled from './Filters.styles';
 import { OrderStatus } from '../../types/Order';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
+import OrdersContext from '../../store/OrdersProvider/Orders.context';
 
 const FiltersComponent = () => {
+  const { setSelectedOrderId } = useContext(OrdersContext);
   const { params, setQParam, removeQParam, removeMultipleQParams } =
     useQueryParams();
   const navigate = useNavigate();
@@ -79,7 +81,10 @@ const FiltersComponent = () => {
           key={key}
           className={classNames('filter-button', key)}
           variant={variant}
-          onClick={() => updateQParam(key)}
+          onClick={() => {
+            updateQParam(key);
+            setSelectedOrderId(0);
+          }}
         >
           {label}
         </Button>
@@ -88,9 +93,10 @@ const FiltersComponent = () => {
         className="reset-filters"
         variant={'outlined'}
         startIcon={<ClearOutlinedIcon />}
-        onClick={() =>
-          removeMultipleQParams(filterButtonsConfig.map((x) => x.key))
-        }
+        onClick={() => {
+          removeMultipleQParams(filterButtonsConfig.map((x) => x.key));
+          setSelectedOrderId(0);
+        }}
       >
         Reset
       </Button>
