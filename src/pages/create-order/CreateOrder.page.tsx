@@ -65,7 +65,7 @@ const CreateOrderPage = () => {
       >
         <TextField
           className="create-order--name-input"
-          label="Order name"
+          label={t('order-name')}
           name="name"
           type="text"
           value={formik.values.name}
@@ -76,7 +76,7 @@ const CreateOrderPage = () => {
         />
         <TextField
           className="create-order--description-input"
-          label="Description"
+          label={t('description')}
           name="description"
           type="text"
           value={formik.values.description}
@@ -97,27 +97,27 @@ const CreateOrderPage = () => {
         /> */}
 
         <TextField
+          label={t('sale-price')}
           name="salePrice"
           className="create-order--sale-price-input"
           type="number"
           value={formik.values.salePrice}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          label="Sale price"
         />
 
         <TextField
+          label={t('acquisition-cost')}
           name="acquisitionCost"
           className="create-order--acquisition-cost-input"
           type="number"
           value={formik.values.acquisitionCost}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          label="Acquisition cost"
         />
 
         <FormControlLabel
-          label="is legal entity"
+          label={t('is-legal-entity')}
           className="create-order--is-legal-input"
           control={
             <Checkbox
@@ -135,7 +135,7 @@ const CreateOrderPage = () => {
             size="large"
             onClick={() => navigate('/')}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             className="create-order__footer--submit-button"
@@ -143,7 +143,7 @@ const CreateOrderPage = () => {
             size="large"
             variant="contained"
           >
-            Create
+            {t('create')}
           </Button>
         </div>
       </form>

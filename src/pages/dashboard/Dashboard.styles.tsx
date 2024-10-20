@@ -65,7 +65,7 @@ export const DashboardContainer = styled.div`
 
     .details {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-      padding: 8px;
+      padding: 16px;
       padding-bottom: 16px;
       height: fit-content;
     }

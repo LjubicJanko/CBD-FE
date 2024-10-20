@@ -18,6 +18,7 @@ export const orderStatusArray = [
 export type OrderStatusHistory = {
   id: number;
   status: OrderStatus;
+  closingComment: string;
   timestamp: string;
   user: string;
 };
@@ -74,6 +75,13 @@ export type Order = {
   description: string;
   status: OrderStatus;
   statusHistory: OrderStatusHistory[];
+  acquisitionCost: number;
+  salePrice: number;
+  legalEntity: boolean;
+  postalService: string;
+  postalCode: string;
+  plannedEndingDate: string;
+  amountLeftToPay: number;
 };
 
 export type OrderTracking = {

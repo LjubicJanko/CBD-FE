@@ -11,9 +11,20 @@
   "search": "ПРЕТРАЖИ",
   "order-tracking": "Праћење пошиљке: ",
   "description": "Опис: ",
+  "order-name": "Назив",
+  "sale-price": "Продајна цена",
+  "acquisition-cost": "Набавна цена",
+  "is-legal-entity": "Да ли је правно лице",
   "left-to-pay": "За плаћање",
   "shipped-via": "Послато преко",
   "shipping-code": "Код пошиљке",
-  "expected": "Очекивано",
-  "status": "Статус"
+  "expected": "Очекиван завршетак",
+  "status": "Статус",
+  "move-to-next-state": "Пребаци на следећи корак",
+  "comment": "Коментар",
+  "postal-service": "Доставна служба",
+  "postal-code": "Код за праћење",
+  "move-to": "Пребаци на корак {{STATUS}}",
+  "cancel": "Откажи",
+  "create": "Креирај"
 }

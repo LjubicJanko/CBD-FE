@@ -11,9 +11,20 @@
   "search": "SEARCH",
   "order-tracking": "Order tracking: ",
   "description": "Description: ",
+  "order-name": "Order name",
+  "sale-price": "Sale price",
+  "acquisition-cost": "Acquisition cost",
+  "is-legal-entity": "Is legal entity",
   "left-to-pay": "Left to pay",
   "shipped-via": "Shipped via",
   "shipping-code": "Shipping code",
-  "expected": "Expected"
-  
+  "expected": "Expected",
+  "status": "Status",
+  "move-to-next-state": "Move to next state",
+  "comment": "Comment",
+  "postal-service": "Postal service",
+  "postal-code": "Postal code",
+  "move-to": "Move to {{STATUS}}",
+  "cancel": "Cancel",
+  "create": "Create"
 }

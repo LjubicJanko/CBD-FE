@@ -5,6 +5,7 @@ import { Button, TextField } from '@mui/material';
 import { Order, OrderStatus } from '../../../types/Order';
 import { getNextStatus } from '../../../util/util';
 import { orderService } from '../../../api';
+import { useTranslation } from 'react-i18next';
 
 export type StatusChangeModalProps = {
   currentStatus: OrderStatus;
@@ -27,19 +28,26 @@ const StatusChangeModal = ({
   setOrderData,
   onClose,
 }: StatusChangeModalProps) => {
+  const { t } = useTranslation();
   const initialValues = {};
   const nextStatus = getNextStatus(currentStatus);
 
   const onSubmit = useCallback(
     async (statusData: StatusData) => {
-      const response: Order = await orderService.changeStatus(
-        orderId,
-        statusData
-      );
-      setOrderData(response);
-      console.log(response);
+      try {
+        const response: Order = await orderService.changeStatus(
+          orderId,
+          statusData
+        );
+        setOrderData(response);
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        onClose();
+      }
     },
-    [orderId, setOrderData]
+    [onClose, orderId, setOrderData]
   );
 
   const formik = useFormik<StatusData>({
@@ -49,7 +57,7 @@ const StatusChangeModal = ({
 
   return (
     <Styled.StatusChangeModalContainer
-      title="Move to next state"
+      title={t('move-to-next-state')}
       isOpen={isOpen}
       onClose={() => {
         formik.resetForm();
@@ -60,7 +68,7 @@ const StatusChangeModal = ({
         <div className="fields">
           <TextField
             className="comment-input"
-            label="Comment"
+            label={t('comment')}
             name="closingComment"
             type="text"
             value={formik.values.closingComment}
@@ -73,7 +81,7 @@ const StatusChangeModal = ({
             <>
               <TextField
                 className="postal-service-input"
-                label="Postal service"
+                label={t('postal-service')}
                 name="postalService"
                 type="text"
                 value={formik.values.postalService}
@@ -82,7 +90,7 @@ const StatusChangeModal = ({
               />
               <TextField
                 className="postal-code-input"
-                label="Postal code"
+                label={t('postal-code')}
                 name="postalCode"
                 type="text"
                 value={formik.values.postalCode}
@@ -101,7 +109,7 @@ const StatusChangeModal = ({
           disabled={!formik.isValid}
           className="submit-button"
         >
-          Move to {nextStatus}
+          {t('move-to', { STATUS: nextStatus })}
         </Button>
       </form>
     </Styled.StatusChangeModalContainer>

@@ -6,17 +6,24 @@ import { Dayjs } from 'dayjs';
 
 export type BasicDatePickerProps = {
   onChange: (value: Dayjs | null) => void;
+  value?: Dayjs;
   label?: string;
 };
 
 const BasicDatePickerComponent = ({
   label,
+  value,
   onChange,
 }: BasicDatePickerProps) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label={label} onChange={onChange} />
+        <DatePicker
+          className="date-picker"
+          label={label}
+          onChange={onChange}
+          value={value}
+        />
       </DemoContainer>
     </LocalizationProvider>
   );
