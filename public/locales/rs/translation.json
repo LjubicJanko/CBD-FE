@@ -24,7 +24,17 @@
   "comment": "Коментар",
   "postal-service": "Доставна служба",
   "postal-code": "Код за праћење",
-  "move-to": "Пребаци на корак {{STATUS}}",
+  "move-to": "Пребаци на корак '{{STATUS}}'",
   "cancel": "Откажи",
-  "create": "Креирај"
+  "create": "Креирај",
+  "save-changes": "Сачувај измене",
+  "tracking-id": "Идентификатор праћења: {{TRACKING_ID}}",
+  "timestamp": "Датум преласка",
+  "user": "Корисник",
+  "DESIGN": "Дизајн",
+  "PRINT_READY": "Спремно за штампу",
+  "PRINTING": "Штампа се",
+  "PRINTED": "Одштампано",
+  "SHIPPED": "Послато",
+  "DONE": "Готово"
 }

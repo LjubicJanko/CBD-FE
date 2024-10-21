@@ -12,6 +12,7 @@ import { OrderStatusHistory } from '../../../types/Order';
 import * as Styled from './ChangeHistory.styles';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import { statusColors } from '../../../util/util';
 
 export type ChangeHistoryProps = {
   statusHistory: OrderStatusHistory[];
@@ -39,7 +40,14 @@ const ChangeHistoryComponent = ({ statusHistory }: ChangeHistoryProps) => {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  <Chip label={row.status} />
+                  <Chip
+                    className="status-chip"
+                    label={t(row.status)}
+                    style={{
+                      backgroundColor: statusColors[row.status],
+                      color: 'white',
+                    }}
+                  />
                 </TableCell>
                 <TableCell align="right">{row.user}</TableCell>
                 <TableCell align="right">{row.closingComment}</TableCell>

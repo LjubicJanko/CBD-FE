@@ -21,23 +21,6 @@ export const DashboardContainer = styled.div`
       align-items: center;
     }
 
-    .filters {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-
-      .filter-button,
-      .reset-filters {
-        border-radius: 16px;
-        height: 40px;
-        box-sizing: border-box;
-        max-width: 100%;
-      }
-      .reset-filters {
-        margin-left: 16px;
-      }
-    }
-
     .search {
       height: 40px;
       display: flex;
@@ -46,6 +29,9 @@ export const DashboardContainer = styled.div`
       display: 'flex';
       align-items: 'center';
       width: 400px;
+      ${tablet(css`
+        width: 100%;
+      `)}
 
       .input-base {
         margin-left: 1px;
@@ -68,6 +54,7 @@ export const DashboardContainer = styled.div`
       padding: 16px;
       padding-bottom: 16px;
       height: fit-content;
+      margin-bottom: 16px;
     }
   }
 

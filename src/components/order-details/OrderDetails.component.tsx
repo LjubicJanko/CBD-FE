@@ -72,7 +72,7 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
   return (
     <Styled.OrderDetailsContainer key={orderData.id}>
       <div className="tracking-id">
-        <p>Tracking id: {orderData.trackingId}</p>
+        <p>{t('tracking-id', { TRACKING_ID: orderData.trackingId })}</p>
         <IconButton
           onClick={() => navigator.clipboard.writeText(orderData.trackingId)}
           edge="end"
@@ -122,7 +122,10 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'end' }}>
+        <div
+          className="date-input-container"
+          style={{ display: 'flex', gap: '16px', alignItems: 'end' }}
+        >
           <p>{t('expected')}</p>
           <BasicDatePicker
             value={dayjs(order?.plannedEndingDate)}
@@ -152,7 +155,7 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
           size="medium"
           disabled={!formik.isValid || !formik.dirty}
         >
-          Save changes
+          {t('save-changes')}
         </Button>
       </form>
       <Divider />
@@ -163,7 +166,7 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
         {statuses.map((status) => {
           return (
             <Step key={status}>
-              <StepLabel>{status}</StepLabel>
+              <StepLabel>{t(status)}</StepLabel>
             </Step>
           );
         })}
@@ -178,9 +181,10 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
         // disabled
         onClick={handleOpen}
       >
-        Move to next state
+        {t('move-to-next-state')}
       </Button>
       <StatusChangeModal
+        key={`modal-${open}`}
         orderId={orderData.id}
         currentStatus={orderData.status}
         isOpen={open}

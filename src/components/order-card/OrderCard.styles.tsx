@@ -24,11 +24,9 @@ export const OrderCardContainer = styled.div`
       color: #5e554d;
     }
 
-    .status {
-      width: fit-content;
-      display: flex;
-      align-self: flex-end;
-      margin-top: 8px;
+    .status-chip {
+      /* width: fit-content; */
+      width: 60%;
     }
 
     &--selected {

@@ -4,7 +4,7 @@ import React, { useCallback, useState } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 type OrderSearchProps = {
-  onSearch: (query: string) => void; // Callback to trigger the search
+  onSearch: (query: string) => void;
 };
 
 const OrderSearch: React.FC<OrderSearchProps> = ({ onSearch }) => {
@@ -13,8 +13,8 @@ const OrderSearch: React.FC<OrderSearchProps> = ({ onSearch }) => {
 
   const handleSearch = useCallback(
     (e: React.FormEvent) => {
-      e.preventDefault(); // Prevent form submission from reloading the page
-      onSearch(searchTerm); // Pass the search term to the parent component for searching
+      e.preventDefault(); 
+      onSearch(searchTerm);
       setSearchActive(true);
     },
     [searchTerm, onSearch]
@@ -38,7 +38,7 @@ const OrderSearch: React.FC<OrderSearchProps> = ({ onSearch }) => {
         placeholder="Search orders"
         inputProps={{ 'aria-label': 'search orders' }}
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm on input change
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">

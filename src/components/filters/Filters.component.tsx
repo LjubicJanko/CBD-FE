@@ -8,8 +8,10 @@ import { OrderStatus } from '../../types/Order';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
+import { useTranslation } from 'react-i18next';
 
 const FiltersComponent = () => {
+  const { t } = useTranslation();
   const { setSelectedOrderId } = useContext(OrdersContext);
   const { params, setQParam, removeQParam, removeMultipleQParams } =
     useQueryParams();
@@ -22,37 +24,37 @@ const FiltersComponent = () => {
   }[] = useMemo(
     () => [
       {
-        label: 'Design',
+        label: t('DESIGN'),
         key: 'DESIGN',
         variant: 'DESIGN' in params ? 'contained' : 'outlined',
       },
       {
-        label: 'Print ready',
+        label: t('PRINT_READY'),
         key: 'PRINT_READY',
         variant: 'PRINT_READY' in params ? 'contained' : 'outlined',
       },
       {
-        label: 'Printing',
+        label: t('PRINTING'),
         key: 'PRINTING',
         variant: 'PRINTING' in params ? 'contained' : 'outlined',
       },
       {
-        label: 'Printed',
+        label: t('PRINTED'),
         key: 'PRINTED',
         variant: 'PRINTED' in params ? 'contained' : 'outlined',
       },
       {
-        label: 'Shipped',
+        label: t('SHIPPED'),
         key: 'SHIPPED',
         variant: 'SHIPPED' in params ? 'contained' : 'outlined',
       },
       {
-        label: 'Done',
+        label: t('DONE'),
         key: 'DONE',
         variant: 'DONE' in params ? 'contained' : 'outlined',
       },
     ],
-    [params]
+    [params, t]
   );
 
   const updateQParam = useCallback(
@@ -76,6 +78,17 @@ const FiltersComponent = () => {
       >
         <AddIcon />
       </Button>
+      <Button
+        className="reset-filters"
+        variant={'outlined'}
+        startIcon={<ClearOutlinedIcon />}
+        onClick={() => {
+          removeMultipleQParams(filterButtonsConfig.map((x) => x.key));
+          setSelectedOrderId(0);
+        }}
+      >
+        Reset
+      </Button>
       {filterButtonsConfig.map(({ key, label, variant }) => (
         <Button
           key={key}
@@ -89,17 +102,6 @@ const FiltersComponent = () => {
           {label}
         </Button>
       ))}
-      <Button
-        className="reset-filters"
-        variant={'outlined'}
-        startIcon={<ClearOutlinedIcon />}
-        onClick={() => {
-          removeMultipleQParams(filterButtonsConfig.map((x) => x.key));
-          setSelectedOrderId(0);
-        }}
-      >
-        Reset
-      </Button>
     </Styled.FiltersComponentContainer>
   );
 };

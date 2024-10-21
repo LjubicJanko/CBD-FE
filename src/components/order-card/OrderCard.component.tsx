@@ -1,7 +1,9 @@
 import { Chip } from '@mui/material';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import { OrderOverview } from '../../types/Order';
 import * as Styled from './OrderCard.styles';
+import { statusColors } from '../../util/util';
 
 export type OrderCardComponentProps = {
   order: OrderOverview;
@@ -13,6 +15,7 @@ const OrderCardComponent = ({
   isSelected = false,
   onClick,
 }: OrderCardComponentProps) => {
+  const { t } = useTranslation();
   return (
     <Styled.OrderCardContainer
       className={classNames('order-card', {
@@ -24,7 +27,15 @@ const OrderCardComponent = ({
       <h3 className="description">{order.description}</h3>
       <div className="order-card__footer">
         <p>{order.plannedEndingDate}</p>
-        <Chip className="status" label={order.status} />
+
+        <Chip
+          className="status-chip"
+          label={t(order.status)}
+          style={{
+            backgroundColor: statusColors[order.status],
+            color: 'white',
+          }}
+        />
       </div>
     </Styled.OrderCardContainer>
   );

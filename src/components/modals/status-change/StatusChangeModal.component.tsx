@@ -109,7 +109,7 @@ const StatusChangeModal = ({
           disabled={!formik.isValid}
           className="submit-button"
         >
-          {t('move-to', { STATUS: nextStatus })}
+          {t('move-to', { STATUS: t(nextStatus) })}
         </Button>
       </form>
     </Styled.StatusChangeModalContainer>

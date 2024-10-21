@@ -24,7 +24,17 @@
   "comment": "Comment",
   "postal-service": "Postal service",
   "postal-code": "Postal code",
-  "move-to": "Move to {{STATUS}}",
+  "move-to": "Move to '{{STATUS}}'",
   "cancel": "Cancel",
-  "create": "Create"
+  "create": "Create",
+  "save-changes": "Save changes",
+  "tracking-id": "Tracking id: {{TRACKING_ID}}",
+  "timestamp": "Timestamp",
+  "user": "User",
+  "DESIGN": "Design",
+  "PRINT_READY": "Print ready",
+  "PRINTING": "Printing",
+  "PRINTED": "Printed",
+  "SHIPPED": "Shipped",
+  "DONE": "Done"
 }
