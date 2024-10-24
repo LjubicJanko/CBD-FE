@@ -1,3 +1,9 @@
+export type OrderExecutionStatus =
+  | 'ACTIVE'
+  | 'PAUSED'
+  | 'CANCELED'
+  | 'ARCHIVED';
+
 export type OrderStatus =
   | 'DESIGN'
   | 'PRINT_READY'
@@ -65,6 +71,7 @@ export type OrderOverview = {
   name: string;
   description: string;
   status: OrderStatus;
+  executionStatus: OrderExecutionStatus;
   plannedEndingDate: string;
 };
 
@@ -74,6 +81,7 @@ export type Order = {
   name: string;
   description: string;
   status: OrderStatus;
+  executionStatus: OrderExecutionStatus;
   statusHistory: OrderStatusHistory[];
   acquisitionCost: number;
   salePrice: number;
@@ -101,5 +109,6 @@ export type GetAllPaginatedResponse = {
   page: number;
   perPage: number;
   total: number;
+  totalElements: number;
   data: OrderOverview[];
 };

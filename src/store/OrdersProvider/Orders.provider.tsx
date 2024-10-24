@@ -14,7 +14,29 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [selectedOrderId, setSelectedOrderId] = useState<number>(-1);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const statuses = Object.keys(params);
+      const response = await orderService.getAllPaginated({
+        statuses,
+        page,
+        perPage,
+      });
+      setPage(response.page);
+      setPerPage(response.perPage);
+      setTotal(response.total);
+      setTotalElements(response.totalElements);
+      setOrders(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [page, params, perPage]);
 
   const handleSearch = useCallback(
     async (searchTerm: string) => {
@@ -31,10 +53,10 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
           perPage,
         });
         setSelectedOrderId(-1);
-        setOrders(response);
         setPage(response.page);
         setPerPage(response.perPage);
         setTotal(response.total);
+        setTotalElements(response.totalElements);
         setOrders(response.data);
       } catch (error) {
         console.error(error);
@@ -46,28 +68,8 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   );
 
   useEffect(() => {
-    const fetchFiltered = async () => {
-      try {
-        setIsLoading(true);
-        const statuses = Object.keys(params);
-        const response = await orderService.getAllPaginated({
-          statuses,
-          page,
-          perPage,
-        });
-        setPage(response.page);
-        setPerPage(response.perPage);
-        setTotal(response.total);
-        setOrders(response.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFiltered();
-  }, [page, params, perPage]);
+    fetchOrders();
+  }, [fetchOrders, page, params, perPage]);
 
   useEffect(() => {
     const fetchSelectedOrder = async (orderId: number) => {
@@ -92,11 +94,13 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         orders,
         page,
         total,
-        handleSearch,
-        setPage,
-        selectedOrder,
-        setSelectedOrderId,
+        totalElements,
         isLoading,
+        selectedOrder,
+        handleSearch,
+        fetchOrders,
+        setPage,
+        setSelectedOrderId,
       }}
     >
       {children}

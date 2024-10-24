@@ -1,4 +1,6 @@
+import CancelIcon from '@mui/icons-material/Cancel';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import PauseIcon from '@mui/icons-material/Pause';
 import {
   Button,
   Checkbox,
@@ -10,18 +12,20 @@ import {
   Stepper,
   TextField,
 } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { BasicDatePicker } from '..';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { Order } from '../../types/Order';
+import { xxsMax } from '../../util/breakpoints';
 import { statuses } from '../../util/util';
 import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import * as Styled from './OrderDetails.styles';
 import ChangeHistoryComponent from './components/ChangeHistory.component';
-import { BasicDatePicker } from '..';
-import dayjs, { Dayjs } from 'dayjs';
-import { useTranslation } from 'react-i18next';
-import useResponsiveWidth from '../../hooks/useResponsiveWidth';
-import { xxsMax } from '../../util/breakpoints';
+import { orderService } from '../../api';
+import OrdersContext from '../../store/OrdersProvider/Orders.context';
 
 export type OrderDetailsProps = {
   order?: Order;
@@ -33,6 +37,7 @@ const initialData: Order = {
   name: '',
   description: '',
   status: 'DESIGN',
+  executionStatus: 'ACTIVE',
   statusHistory: [],
   postalService: '',
   postalCode: '',
@@ -45,21 +50,48 @@ const initialData: Order = {
 
 const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
   const { t } = useTranslation();
+
+  const { fetchOrders } = useContext(OrdersContext);
   const [orderData, setOrderData] = useState(order || initialData);
-  const [open, setOpen] = useState(false);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const width = useResponsiveWidth();
 
-  const onSubmit = (values: Order) => {
-    console.log(values);
-  };
+  const onSubmit = useCallback(
+    async (values: Order) => {
+      try {
+        const res = await orderService.updateOrder(values);
+        console.log(res);
+        // todo check if we should refetch, or just update frontend array
+        fetchOrders();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [fetchOrders]
+  );
 
-  const handleOpen = useCallback(() => {
-    setOpen(true);
+  const handleOpenStatusModal = useCallback(() => {
+    setIsStatusModalOpen(true);
   }, []);
 
-  const handleClose = useCallback(() => {
-    setOpen(false);
+  const handleCloseStatusModal = useCallback(() => {
+    setIsStatusModalOpen(false);
   }, []);
+
+  const handlePauseOrder = useCallback(async () => {
+    if (!order?.id) return;
+
+    try {
+      const response: Order = await orderService.pauseOrder(order?.id, 'test');
+
+      console.log(response);
+      fetchOrders();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [fetchOrders, order?.id]);
+
+  const handleCancelOrder = useCallback(() => {}, []);
 
   const initialValues = useMemo(() => orderData, [orderData]);
 
@@ -179,16 +211,38 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
         fullWidth
         size="medium"
         // disabled
-        onClick={handleOpen}
+        onClick={handleOpenStatusModal}
       >
         {t('move-to-next-state')}
       </Button>
+      <Divider />
+      <div className="action-buttons">
+        <Button
+          variant="outlined"
+          color="warning"
+          className="pause-order"
+          onClick={handlePauseOrder}
+          size="large"
+        >
+          <p>pause</p>
+          <PauseIcon />
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          className="cancel-order"
+          onClick={handleCancelOrder}
+        >
+          <p>cancel</p>
+          <CancelIcon />
+        </Button>
+      </div>
       <StatusChangeModal
-        key={`modal-${open}`}
+        key={`status-modal-${isStatusModalOpen}`}
         orderId={orderData.id}
         currentStatus={orderData.status}
-        isOpen={open}
-        onClose={handleClose}
+        isOpen={isStatusModalOpen}
+        onClose={handleCloseStatusModal}
         setOrderData={setOrderData}
       />
     </Styled.OrderDetailsContainer>

@@ -1,4 +1,5 @@
-import { Pagination } from '@mui/material';
+import FolderIcon from '@mui/icons-material/Folder';
+import { Badge, Pagination } from '@mui/material';
 import { useContext } from 'react';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import OrderCardComponent from '../order-card/OrderCard.component';
@@ -9,8 +10,15 @@ export type OrdersListProps = {
 };
 
 const OrdersList = ({ className }: OrdersListProps) => {
-  const { orders, selectedOrder, setSelectedOrderId, page, total, setPage } =
-    useContext(OrdersContext);
+  const {
+    orders,
+    selectedOrder,
+    page,
+    total,
+    totalElements,
+    setPage,
+    setSelectedOrderId,
+  } = useContext(OrdersContext);
 
   const handleChange = (_event: unknown, value: number) => {
     setPage(value - 1);
@@ -31,7 +39,12 @@ const OrdersList = ({ className }: OrdersListProps) => {
           }
         />
       ))}
-      <Pagination count={total} page={page + 1} onChange={handleChange} />
+      <div className="pagination">
+        <Pagination count={total} page={page + 1} onChange={handleChange} />
+        <Badge badgeContent={totalElements} color="primary">
+          <FolderIcon color="action" />
+        </Badge>
+      </div>
     </Styled.OrdersListContainer>
   );
 };

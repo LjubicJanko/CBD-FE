@@ -8,5 +8,6 @@ export type PaginatedResponse<T> = {
   page: number;
   perPage: number;
   total: number;
+  totalElements: number;
   data: T;
 };

@@ -1,5 +1,5 @@
 import { StatusData } from '../../components/modals/status-change/StatusChangeModal.component';
-import { CreateOrder, GetAllPaginatedResponse } from '../../types/Order';
+import { CreateOrder, GetAllPaginatedResponse, Order } from '../../types/Order';
 import client from '../client';
 import privateClient from '../privateClient';
 
@@ -89,6 +89,14 @@ const searchOrders = async (props: SearchProps) =>
 const createOrder = async (data: CreateOrder) =>
   privateClient.post('/orders/create', data).then((res) => res.data);
 
+const updateOrder = async (order: Order) =>
+  privateClient.put(`/orders/${order.id}`, order).then((res) => res.data);
+
+const pauseOrder = async (id: number, pauseComment: string) =>
+  privateClient
+    .put(`/orders/pause/${id}`, pauseComment)
+    .then((res) => res.data);
+
 export default {
   getOrder,
   trackOrder,
@@ -97,4 +105,6 @@ export default {
   changeStatus,
   searchOrders,
   createOrder,
+  updateOrder,
+  pauseOrder,
 };

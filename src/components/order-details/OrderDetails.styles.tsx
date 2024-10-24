@@ -1,13 +1,19 @@
 import styled, { css } from 'styled-components';
-import { mobile } from '../../util/breakpoints';
+import { mobile, tablet } from '../../util/breakpoints';
 
 export const OrderDetailsContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 32px;
 
-  p {
-    margin: 0;
+  .tracking-id {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    width: fit-content;
+    padding: 4px;
+    border-radius: 10px;
   }
 
   form {
@@ -31,13 +37,23 @@ export const OrderDetailsContainer = styled.div`
     }
   }
 
-  .tracking-id {
+  .action-buttons {
     display: flex;
     align-items: center;
-    margin-left: 0;
-    width: fit-content;
-    padding: 4px;
-    border-radius: 10px;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+
+    ${tablet(css`
+      position: relative;
+    `)};
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
   }
 
   button {
