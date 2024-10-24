@@ -10,7 +10,7 @@ export type GetAllPaginatedProps = {
 };
 
 export type SearchProps = {
-  statuses?: string[];
+  searchTerm?: string;
   page?: number;
   perPage?: number;
 };
@@ -75,11 +75,13 @@ const changeStatus = async (id?: number, statusData?: StatusData) => {
     .then((res) => res.data);
 };
 
-const searchOrders = async (props: GetAllPaginatedProps) =>
+const searchOrders = async (props: SearchProps) =>
   privateClient
     .get('/orders/search', {
       params: {
-        searchTerm,
+        searchTerm: props?.searchTerm,
+        page: props.page ?? 0,
+        perPage: props.perPage ?? 5,
       },
     })
     .then((res) => res.data);

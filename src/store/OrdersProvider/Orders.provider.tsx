@@ -17,12 +17,16 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [perPage, setPerPage] = useState(5);
 
   const handleSearch = useCallback(
-    async (query: string) => {
+    async (searchTerm: string) => {
       try {
         setIsLoading(true);
-        const statuses = Object.keys(params);
+        console.log({
+          searchTerm,
+          page,
+          perPage,
+        });
         const response = await orderService.searchOrders({
-          query,
+          searchTerm,
           page,
           perPage,
         });
@@ -38,7 +42,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         setIsLoading(false);
       }
     },
-    [page, params, perPage]
+    [page, perPage]
   );
 
   useEffect(() => {
