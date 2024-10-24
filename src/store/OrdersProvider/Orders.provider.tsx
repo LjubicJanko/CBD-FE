@@ -16,15 +16,30 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [total, setTotal] = useState(0);
   const [perPage, setPerPage] = useState(5);
 
-  const handleSearch = useCallback(async (query: string) => {
-    try {
-      const response: OrderOverview[] = await orderService.searchOrders(query);
-      setSelectedOrderId(-1);
-      setOrders(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  const handleSearch = useCallback(
+    async (query: string) => {
+      try {
+        setIsLoading(true);
+        const statuses = Object.keys(params);
+        const response = await orderService.searchOrders({
+          query,
+          page,
+          perPage,
+        });
+        setSelectedOrderId(-1);
+        setOrders(response);
+        setPage(response.page);
+        setPerPage(response.perPage);
+        setTotal(response.total);
+        setOrders(response.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [page, params, perPage]
+  );
 
   useEffect(() => {
     const fetchFiltered = async () => {

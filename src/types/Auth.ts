@@ -1,7 +1,10 @@
+export type Role = 'admin' | 'manager' | 'manufacturer' | 'consumer';
+
 export type AuthData = {
   id: number;
   token: string;
-  roles: "admin" | "manager" | "manufacturer" | "consumer";
+  roles: Role[];
+  privileges: string[];
 };
 
 export type LoginData = {

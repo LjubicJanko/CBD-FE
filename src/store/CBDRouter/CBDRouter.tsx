@@ -19,6 +19,8 @@ import { HeaderComponent } from '../../components';
 import OrdersProvider from '../OrdersProvider/Orders.provider';
 import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
+import ProtectedRoute from './ProtectedRoute';
+import { privileges } from '../../util/util';
 // type Route = {
 //   path: string;
 //   component: React.FC | any;
@@ -92,7 +94,13 @@ const CBDRouter: React.FC = (): JSX.Element => {
               </OrdersProvider>
             }
           />
-          <Route path="createOrder" element={<CreateOrderPage />} />
+          <Route
+            element={
+              <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
+            }
+          >
+            <Route path="createOrder" element={<CreateOrderPage />} />
+          </Route>
         </Route>
         <Route
           index

@@ -9,6 +9,12 @@ export type GetAllPaginatedProps = {
   perPage?: number;
 };
 
+export type SearchProps = {
+  statuses?: string[];
+  page?: number;
+  perPage?: number;
+};
+
 const trackOrder = async (trackingId: string) =>
   client.get('/orders/track/' + trackingId).then((res) => res.data);
 
@@ -69,7 +75,7 @@ const changeStatus = async (id?: number, statusData?: StatusData) => {
     .then((res) => res.data);
 };
 
-const searchOrders = async (searchTerm: string) =>
+const searchOrders = async (props: GetAllPaginatedProps) =>
   privateClient
     .get('/orders/search', {
       params: {

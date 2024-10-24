@@ -33,3 +33,7 @@ export const getNextStatus = (orderStatus: OrderStatus) => {
 
   return [-1, statuses.length - 1].includes(index) ? '' : statuses[index + 1];
 };
+
+export enum privileges {
+  ORDER_CREATE = 'order-create',
+}

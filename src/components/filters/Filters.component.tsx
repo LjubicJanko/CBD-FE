@@ -1,14 +1,16 @@
+import AddIcon from '@mui/icons-material/Add';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { Button } from '@mui/material';
 import classNames from 'classnames';
 import { useCallback, useContext, useMemo } from 'react';
-import useQueryParams from '../../hooks/useQueryParams';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import * as Styled from './Filters.styles';
-import { OrderStatus } from '../../types/Order';
-import AddIcon from '@mui/icons-material/Add';
-import { useNavigate } from 'react-router-dom';
-import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useHasPrivilege } from '../../hooks/useHasPrivilege';
+import useQueryParams from '../../hooks/useQueryParams';
+import OrdersContext from '../../store/OrdersProvider/Orders.context';
+import { OrderStatus } from '../../types/Order';
+import { privileges } from '../../util/util';
+import * as Styled from './Filters.styles';
 
 const FiltersComponent = () => {
   const { t } = useTranslation();
@@ -16,6 +18,8 @@ const FiltersComponent = () => {
   const { params, setQParam, removeQParam, removeMultipleQParams } =
     useQueryParams();
   const navigate = useNavigate();
+
+  const canAddOrder = useHasPrivilege(privileges.ORDER_CREATE);
 
   const filterButtonsConfig: {
     label: string;
@@ -70,14 +74,16 @@ const FiltersComponent = () => {
 
   return (
     <Styled.FiltersComponentContainer className="filters">
-      <Button
-        variant="contained"
-        size="large"
-        className="add-button"
-        onClick={() => navigate('/createOrder')}
-      >
-        <AddIcon />
-      </Button>
+      {canAddOrder && (
+        <Button
+          variant="contained"
+          size="large"
+          className="add-button"
+          onClick={() => navigate('/createOrder')}
+        >
+          <AddIcon />
+        </Button>
+      )}
       <Button
         className="reset-filters"
         variant={'outlined'}

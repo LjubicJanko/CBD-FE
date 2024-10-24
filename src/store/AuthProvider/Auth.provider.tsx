@@ -16,13 +16,12 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       data: LoginData,
       navigate: (path: string) => void
     ): Promise<boolean> => {
-      console.log(`login with ${data.password}`);
       let status = false;
       try {
         const response = await authService.login(data);
-        const { token, id, roles } = response;
+        const { token, id, roles, privileges } = response;
         setToken(token);
-        setAuthData({ id, roles });
+        setAuthData({ id, roles, privileges });
         localStorageService.saveData(response);
         status = true;
         navigate('/dashboard');
