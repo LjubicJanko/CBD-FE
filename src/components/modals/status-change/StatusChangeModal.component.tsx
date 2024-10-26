@@ -77,7 +77,7 @@ const StatusChangeModal = ({
             multiline
             maxRows={4}
           />
-          {currentStatus === 'PRINTED' && (
+          {currentStatus === 'SHIP_READY' && (
             <>
               <TextField
                 className="postal-service-input"

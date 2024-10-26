@@ -16,7 +16,7 @@ export const OrderDetailsContainer = styled.div`
     border-radius: 10px;
   }
 
-  form {
+  /* form {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -35,7 +35,7 @@ export const OrderDetailsContainer = styled.div`
         padding-top: 0;
       }
     }
-  }
+  } */
 
   .action-buttons {
     display: flex;

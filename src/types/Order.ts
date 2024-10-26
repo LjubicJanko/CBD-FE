@@ -8,15 +8,27 @@ export type OrderStatus =
   | 'DESIGN'
   | 'PRINT_READY'
   | 'PRINTING'
-  | 'PRINTED'
+  | 'SEWING'
+  | 'SHIP_READY'
   | 'SHIPPED'
   | 'DONE';
+
+export enum OrderStatusEnum {
+  DESIGN = 'DESIGN',
+  PRINT_READY = 'PRINT_READY',
+  PRINTING = 'PRINTING',
+  SEWING = 'SEWING',
+  SHIP_READY = 'SHIP_READY',
+  SHIPPED = 'SHIPPED',
+  DONE = 'DONE',
+}
 
 export const orderStatusArray = [
   'DESIGN',
   'PRINT_READY',
   'PRINTING',
-  'PRINTED',
+  'SEWING',
+  'SHIP_READY',
   'SHIPPED',
   'DONE',
 ];

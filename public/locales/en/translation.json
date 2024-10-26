@@ -34,7 +34,8 @@
   "DESIGN": "Design",
   "PRINT_READY": "Print ready",
   "PRINTING": "Printing",
-  "PRINTED": "Printed",
+  "SEWING": "SEWING",
+  "SHIP_READY": "Ready for shipping",
   "SHIPPED": "Shipped",
   "DONE": "Done"
 }

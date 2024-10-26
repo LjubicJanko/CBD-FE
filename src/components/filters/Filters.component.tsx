@@ -43,9 +43,14 @@ const FiltersComponent = () => {
         variant: 'PRINTING' in params ? 'contained' : 'outlined',
       },
       {
-        label: t('PRINTED'),
-        key: 'PRINTED',
-        variant: 'PRINTED' in params ? 'contained' : 'outlined',
+        label: t('SEWING'),
+        key: 'SEWING',
+        variant: 'SEWING' in params ? 'contained' : 'outlined',
+      },
+      {
+        label: t('SHIP_READY'),
+        key: 'SHIP_READY',
+        variant: 'SHIP_READY' in params ? 'contained' : 'outlined',
       },
       {
         label: t('SHIPPED'),
