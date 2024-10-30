@@ -55,8 +55,8 @@ export type CreateOrder = {
   description: string;
   plannedEndingDate: string | number;
   legalEntity: boolean;
-  acquisitionCost: number;
-  salePrice: number;
+  acquisitionCost?: number;
+  salePrice?: number;
 };
 
 // export type CreateOrder = {

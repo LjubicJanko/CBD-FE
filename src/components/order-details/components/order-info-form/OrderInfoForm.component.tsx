@@ -8,6 +8,7 @@ import { Order } from '../../../../types/Order';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
 import { useTranslation } from 'react-i18next';
 import * as Styled from './OrderInfoForm.styles';
+import * as Yup from 'yup';
 
 export type OrderInfoFormProps = {
   orderData: Order;
@@ -15,24 +16,39 @@ export type OrderInfoFormProps = {
 
 const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
   const { t } = useTranslation();
-  const { fetchOrders } = useContext(OrdersContext);
+  const { updateOrderInOverviewList } = useContext(OrdersContext);
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+    description: Yup.string().required('Description is required'),
+    salePrice: Yup.number()
+      .positive()
+      .required('Sale price is required')
+      .min(0),
+    acquisitionCost: Yup.number()
+      .positive()
+      .required('Acquisition cost is required')
+      .min(0),
+  });
 
   const onSubmit = useCallback(
     async (values: Order) => {
       try {
-        const res = await orderService.updateOrder(values);
+        const res: Order = await orderService.updateOrder(values);
         console.log(res);
         // todo check if we should refetch, or just update frontend array
-        fetchOrders();
+        updateOrderInOverviewList(res);
+        // fetchOrders();
       } catch (error) {
         console.error(error);
       }
     },
-    [fetchOrders]
+    [updateOrderInOverviewList]
   );
 
   const formik = useFormik<Order>({
     initialValues: orderData,
+    validationSchema,
     onSubmit,
   });
 
@@ -49,6 +65,8 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
         value={formik.values.name}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
+        error={!!formik.errors.name}
+        helperText={formik.errors.name ?? ''}
         multiline
         maxRows={4}
       />
@@ -58,6 +76,8 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
         name="description"
         type="text"
         value={formik.values.description}
+        error={!!formik.errors.description}
+        helperText={formik.errors.description ?? ''}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         multiline
@@ -69,6 +89,8 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
         type="number"
         name="salePrice"
         value={formik.values.salePrice}
+        error={!!formik.errors.salePrice}
+        helperText={formik.errors.salePrice ?? ''}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
       />
@@ -78,6 +100,8 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
         type="number"
         name="acquisitionCost"
         value={formik.values.acquisitionCost}
+        error={!!formik.errors.acquisitionCost}
+        helperText={formik.errors.acquisitionCost ?? ''}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
       />

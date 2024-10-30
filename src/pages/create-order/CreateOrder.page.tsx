@@ -8,14 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BasicDatePicker } from '../../components';
 import { Dayjs } from 'dayjs';
+import * as Yup from 'yup';
 
 const emptyOrderData: CreateOrder = {
   name: '',
   description: '',
   plannedEndingDate: '',
   legalEntity: false,
-  acquisitionCost: 0,
-  salePrice: 0,
+  acquisitionCost: undefined,
+  salePrice: undefined,
 };
 
 const CreateOrderPage = () => {
@@ -40,10 +41,39 @@ const CreateOrderPage = () => {
     [navigate, plannedEndingDate]
   );
 
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+    description: Yup.string().required('Description is required'),
+    salePrice: Yup.number()
+      .positive()
+      .required('Sale price is required')
+      .min(0),
+    acquisitionCost: Yup.number()
+      .positive()
+      .required('Acquisition cost is required')
+      .min(0),
+  });
+
   const formik = useFormik<CreateOrder>({
     initialValues,
+    validationSchema,
     onSubmit,
   });
+
+  const isSubmitDisabled = useMemo(() => {
+    const hasErrors = Object.keys(formik.errors).length > 0;
+    const isFormNotTouched = !formik.dirty && !formik.touched;
+    const isFormInvalid = !formik.isValid;
+    const isFormEmpty = Object.values(formik.values).every((x) => !x);
+
+    return hasErrors || isFormNotTouched || isFormInvalid || isFormEmpty;
+  }, [
+    formik.dirty,
+    formik.errors,
+    formik.isValid,
+    formik.touched,
+    formik.values,
+  ]);
 
   const handleDateChange = useCallback((newValue: Dayjs | null) => {
     console.log(
@@ -71,9 +101,14 @@ const CreateOrderPage = () => {
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          error={!!formik.errors.name}
+          helperText={formik.errors.name ?? ''}
           multiline
           maxRows={4}
         />
+        {/* {formik.errors.name && (
+          <span className="create-order--error">{formik.errors.name}</span>
+        )} */}
         <TextField
           className="create-order--description-input"
           label={t('description')}
@@ -82,6 +117,8 @@ const CreateOrderPage = () => {
           value={formik.values.description}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          error={!!formik.errors.description}
+          helperText={formik.errors.description ?? ''}
           multiline
           maxRows={4}
         />
@@ -104,6 +141,8 @@ const CreateOrderPage = () => {
           value={formik.values.salePrice}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          error={!!formik.errors.salePrice}
+          helperText={formik.errors.salePrice ?? ''}
         />
 
         <TextField
@@ -114,6 +153,8 @@ const CreateOrderPage = () => {
           value={formik.values.acquisitionCost}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          error={!!formik.errors.acquisitionCost}
+          helperText={formik.errors.acquisitionCost ?? ''}
         />
 
         <FormControlLabel
@@ -142,6 +183,7 @@ const CreateOrderPage = () => {
             type="submit"
             size="large"
             variant="contained"
+            disabled={isSubmitDisabled}
           >
             {t('create')}
           </Button>

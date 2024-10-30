@@ -1,11 +1,19 @@
 import { useFormik } from 'formik';
 import * as Styled from './StatusChangeModal.styles';
-import { useCallback } from 'react';
-import { Button, TextField } from '@mui/material';
+import { useCallback, useContext } from 'react';
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { Order, OrderStatus } from '../../../types/Order';
 import { getNextStatus } from '../../../util/util';
 import { orderService } from '../../../api';
 import { useTranslation } from 'react-i18next';
+import OrdersContext from '../../../store/OrdersProvider/Orders.context';
 
 export type StatusChangeModalProps = {
   currentStatus: OrderStatus;
@@ -21,6 +29,8 @@ export type StatusData = {
   postalService?: string;
 };
 
+const postServices = ['d-express', 'city-express', 'aks', 'post-express'];
+
 const StatusChangeModal = ({
   currentStatus,
   isOpen = false,
@@ -29,7 +39,12 @@ const StatusChangeModal = ({
   onClose,
 }: StatusChangeModalProps) => {
   const { t } = useTranslation();
-  const initialValues = {};
+  const { updateOrderInOverviewList } = useContext(OrdersContext);
+  const initialValues: StatusData = {
+    closingComment: '',
+    postalCode: '',
+    postalService: '',
+  };
   const nextStatus = getNextStatus(currentStatus);
 
   const onSubmit = useCallback(
@@ -40,6 +55,7 @@ const StatusChangeModal = ({
           statusData
         );
         setOrderData(response);
+        updateOrderInOverviewList(response);
         console.log(response);
       } catch (error) {
         console.error(error);
@@ -47,7 +63,7 @@ const StatusChangeModal = ({
         onClose();
       }
     },
-    [onClose, orderId, setOrderData]
+    [onClose, orderId, setOrderData, updateOrderInOverviewList]
   );
 
   const formik = useFormik<StatusData>({
@@ -55,6 +71,7 @@ const StatusChangeModal = ({
     onSubmit,
   });
 
+  console.log(formik);
   return (
     <Styled.StatusChangeModalContainer
       title={t('move-to-next-state')}
@@ -75,11 +92,11 @@ const StatusChangeModal = ({
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             multiline
-            maxRows={4}
+            rows={4}
           />
           {currentStatus === 'SHIP_READY' && (
             <>
-              <TextField
+              {/* <TextField
                 className="postal-service-input"
                 label={t('postal-service')}
                 name="postalService"
@@ -87,7 +104,28 @@ const StatusChangeModal = ({
                 value={formik.values.postalService}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-              />
+              /> */}
+              <FormControl fullWidth>
+                <InputLabel id="postal-service-input-label">
+                  {t('postal-service')}
+                </InputLabel>
+                <Select
+                  labelId="postal-service-input-label"
+                  className="postal-service-input"
+                  id="postal-service-input"
+                  name="postalService"
+                  value={formik.values.postalService}
+                  label={t('postal-service')}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                >
+                  {postServices.map((postService) => (
+                    <MenuItem key={postService} value={postService}>
+                      {t(postService)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <TextField
                 className="postal-code-input"
                 label={t('postal-code')}

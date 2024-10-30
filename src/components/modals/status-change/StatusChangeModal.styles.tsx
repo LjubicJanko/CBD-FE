@@ -9,6 +9,9 @@ export const StatusChangeModalContainer = styled(CbdModal)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    .comment-input {
+      
+    };
     .comment-input,
     .postal-service-input,
     .postal-code-input {

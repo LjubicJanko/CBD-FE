@@ -148,42 +148,46 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
       </Stepper>
 
       <ChangeHistoryComponent statusHistory={orderData.statusHistory} />
-      <Button
-        variant="contained"
-        color="primary"
-        fullWidth
-        size="medium"
-        disabled={isMoveButtonDisabled}
-        onClick={handleOpenStatusModal}
-      >
-        {t('move-to-next-state')}
-      </Button>
-      <Divider />
-      <div className="action-buttons">
-        {canPauseOrder && (
-          <Button
-            variant="outlined"
-            color="warning"
-            className="pause-order"
-            onClick={handlePauseOrder}
-            size="large"
-          >
-            <p>pause</p>
-            <PauseIcon />
-          </Button>
-        )}
-        {canCancelOrder && (
+      {orderData.status !== OrderStatusEnum.DONE && (
+        <>
           <Button
             variant="contained"
-            color="error"
-            className="cancel-order"
-            onClick={handleCancelOrder}
+            color="primary"
+            fullWidth
+            size="medium"
+            disabled={isMoveButtonDisabled}
+            onClick={handleOpenStatusModal}
           >
-            <p>cancel</p>
-            <CancelIcon />
+            {t('move-to-next-state')}
           </Button>
-        )}
-      </div>
+          <Divider />
+          <div className="action-buttons">
+            {canPauseOrder && (
+              <Button
+                variant="outlined"
+                color="warning"
+                className="pause-order"
+                onClick={handlePauseOrder}
+                size="large"
+              >
+                <p>pause</p>
+                <PauseIcon />
+              </Button>
+            )}
+            {canCancelOrder && (
+              <Button
+                variant="contained"
+                color="error"
+                className="cancel-order"
+                onClick={handleCancelOrder}
+              >
+                <p>cancel</p>
+                <CancelIcon />
+              </Button>
+            )}
+          </div>
+        </>
+      )}
       <StatusChangeModal
         key={`status-modal-${isStatusModalOpen}`}
         orderId={orderData.id}

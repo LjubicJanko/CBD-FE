@@ -5,9 +5,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Dayjs } from 'dayjs';
 
 export type BasicDatePickerProps = {
-  onChange: (value: Dayjs | null) => void;
   value?: Dayjs;
   label?: string;
+  errorMessage?: string;
+  onChange: (value: Dayjs | null) => void;
 };
 
 const BasicDatePickerComponent = ({

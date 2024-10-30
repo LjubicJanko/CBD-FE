@@ -28,6 +28,11 @@ export const CreateOrderPageContainer = styled.div`
       padding: 16px;
     `)}
 
+    &--error {
+      font-size: 12px;
+      color: red;
+    }
+
     &--ending-date-input {
       height: 45px;
       width: 200px;

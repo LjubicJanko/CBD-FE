@@ -22,11 +22,7 @@ export const ModalContent = styled.div`
   width: 400px;
   max-width: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative; /* Allows for close button positioning */
-  &.custom-class {
-    /* Example of how to style using an external class */
-    background-color: #f0f0f0;
-  }
+  position: relative;
 `;
 
 // Styled component for close button

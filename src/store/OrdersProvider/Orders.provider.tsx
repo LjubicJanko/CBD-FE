@@ -17,6 +17,14 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
 
+  const updateOrderInOverviewList = useCallback((orderToUpdate: Order) => {
+    setOrders((old) =>
+      old.map((order) =>
+        order.id === orderToUpdate.id ? (orderToUpdate as OrderOverview) : order
+      )
+    );
+  }, []);
+
   const fetchOrders = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -76,6 +84,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       try {
         const response = await orderService.getOrder(orderId);
         setSelectedOrder(response);
+        updateOrderInOverviewList(response);
       } catch (error) {
         console.error(error);
       }
@@ -86,6 +95,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
     } else {
       setSelectedOrder(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrderId]);
 
   return (
@@ -97,6 +107,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         totalElements,
         isLoading,
         selectedOrder,
+        updateOrderInOverviewList,
         handleSearch,
         fetchOrders,
         setPage,
