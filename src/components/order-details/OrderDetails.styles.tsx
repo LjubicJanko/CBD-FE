@@ -32,6 +32,7 @@ export const OrderDetailsContainer = styled.div`
       align-items: center;
       justify-content: center;
       text-align: center;
+      gap: 4px;
     }
   }
 

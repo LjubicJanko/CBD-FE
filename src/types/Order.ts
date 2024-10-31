@@ -6,6 +6,16 @@ export type OrderExecutionStatus =
   | 'CANCELED'
   | 'ARCHIVED';
 
+export const OrderExecutionStatusEnum = {
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  CANCELED: 'CANCELED',
+  ARCHIVED: 'ARCHIVED',
+} as const;
+
+export type OrderExecutionStatusEnum =
+  (typeof OrderExecutionStatusEnum)[keyof typeof OrderExecutionStatusEnum];
+
 export type OrderStatus =
   | 'DESIGN'
   | 'PRINT_READY'

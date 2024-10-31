@@ -1,5 +1,10 @@
 import { StatusData } from '../../components/modals/status-change/StatusChangeModal.component';
-import { CreateOrder, GetAllPaginatedResponse, Order } from '../../types/Order';
+import {
+  CreateOrder,
+  GetAllPaginatedResponse,
+  Order,
+  OrderExecutionStatus,
+} from '../../types/Order';
 import { Payment } from '../../types/Payment';
 import client from '../client';
 import privateClient from '../privateClient';
@@ -93,10 +98,25 @@ const createOrder = async (data: CreateOrder) =>
 const updateOrder = async (order: Order) =>
   privateClient.put(`/orders/${order.id}`, order).then((res) => res.data);
 
+const changeExecutionStatus = async (
+  id: number,
+  executionStatus: OrderExecutionStatus,
+  note: string
+) =>
+  privateClient
+    .put(`/orders/changeExecutionStatus/${id}`, {
+      executionStatus: executionStatus,
+      note: note,
+    })
+    .then((res) => res.data);
+
 const pauseOrder = async (id: number, pauseComment: string) =>
   privateClient
-    .put(`/orders/pause/${id}`, pauseComment)
+    .put(`/orders/pause/${id}`, { pausingComment: pauseComment })
     .then((res) => res.data);
+
+const reactivateOrder = async (id: number) =>
+  privateClient.put(`/orders/reactivate/${id}`).then((res) => res.data);
 
 const addPayment = async (payment: Payment, orderId: number) =>
   privateClient
@@ -112,6 +132,8 @@ export default {
   searchOrders,
   createOrder,
   updateOrder,
+  changeExecutionStatus,
   pauseOrder,
+  reactivateOrder,
   addPayment,
 };

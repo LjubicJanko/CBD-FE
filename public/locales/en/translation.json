@@ -28,6 +28,7 @@
   "postal-code": "Postal code",
   "move-to": "Move to '{{STATUS}}'",
   "cancel": "Cancel",
+  "confirm": "Confirm",
   "create": "Create",
   "save-changes": "Save changes",
   "tracking-id": "Tracking id: {{TRACKING_ID}}",
@@ -48,5 +49,10 @@
   "status-change-history": "Status change history",
   "note": "Note",
   "add": "Add",
-  "payments": "Payments"
+  "payments": "Payments",
+  "pause": "Pause",
+  "pause-reason": "Reason to pause",
+  "reactivate": "Reactivate",
+  "reactivate-reason": "Reason to reactivate",
+  "cancel-reason": "Reason to cancel"
 }

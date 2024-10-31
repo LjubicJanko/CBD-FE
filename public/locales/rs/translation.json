@@ -29,6 +29,7 @@
   "move-to": "Пребаци на корак '{{STATUS}}'",
   "cancel": "Откажи",
   "create": "Креирај",
+  "confirm": "Потврди",
   "save-changes": "Сачувај измене",
   "tracking-id": "Идентификатор праћења: {{TRACKING_ID}}",
   "timestamp": "Датум преласка",
@@ -48,5 +49,10 @@
   "status-change-history": "Историја промене статуса",
   "note": "Белешка",
   "add": "Додај",
-  "payments": "Уплате"
+  "payments": "Уплате",
+  "pause": "Паузирај",
+  "pause-reason": "Разлог паузирања",
+  "reactivate": "Реактивирај",
+  "reactivate-reason": "Разлог реактивирања",
+  "cancel-reason": "Разлог отказивања"
 }
