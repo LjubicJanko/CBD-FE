@@ -1,9 +1,6 @@
-import CancelIcon from '@mui/icons-material/Cancel';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import PauseIcon from '@mui/icons-material/Pause';
-import { Button, Divider, IconButton } from '@mui/material';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button, Divider, IconButton } from '@mui/material';
 import { orderService } from '../../api';
 import { usePrivileges } from '../../hooks/usePrivileges';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
@@ -12,27 +9,19 @@ import {
   OrderExecutionStatusEnum,
   OrderStatusEnum,
 } from '../../types/Order';
-import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import * as Styled from './OrderDetails.styles';
 import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
+import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import ConfirmModal from '../modals/confirm-modal/ConfirmModal.component';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
+import CancelIcon from '@mui/icons-material/Cancel';
 
-export type OrderDetailsProps = {
-  order?: Order;
-};
-
-export type ConfirmModalProps = {
-  open: boolean;
-  text: string;
-  onConfirm: (note: string) => void;
-  onCancel: () => void;
-};
-
-const initialData: Order = {
+const initialOrderData: Order = {
   id: 0,
   trackingId: '',
   name: '',
@@ -51,199 +40,145 @@ const initialData: Order = {
   payments: [],
 };
 
-const EMPTY_CONFIRM_MODAL_PROPS: ConfirmModalProps = {
+type ConfirmModalProps = {
+  open: boolean;
+  text: string;
+  onConfirm: (note: string) => void;
+  onCancel: () => void;
+};
+
+const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   open: false,
   text: '',
   onConfirm: () => {},
   onCancel: () => {},
 };
 
-const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
+type ButtonColors =
+  | 'inherit'
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'error'
+  | 'info'
+  | 'warning';
+
+export type OrderDetailsProps = { order?: Order };
+
+const OrderDetailsComponent = () => {
   const { t } = useTranslation();
-
-  const { selectedOrder, isOrderUpdating, fetchOrders } =
+  const { selectedOrder, isOrderUpdating, fetchOrders, setSelectedOrder } =
     useContext(OrdersContext);
+  const privileges = usePrivileges();
 
-  const {
-    canEditData,
-    canCancelOrder,
-    canPauseOrder,
-    canMoveToPrintReady,
-    canMoveToPrinting,
-    canMoveToSewing,
-    canMoveToShipReady,
-    canMoveToShipped,
-    canMoveToDone,
-  } = usePrivileges();
-
-  const [orderData, setOrderData] = useState(order || initialData);
+  const [orderData, setOrderData] = useState(selectedOrder || initialOrderData);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-  const [confirmModalProps, setConfirmModalProps] = useState<ConfirmModalProps>(
-    EMPTY_CONFIRM_MODAL_PROPS
-  );
+  const [confirmModalProps, setConfirmModalProps] =
+    useState(EMPTY_CONFIRM_MODAL);
 
   const isMoveButtonDisabled = useMemo(() => {
-    switch (order?.status) {
-      case OrderStatusEnum.DESIGN:
-        return !canMoveToPrintReady;
-      case OrderStatusEnum.PRINT_READY:
-        return !canMoveToPrinting;
-      case OrderStatusEnum.PRINTING:
-        return !canMoveToSewing;
-      case OrderStatusEnum.SEWING:
-        return !canMoveToShipReady;
-      case OrderStatusEnum.SHIP_READY:
-        return !canMoveToShipped;
-      case OrderStatusEnum.SHIPPED:
-        return !canMoveToDone;
-      case OrderStatusEnum.DONE:
-        return true;
-      default:
-        return true;
-    }
-  }, [
-    canMoveToPrintReady,
-    canMoveToPrinting,
-    canMoveToSewing,
-    canMoveToShipReady,
-    canMoveToShipped,
-    canMoveToDone,
-    order?.status,
-  ]);
+    const movePermissions = {
+      DESIGN: privileges.canMoveToPrintReady,
+      PRINT_READY: privileges.canMoveToPrinting,
+      PRINTING: privileges.canMoveToSewing,
+      SEWING: privileges.canMoveToShipReady,
+      SHIP_READY: privileges.canMoveToShipped,
+      SHIPPED: privileges.canMoveToDone,
+      DONE: false,
+    };
+    return !movePermissions[selectedOrder?.status as OrderStatusEnum];
+  }, [privileges, selectedOrder?.status]);
 
-  const shouldShowPause = useMemo(
-    () =>
-      canPauseOrder &&
-      order?.executionStatus === OrderExecutionStatusEnum.ACTIVE,
-    [canPauseOrder, order?.executionStatus]
+  const isExecutionStatus = (status: OrderExecutionStatusEnum) =>
+    selectedOrder?.executionStatus === status;
+
+  const actionButtons = [
+    {
+      show:
+        privileges.canPauseOrder &&
+        isExecutionStatus(OrderExecutionStatusEnum.ACTIVE),
+      label: t('pause'),
+      color: 'warning' as ButtonColors,
+      icon: <PauseIcon />,
+      onClick: () => openConfirmModal(t('pause-reason'), handlePauseOrder),
+    },
+    {
+      show:
+        privileges.canPauseOrder &&
+        isExecutionStatus(OrderExecutionStatusEnum.PAUSED),
+      label: t('reactivate'),
+      color: 'success' as ButtonColors,
+      icon: <ReplayIcon />,
+      onClick: () =>
+        openConfirmModal(t('reactivate-reason'), handleReactivateOrder),
+    },
+    {
+      show:
+        privileges.canCancelOrder &&
+        ['ACTIVE', 'PAUSED'].includes(selectedOrder?.executionStatus || ''),
+      label: t('cancel'),
+      color: 'error' as ButtonColors,
+      icon: <CancelIcon />,
+      onClick: () => openConfirmModal(t('cancel-reason'), handleCancelOrder),
+    },
+  ];
+
+  const resetConfirmModal = useCallback(
+    () => setConfirmModalProps(EMPTY_CONFIRM_MODAL),
+    []
   );
 
-  const shouldShowReactivate = useMemo(
-    () =>
-      canPauseOrder &&
-      order?.executionStatus === OrderExecutionStatusEnum.PAUSED,
-    [canPauseOrder, order?.executionStatus]
+  const openConfirmModal = useCallback(
+    (text: string, onConfirm: (note: string) => void) => {
+      setConfirmModalProps({
+        open: true,
+        text,
+        onConfirm,
+        onCancel: resetConfirmModal,
+      });
+    },
+    [resetConfirmModal]
   );
 
-  const shouldShowCancel = useMemo(
-    () =>
-      ['ACTIVE', 'PAUSED'].includes(
-        order?.executionStatus as OrderExecutionStatusEnum
-      ) && canCancelOrder,
-    [canCancelOrder, order?.executionStatus]
-  );
-
-  const handleOpenStatusModal = useCallback(() => {
-    setIsStatusModalOpen(true);
-  }, []);
-
-  const handleCloseStatusModal = useCallback(() => {
-    setIsStatusModalOpen(false);
-  }, []);
-
-  const resetConfirmModalProps = useCallback(() => {
-    setConfirmModalProps(EMPTY_CONFIRM_MODAL_PROPS);
-  }, []);
-
-  const handlePauseOrder = useCallback(
-    async (note: string) => {
-      if (!order?.id) return;
-
+  const changeOrderStatus = useCallback(
+    async (status: OrderExecutionStatusEnum, note: string) => {
+      if (!selectedOrder?.id) return;
+      setSelectedOrder(null);
       try {
-        const response: Order = await orderService.changeExecutionStatus(
-          order?.id,
-          OrderExecutionStatusEnum.PAUSED,
+        const orderResponse = await orderService.changeExecutionStatus(
+          selectedOrder.id,
+          status,
           note
         );
-
-        console.log(response);
         fetchOrders();
+        setSelectedOrder(orderResponse);
       } catch (error) {
         console.error(error);
       }
-
-      resetConfirmModalProps();
+      resetConfirmModal();
     },
-    [fetchOrders, order?.id, resetConfirmModalProps]
+    [fetchOrders, selectedOrder?.id, resetConfirmModal, setSelectedOrder]
   );
 
-  const handleReactivateOrder = useCallback(
-    async (note: string) => {
-      if (!order?.id) return;
+  const handlePauseOrder = (note: string) =>
+    changeOrderStatus(OrderExecutionStatusEnum.PAUSED, note);
+  const handleReactivateOrder = (note: string) =>
+    changeOrderStatus(OrderExecutionStatusEnum.ACTIVE, note);
+  const handleCancelOrder = (note: string) =>
+    changeOrderStatus(OrderExecutionStatusEnum.CANCELED, note);
 
-      try {
-        const response: Order = await orderService.changeExecutionStatus(
-          order?.id,
-          OrderExecutionStatusEnum.ACTIVE,
-          note
-        );
-
-        console.log(response);
-        fetchOrders();
-      } catch (error) {
-        console.error(error);
-      }
-
-      resetConfirmModalProps();
-    },
-    [fetchOrders, order?.id, resetConfirmModalProps]
+  const toggleStatusModal = useCallback(
+    () => setIsStatusModalOpen((prev) => !prev),
+    []
   );
 
-  const handleCancelOrder = useCallback(
-    async (note: string) => {
-      if (!order?.id) return;
+  if (!orderData.id) return null;
 
-      try {
-        const response: Order = await orderService.changeExecutionStatus(
-          order?.id,
-          OrderExecutionStatusEnum.CANCELED,
-          note
-        );
-
-        console.log(response);
-        fetchOrders();
-      } catch (error) {
-        console.error(error);
-      }
-
-      resetConfirmModalProps();
-    },
-    [fetchOrders, order?.id, resetConfirmModalProps]
-  );
-
-  const handleOpenPauseModal = useCallback(() => {
-    setConfirmModalProps({
-      open: true,
-      text: t('pause-reason'),
-      onConfirm: handlePauseOrder,
-      onCancel: resetConfirmModalProps,
-    });
-  }, [handlePauseOrder, resetConfirmModalProps, t]);
-
-  const handleOpenReactivateModal = useCallback(() => {
-    setConfirmModalProps({
-      open: true,
-      text: t('reactivate-reason'),
-      onConfirm: handleReactivateOrder,
-      onCancel: resetConfirmModalProps,
-    });
-  }, [handleReactivateOrder, resetConfirmModalProps, t]);
-
-  const handleOpenCancelModal = useCallback(() => {
-    setConfirmModalProps({
-      open: true,
-      text: t('cancel-reason'),
-      onConfirm: handleCancelOrder,
-      onCancel: resetConfirmModalProps,
-    });
-  }, [handleCancelOrder, resetConfirmModalProps, t]);
-
-  if (!orderData.id) return <></>;
+  if (isOrderUpdating)
+    return <Styled.OrderDetailsContainer>loading</Styled.OrderDetailsContainer>;
 
   return (
-    <Styled.OrderDetailsContainer
-      key={isOrderUpdating ? selectedOrder?.id : selectedOrder?.name}
-    >
+    <Styled.OrderDetailsContainer key={selectedOrder?.id}>
       <div className="tracking-id">
         <p>{t('tracking-id', { TRACKING_ID: orderData.trackingId })}</p>
         <IconButton
@@ -254,8 +189,11 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
         </IconButton>
       </div>
       <Divider />
-      {canEditData && <OrderInfoForm orderData={orderData} />}
-      {!canEditData && <OrderInfoOverview orderData={orderData} />}
+      {privileges.canEditData ? (
+        <OrderInfoForm />
+      ) : (
+        <OrderInfoOverview orderData={orderData} />
+      )}
       <Divider />
       <OrderPayments payments={orderData.payments} orderId={orderData.id} />
       <Divider />
@@ -271,56 +209,35 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
             fullWidth
             size="medium"
             disabled={isMoveButtonDisabled}
-            onClick={handleOpenStatusModal}
+            onClick={toggleStatusModal}
           >
             {t('move-to-next-state')}
           </Button>
           <Divider />
           <div className="action-buttons">
-            {shouldShowPause && (
-              <Button
-                variant="outlined"
-                color="warning"
-                className="pause-order"
-                onClick={handleOpenPauseModal}
-                size="large"
-              >
-                <p>{t('pause')}</p>
-                <PauseIcon />
-              </Button>
-            )}
-            {shouldShowReactivate && (
-              <Button
-                variant="outlined"
-                color="success"
-                className="reactivate-order"
-                onClick={handleOpenReactivateModal}
-                size="large"
-              >
-                <p>{t('reactivate')}</p>
-                <ReplayIcon />
-              </Button>
-            )}
-            {shouldShowCancel && (
-              <Button
-                variant="contained"
-                color="error"
-                className="cancel-order"
-                onClick={handleOpenCancelModal}
-              >
-                <p>{t('cancel')}</p>
-                <CancelIcon />
-              </Button>
+            {actionButtons.map(
+              ({ show, label, color, icon, onClick }, index) =>
+                show && (
+                  <Button
+                    key={index}
+                    variant="outlined"
+                    color={color}
+                    onClick={onClick}
+                    size="large"
+                  >
+                    <p>{label}</p>
+                    {icon}
+                  </Button>
+                )
             )}
           </div>
         </>
       )}
       <StatusChangeModal
-        key={`status-modal-${isStatusModalOpen}`}
         orderId={orderData.id}
         currentStatus={orderData.status}
         isOpen={isStatusModalOpen}
-        onClose={handleCloseStatusModal}
+        onClose={toggleStatusModal}
         setOrderData={setOrderData}
       />
       <ConfirmModal

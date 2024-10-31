@@ -27,8 +27,8 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   }, []);
 
   const fetchOrders = useCallback(async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const statuses = Object.keys(params);
       const response = await orderService.getAllPaginated({
         statuses,

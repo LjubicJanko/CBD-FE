@@ -54,5 +54,10 @@
   "pause-reason": "Reason to pause",
   "reactivate": "Reactivate",
   "reactivate-reason": "Reason to reactivate",
-  "cancel-reason": "Reason to cancel"
+  "cancel-reason": "Reason to cancel",
+  "ACCOUNT": "Account",
+  "CASH": "Cash",
+  "INVOICE": "Invoice",
+  "required": "Required field",
+  "must-be-positive": "Number must be positive"
 }

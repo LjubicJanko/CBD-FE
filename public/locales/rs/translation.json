@@ -54,5 +54,10 @@
   "pause-reason": "Разлог паузирања",
   "reactivate": "Реактивирај",
   "reactivate-reason": "Разлог реактивирања",
-  "cancel-reason": "Разлог отказивања"
+  "cancel-reason": "Разлог отказивања",
+  "ACCOUNT": "На рачун",
+  "CASH": "Кеш",
+  "INVOICE": "По предрачуну",
+  "required": "Обавезно поље",
+  "must-be-positive": "Број мора бити већи од нуле"
 }

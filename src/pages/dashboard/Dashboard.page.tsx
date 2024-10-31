@@ -30,7 +30,7 @@ const DashboardPage = () => {
             <div className="details">
               <OrderDetailsComponent
                 key={selectedOrder.id}
-                order={selectedOrder}
+                // order={selectedOrder}
               />
             </div>
           )}

@@ -110,7 +110,7 @@ const StatusChangeModal = ({
                 >
                   {postServices.map((postService) => (
                     <MenuItem key={postService} value={postService}>
-                      {t(postService)}
+                      {postService}
                     </MenuItem>
                   ))}
                 </Select>

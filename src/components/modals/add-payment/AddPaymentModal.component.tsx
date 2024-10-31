@@ -45,7 +45,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 
   const validationSchema = Yup.object({
     payer: Yup.string().required(t('required')),
-    amount: Yup.number().required(t('required')).positive(t('mustBePositive')),
+    amount: Yup.number().required(t('required')).positive(t('must-be-positive')),
     dateOfTransaction: Yup.string().required(t('required')),
     paymentMethod: Yup.string().required(t('required')),
     note: Yup.string(),
@@ -53,6 +53,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 
   const onSubmit = useCallback(
     async (values: PaymentData) => {
+      setSelectedOrder(null);
       const newPayment: Payment = {
         id: Date.now(),
         payer: values.payer,

@@ -102,13 +102,14 @@ const changeExecutionStatus = async (
   id: number,
   executionStatus: OrderExecutionStatus,
   note: string
-) =>
-  privateClient
+) => {
+  return privateClient
     .put(`/orders/changeExecutionStatus/${id}`, {
-      executionStatus: executionStatus,
-      note: note,
+      executionStatus,
+      note,
     })
     .then((res) => res.data);
+};
 
 const pauseOrder = async (id: number, pauseComment: string) =>
   privateClient

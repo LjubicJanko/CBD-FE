@@ -10,13 +10,29 @@ import { useTranslation } from 'react-i18next';
 import * as Styled from './OrderInfoForm.styles';
 import * as Yup from 'yup';
 
-export type OrderInfoFormProps = {
-  orderData: Order;
+const initialOrderData: Order = {
+  id: 0,
+  trackingId: '',
+  name: '',
+  description: '',
+  status: 'DESIGN',
+  executionStatus: 'ACTIVE',
+  statusHistory: [],
+  postalService: '',
+  postalCode: '',
+  plannedEndingDate: '',
+  amountLeftToPay: 0,
+  legalEntity: false,
+  acquisitionCost: 0,
+  salePrice: 0,
+  amountPaid: 0,
+  payments: [],
 };
 
-const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
+const OrderInfoForm = () => {
   const { t } = useTranslation();
-  const { updateOrderInOverviewList } = useContext(OrdersContext);
+  const { selectedOrder, setSelectedOrder, updateOrderInOverviewList } =
+    useContext(OrdersContext);
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
@@ -33,18 +49,20 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
 
   const onSubmit = useCallback(
     async (values: Order) => {
+      setSelectedOrder(null);
       try {
         const res: Order = await orderService.updateOrder(values);
         updateOrderInOverviewList(res);
+        setSelectedOrder(res);
       } catch (error) {
         console.error(error);
       }
     },
-    [updateOrderInOverviewList]
+    [setSelectedOrder, updateOrderInOverviewList]
   );
 
   const formik = useFormik<Order>({
-    initialValues: orderData,
+    initialValues: selectedOrder ?? initialOrderData,
     validationSchema,
     onSubmit,
   });
@@ -106,9 +124,9 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
         <dt>{t('price-difference')}</dt>
         <dd>{formik.values.salePrice - formik.values.acquisitionCost}</dd>
         <dt>{t('paid')}</dt>
-        <dd>{orderData.amountPaid}</dd>
+        <dd>{selectedOrder?.amountPaid}</dd>
         <dt>{t('left-to-pay')}</dt>
-        <dd>{orderData.amountLeftToPay}</dd>
+        <dd>{selectedOrder?.amountLeftToPay}</dd>
       </dl>
       <div
         className="date-input-container"
@@ -116,7 +134,7 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
       >
         <p>{t('expected')}</p>
         <BasicDatePicker
-          value={dayjs(orderData?.plannedEndingDate)}
+          value={dayjs(selectedOrder?.plannedEndingDate)}
           onChange={(value: Dayjs | null) => {
             console.log(value);
           }}
