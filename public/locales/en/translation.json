@@ -14,7 +14,9 @@
   "order-name": "Order name",
   "sale-price": "Sale price",
   "acquisition-cost": "Acquisition cost",
+  "price-difference": "Price difference",
   "is-legal-entity": "Is legal entity",
+  "paid": "Paid",
   "left-to-pay": "Left to pay",
   "shipped-via": "Shipped via",
   "shipping-code": "Shipping code",
@@ -37,5 +39,14 @@
   "SEWING": "SEWING",
   "SHIP_READY": "Ready for shipping",
   "SHIPPED": "Shipped",
-  "DONE": "Done"
+  "DONE": "Done",
+  "add-payment": "Add payment",
+  "payer": "Payer",
+  "amount": "Amount",
+  "payment-method": "Payment method",
+  "transaction-date": "Transaction date",
+  "status-change-history": "Status change history",
+  "note": "Note",
+  "add": "Add",
+  "payments": "Payments"
 }

@@ -35,10 +35,7 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
     async (values: Order) => {
       try {
         const res: Order = await orderService.updateOrder(values);
-        console.log(res);
-        // todo check if we should refetch, or just update frontend array
         updateOrderInOverviewList(res);
-        // fetchOrders();
       } catch (error) {
         console.error(error);
       }
@@ -105,6 +102,14 @@ const OrderInfoForm = ({ orderData }: OrderInfoFormProps) => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
       />
+      <dl className="order-const-difference">
+        <dt>{t('price-difference')}</dt>
+        <dd>{formik.values.salePrice - formik.values.acquisitionCost}</dd>
+        <dt>{t('paid')}</dt>
+        <dd>{orderData.amountPaid}</dd>
+        <dt>{t('left-to-pay')}</dt>
+        <dd>{orderData.amountLeftToPay}</dd>
+      </dl>
       <div
         className="date-input-container"
         style={{ display: 'flex', gap: '16px', alignItems: 'end' }}

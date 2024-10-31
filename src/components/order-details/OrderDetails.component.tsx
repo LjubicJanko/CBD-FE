@@ -1,28 +1,19 @@
 import CancelIcon from '@mui/icons-material/Cancel';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import PauseIcon from '@mui/icons-material/Pause';
-import {
-  Button,
-  Divider,
-  IconButton,
-  Step,
-  StepLabel,
-  Stepper,
-} from '@mui/material';
+import { Button, Divider, IconButton } from '@mui/material';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { orderService } from '../../api';
 import { usePrivileges } from '../../hooks/usePrivileges';
-import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import { Order, OrderStatusEnum } from '../../types/Order';
-import { xxsMax } from '../../util/breakpoints';
-import { statuses } from '../../util/util';
 import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import * as Styled from './OrderDetails.styles';
 import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
+import OrderPayments from './components/order-payments/OrderPayments.component';
 
 export type OrderDetailsProps = {
   order?: Order;
@@ -43,13 +34,15 @@ const initialData: Order = {
   legalEntity: false,
   acquisitionCost: 0,
   salePrice: 0,
+  amountPaid: 0,
+  payments: [],
 };
 
 const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
   const { t } = useTranslation();
 
-  const { fetchOrders } = useContext(OrdersContext);
-  const width = useResponsiveWidth();
+  const { selectedOrder, isOrderUpdating, fetchOrders } =
+    useContext(OrdersContext);
 
   const {
     canEditData,
@@ -119,8 +112,11 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
   const handleCancelOrder = useCallback(() => {}, []);
 
   if (!orderData.id) return <></>;
+
   return (
-    <Styled.OrderDetailsContainer key={orderData.id}>
+    <Styled.OrderDetailsContainer
+      key={isOrderUpdating ? selectedOrder?.id : selectedOrder?.name}
+    >
       <div className="tracking-id">
         <p>{t('tracking-id', { TRACKING_ID: orderData.trackingId })}</p>
         <IconButton
@@ -134,20 +130,12 @@ const OrderDetailsComponent = ({ order }: OrderDetailsProps) => {
       {canEditData && <OrderInfoForm orderData={orderData} />}
       {!canEditData && <OrderInfoOverview orderData={orderData} />}
       <Divider />
-      <Stepper
-        activeStep={statuses.indexOf(orderData.status)}
-        orientation={width < xxsMax ? 'vertical' : 'horizontal'}
-      >
-        {statuses.map((status) => {
-          return (
-            <Step key={status}>
-              <StepLabel>{t(status)}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-
-      <ChangeHistoryComponent statusHistory={orderData.statusHistory} />
+      <OrderPayments payments={orderData.payments} orderId={orderData.id} />
+      <Divider />
+      <ChangeHistoryComponent
+        statusHistory={orderData.statusHistory}
+        status={orderData.status}
+      />
       {orderData.status !== OrderStatusEnum.DONE && (
         <>
           <Button

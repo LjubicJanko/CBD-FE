@@ -7,22 +7,46 @@ import {
   TableCell,
   TableBody,
   Chip,
+  Step,
+  StepLabel,
+  Stepper,
 } from '@mui/material';
-import { OrderStatusHistory } from '../../../types/Order';
+import { OrderStatus, OrderStatusHistory } from '../../../types/Order';
 import * as Styled from './ChangeHistory.styles';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { statusColors } from '../../../util/util';
+import { statusColors, statuses } from '../../../util/util';
+import { xxsMax } from '../../../util/breakpoints';
+import useResponsiveWidth from '../../../hooks/useResponsiveWidth';
 
 export type ChangeHistoryProps = {
   statusHistory: OrderStatusHistory[];
+  status: OrderStatus;
 };
 
-const ChangeHistoryComponent = ({ statusHistory }: ChangeHistoryProps) => {
+const ChangeHistoryComponent = ({
+  statusHistory,
+  status,
+}: ChangeHistoryProps) => {
   const { t } = useTranslation();
+  const width = useResponsiveWidth();
 
   return (
     <Styled.ChangeHistoryContainer>
+      <h2>{t('status-change-history')}</h2>
+      <Stepper
+        className='stepper'
+        activeStep={statuses.indexOf(status)}
+        orientation={width < xxsMax ? 'vertical' : 'horizontal'}
+      >
+        {statuses.map((status) => {
+          return (
+            <Step key={status}>
+              <StepLabel>{t(status)}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

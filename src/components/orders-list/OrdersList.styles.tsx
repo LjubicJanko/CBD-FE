@@ -16,4 +16,8 @@ export const OrdersListContainer = styled.div`
       flex-direction: column;
     `)}
   }
+
+  .no-content {
+    width: 250px;
+  }
 `;

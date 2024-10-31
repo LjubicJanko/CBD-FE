@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import OrderCardComponent from '../order-card/OrderCard.component';
 import * as Styled from './OrdersList.styles';
+import NoContent from '../no-content/NoContent.component';
 
 export type OrdersListProps = {
   className?: string;
@@ -25,7 +26,7 @@ const OrdersList = ({ className }: OrdersListProps) => {
     setSelectedOrderId(-1);
   };
 
-  if (!orders.length) return <p>no records</p>;
+  if (!orders.length) return <NoContent />;
 
   return (
     <Styled.OrdersListContainer className={className}>

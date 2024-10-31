@@ -16,6 +16,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [total, setTotal] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
+  const [isOrderUpdating, setIsOrderUpdating] = useState(false);
 
   const updateOrderInOverviewList = useCallback((orderToUpdate: Order) => {
     setOrders((old) =>
@@ -45,6 +46,19 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       setIsLoading(false);
     }
   }, [page, params, perPage]);
+
+  const fetchSelectedOrder = useCallback(
+    async (orderId: number) => {
+      try {
+        const response = await orderService.getOrder(orderId);
+        setSelectedOrder(response);
+        updateOrderInOverviewList(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [updateOrderInOverviewList]
+  );
 
   const handleSearch = useCallback(
     async (searchTerm: string) => {
@@ -80,16 +94,6 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   }, [fetchOrders, page, params, perPage]);
 
   useEffect(() => {
-    const fetchSelectedOrder = async (orderId: number) => {
-      try {
-        const response = await orderService.getOrder(orderId);
-        setSelectedOrder(response);
-        updateOrderInOverviewList(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     if (selectedOrderId > 0) {
       fetchSelectedOrder(selectedOrderId);
     } else {
@@ -107,9 +111,12 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         totalElements,
         isLoading,
         selectedOrder,
+        isOrderUpdating,
+        setIsOrderUpdating,
         updateOrderInOverviewList,
         handleSearch,
         fetchOrders,
+        setSelectedOrder,
         setPage,
         setSelectedOrderId,
       }}

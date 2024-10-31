@@ -14,7 +14,9 @@
   "order-name": "Назив",
   "sale-price": "Продајна цена",
   "acquisition-cost": "Набавна цена",
+  "price-difference": "Разлика у цени",
   "is-legal-entity": "Да ли је правно лице",
+  "paid": "Плаћено",
   "left-to-pay": "За плаћање",
   "shipped-via": "Послато преко",
   "shipping-code": "Код пошиљке",
@@ -37,5 +39,14 @@
   "SEWING": "Шивење",
   "SHIP_READY": "Спремно за слање",
   "SHIPPED": "Послато",
-  "DONE": "Готово"
+  "DONE": "Готово",
+  "add-payment": "Додај уплату",
+  "payer": "Уплатилац",
+  "amount": "Количина",
+  "payment-method": "Метод плаћања",
+  "transaction-date": "Датум трансакције",
+  "status-change-history": "Историја промене статуса",
+  "note": "Белешка",
+  "add": "Додај",
+  "payments": "Уплате"
 }

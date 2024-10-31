@@ -6,6 +6,23 @@ export const OrderInfoFormContainer = styled.form`
   flex-direction: column;
   gap: 16px;
 
+  .order-const-difference {
+    display: grid;
+    grid-gap: 4px 16px;
+    grid-template-columns: max-content;
+    grid-row-gap: 8px;
+    font-size: 18px;
+    margin: 0;
+
+    dt {
+      font-weight: bold;
+    }
+    dd {
+      margin: 0;
+      grid-column-start: 2;
+    }
+  }
+
   .date-input-container {
     display: flex;
     gap: 16px;

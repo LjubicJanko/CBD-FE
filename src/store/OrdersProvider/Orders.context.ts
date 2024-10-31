@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
 import { Order, OrderOverview } from '../../types/Order';
 
 interface OrdersContext {
@@ -8,9 +8,12 @@ interface OrdersContext {
   totalElements: number;
   isLoading: boolean;
   selectedOrder: Order | null;
+  isOrderUpdating: boolean;
+  setIsOrderUpdating: Dispatch<SetStateAction<boolean>>;
   updateOrderInOverviewList: (orderToUpdate: Order) => void;
   fetchOrders: () => Promise<void>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedOrder: Dispatch<SetStateAction<Order | null>>;
   handleSearch: (query: string) => Promise<void>;
   setSelectedOrderId: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -22,9 +25,12 @@ export default createContext<OrdersContext>({
   totalElements: 0,
   isLoading: false,
   selectedOrder: null,
+  isOrderUpdating: false,
+  setIsOrderUpdating: () => {},
   updateOrderInOverviewList: () => {},
   fetchOrders: () => new Promise(() => {}),
   setPage: () => {},
+  setSelectedOrder: () => {},
   handleSearch: () => new Promise(() => {}),
   setSelectedOrderId: () => {},
 });

@@ -56,7 +56,6 @@ const StatusChangeModal = ({
         );
         setOrderData(response);
         updateOrderInOverviewList(response);
-        console.log(response);
       } catch (error) {
         console.error(error);
       } finally {
@@ -71,7 +70,6 @@ const StatusChangeModal = ({
     onSubmit,
   });
 
-  console.log(formik);
   return (
     <Styled.StatusChangeModalContainer
       title={t('move-to-next-state')}
@@ -96,15 +94,6 @@ const StatusChangeModal = ({
           />
           {currentStatus === 'SHIP_READY' && (
             <>
-              {/* <TextField
-                className="postal-service-input"
-                label={t('postal-service')}
-                name="postalService"
-                type="text"
-                value={formik.values.postalService}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              /> */}
               <FormControl fullWidth>
                 <InputLabel id="postal-service-input-label">
                   {t('postal-service')}

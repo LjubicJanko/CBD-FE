@@ -1,5 +1,6 @@
 import { StatusData } from '../../components/modals/status-change/StatusChangeModal.component';
 import { CreateOrder, GetAllPaginatedResponse, Order } from '../../types/Order';
+import { Payment } from '../../types/Payment';
 import client from '../client';
 import privateClient from '../privateClient';
 
@@ -97,6 +98,11 @@ const pauseOrder = async (id: number, pauseComment: string) =>
     .put(`/orders/pause/${id}`, pauseComment)
     .then((res) => res.data);
 
+const addPayment = async (payment: Payment, orderId: number) =>
+  privateClient
+    .post(`/orders/addPayment/${orderId}`, payment)
+    .then((res) => res.data);
+
 export default {
   getOrder,
   trackOrder,
@@ -107,4 +113,5 @@ export default {
   createOrder,
   updateOrder,
   pauseOrder,
+  addPayment,
 };

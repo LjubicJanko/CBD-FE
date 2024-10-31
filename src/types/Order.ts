@@ -1,3 +1,5 @@
+import { Payment } from './Payment';
+
 export type OrderExecutionStatus =
   | 'ACTIVE'
   | 'PAUSED'
@@ -39,15 +41,6 @@ export type OrderStatusHistory = {
   closingComment: string;
   timestamp: string;
   user: string;
-};
-
-export type Payment = {
-  id: number;
-  name: string;
-  amount: number;
-  date: string;
-  type: string;
-  note: string;
 };
 
 export type CreateOrder = {
@@ -101,7 +94,9 @@ export type Order = {
   postalService: string;
   postalCode: string;
   plannedEndingDate: string;
+  amountPaid: number;
   amountLeftToPay: number;
+  payments: Payment[];
 };
 
 export type OrderTracking = {
