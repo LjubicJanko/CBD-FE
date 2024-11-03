@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 const HomeComponent = () => {
   const { t } = useTranslation();
   const [trackingOrderId, setTrackingOrderId] = useState<string | undefined>(
-    '3a349a95-e9d7-4e46-8386-35578a8425f6'
+    'c10b3935-4dda-4350-9776-835ec038cf70'
   );
   const [order, setOrder] = useState<OrderTracking>();
 
@@ -20,7 +20,6 @@ const HomeComponent = () => {
     console.log(response);
   }, [trackingOrderId]);
 
-  console.log(trackingOrderId);
   return (
     <Styled.HomeContainer className="home">
       <div className="home__search-container">

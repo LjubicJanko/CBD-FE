@@ -1,4 +1,10 @@
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { orderService } from '../../api';
 import useQueryParams from '../../hooks/useQueryParams';
 import { Order, OrderOverview } from '../../types/Order';
@@ -13,6 +19,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<number>(-1);
   const [page, setPage] = useState(0);
+  const lastPageValueRef = useRef<number>(page);
   const [total, setTotal] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
@@ -29,10 +36,12 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const fetchOrders = useCallback(async () => {
     setIsLoading(true);
     try {
+      const isPageUnchanged = lastPageValueRef.current === page;
+
       const statuses = Object.keys(params);
       const response = await orderService.getAllPaginated({
         statuses,
-        page,
+        page: isPageUnchanged ? 0 : page,
         perPage,
       });
       setPage(response.page);
@@ -40,6 +49,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       setTotal(response.total);
       setTotalElements(response.totalElements);
       setOrders(response.data);
+      lastPageValueRef.current = response.page;
     } catch (error) {
       console.error(error);
     } finally {
@@ -91,7 +101,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     fetchOrders();
-  }, [fetchOrders, page, params, perPage]);
+  }, [fetchOrders, page, perPage]);
 
   useEffect(() => {
     if (selectedOrderId > 0) {
