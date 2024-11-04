@@ -1,6 +1,10 @@
+import CancelIcon from '@mui/icons-material/Cancel';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import PauseIcon from '@mui/icons-material/Pause';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { Button, Chip, Divider, IconButton, Tooltip } from '@mui/material';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Divider, IconButton } from '@mui/material';
 import { orderService } from '../../api';
 import { usePrivileges } from '../../hooks/usePrivileges';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
@@ -9,17 +13,13 @@ import {
   OrderExecutionStatusEnum,
   OrderStatusEnum,
 } from '../../types/Order';
+import ConfirmModal from '../modals/confirm-modal/ConfirmModal.component';
+import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import * as Styled from './OrderDetails.styles';
 import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
-import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
-import ConfirmModal from '../modals/confirm-modal/ConfirmModal.component';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import PauseIcon from '@mui/icons-material/Pause';
-import ReplayIcon from '@mui/icons-material/Replay';
-import CancelIcon from '@mui/icons-material/Cancel';
 
 const initialOrderData: Order = {
   id: 0,
@@ -38,6 +38,7 @@ const initialOrderData: Order = {
   salePrice: 0,
   amountPaid: 0,
   payments: [],
+  pausingComment: '',
 };
 
 type ConfirmModalProps = {
@@ -76,6 +77,28 @@ const OrderDetailsComponent = () => {
   const [confirmModalProps, setConfirmModalProps] =
     useState(EMPTY_CONFIRM_MODAL);
 
+  const isPaused = useMemo(
+    () => selectedOrder?.executionStatus === OrderExecutionStatusEnum.PAUSED,
+    [selectedOrder?.executionStatus]
+  );
+
+  const isCanceled =
+    selectedOrder?.executionStatus === OrderExecutionStatusEnum.CANCELED;
+
+  const shouldShowForm = useMemo(
+    () =>
+      privileges.canEditData &&
+      !isPaused &&
+      orderData.executionStatus !== OrderExecutionStatusEnum.CANCELED &&
+      orderData.status !== OrderStatusEnum.DONE,
+    [
+      isPaused,
+      orderData.executionStatus,
+      orderData.status,
+      privileges.canEditData,
+    ]
+  );
+
   const isMoveButtonDisabled = useMemo(() => {
     const movePermissions = {
       DESIGN: privileges.canMoveToPrintReady,
@@ -86,26 +109,44 @@ const OrderDetailsComponent = () => {
       SHIPPED: privileges.canMoveToDone,
       DONE: false,
     };
-    return !movePermissions[selectedOrder?.status as OrderStatusEnum];
-  }, [privileges, selectedOrder?.status]);
+    return (
+      !movePermissions[selectedOrder?.status as OrderStatusEnum] || isPaused
+    );
+  }, [
+    isPaused,
+    privileges.canMoveToDone,
+    privileges.canMoveToPrintReady,
+    privileges.canMoveToPrinting,
+    privileges.canMoveToSewing,
+    privileges.canMoveToShipReady,
+    privileges.canMoveToShipped,
+    selectedOrder?.status,
+  ]);
 
-  const isExecutionStatus = (status: OrderExecutionStatusEnum) =>
-    selectedOrder?.executionStatus === status;
+  const nonActiveBanner = useMemo(
+    () => (
+      <Tooltip title={orderData.pausingComment}>
+        <Chip
+          className="execution-chip"
+          label={isCanceled ? 'canceled' : 'paused'}
+        />
+      </Tooltip>
+    ),
+    [isCanceled, orderData.pausingComment]
+  );
 
   const actionButtons = [
     {
       show:
         privileges.canPauseOrder &&
-        isExecutionStatus(OrderExecutionStatusEnum.ACTIVE),
+        selectedOrder?.executionStatus === OrderExecutionStatusEnum.ACTIVE,
       label: t('pause'),
       color: 'warning' as ButtonColors,
       icon: <PauseIcon />,
       onClick: () => openConfirmModal(t('pause-reason'), handlePauseOrder),
     },
     {
-      show:
-        privileges.canPauseOrder &&
-        isExecutionStatus(OrderExecutionStatusEnum.PAUSED),
+      show: privileges.canPauseOrder && isPaused,
       label: t('reactivate'),
       color: 'success' as ButtonColors,
       icon: <ReplayIcon />,
@@ -179,6 +220,7 @@ const OrderDetailsComponent = () => {
 
   return (
     <Styled.OrderDetailsContainer key={selectedOrder?.id}>
+      {(isCanceled || isPaused) && nonActiveBanner}
       <div className="tracking-id">
         <p>{t('tracking-id', { TRACKING_ID: orderData.trackingId })}</p>
         <IconButton
@@ -189,14 +231,11 @@ const OrderDetailsComponent = () => {
         </IconButton>
       </div>
       <Divider />
-      {privileges.canEditData ? (
+      {shouldShowForm ? (
         <OrderInfoForm />
       ) : (
         <OrderInfoOverview orderData={orderData} />
       )}
-      <Divider />
-      <OrderPayments payments={orderData.payments} orderId={orderData.id} />
-      <Divider />
       <ChangeHistoryComponent
         statusHistory={orderData.statusHistory}
         status={orderData.status}
@@ -213,25 +252,36 @@ const OrderDetailsComponent = () => {
           >
             {t('move-to-next-state')}
           </Button>
-          <Divider />
-          <div className="action-buttons">
-            {actionButtons.map(
-              ({ show, label, color, icon, onClick }, index) =>
-                show && (
-                  <Button
-                    key={index}
-                    variant="outlined"
-                    color={color}
-                    onClick={onClick}
-                    size="large"
-                  >
-                    <p>{label}</p>
-                    {icon}
-                  </Button>
-                )
-            )}
-          </div>
         </>
+      )}
+      <Divider />
+      <OrderPayments
+        payments={orderData.payments}
+        orderId={orderData.id}
+        isAddingDisabled={
+          orderData.executionStatus !== OrderExecutionStatusEnum.ACTIVE ||
+          orderData.status === OrderStatusEnum.DONE
+        }
+      />
+      <Divider />
+      {orderData.status !== OrderStatusEnum.DONE && (
+        <div className="action-buttons">
+          {actionButtons.map(
+            ({ show, label, color, icon, onClick }, index) =>
+              show && (
+                <Button
+                  key={index}
+                  variant="outlined"
+                  color={color}
+                  onClick={onClick}
+                  size="large"
+                >
+                  <p>{label}</p>
+                  {icon}
+                </Button>
+              )
+          )}
+        </div>
       )}
       <StatusChangeModal
         orderId={orderData.id}

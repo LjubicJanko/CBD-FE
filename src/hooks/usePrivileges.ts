@@ -22,6 +22,7 @@ export const usePrivileges = () => {
       ),
       canMoveToShipped: authPrivileges.includes(privileges.MOVE_TO_SHIPPED),
       canMoveToDone: authPrivileges.includes(privileges.MOVE_TO_DONE),
+      canAddPayment: authPrivileges.includes(privileges.PAYMENT_ADD),
     };
   }, [authData?.privileges]);
 };

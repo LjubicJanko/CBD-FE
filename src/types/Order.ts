@@ -107,6 +107,7 @@ export type Order = {
   amountPaid: number;
   amountLeftToPay: number;
   payments: Payment[];
+  pausingComment: string;
 };
 
 export type OrderTracking = {

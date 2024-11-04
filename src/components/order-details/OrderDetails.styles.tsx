@@ -1,11 +1,19 @@
 import styled, { css } from 'styled-components';
-import { tablet } from '../../util/breakpoints';
+import { mobile, tablet } from '../../util/breakpoints';
 
 export const OrderDetailsContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 32px;
+
+  .execution-chip {
+    width: fit-content;
+
+    ${mobile(css`
+      align-self: center;
+    `)}
+  }
 
   .tracking-id {
     display: flex;

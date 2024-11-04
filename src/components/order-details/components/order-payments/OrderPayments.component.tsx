@@ -16,14 +16,21 @@ import { useTranslation } from 'react-i18next';
 import { Payment } from '../../../../types/Payment';
 import AddPaymentModal from '../../../modals/add-payment/AddPaymentModal.component';
 import * as Styled from './OrderPayments.styles';
+import { usePrivileges } from '../../../../hooks/usePrivileges';
 
 export type OrderPaymentsProps = {
   payments: Payment[];
   orderId: number;
+  isAddingDisabled?: boolean;
 };
 
-const OrderPayments = ({ payments, orderId }: OrderPaymentsProps) => {
+const OrderPayments = ({
+  payments,
+  orderId,
+  isAddingDisabled = false,
+}: OrderPaymentsProps) => {
   const { t } = useTranslation();
+  const privileges = usePrivileges();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = useCallback(() => setIsModalOpen(true), []);
@@ -93,17 +100,20 @@ const OrderPayments = ({ payments, orderId }: OrderPaymentsProps) => {
         <img className="no-content" src="/no_content.png" alt="no-content" />
       )}
 
-      <div className="actions">
-        <Button
-          className="add-button"
-          variant="contained"
-          color="primary"
-          onClick={handleOpenModal}
-        >
-          {t('add-payment')}
-          <AddIcon />
-        </Button>
-      </div>
+      {privileges.canAddPayment && (
+        <div className="actions">
+          <Button
+            className="add-button"
+            variant="contained"
+            color="primary"
+            disabled={isAddingDisabled}
+            onClick={handleOpenModal}
+          >
+            {t('add-payment')}
+            <AddIcon />
+          </Button>
+        </div>
+      )}
     </Styled.OrderPaymentsContainer>
   );
 };

@@ -27,6 +27,7 @@ const initialOrderData: Order = {
   salePrice: 0,
   amountPaid: 0,
   payments: [],
+  pausingComment: '',
 };
 
 const OrderInfoForm = () => {

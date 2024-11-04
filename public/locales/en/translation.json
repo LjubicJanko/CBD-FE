@@ -59,5 +59,6 @@
   "CASH": "Cash",
   "INVOICE": "Invoice",
   "required": "Required field",
-  "must-be-positive": "Number must be positive"
+  "must-be-positive": "Number must be positive",
+  "pausing-comment": "Pausing comment"
 }

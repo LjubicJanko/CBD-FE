@@ -62,4 +62,5 @@ export enum privileges {
   MOVE_TO_SHIP_READY = 'move-to-ship-ready',
   MOVE_TO_SHIPPED = 'move-to-shipped',
   MOVE_TO_DONE = 'move-to-done',
+  PAYMENT_ADD = 'payment-add'
 }

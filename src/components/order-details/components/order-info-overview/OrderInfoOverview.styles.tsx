@@ -1,7 +1,20 @@
+import { TableCell, TableContainer } from '@mui/material';
 import styled from 'styled-components';
 
-export const OrderInfoOverviewContainer = styled.dl`
+export const MobileContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+
+  .pause {
+    color: gray;
+  }
+`;
+
+export const DesktopContainer = styled(TableContainer)``;
+
+export const TableCellContainer = styled(TableCell)`
+  max-width: 200px;
+  white-space: normal;
+  padding: 6px !important;
 `;
