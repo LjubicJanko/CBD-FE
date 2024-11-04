@@ -55,6 +55,7 @@
   "reactivate": "Reactivate",
   "reactivate-reason": "Reason to reactivate",
   "cancel-reason": "Reason to cancel",
+  "archive-reason": "Reason to archive",
   "ACCOUNT": "Account",
   "CASH": "Cash",
   "INVOICE": "Invoice",

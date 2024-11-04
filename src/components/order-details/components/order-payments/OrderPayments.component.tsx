@@ -100,13 +100,12 @@ const OrderPayments = ({
         <img className="no-content" src="/no_content.png" alt="no-content" />
       )}
 
-      {privileges.canAddPayment && (
+      {privileges.canAddPayment && !isAddingDisabled && (
         <div className="actions">
           <Button
             className="add-button"
             variant="contained"
             color="primary"
-            disabled={isAddingDisabled}
             onClick={handleOpenModal}
           >
             {t('add-payment')}

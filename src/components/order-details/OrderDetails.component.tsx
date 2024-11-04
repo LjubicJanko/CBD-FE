@@ -85,6 +85,14 @@ const OrderDetailsComponent = () => {
   const isCanceled =
     selectedOrder?.executionStatus === OrderExecutionStatusEnum.CANCELED;
 
+  const canArchive = useMemo(
+    () =>
+      orderData?.status === OrderStatusEnum.DONE ||
+      orderData?.executionStatus === OrderExecutionStatusEnum.ARCHIVED ||
+      orderData?.executionStatus === OrderExecutionStatusEnum.CANCELED,
+    [orderData?.executionStatus, orderData?.status]
+  );
+
   const shouldShowForm = useMemo(
     () =>
       privileges.canEditData &&
@@ -207,6 +215,11 @@ const OrderDetailsComponent = () => {
     changeOrderStatus(OrderExecutionStatusEnum.ACTIVE, note);
   const handleCancelOrder = (note: string) =>
     changeOrderStatus(OrderExecutionStatusEnum.CANCELED, note);
+  const handleArchiveOrder = useCallback(
+    (note: string) =>
+      changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note),
+    [changeOrderStatus]
+  );
 
   const toggleStatusModal = useCallback(
     () => setIsStatusModalOpen((prev) => !prev),
@@ -221,6 +234,19 @@ const OrderDetailsComponent = () => {
   return (
     <Styled.OrderDetailsContainer key={selectedOrder?.id}>
       {(isCanceled || isPaused) && nonActiveBanner}
+      {canArchive && (
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          size="medium"
+          onClick={() =>
+            openConfirmModal(t('archive-reason'), handleArchiveOrder)
+          }
+        >
+          {t('archive')}
+        </Button>
+      )}
       <div className="tracking-id">
         <p>{t('tracking-id', { TRACKING_ID: orderData.trackingId })}</p>
         <IconButton
@@ -283,6 +309,7 @@ const OrderDetailsComponent = () => {
           )}
         </div>
       )}
+
       <StatusChangeModal
         orderId={orderData.id}
         currentStatus={orderData.status}
