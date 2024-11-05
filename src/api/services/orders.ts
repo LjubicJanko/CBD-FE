@@ -11,6 +11,7 @@ import privateClient from '../privateClient';
 
 export type GetAllPaginatedProps = {
   statuses?: string[];
+  executionStatuses?: string[];
   page?: number;
   perPage?: number;
 };
@@ -48,18 +49,31 @@ const getAllPaginated = async (props: GetAllPaginatedProps) =>
     .get('/orders/getPageable', {
       params: {
         statuses: props.statuses,
+        executionStatuses: props.executionStatuses,
         page: props.page ?? 0,
         perPage: props.perPage ?? 5,
       },
       paramsSerializer: (params) => {
         const searchParams = new URLSearchParams();
+
+        // Serialize statuses
         if (params.statuses) {
           params.statuses.forEach((status: string) =>
             searchParams.append('statuses', status)
           );
-          searchParams.append('page', (props.page ?? 0).toString());
-          searchParams.append('perPage', (props.perPage ?? 0).toString());
         }
+
+        // Serialize executionStatuses
+        if (params.executionStatuses) {
+          params.executionStatuses.forEach((executionStatus: string) =>
+            searchParams.append('executionStatuses', executionStatus)
+          );
+        }
+
+        // Serialize pagination params
+        searchParams.append('page', (props.page ?? 0).toString());
+        searchParams.append('perPage', (props.perPage ?? 5).toString());
+
         return searchParams.toString();
       },
     })

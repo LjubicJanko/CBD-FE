@@ -61,5 +61,7 @@
   "INVOICE": "Invoice",
   "required": "Required field",
   "must-be-positive": "Number must be positive",
-  "pausing-comment": "Pausing comment"
+  "pausing-comment": "Pausing comment",
+  "active-orders": "Active",
+  "archive-orders": "Archived"
 }

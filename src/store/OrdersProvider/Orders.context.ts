@@ -16,6 +16,7 @@ interface OrdersContext {
   setSelectedOrder: Dispatch<SetStateAction<Order | null>>;
   handleSearch: (query: string) => Promise<void>;
   setSelectedOrderId: React.Dispatch<React.SetStateAction<number>>;
+  setShouldShowArchived: Dispatch<SetStateAction<boolean>>;
 }
 
 export default createContext<OrdersContext>({
@@ -33,4 +34,5 @@ export default createContext<OrdersContext>({
   setSelectedOrder: () => {},
   handleSearch: () => new Promise(() => {}),
   setSelectedOrderId: () => {},
+  setShouldShowArchived: () => {},
 });

@@ -17,22 +17,8 @@ export const FiltersComponentContainer = styled.div`
     flex-direction: column;
   `)}
 
-  .add-button {
-    margin-right: 32px;
-    ${tablet(css`
-      margin-right: 0;
-    `)};
-  }
 
-  .filter-button,
-  .reset-filters {
-    border-radius: 16px;
-    height: 32px;
-    box-sizing: border-box;
-    max-width: 100%;
-    height: 40px;
-
-    white-space: nowrap;
-    min-width: fit-content;
+  .archive-radio {
+    display: flex;
   }
 `;

@@ -87,11 +87,13 @@ const OrderDetailsComponent = () => {
 
   const canArchive = useMemo(
     () =>
-      orderData?.status === OrderStatusEnum.DONE ||
-      orderData?.executionStatus === OrderExecutionStatusEnum.ARCHIVED ||
-      orderData?.executionStatus === OrderExecutionStatusEnum.CANCELED,
+      orderData?.status === OrderStatusEnum.DONE &&
+      orderData.executionStatus !== OrderExecutionStatusEnum.ARCHIVED &&
+      orderData.executionStatus !== OrderExecutionStatusEnum.CANCELED,
     [orderData?.executionStatus, orderData?.status]
   );
+
+  console.log({ canArchive });
 
   const shouldShowForm = useMemo(
     () =>

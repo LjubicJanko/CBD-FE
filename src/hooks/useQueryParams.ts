@@ -39,6 +39,28 @@ export default function useQueryParams<
     [getUrlSearchParams, navigate]
   );
 
+  const setMultipleQParams = useCallback(
+    (newParams: Partial<Record<keyof Params, string | number | string[]>>) => {
+      const urlSP = getUrlSearchParams();
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          urlSP.set(
+            key,
+            Array.isArray(value) ? value.join(',') : value.toString()
+          );
+        }
+      });
+
+      navigate(
+        {
+          search: `?${urlSP.toString()}`,
+        },
+        { replace: true }
+      );
+    },
+    [getUrlSearchParams, navigate]
+  );
+
   const removeQParam = useCallback(
     (key: keyof Params) => {
       const urlSearchParam = getUrlSearchParams();
@@ -72,5 +94,11 @@ export default function useQueryParams<
     [getUrlSearchParams, navigate]
   );
 
-  return { params, setQParam, removeQParam, removeMultipleQParams };
+  return {
+    params,
+    setQParam,
+    setMultipleQParams,
+    removeQParam,
+    removeMultipleQParams,
+  };
 }

@@ -24,6 +24,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
   const [isOrderUpdating, setIsOrderUpdating] = useState(false);
+  const [shouldShowArchived, setShouldShowArchived] = useState(false);
 
   const updateOrderInOverviewList = useCallback((orderToUpdate: Order) => {
     setOrders((old) =>
@@ -39,8 +40,10 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       const isPageUnchanged = lastPageValueRef.current === page;
 
       const statuses = Object.keys(params);
+      console.log({ shouldShowArchived });
       const response = await orderService.getAllPaginated({
         statuses,
+        executionStatuses: shouldShowArchived ? ['ARCHIVED', 'CANCELED'] : [],
         page: isPageUnchanged ? 0 : page,
         perPage,
       });
@@ -55,7 +58,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, params, perPage]);
+  }, [page, params, perPage, shouldShowArchived]);
 
   const fetchSelectedOrder = useCallback(
     async (orderId: number) => {
@@ -129,6 +132,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         setSelectedOrder,
         setPage,
         setSelectedOrderId,
+        setShouldShowArchived,
       }}
     >
       {children}

@@ -61,5 +61,7 @@
   "INVOICE": "По предрачуну",
   "required": "Обавезно поље",
   "must-be-positive": "Број мора бити већи од нуле",
-  "pausing-comment": "Разлог паузирања"
+  "pausing-comment": "Разлог паузирања",
+  "active-orders": "Активно",
+  "archive-orders": "Архива"
 }
