@@ -30,12 +30,13 @@ const ChangeHistoryComponent = ({
 }: ChangeHistoryProps) => {
   const { t } = useTranslation();
   const width = useResponsiveWidth();
+  console.log(statusHistory);
 
   return (
     <Styled.ChangeHistoryContainer>
       <h2>{t('status-change-history')}</h2>
       <Stepper
-        className='stepper'
+        className="stepper"
         activeStep={statuses.indexOf(status)}
         orientation={width < xxsMax ? 'vertical' : 'horizontal'}
       >
@@ -76,7 +77,7 @@ const ChangeHistoryComponent = ({
                 <TableCell align="right">{row.user}</TableCell>
                 <TableCell align="right">{row.closingComment}</TableCell>
                 <TableCell align="right">
-                  {dayjs(row.timestamp).format('DD-MM-YYYY HH:mm:ss')}
+                  {dayjs(row.creationTime).format('DD-MM-YYYY HH:mm:ss')}
                 </TableCell>
               </TableRow>
             ))}

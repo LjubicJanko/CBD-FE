@@ -125,6 +125,10 @@ const changeExecutionStatus = async (
     .then((res) => res.data);
 };
 
+const deleteOrder = async (id: number) => {
+  return privateClient.delete(`/orders/delete/${id}`);
+};
+
 const pauseOrder = async (id: number, pauseComment: string) =>
   privateClient
     .put(`/orders/pause/${id}`, { pausingComment: pauseComment })
@@ -148,6 +152,7 @@ export default {
   createOrder,
   updateOrder,
   changeExecutionStatus,
+  deleteOrder,
   pauseOrder,
   reactivateOrder,
   addPayment,

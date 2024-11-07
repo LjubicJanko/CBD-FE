@@ -2,6 +2,11 @@ import styled, { css } from 'styled-components';
 import { mobile } from '../../util/breakpoints';
 
 export const HeaderContainer = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -12,12 +17,15 @@ export const HeaderContainer = styled.header`
   ${mobile(css`
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 4px;
     padding: 16px;
-    min-height: 40px;
+    min-height: 30px;
   `)}
 
   .header {
+    &__logo {
+      width: 50px;
+    }
     &__actions {
       display: flex;
       align-items: center;
@@ -47,7 +55,6 @@ export const HeaderContainer = styled.header`
               display: inline-block;
               box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
                 rgba(0, 0, 0, 0.23) 0px 6px 6px;
-
               width: 30px;
 
               ${mobile(css`

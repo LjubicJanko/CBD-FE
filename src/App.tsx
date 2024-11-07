@@ -1,16 +1,17 @@
-import { Fragment } from 'react/jsx-runtime';
 import AuthProvider from './store/AuthProvider';
 import CBDRouter from './store/CBDRouter/CBDRouter';
 import { GlobalStyle } from './globalStyles';
+import { ThemeProvider } from 'styled-components';
+import theme from './styles/theme';
 
 const App = (): JSX.Element => {
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <AuthProvider>
         <CBDRouter />
       </AuthProvider>
-    </Fragment>
+    </ThemeProvider>
   );
 };
 

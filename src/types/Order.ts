@@ -49,7 +49,7 @@ export type OrderStatusHistory = {
   id: number;
   status: OrderStatus;
   closingComment: string;
-  timestamp: string;
+  creationTime: string;
   user: string;
 };
 

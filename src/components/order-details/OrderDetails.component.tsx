@@ -1,5 +1,6 @@
 import CancelIcon from '@mui/icons-material/Cancel';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Button, Chip, Divider, IconButton, Tooltip } from '@mui/material';
@@ -172,6 +173,14 @@ const OrderDetailsComponent = () => {
       icon: <CancelIcon />,
       onClick: () => openConfirmModal(t('cancel-reason'), handleCancelOrder),
     },
+    {
+      show: privileges.canCancelOrder,
+      label: t('delete'),
+      color: 'error' as ButtonColors,
+      icon: <DeleteIcon />,
+      hideComment: true,
+      onClick: () => openConfirmModal(t('delete-confirm'), handleDeleteOrder),
+    },
   ];
 
   const resetConfirmModal = useCallback(
@@ -222,6 +231,16 @@ const OrderDetailsComponent = () => {
       changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note),
     [changeOrderStatus]
   );
+  const handleDeleteOrder = useCallback(async () => {
+    if (!selectedOrder?.id) return;
+    setSelectedOrder(null);
+    try {
+      await orderService.deleteOrder(selectedOrder.id);
+      fetchOrders();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [fetchOrders, selectedOrder?.id, setSelectedOrder]);
 
   const toggleStatusModal = useCallback(
     () => setIsStatusModalOpen((prev) => !prev),
@@ -271,6 +290,7 @@ const OrderDetailsComponent = () => {
       {orderData.status !== OrderStatusEnum.DONE && (
         <>
           <Button
+            key={isStatusModalOpen ? 'openned' : 'closed'}
             variant="contained"
             color="primary"
             fullWidth
@@ -311,14 +331,15 @@ const OrderDetailsComponent = () => {
           )}
         </div>
       )}
-
-      <StatusChangeModal
-        orderId={orderData.id}
-        currentStatus={orderData.status}
-        isOpen={isStatusModalOpen}
-        onClose={toggleStatusModal}
-        setOrderData={setOrderData}
-      />
+      {isStatusModalOpen && (
+        <StatusChangeModal
+          orderId={orderData.id}
+          currentStatus={orderData.status}
+          isOpen={isStatusModalOpen}
+          onClose={toggleStatusModal}
+          setOrderData={setOrderData}
+        />
+      )}
       <ConfirmModal
         text={confirmModalProps.text}
         isOpen={confirmModalProps.open}
