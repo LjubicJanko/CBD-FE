@@ -14,4 +14,5 @@ export type LoginData = {
 
 export type RegisterData = LoginData & {
   fullName: string;
+  role: string;
 };
