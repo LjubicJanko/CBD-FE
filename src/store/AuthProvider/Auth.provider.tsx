@@ -35,26 +35,20 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
     []
   );
 
-  const signup = useCallback(
-    async (
-      data: RegisterData,
-      navigate: (path: string) => void
-    ): Promise<boolean> => {
-      console.log(`register with ${data.password}`);
-      let status = false;
-      try {
-        await authService.signup(data);
-        status = true;
-        navigate('/login');
-      } catch (error) {
-        console.error(error);
-        status = false;
-      }
+  const signup = useCallback(async (data: RegisterData): Promise<boolean> => {
+    console.log(`register with ${data.password}`);
+    let status = false;
+    try {
+      await authService.signup(data);
+      status = true;
+      alert('success');
+    } catch (error) {
+      console.error(error);
+      status = false;
+    }
 
-      return status;
-    },
-    []
-  );
+    return status;
+  }, []);
 
   const logout = useCallback((navigate: (path: string) => void) => {
     try {

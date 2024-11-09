@@ -1,10 +1,10 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-// import { useContext } from 'react';
-// import AuthContext from '../../store/AuthProvider/Auth.context';
+import { useContext } from 'react';
+import AuthContext from '../../store/AuthProvider/Auth.context';
 import { RegisterData } from '../../types/Auth';
 
 const SignupPage = () => {
-  // const { signup } = useContext(AuthContext);
+  const { signup } = useContext(AuthContext);
 
   return (
     <div>
@@ -22,8 +22,8 @@ const SignupPage = () => {
         }}
         onSubmit={(values, { setSubmitting }) => {
           console.log(values);
-          // const res = signup(values);
-          // console.log(res);
+          const res = signup(values);
+          console.log(res);
           setSubmitting(false);
         }}
       >

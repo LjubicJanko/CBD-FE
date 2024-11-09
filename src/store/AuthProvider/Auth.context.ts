@@ -8,10 +8,7 @@ interface AuthContext {
     data: LoginData,
     navigate: (path: string) => void
   ) => Promise<boolean>;
-  signup: (
-    data: RegisterData,
-    navigate: (path: string) => void
-  ) => Promise<boolean>;
+  signup: (data: RegisterData) => Promise<boolean>;
   logout: (navigate: (path: string) => void) => void;
 }
 
