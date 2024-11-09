@@ -23,6 +23,7 @@ const HomeComponent = () => {
   return (
     <Styled.HomeContainer className="home">
       <div className="home__search-container">
+        deployed
         <TextField
           className="order-id-input"
           label={t('order-tracking-id')}
