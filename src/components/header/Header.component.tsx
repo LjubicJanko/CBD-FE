@@ -24,7 +24,12 @@ const HeaderComponent = () => {
 
   return (
     <Styled.HeaderContainer className="header">
-      <img src={theme.logo} alt="Logo" className="header__logo" />
+      <img
+        src={theme.logo}
+        alt="Logo"
+        className="header__logo"
+        onClick={() => navigate('/')}
+      />
       <div className="header__actions">
         <div className="header__actions__language">
           <div

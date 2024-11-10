@@ -24,6 +24,19 @@ export const OrderDetailsContainer = styled.div`
     border-radius: 10px;
   }
 
+  .status-history-butons {
+    display: flex;
+    justify-content: space-between;
+    ${mobile(css`
+      flex-direction: column-reverse;
+      gap: 8px;
+
+      button {
+        width: 100%
+      }
+    `)};
+  }
+
   .action-buttons {
     display: flex;
     align-items: center;

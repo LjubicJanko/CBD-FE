@@ -3,23 +3,35 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { Button, Chip, Divider, IconButton, Tooltip } from '@mui/material';
+import {
+  Button,
+  Chip,
+  Divider,
+  IconButton,
+  Step,
+  StepLabel,
+  Stepper,
+  Tooltip,
+} from '@mui/material';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { orderService } from '../../api';
 import { usePrivileges } from '../../hooks/usePrivileges';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import {
   Order,
   OrderExecutionStatusEnum,
   OrderStatusEnum,
 } from '../../types/Order';
+import { xxsMax } from '../../util/breakpoints';
+import { statuses } from '../../util/util';
 import ConfirmModal, {
   ConfirmModalProps,
 } from '../modals/confirm-modal/ConfirmModal.component';
 import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
+import StatusHistoryModal from '../modals/status-history/StatusHistoryModal.component';
 import * as Styled from './OrderDetails.styles';
-import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
@@ -48,8 +60,11 @@ const OrderDetailsComponent = () => {
   const { selectedOrder, fetchOrders, setSelectedOrder } =
     useContext(OrdersContext);
   const privileges = usePrivileges();
+  const width = useResponsiveWidth();
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isStatusHistoryModalOpen, setIsStatusHistoryModalOpen] =
+    useState(false);
   const [confirmModalProps, setConfirmModalProps] =
     useState(EMPTY_CONFIRM_MODAL);
 
@@ -266,12 +281,24 @@ const OrderDetailsComponent = () => {
       ) : (
         <OrderInfoOverview selectedOrder={selectedOrder} />
       )}
-      <ChangeHistoryComponent
-        statusHistory={selectedOrder.statusHistory}
-        status={selectedOrder.status}
-      />
-      {selectedOrder.status !== OrderStatusEnum.DONE && (
-        <>
+      <Stepper
+        className="stepper"
+        activeStep={statuses.indexOf(selectedOrder?.status)}
+        orientation={width < xxsMax ? 'vertical' : 'horizontal'}
+      >
+        {statuses.map((status) => {
+          return (
+            <Step key={status}>
+              <StepLabel>{t(status)}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+      <div className="status-history-butons">
+        <Button onClick={() => setIsStatusHistoryModalOpen(true)}>
+          View status history
+        </Button>
+        {selectedOrder.status !== OrderStatusEnum.DONE && (
           <Button
             key={isStatusModalOpen ? 'openned' : 'closed'}
             variant="contained"
@@ -283,8 +310,8 @@ const OrderDetailsComponent = () => {
           >
             {t('move-to-next-state')}
           </Button>
-        </>
-      )}
+        )}
+      </div>
       <Divider />
       <OrderPayments
         payments={selectedOrder.payments}
@@ -320,6 +347,13 @@ const OrderDetailsComponent = () => {
           currentStatus={selectedOrder.status}
           isOpen={isStatusModalOpen}
           onClose={toggleStatusModal}
+        />
+      )}
+      {isStatusHistoryModalOpen && (
+        <StatusHistoryModal
+          selectedOrder={selectedOrder}
+          isOpen={isStatusHistoryModalOpen}
+          onClose={() => setIsStatusHistoryModalOpen(false)}
         />
       )}
       <ConfirmModal {...confirmModalProps} />

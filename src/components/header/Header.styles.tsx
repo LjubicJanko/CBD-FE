@@ -25,6 +25,7 @@ export const HeaderContainer = styled.header`
   .header {
     &__logo {
       width: 50px;
+      cursor: pointer;
     }
     &__actions {
       display: flex;
