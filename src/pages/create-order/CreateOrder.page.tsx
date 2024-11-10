@@ -27,7 +27,12 @@ const CreateOrderPage = () => {
   const onSubmit = useCallback(
     async (values: CreateOrder) => {
       try {
-        await orderService.createOrder(values);
+        await orderService.createOrder({
+          ...values,
+          plannedEndingDate: dayjs(values.plannedEndingDate).format(
+            'YYYY-MM-DD'
+          ),
+        });
         navigate('/');
       } catch (error) {
         console.error(error);
