@@ -5,6 +5,7 @@ import useResponsiveWidth from '../../../../hooks/useResponsiveWidth';
 import { Order, OrderExecutionStatusEnum } from '../../../../types/Order';
 import { xxsMax } from '../../../../util/breakpoints';
 import * as Styled from './OrderInfoOverview.styles';
+import dayjs from 'dayjs';
 
 export type OrderInfoOverviewProps = {
   orderData?: Order;
@@ -31,7 +32,10 @@ const OrderInfoOverview = ({ orderData }: OrderInfoOverviewProps) => {
       },
       { label: t('paid'), value: orderData?.amountPaid },
       { label: t('left-to-pay'), value: orderData?.amountLeftToPay },
-      { label: t('expected'), value: orderData?.plannedEndingDate },
+      {
+        label: t('expected'),
+        value: dayjs(orderData?.plannedEndingDate).format('DD-MM-YYY'),
+      },
     ],
     [
       orderData?.acquisitionCost,
