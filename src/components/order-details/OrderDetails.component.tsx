@@ -14,13 +14,16 @@ import {
   OrderExecutionStatusEnum,
   OrderStatusEnum,
 } from '../../types/Order';
-import ConfirmModal from '../modals/confirm-modal/ConfirmModal.component';
+import ConfirmModal, {
+  ConfirmModalProps,
+} from '../modals/confirm-modal/ConfirmModal.component';
 import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import * as Styled from './OrderDetails.styles';
 import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
+import dayjs from 'dayjs';
 
 const initialOrderData: Order = {
   id: 0,
@@ -32,7 +35,7 @@ const initialOrderData: Order = {
   statusHistory: [],
   postalService: '',
   postalCode: '',
-  plannedEndingDate: '',
+  plannedEndingDate: dayjs().add(1, 'week'),
   amountLeftToPay: 0,
   legalEntity: false,
   acquisitionCost: 0,
@@ -42,16 +45,10 @@ const initialOrderData: Order = {
   pausingComment: '',
 };
 
-type ConfirmModalProps = {
-  open: boolean;
-  text: string;
-  onConfirm: (note: string) => void;
-  onCancel: () => void;
-};
-
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
-  open: false,
+  isOpen: false,
   text: '',
+  hideNote: false,
   onConfirm: () => {},
   onCancel: () => {},
 };
@@ -93,8 +90,6 @@ const OrderDetailsComponent = () => {
       orderData.executionStatus !== OrderExecutionStatusEnum.CANCELED,
     [orderData?.executionStatus, orderData?.status]
   );
-
-  console.log({ canArchive });
 
   const shouldShowForm = useMemo(
     () =>
@@ -146,53 +141,17 @@ const OrderDetailsComponent = () => {
     [isCanceled, orderData.pausingComment]
   );
 
-  const actionButtons = [
-    {
-      show:
-        privileges.canPauseOrder &&
-        selectedOrder?.executionStatus === OrderExecutionStatusEnum.ACTIVE,
-      label: t('pause'),
-      color: 'warning' as ButtonColors,
-      icon: <PauseIcon />,
-      onClick: () => openConfirmModal(t('pause-reason'), handlePauseOrder),
-    },
-    {
-      show: privileges.canPauseOrder && isPaused,
-      label: t('reactivate'),
-      color: 'success' as ButtonColors,
-      icon: <ReplayIcon />,
-      onClick: () =>
-        openConfirmModal(t('reactivate-reason'), handleReactivateOrder),
-    },
-    {
-      show:
-        privileges.canCancelOrder &&
-        ['ACTIVE', 'PAUSED'].includes(selectedOrder?.executionStatus || ''),
-      label: t('cancel'),
-      color: 'error' as ButtonColors,
-      icon: <CancelIcon />,
-      onClick: () => openConfirmModal(t('cancel-reason'), handleCancelOrder),
-    },
-    {
-      show: privileges.canCancelOrder,
-      label: t('delete'),
-      color: 'error' as ButtonColors,
-      icon: <DeleteIcon />,
-      hideComment: true,
-      onClick: () => openConfirmModal(t('delete-confirm'), handleDeleteOrder),
-    },
-  ];
-
   const resetConfirmModal = useCallback(
     () => setConfirmModalProps(EMPTY_CONFIRM_MODAL),
     []
   );
 
   const openConfirmModal = useCallback(
-    (text: string, onConfirm: (note: string) => void) => {
+    (text: string, onConfirm: (note: string) => void, hideNote?: boolean) => {
       setConfirmModalProps({
-        open: true,
+        isOpen: true,
         text,
+        hideNote: hideNote,
         onConfirm,
         onCancel: resetConfirmModal,
       });
@@ -220,17 +179,6 @@ const OrderDetailsComponent = () => {
     [fetchOrders, selectedOrder?.id, resetConfirmModal, setSelectedOrder]
   );
 
-  const handlePauseOrder = (note: string) =>
-    changeOrderStatus(OrderExecutionStatusEnum.PAUSED, note);
-  const handleReactivateOrder = (note: string) =>
-    changeOrderStatus(OrderExecutionStatusEnum.ACTIVE, note);
-  const handleCancelOrder = (note: string) =>
-    changeOrderStatus(OrderExecutionStatusEnum.CANCELED, note);
-  const handleArchiveOrder = useCallback(
-    (note: string) =>
-      changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note),
-    [changeOrderStatus]
-  );
   const handleDeleteOrder = useCallback(async () => {
     if (!selectedOrder?.id) return;
     setSelectedOrder(null);
@@ -245,6 +193,63 @@ const OrderDetailsComponent = () => {
   const toggleStatusModal = useCallback(
     () => setIsStatusModalOpen((prev) => !prev),
     []
+  );
+
+  const actionButtons = useMemo(
+    () => [
+      {
+        show:
+          privileges.canPauseOrder &&
+          selectedOrder?.executionStatus === OrderExecutionStatusEnum.ACTIVE,
+        label: t('pause'),
+        color: 'warning' as ButtonColors,
+        icon: <PauseIcon />,
+        onClick: () =>
+          openConfirmModal(t('pause-reason'), (note: string) =>
+            changeOrderStatus(OrderExecutionStatusEnum.PAUSED, note)
+          ),
+      },
+      {
+        show: privileges.canPauseOrder && isPaused,
+        label: t('reactivate'),
+        color: 'success' as ButtonColors,
+        icon: <ReplayIcon />,
+        onClick: () =>
+          openConfirmModal(t('reactivate-reason'), (note: string) =>
+            changeOrderStatus(OrderExecutionStatusEnum.ACTIVE, note)
+          ),
+      },
+      {
+        show:
+          privileges.canCancelOrder &&
+          ['ACTIVE', 'PAUSED'].includes(selectedOrder?.executionStatus || ''),
+        label: t('cancel'),
+        color: 'error' as ButtonColors,
+        icon: <CancelIcon />,
+        onClick: () =>
+          openConfirmModal(t('cancel-reason'), (note: string) =>
+            changeOrderStatus(OrderExecutionStatusEnum.CANCELED, note)
+          ),
+      },
+      {
+        show: privileges.canCancelOrder,
+        label: t('delete'),
+        color: 'error' as ButtonColors,
+        icon: <DeleteIcon />,
+        onClick: () =>
+          openConfirmModal(t('delete-confirm'), handleDeleteOrder, true),
+      },
+    ],
+    [
+      changeOrderStatus,
+      handleDeleteOrder,
+      isPaused,
+      openConfirmModal,
+      privileges.canCancelOrder,
+      privileges.canPauseOrder,
+      selectedOrder?.executionStatus,
+      t,
+    ]
   );
 
   if (!orderData.id) return null;
@@ -262,7 +267,9 @@ const OrderDetailsComponent = () => {
           fullWidth
           size="medium"
           onClick={() =>
-            openConfirmModal(t('archive-reason'), handleArchiveOrder)
+            openConfirmModal(t('archive-reason'), (note: string) =>
+              changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note)
+            )
           }
         >
           {t('archive')}
@@ -340,12 +347,7 @@ const OrderDetailsComponent = () => {
           setOrderData={setOrderData}
         />
       )}
-      <ConfirmModal
-        text={confirmModalProps.text}
-        isOpen={confirmModalProps.open}
-        onConfirm={confirmModalProps.onConfirm}
-        onCancel={confirmModalProps.onCancel}
-      />
+      <ConfirmModal {...confirmModalProps} />
     </Styled.OrderDetailsContainer>
   );
 };

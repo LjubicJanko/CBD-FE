@@ -24,8 +24,7 @@ const LoginComponent = () => {
   const navigate = useNavigate();
 
   const onSubmit = (values: LoginData) => {
-    const res = login(values, navigate);
-    console.log(res);
+    login(values, navigate);
   };
 
   const formik = useFormik<LoginData>({
@@ -51,9 +50,6 @@ const LoginComponent = () => {
   return (
     <Styled.LoginContainer className="login-container">
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
-        {/* <Typography variant="h5" fontWeight={600} mb={2}>
-          Login Form
-        </Typography> */}
         <div className="fields">
           <TextField
             label="username"
@@ -102,33 +98,6 @@ const LoginComponent = () => {
           Login
         </Button>
       </form>
-      {/* <Formik
-        initialValues={{ username: '', password: '' } as LoginData}
-        validate={(values) => {
-          const errors: { username?: string } = {};
-          if (!values.username) {
-            errors.username = 'Required';
-          }
-          return errors;
-        }}
-        onSubmit={(values, { setSubmitting }) => {
-          const res = login(values);
-          console.log(res);
-          setSubmitting(false);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <Field type="text" name="username" />
-            <ErrorMessage name="username" component="div" />
-            <Field type="password" name="password" />
-            <ErrorMessage name="password" component="div" />
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
-          </Form>
-        )}
-      </Formik> */}
     </Styled.LoginContainer>
   );
 };

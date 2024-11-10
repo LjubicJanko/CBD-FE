@@ -17,7 +17,6 @@ const HomeComponent = () => {
     if (!trackingOrderId) return;
     const response = await orderService.trackOrder(trackingOrderId);
     setOrder(response);
-    console.log(response);
   }, [trackingOrderId]);
 
   return (

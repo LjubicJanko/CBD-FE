@@ -1,19 +1,19 @@
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { useFormik } from 'formik';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { orderService } from '../../api';
 import { CreateOrder } from '../../types/Order';
 import * as Styled from './CreateOrder.styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BasicDatePicker } from '../../components';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import * as Yup from 'yup';
 
 const emptyOrderData: CreateOrder = {
   name: '',
   description: '',
-  plannedEndingDate: '',
+  plannedEndingDate: dayjs().add(1, 'week'),
   legalEntity: false,
   acquisitionCost: undefined,
   salePrice: undefined,
@@ -24,21 +24,16 @@ const CreateOrderPage = () => {
   const { t } = useTranslation();
   const initialValues = useMemo(() => emptyOrderData, []);
 
-  const [plannedEndingDate, setPlannedEndingDate] = useState('');
-
   const onSubmit = useCallback(
     async (values: CreateOrder) => {
       try {
-        await orderService.createOrder({
-          ...values,
-          plannedEndingDate: plannedEndingDate,
-        });
+        await orderService.createOrder(values);
         navigate('/');
       } catch (error) {
         console.error(error);
       }
     },
-    [navigate, plannedEndingDate]
+    [navigate]
   );
 
   const validationSchema = Yup.object({
@@ -58,6 +53,8 @@ const CreateOrderPage = () => {
     initialValues,
     validationSchema,
     onSubmit,
+    validateOnChange: false,
+    validateOnBlur: false,
   });
 
   const isSubmitDisabled = useMemo(() => {
@@ -75,19 +72,17 @@ const CreateOrderPage = () => {
     formik.values,
   ]);
 
-  const handleDateChange = useCallback((newValue: Dayjs | null) => {
-    console.log(
-      'Selected Date:',
-      newValue ? newValue.format('YYYY-MM-DD') : 'No date selected'
-    );
-    if (newValue) {
-      setPlannedEndingDate(newValue?.format('YYYY-MM-DD'));
-    }
-  }, []);
+  const handleDateChange = useCallback(
+    (newValue: Dayjs | null) => {
+      if (newValue) {
+        formik.setFieldValue('plannedEndingDate', newValue);
+      }
+    },
+    [formik]
+  );
 
   return (
     <Styled.CreateOrderPageContainer>
-      {/* <h2 className="title">Create new order</h2> */}
       <form
         autoComplete="off"
         onSubmit={formik.handleSubmit}
@@ -106,9 +101,6 @@ const CreateOrderPage = () => {
           multiline
           maxRows={4}
         />
-        {/* {formik.errors.name && (
-          <span className="create-order--error">{formik.errors.name}</span>
-        )} */}
         <TextField
           className="create-order--description-input"
           label={t('description')}
@@ -123,15 +115,11 @@ const CreateOrderPage = () => {
           maxRows={4}
         />
 
-        <BasicDatePicker label={t('expected')} onChange={handleDateChange} />
-        {/* <input
-          type="date"
-          className="create-order--ending-date-input"
-          id="plannedEndingDate"
-          name="plannedEndingDate"
-          onChange={formik.handleChange}
-          value={formik.values.plannedEndingDate}
-        /> */}
+        <BasicDatePicker
+          label={t('expected')}
+          onChange={handleDateChange}
+          value={formik.values.plannedEndingDate as Dayjs}
+        />
 
         <TextField
           label={t('sale-price')}

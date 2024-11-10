@@ -1,5 +1,5 @@
 import { Button, MenuItem, TextField } from '@mui/material';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import orders from '../../../api/services/orders';
 import OrdersContext from '../../../store/OrdersProvider/Orders.context';
 import { Payment } from '../../../types/Payment';
 import * as Styled from './AddPaymentModal.styles';
+import { BasicDatePicker } from '../..';
 
 type AddPaymentModalProps = {
   isOpen: boolean;
@@ -18,7 +19,7 @@ type AddPaymentModalProps = {
 type PaymentData = {
   payer: string;
   amount: string;
-  dateOfTransaction: string;
+  dateOfTransaction: Dayjs | string;
   paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE';
   note: string;
 };
@@ -28,7 +29,7 @@ const paymentMethods = ['ACCOUNT', 'CASH', 'INVOICE'];
 const initialValues: PaymentData = {
   payer: '',
   amount: '',
-  dateOfTransaction: dayjs().format('YYYY-MM-DDTHH:mm'),
+  dateOfTransaction: dayjs(),
   paymentMethod: 'ACCOUNT',
   note: '',
 };
@@ -45,7 +46,9 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 
   const validationSchema = Yup.object({
     payer: Yup.string().required(t('required')),
-    amount: Yup.number().required(t('required')).positive(t('must-be-positive')),
+    amount: Yup.number()
+      .required(t('required'))
+      .positive(t('must-be-positive')),
     dateOfTransaction: Yup.string().required(t('required')),
     paymentMethod: Yup.string().required(t('required')),
     note: Yup.string(),
@@ -88,6 +91,15 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
     validationSchema,
     onSubmit,
   });
+
+  const handleDateChange = useCallback(
+    (newValue: Dayjs | null) => {
+      if (newValue) {
+        formik.setFieldValue('dateOfTransaction', newValue);
+      }
+    },
+    [formik]
+  );
 
   const isSubmitDisabled = useMemo(
     () => !formik.isValid || !formik.dirty,
@@ -149,22 +161,11 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
             </MenuItem>
           ))}
         </TextField>
-        <TextField
-          fullWidth
-          margin="dense"
+
+        <BasicDatePicker
           label={t('transaction-date')}
-          name="dateOfTransaction"
-          type="datetime-local"
-          value={formik.values.dateOfTransaction}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.dateOfTransaction &&
-            Boolean(formik.errors.dateOfTransaction)
-          }
-          helperText={
-            formik.touched.dateOfTransaction && formik.errors.dateOfTransaction
-          }
+          onChange={handleDateChange}
+          value={formik.values.dateOfTransaction as Dayjs}
         />
         <TextField
           fullWidth

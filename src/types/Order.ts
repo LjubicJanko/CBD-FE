@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import { Payment } from './Payment';
 
 export type OrderExecutionStatus =
@@ -56,7 +57,7 @@ export type OrderStatusHistory = {
 export type CreateOrder = {
   name: string;
   description: string;
-  plannedEndingDate: string | number;
+  plannedEndingDate: string | number | Dayjs;
   legalEntity: boolean;
   acquisitionCost?: number;
   salePrice?: number;
@@ -103,7 +104,7 @@ export type Order = {
   legalEntity: boolean;
   postalService: string;
   postalCode: string;
-  plannedEndingDate: string;
+  plannedEndingDate: Dayjs | string;
   amountPaid: number;
   amountLeftToPay: number;
   payments: Payment[];

@@ -14,6 +14,7 @@ import { getNextStatus } from '../../../util/util';
 import { orderService } from '../../../api';
 import { useTranslation } from 'react-i18next';
 import OrdersContext from '../../../store/OrdersProvider/Orders.context';
+import * as Yup from 'yup';
 
 export type StatusChangeModalProps = {
   currentStatus: OrderStatus;
@@ -45,7 +46,10 @@ const StatusChangeModal = ({
     postalCode: '',
     postalService: '',
   };
+
   const nextStatus = getNextStatus(currentStatus);
+
+  const isShipReady = currentStatus === 'SHIP_READY';
 
   const onSubmit = useCallback(
     async (statusData: StatusData) => {
@@ -65,8 +69,23 @@ const StatusChangeModal = ({
     [onClose, orderId, setOrderData, updateOrderInOverviewList]
   );
 
+  const validationSchema = Yup.object({
+    closingComment: Yup.string().required(t('required')),
+    postalCode: Yup.string().when('isShipReady', (_, schema) => {
+      return isShipReady
+        ? schema.required(t('required'))
+        : schema.notRequired();
+    }),
+    postalService: Yup.string().when('isShipReady', (_, schema) => {
+      return isShipReady
+        ? schema.required(t('required'))
+        : schema.notRequired();
+    }),
+  });
+
   const formik = useFormik<StatusData>({
     initialValues,
+    validationSchema,
     onSubmit,
   });
 
@@ -87,12 +106,13 @@ const StatusChangeModal = ({
             name="closingComment"
             type="text"
             value={formik.values.closingComment}
+            helperText={formik.errors.closingComment}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             multiline
             rows={4}
           />
-          {currentStatus === 'SHIP_READY' && (
+          {isShipReady && (
             <>
               <FormControl fullWidth>
                 <InputLabel id="postal-service-input-label">
@@ -107,6 +127,7 @@ const StatusChangeModal = ({
                   label={t('postal-service')}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  error={!!formik.errors.postalService}
                 >
                   {postServices.map((postService) => (
                     <MenuItem key={postService} value={postService}>
@@ -115,6 +136,11 @@ const StatusChangeModal = ({
                   ))}
                 </Select>
               </FormControl>
+              {formik.errors.postalService && (
+                <span className="postalService--error">
+                  {formik.errors.postalService}
+                </span>
+              )}
               <TextField
                 className="postal-code-input"
                 label={t('postal-code')}
@@ -123,6 +149,7 @@ const StatusChangeModal = ({
                 value={formik.values.postalCode}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                helperText={formik.errors.postalCode}
               />
             </>
           )}

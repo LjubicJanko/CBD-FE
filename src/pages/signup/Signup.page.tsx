@@ -102,45 +102,6 @@ const SignupPage = () => {
       </form>
     </Styled.SignupContainer>
   );
-
-  // return (
-  //   <Styled.SignupContainer
-  //     initialValues={
-  //       {
-  //         username: '',
-  //         password: '',
-  //         fullName: '',
-  //         role: 'consumer',
-  //       } as RegisterData
-  //     }
-  //     validate={(values) => {
-  //       const errors: { username?: string } = {};
-  //       if (!values.username) {
-  //         errors.username = 'Required';
-  //       }
-  //       return errors;
-  //     }}
-  //     onSubmit={(values, { setSubmitting }) => {
-  //       console.log(values);
-  //       const res = signup(values as RegisterData);
-  //       console.log(res);
-  //       setSubmitting(false);
-  //     }}
-  //   >
-  //     {({ isSubmitting }) => (
-  //       <Form>
-  //         <Field type="text" name="fullName" />
-  //         <Field type="text" name="username" />
-  //         <ErrorMessage name="username" component="div" />
-  //         <Field type="password" name="password" />
-  //         <ErrorMessage name="password" component="div" />
-  //         <button type="submit" disabled={isSubmitting}>
-  //           Submit
-  //         </button>
-  //       </Form>
-  //     )}
-  //   </Styled.SignupContainer>
-  // );
 };
 
 export default SignupPage;

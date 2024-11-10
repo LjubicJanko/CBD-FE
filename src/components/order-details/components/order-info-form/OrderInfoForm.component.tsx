@@ -1,14 +1,15 @@
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
 import { BasicDatePicker } from '../../..';
 import { orderService } from '../../../../api';
-import { Order } from '../../../../types/Order';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
-import { useTranslation } from 'react-i18next';
+import { Order } from '../../../../types/Order';
 import * as Styled from './OrderInfoForm.styles';
-import * as Yup from 'yup';
+import dayjs from 'dayjs'; // Import dayjs
 
 const initialOrderData: Order = {
   id: 0,
@@ -20,7 +21,7 @@ const initialOrderData: Order = {
   statusHistory: [],
   postalService: '',
   postalCode: '',
-  plannedEndingDate: '',
+  plannedEndingDate: dayjs().add(1, 'week'),
   amountLeftToPay: 0,
   legalEntity: false,
   acquisitionCost: 0,
@@ -52,7 +53,12 @@ const OrderInfoForm = () => {
     async (values: Order) => {
       setSelectedOrder(null);
       try {
-        const res: Order = await orderService.updateOrder(values);
+        const res: Order = await orderService.updateOrder({
+          ...values,
+          plannedEndingDate: dayjs(values.plannedEndingDate).format(
+            'YYYY-MM-DD'
+          ),
+        });
         updateOrderInOverviewList(res);
         setSelectedOrder(res);
       } catch (error) {
@@ -62,11 +68,33 @@ const OrderInfoForm = () => {
     [setSelectedOrder, updateOrderInOverviewList]
   );
 
+  const initialValues = useMemo(
+    () =>
+      selectedOrder
+        ? {
+            ...selectedOrder,
+            plannedEndingDate: selectedOrder?.plannedEndingDate
+              ? dayjs(selectedOrder.plannedEndingDate)
+              : dayjs(),
+          }
+        : initialOrderData,
+    [selectedOrder]
+  );
+
   const formik = useFormik<Order>({
-    initialValues: selectedOrder ?? initialOrderData,
+    initialValues,
     validationSchema,
     onSubmit,
   });
+
+  const handleDateChange = useCallback(
+    (newValue: Dayjs | null) => {
+      if (newValue) {
+        formik.setFieldValue('plannedEndingDate', newValue);
+      }
+    },
+    [formik]
+  );
 
   return (
     <Styled.OrderInfoFormContainer
@@ -128,19 +156,13 @@ const OrderInfoForm = () => {
         <dd>{selectedOrder?.amountPaid}</dd>
         <dt>{t('left-to-pay')}</dt>
         <dd>{selectedOrder?.amountLeftToPay}</dd>
+        
       </dl>
-      <div
-        className="date-input-container"
-        style={{ display: 'flex', gap: '16px', alignItems: 'end' }}
-      >
-        <p>{t('expected')}</p>
-        <BasicDatePicker
-          value={dayjs(selectedOrder?.plannedEndingDate)}
-          onChange={(value: Dayjs | null) => {
-            console.log(value);
-          }}
-        />
-      </div>
+      <BasicDatePicker
+        label={t('expected')}
+        value={formik.values.plannedEndingDate as Dayjs}
+        onChange={handleDateChange}
+      />
 
       <FormControlLabel
         label={t('is-legal-entity')}

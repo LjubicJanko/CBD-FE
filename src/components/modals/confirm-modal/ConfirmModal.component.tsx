@@ -3,9 +3,10 @@ import * as Styled from './ConfirmModal.styles';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
-type ConfirmModalProps = {
+export type ConfirmModalProps = {
   text: string;
   isOpen: boolean;
+  hideNote?: boolean;
   onConfirm: (note: string) => void;
   onCancel: () => void;
 };
@@ -13,11 +14,13 @@ type ConfirmModalProps = {
 const ConfirmModal = ({
   text,
   isOpen,
+  hideNote = false,
   onConfirm,
   onCancel,
 }: ConfirmModalProps) => {
   const { t } = useTranslation();
   const [note, setNote] = useState('');
+
 
   return (
     <Styled.ConfirmModalContainer
@@ -25,24 +28,26 @@ const ConfirmModal = ({
       isOpen={isOpen}
       onClose={onCancel}
     >
-      <TextField
-        className="comment-input"
-        label={t('comment')}
-        name="closingComment"
-        type="text"
-        fullWidth
-        value={note}
-        onChange={(val) => setNote(val.target.value)}
-        multiline
-        rows={4}
-      />
+      {!hideNote && (
+        <TextField
+          className="comment-input"
+          label={t('comment')}
+          name="closingComment"
+          type="text"
+          fullWidth
+          value={note}
+          onChange={(val) => setNote(val.target.value)}
+          multiline
+          rows={4}
+        />
+      )}
       <div className="actions">
         <Button className="cancel" onClick={onCancel}>
           {t('cancel')}
         </Button>
         <Button
           className="confirm"
-          disabled={note === ''}
+          disabled={note === '' && !hideNote}
           onClick={() => onConfirm(note)}
         >
           {t('confirm')}

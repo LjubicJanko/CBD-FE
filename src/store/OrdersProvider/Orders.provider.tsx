@@ -40,7 +40,6 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       const isPageUnchanged = lastPageValueRef.current === page;
 
       const statuses = Object.keys(params);
-      console.log({ shouldShowArchived });
       const response = await orderService.getAllPaginated({
         statuses,
         executionStatuses: shouldShowArchived ? ['ARCHIVED', 'CANCELED'] : [],
@@ -77,11 +76,6 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
     async (searchTerm: string) => {
       try {
         setIsLoading(true);
-        console.log({
-          searchTerm,
-          page,
-          perPage,
-        });
         const response = await orderService.searchOrders({
           searchTerm,
           page,

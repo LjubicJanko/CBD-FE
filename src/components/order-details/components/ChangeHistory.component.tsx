@@ -30,7 +30,6 @@ const ChangeHistoryComponent = ({
 }: ChangeHistoryProps) => {
   const { t } = useTranslation();
   const width = useResponsiveWidth();
-  console.log(statusHistory);
 
   return (
     <Styled.ChangeHistoryContainer>
