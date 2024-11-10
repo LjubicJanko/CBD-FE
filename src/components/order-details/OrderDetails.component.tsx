@@ -127,11 +127,11 @@ const OrderDetailsComponent = () => {
       <Tooltip title={selectedOrder?.pausingComment}>
         <Chip
           className="execution-chip"
-          label={isCanceled ? 'canceled' : 'paused'}
+          label={isCanceled ? t('canceled') : t('paused')}
         />
       </Tooltip>
     ),
-    [isCanceled, selectedOrder?.pausingComment]
+    [isCanceled, selectedOrder?.pausingComment, t]
   );
 
   const resetConfirmModal = useCallback(

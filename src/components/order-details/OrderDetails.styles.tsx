@@ -48,6 +48,13 @@ export const OrderDetailsContainer = styled.div`
       position: relative;
     `)};
 
+    ${mobile(css`
+      flex-direction: column;
+      button {
+        width: 100%;
+      }
+    `)}
+
     button {
       display: flex;
       align-items: center;

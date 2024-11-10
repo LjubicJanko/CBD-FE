@@ -13,6 +13,7 @@ import * as Styled from './Login.styles';
 import { useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useTranslation } from 'react-i18next';
 
 const initialValues: LoginData = {
   username: '',
@@ -21,6 +22,7 @@ const initialValues: LoginData = {
 
 const LoginComponent = () => {
   const { login } = useContext(AuthContext);
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const onSubmit = (values: LoginData) => {
@@ -68,7 +70,9 @@ const LoginComponent = () => {
           <OutlinedInput
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
+            label="password"
             name="password"
+            placeholder="password"
             value={formik.values.password}
             onChange={formik.handleChange}
             endAdornment={
@@ -84,7 +88,6 @@ const LoginComponent = () => {
                 </IconButton>
               </InputAdornment>
             }
-            label="Password"
           />
         </div>
         <Button
@@ -95,7 +98,7 @@ const LoginComponent = () => {
           size="medium"
           disabled={!formik.isValid}
         >
-          Login
+          {t('login')}
         </Button>
       </form>
     </Styled.LoginContainer>
