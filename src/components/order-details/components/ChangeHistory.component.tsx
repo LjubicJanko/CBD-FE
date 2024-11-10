@@ -1,23 +1,28 @@
 import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Chip,
+  Paper,
   Step,
   StepLabel,
   Stepper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from '@mui/material';
-import { OrderStatus, OrderStatusHistory } from '../../../types/Order';
-import * as Styled from './ChangeHistory.styles';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { statusColors, statuses } from '../../../util/util';
-import { xxsMax } from '../../../util/breakpoints';
 import useResponsiveWidth from '../../../hooks/useResponsiveWidth';
+import {
+  OrderStatus,
+  OrderStatusEnum,
+  OrderStatusHistory,
+} from '../../../types/Order';
+import { xxsMax } from '../../../util/breakpoints';
+import { statusColors, statuses } from '../../../util/util';
+import * as Styled from './ChangeHistory.styles';
+import { ShippedInfoTooltip } from './shipped-tooltip/ShippedTooltip.component';
 
 export type ChangeHistoryProps = {
   statusHistory: OrderStatusHistory[];
@@ -64,20 +69,28 @@ const ChangeHistoryComponent = ({
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  <Chip
-                    className="status-chip"
-                    label={t(row.status)}
-                    style={{
-                      backgroundColor: statusColors[row.status],
-                      color: 'white',
-                    }}
-                  />
+                  <div>
+                    <Chip
+                      className="status-chip"
+                      label={t(row.status)}
+                      style={{
+                        backgroundColor: statusColors[row.status],
+                        color: 'white',
+                      }}
+                    />
+                  </div>
                 </TableCell>
                 <TableCell align="right">{row.user}</TableCell>
                 <TableCell align="right">{row.closingComment}</TableCell>
                 <TableCell align="right">
                   {dayjs(row.creationTime).format('DD-MM-YYYY HH:mm:ss')}
                 </TableCell>
+
+                {row.status === OrderStatusEnum.SHIPPED && (
+                  <TableCell align="right">
+                    <ShippedInfoTooltip row={row} />
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

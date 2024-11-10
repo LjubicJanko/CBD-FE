@@ -51,7 +51,6 @@ const OrderInfoForm = () => {
 
   const onSubmit = useCallback(
     async (values: Order) => {
-      setSelectedOrder(null);
       try {
         const res: Order = await orderService.updateOrder({
           ...values,

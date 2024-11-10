@@ -52,6 +52,8 @@ export type OrderStatusHistory = {
   closingComment: string;
   creationTime: string;
   user: string;
+  postalCode?: string;
+  postalService?: string;
 };
 
 export type CreateOrder = {

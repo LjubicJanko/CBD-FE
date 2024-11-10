@@ -5,46 +5,45 @@ import useResponsiveWidth from '../../../../hooks/useResponsiveWidth';
 import { Order, OrderExecutionStatusEnum } from '../../../../types/Order';
 import { xxsMax } from '../../../../util/breakpoints';
 import * as Styled from './OrderInfoOverview.styles';
-import dayjs from 'dayjs';
 
 export type OrderInfoOverviewProps = {
-  orderData?: Order;
+  selectedOrder?: Order;
 };
 
-const OrderInfoOverview = ({ orderData }: OrderInfoOverviewProps) => {
+const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
   const { t } = useTranslation();
   const width = useResponsiveWidth();
   const isMobile = width < xxsMax;
   const isPaused =
-    orderData?.executionStatus === OrderExecutionStatusEnum.PAUSED;
+    selectedOrder?.executionStatus === OrderExecutionStatusEnum.PAUSED;
   const priceDifference =
-    (orderData?.salePrice ?? 0) - (orderData?.acquisitionCost ?? 0);
+    (selectedOrder?.salePrice ?? 0) - (selectedOrder?.acquisitionCost ?? 0);
 
   const orderInfoConfig = useMemo(
     () => [
-      { label: t('order-name'), value: orderData?.name },
-      { label: t('description'), value: orderData?.description },
-      { label: t('sale-price'), value: orderData?.salePrice },
-      { label: t('acquisition-cost'), value: orderData?.acquisitionCost },
+      { label: t('order-name'), value: selectedOrder?.name },
+      { label: t('description'), value: selectedOrder?.description },
+      { label: t('sale-price'), value: selectedOrder?.salePrice },
+      { label: t('acquisition-cost'), value: selectedOrder?.acquisitionCost },
       {
         label: t('price-difference'),
         value: priceDifference,
       },
-      { label: t('paid'), value: orderData?.amountPaid },
-      { label: t('left-to-pay'), value: orderData?.amountLeftToPay },
+      { label: t('paid'), value: selectedOrder?.amountPaid },
+      { label: t('left-to-pay'), value: selectedOrder?.amountLeftToPay },
       {
         label: t('expected'),
-        value: dayjs(orderData?.plannedEndingDate).format('DD-MM-YYY'),
+        value: selectedOrder?.plannedEndingDate.toString(),
       },
     ],
     [
-      orderData?.acquisitionCost,
-      orderData?.amountLeftToPay,
-      orderData?.amountPaid,
-      orderData?.description,
-      orderData?.name,
-      orderData?.plannedEndingDate,
-      orderData?.salePrice,
+      selectedOrder?.acquisitionCost,
+      selectedOrder?.amountLeftToPay,
+      selectedOrder?.amountPaid,
+      selectedOrder?.description,
+      selectedOrder?.name,
+      selectedOrder?.plannedEndingDate,
+      selectedOrder?.salePrice,
       priceDifference,
       t,
     ]
@@ -55,7 +54,7 @@ const OrderInfoOverview = ({ orderData }: OrderInfoOverviewProps) => {
     return isMobile ? (
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <strong className="pause">{t('pausing-comment')}</strong>
-        <span className="pause">{orderData?.pausingComment}</span>
+        <span className="pause">{selectedOrder?.pausingComment}</span>
       </div>
     ) : (
       <TableRow>
@@ -68,11 +67,11 @@ const OrderInfoOverview = ({ orderData }: OrderInfoOverviewProps) => {
           {t('pausing-comment')}
         </Styled.TableCellContainer>
         <Styled.TableCellContainer className="pause" style={{ color: 'gray' }}>
-          {orderData?.pausingComment}
+          {selectedOrder?.pausingComment}
         </Styled.TableCellContainer>
       </TableRow>
     );
-  }, [isMobile, isPaused, orderData?.pausingComment, t]);
+  }, [isMobile, isPaused, selectedOrder?.pausingComment, t]);
 
   return isMobile ? (
     <Styled.MobileContainer>

@@ -8,8 +8,6 @@ interface OrdersContext {
   totalElements: number;
   isLoading: boolean;
   selectedOrder: Order | null;
-  isOrderUpdating: boolean;
-  setIsOrderUpdating: Dispatch<SetStateAction<boolean>>;
   updateOrderInOverviewList: (orderToUpdate: Order) => void;
   fetchOrders: () => Promise<void>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
@@ -26,8 +24,6 @@ export default createContext<OrdersContext>({
   totalElements: 0,
   isLoading: false,
   selectedOrder: null,
-  isOrderUpdating: false,
-  setIsOrderUpdating: () => {},
   updateOrderInOverviewList: () => {},
   fetchOrders: () => new Promise(() => {}),
   setPage: () => {},

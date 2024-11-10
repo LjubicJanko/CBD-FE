@@ -23,7 +23,6 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [total, setTotal] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
-  const [isOrderUpdating, setIsOrderUpdating] = useState(false);
   const [shouldShowArchived, setShouldShowArchived] = useState(false);
 
   const updateOrderInOverviewList = useCallback((orderToUpdate: Order) => {
@@ -118,8 +117,6 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         totalElements,
         isLoading,
         selectedOrder,
-        isOrderUpdating,
-        setIsOrderUpdating,
         updateOrderInOverviewList,
         handleSearch,
         fetchOrders,

@@ -20,7 +20,6 @@ export type StatusChangeModalProps = {
   currentStatus: OrderStatus;
   isOpen?: boolean;
   orderId: number;
-  setOrderData: React.Dispatch<React.SetStateAction<Order>>;
   onClose: () => void;
 };
 
@@ -36,11 +35,11 @@ const StatusChangeModal = ({
   currentStatus,
   isOpen = false,
   orderId,
-  setOrderData,
   onClose,
 }: StatusChangeModalProps) => {
   const { t } = useTranslation();
-  const { updateOrderInOverviewList } = useContext(OrdersContext);
+  const { setSelectedOrder, updateOrderInOverviewList } =
+    useContext(OrdersContext);
   const initialValues: StatusData = {
     closingComment: '',
     postalCode: '',
@@ -58,7 +57,7 @@ const StatusChangeModal = ({
           orderId,
           statusData
         );
-        setOrderData(response);
+        setSelectedOrder(response);
         updateOrderInOverviewList(response);
       } catch (error) {
         console.error(error);
@@ -66,7 +65,7 @@ const StatusChangeModal = ({
         onClose();
       }
     },
-    [onClose, orderId, setOrderData, updateOrderInOverviewList]
+    [onClose, orderId, setSelectedOrder, updateOrderInOverviewList]
   );
 
   const validationSchema = Yup.object({

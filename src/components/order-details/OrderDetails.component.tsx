@@ -23,27 +23,6 @@ import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
-import dayjs from 'dayjs';
-
-const initialOrderData: Order = {
-  id: 0,
-  trackingId: '',
-  name: '',
-  description: '',
-  status: 'DESIGN',
-  executionStatus: 'ACTIVE',
-  statusHistory: [],
-  postalService: '',
-  postalCode: '',
-  plannedEndingDate: dayjs().add(1, 'week'),
-  amountLeftToPay: 0,
-  legalEntity: false,
-  acquisitionCost: 0,
-  salePrice: 0,
-  amountPaid: 0,
-  payments: [],
-  pausingComment: '',
-};
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -66,11 +45,10 @@ export type OrderDetailsProps = { order?: Order };
 
 const OrderDetailsComponent = () => {
   const { t } = useTranslation();
-  const { selectedOrder, isOrderUpdating, fetchOrders, setSelectedOrder } =
+  const { selectedOrder, fetchOrders, setSelectedOrder } =
     useContext(OrdersContext);
   const privileges = usePrivileges();
 
-  const [orderData, setOrderData] = useState(selectedOrder || initialOrderData);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] =
     useState(EMPTY_CONFIRM_MODAL);
@@ -85,22 +63,22 @@ const OrderDetailsComponent = () => {
 
   const canArchive = useMemo(
     () =>
-      orderData?.status === OrderStatusEnum.DONE &&
-      orderData.executionStatus !== OrderExecutionStatusEnum.ARCHIVED &&
-      orderData.executionStatus !== OrderExecutionStatusEnum.CANCELED,
-    [orderData?.executionStatus, orderData?.status]
+      selectedOrder?.status === OrderStatusEnum.DONE &&
+      selectedOrder.executionStatus !== OrderExecutionStatusEnum.ARCHIVED &&
+      selectedOrder.executionStatus !== OrderExecutionStatusEnum.CANCELED,
+    [selectedOrder?.executionStatus, selectedOrder?.status]
   );
 
   const shouldShowForm = useMemo(
     () =>
       privileges.canEditData &&
       !isPaused &&
-      orderData.executionStatus !== OrderExecutionStatusEnum.CANCELED &&
-      orderData.status !== OrderStatusEnum.DONE,
+      selectedOrder?.executionStatus !== OrderExecutionStatusEnum.CANCELED &&
+      selectedOrder?.status !== OrderStatusEnum.DONE,
     [
       isPaused,
-      orderData.executionStatus,
-      orderData.status,
+      selectedOrder?.executionStatus,
+      selectedOrder?.status,
       privileges.canEditData,
     ]
   );
@@ -131,14 +109,14 @@ const OrderDetailsComponent = () => {
 
   const nonActiveBanner = useMemo(
     () => (
-      <Tooltip title={orderData.pausingComment}>
+      <Tooltip title={selectedOrder?.pausingComment}>
         <Chip
           className="execution-chip"
           label={isCanceled ? 'canceled' : 'paused'}
         />
       </Tooltip>
     ),
-    [isCanceled, orderData.pausingComment]
+    [isCanceled, selectedOrder?.pausingComment]
   );
 
   const resetConfirmModal = useCallback(
@@ -162,7 +140,6 @@ const OrderDetailsComponent = () => {
   const changeOrderStatus = useCallback(
     async (status: OrderExecutionStatusEnum, note: string) => {
       if (!selectedOrder?.id) return;
-      setSelectedOrder(null);
       try {
         const orderResponse = await orderService.changeExecutionStatus(
           selectedOrder.id,
@@ -252,10 +229,7 @@ const OrderDetailsComponent = () => {
     ]
   );
 
-  if (!orderData.id) return null;
-
-  if (isOrderUpdating)
-    return <Styled.OrderDetailsContainer>loading</Styled.OrderDetailsContainer>;
+  if (!selectedOrder) return null;
 
   return (
     <Styled.OrderDetailsContainer key={selectedOrder?.id}>
@@ -276,9 +250,11 @@ const OrderDetailsComponent = () => {
         </Button>
       )}
       <div className="tracking-id">
-        <p>{t('tracking-id', { TRACKING_ID: orderData.trackingId })}</p>
+        <p>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</p>
         <IconButton
-          onClick={() => navigator.clipboard.writeText(orderData.trackingId)}
+          onClick={() =>
+            navigator.clipboard.writeText(selectedOrder.trackingId)
+          }
           edge="end"
         >
           <ContentCopyIcon />
@@ -288,13 +264,13 @@ const OrderDetailsComponent = () => {
       {shouldShowForm ? (
         <OrderInfoForm />
       ) : (
-        <OrderInfoOverview orderData={orderData} />
+        <OrderInfoOverview selectedOrder={selectedOrder} />
       )}
       <ChangeHistoryComponent
-        statusHistory={orderData.statusHistory}
-        status={orderData.status}
+        statusHistory={selectedOrder.statusHistory}
+        status={selectedOrder.status}
       />
-      {orderData.status !== OrderStatusEnum.DONE && (
+      {selectedOrder.status !== OrderStatusEnum.DONE && (
         <>
           <Button
             key={isStatusModalOpen ? 'openned' : 'closed'}
@@ -311,15 +287,15 @@ const OrderDetailsComponent = () => {
       )}
       <Divider />
       <OrderPayments
-        payments={orderData.payments}
-        orderId={orderData.id}
+        payments={selectedOrder.payments}
+        orderId={selectedOrder.id}
         isAddingDisabled={
-          orderData.executionStatus !== OrderExecutionStatusEnum.ACTIVE ||
-          orderData.status === OrderStatusEnum.DONE
+          selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE ||
+          selectedOrder.status === OrderStatusEnum.DONE
         }
       />
       <Divider />
-      {orderData.status !== OrderStatusEnum.DONE && (
+      {selectedOrder.status !== OrderStatusEnum.DONE && (
         <div className="action-buttons">
           {actionButtons.map(
             ({ show, label, color, icon, onClick }, index) =>
@@ -340,11 +316,10 @@ const OrderDetailsComponent = () => {
       )}
       {isStatusModalOpen && (
         <StatusChangeModal
-          orderId={orderData.id}
-          currentStatus={orderData.status}
+          orderId={selectedOrder.id}
+          currentStatus={selectedOrder.status}
           isOpen={isStatusModalOpen}
           onClose={toggleStatusModal}
-          setOrderData={setOrderData}
         />
       )}
       <ConfirmModal {...confirmModalProps} />

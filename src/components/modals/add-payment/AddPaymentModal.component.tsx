@@ -41,7 +41,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const { setIsOrderUpdating, updateOrderInOverviewList, setSelectedOrder } =
+  const { updateOrderInOverviewList, setSelectedOrder } =
     useContext(OrdersContext);
 
   const validationSchema = Yup.object({
@@ -56,7 +56,6 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 
   const onSubmit = useCallback(
     async (values: PaymentData) => {
-      setSelectedOrder(null);
       const newPayment: Payment = {
         id: Date.now(),
         payer: values.payer,
@@ -66,24 +65,15 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         note: values.note,
       };
       try {
-        setIsOrderUpdating(true);
         const order = await orders.addPayment(newPayment, orderId);
         updateOrderInOverviewList(order);
         setSelectedOrder(order);
       } catch (err) {
         console.error(err);
-      } finally {
-        setIsOrderUpdating(false);
       }
       onClose();
     },
-    [
-      onClose,
-      setIsOrderUpdating,
-      orderId,
-      updateOrderInOverviewList,
-      setSelectedOrder,
-    ]
+    [onClose, orderId, updateOrderInOverviewList, setSelectedOrder]
   );
 
   const formik = useFormik({
