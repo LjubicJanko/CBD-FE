@@ -103,6 +103,7 @@ export type Order = {
   statusHistory: OrderStatusHistory[];
   acquisitionCost: number;
   salePrice: number;
+  salePriceWithTax?: number;
   legalEntity: boolean;
   postalService: string;
   postalCode: string;

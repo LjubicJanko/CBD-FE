@@ -1,6 +1,6 @@
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Dayjs } from 'dayjs';
-import { useFormik } from 'formik';
+import { FormikHelpers, useFormik } from 'formik';
 import { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -50,7 +50,7 @@ const OrderInfoForm = () => {
   });
 
   const onSubmit = useCallback(
-    async (values: Order) => {
+    async (values: Order, { resetForm }: FormikHelpers<Order>) => {
       try {
         const res: Order = await orderService.updateOrder({
           ...values,
@@ -60,6 +60,9 @@ const OrderInfoForm = () => {
         });
         updateOrderInOverviewList(res);
         setSelectedOrder(res);
+        resetForm({
+          values
+        });
       } catch (error) {
         console.error(error);
       }
@@ -149,13 +152,16 @@ const OrderInfoForm = () => {
         onBlur={formik.handleBlur}
       />
       <dl className="order-const-difference">
+        <dt>{t('sale-price-taxed')}</dt>
+        <dd>
+          {selectedOrder?.legalEntity ? selectedOrder?.salePriceWithTax : '-'}
+        </dd>
         <dt>{t('price-difference')}</dt>
         <dd>{formik.values.salePrice - formik.values.acquisitionCost}</dd>
         <dt>{t('paid')}</dt>
         <dd>{selectedOrder?.amountPaid}</dd>
         <dt>{t('left-to-pay')}</dt>
         <dd>{selectedOrder?.amountLeftToPay}</dd>
-        
       </dl>
       <BasicDatePicker
         label={t('expected')}

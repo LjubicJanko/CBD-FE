@@ -13,6 +13,7 @@
   "description": "Опис: ",
   "order-name": "Назив",
   "sale-price": "Продајна цена",
+  "sale-price-taxed": "Продајна + пдв",
   "acquisition-cost": "Набавна цена",
   "price-difference": "Разлика у цени",
   "is-legal-entity": "Да ли је правно лице",
