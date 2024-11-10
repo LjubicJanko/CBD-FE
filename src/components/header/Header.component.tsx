@@ -67,9 +67,9 @@ const HeaderComponent = () => {
             <Button variant="contained" onClick={() => navigate('/login')}>
               {t('go-to-login')}
             </Button>
-            <Button variant="contained" onClick={() => navigate('/signup')}>
+            {/* <Button variant="contained" onClick={() => navigate('/signup')}>
               {t('signup')}
-            </Button>
+            </Button> */}
           </>
         )}
       </div>

@@ -8,9 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const HomeComponent = () => {
   const { t } = useTranslation();
-  const [trackingOrderId, setTrackingOrderId] = useState<string | undefined>(
-    'c10b3935-4dda-4350-9776-835ec038cf70'
-  );
+  const [trackingOrderId, setTrackingOrderId] = useState<string | undefined>();
   const [order, setOrder] = useState<OrderTracking>();
 
   const trackOrder = useCallback(async () => {
@@ -22,7 +20,6 @@ const HomeComponent = () => {
   return (
     <Styled.HomeContainer className="home">
       <div className="home__search-container">
-        deployed again
         <TextField
           className="order-id-input"
           label={t('order-tracking-id')}
