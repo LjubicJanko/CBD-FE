@@ -12,6 +12,7 @@
   "add": "Add",
   "add-payment": "Add payment",
   "amount": "Amount",
+  "active-orders": "Active",
   "archive-orders": "Archived",
   "archive-reason": "Reason to archive",
   "cancel": "Cancel",

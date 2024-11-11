@@ -285,10 +285,13 @@ const OrderDetailsComponent = () => {
         className="stepper"
         activeStep={statuses.indexOf(selectedOrder?.status)}
         orientation={width < xxsMax ? 'vertical' : 'horizontal'}
+        alternativeLabel={width >= xxsMax}
       >
         {statuses.map((status) => {
           return (
-            <Step key={status}>
+            <Step
+              key={status}
+            >
               <StepLabel>{t(status)}</StepLabel>
             </Step>
           );
@@ -296,7 +299,7 @@ const OrderDetailsComponent = () => {
       </Stepper>
       <div className="status-history-butons">
         <Button onClick={() => setIsStatusHistoryModalOpen(true)}>
-          View status history
+          {t('view-status-history')}
         </Button>
         {selectedOrder.status !== OrderStatusEnum.DONE && (
           <Button
