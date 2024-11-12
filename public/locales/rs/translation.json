@@ -38,6 +38,8 @@
   "move-to-next-state": "Пребаци на следећи корак",
   "must-be-positive": "Број мора бити већи од нуле",
   "note": "Белешка",
+  "newest-to-oldest": "Новије ка старијим",
+  "oldest-to-newest": "Старије ка новијим",
   "order-name": "Назив",
   "order-tracking": "Праћење пошиљке",
   "order-tracking-id": "Идентификациони број",
@@ -66,5 +68,6 @@
   "tracking-id": "Идентификатор праћења: {{TRACKING_ID}}",
   "transaction-date": "Датум трансакције",
   "user": "Корисник",
-  "view-status-history": "Погледај историју промена"
+  "view-status-history": "Погледај историју промена",
+  "filters": "Филтери"
 }

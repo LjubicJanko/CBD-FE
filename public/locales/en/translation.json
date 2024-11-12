@@ -38,6 +38,8 @@
   "move-to-next-state": "Move to next state",
   "must-be-positive": "Number must be positive",
   "note": "Note",
+  "newest-to-oldest": "Newest to oldest",
+  "oldest-to-newest": "Oldest to newest",
   "order-name": "Order name",
   "order-tracking": "Order tracking",
   "order-tracking-id": "Order tracking ID",
@@ -66,5 +68,6 @@
   "tracking-id": "Tracking ID: {{TRACKING_ID}}",
   "transaction-date": "Transaction date",
   "user": "User",
-  "view-status-history": "View status history"
+  "view-status-history": "View status history",
+  "filters": "Filters"
 }

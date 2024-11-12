@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { orderService } from '../../api';
 import useQueryParams from '../../hooks/useQueryParams';
-import { Order, OrderOverview } from '../../types/Order';
+import { Order, OrderOverview, orderStatusArray } from '../../types/Order';
 import OrdersContext from './Orders.context';
 
 const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
@@ -38,9 +38,12 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
     try {
       const isPageUnchanged = lastPageValueRef.current === page;
 
-      const statuses = Object.keys(params);
+      const statuses = Object.keys(params).filter((key) =>
+        orderStatusArray.includes(key)
+      );
       const response = await orderService.getAllPaginated({
         statuses,
+        sort: params['sort'] as 'asc' | 'desc',
         executionStatuses: shouldShowArchived ? ['ARCHIVED', 'CANCELED'] : [],
         page: isPageUnchanged ? 0 : page,
         perPage,

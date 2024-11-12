@@ -1,4 +1,10 @@
-import { Button, Divider } from '@mui/material';
+import {
+  Button,
+  Divider,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 import classNames from 'classnames';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,11 +26,16 @@ type ButtonVariants = {
   [key: string]: boolean;
 };
 
+type SortType = 'asc' | 'desc';
+
 const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
   const { t } = useTranslation();
   const { setSelectedOrderId } = useContext(OrdersContext);
-  const { params, setMultipleQParams, removeMultipleQParams } =
+  const { params, setMultipleQParams, setQParam, removeMultipleQParams } =
     useQueryParams();
+  const [sort, setSort] = useState<SortType>(
+    (params['sort'] as SortType) ?? 'desc'
+  );
 
   const initialVariants: ButtonVariants = useMemo(
     () => ({
@@ -100,6 +111,10 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     [selectedStatuses, t]
   );
 
+  const handleChange = useCallback((event: SelectChangeEvent) => {
+    setSort(event.target.value as SortType);
+  }, []);
+
   const toggleVariant = useCallback((key: OrderStatus) => {
     setSelectedStatuses((old) => ({
       ...old,
@@ -114,6 +129,7 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
         return acc;
       }, {} as ButtonVariants)
     );
+    setSort('asc');
   }, []);
 
   const updateQParams = useCallback(() => {
@@ -125,13 +141,16 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
 
     setSelectedOrderId(0);
     setMultipleQParams(activeStatuses);
+    setQParam('sort', sort);
     onClose();
   }, [
     onClose,
     removeMultipleQParams,
     selectedStatuses,
     setMultipleQParams,
+    setQParam,
     setSelectedOrderId,
+    sort,
   ]);
 
   return (
@@ -152,6 +171,16 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
           </Button>
         ))}
       </div>
+      <Divider />
+      <Select
+        labelId="sort-by-creation-date-label"
+        id="sort-by-select"
+        value={sort}
+        onChange={handleChange}
+      >
+        <MenuItem value="desc">{t('newest-to-oldest')}</MenuItem>
+        <MenuItem value="asc">{t('oldest-to-newest')}</MenuItem>
+      </Select>
       <Divider />
       <div className="actions">
         <Button variant="outlined" color="info" onClick={clearAllStatuses}>

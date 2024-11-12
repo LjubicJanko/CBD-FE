@@ -12,6 +12,7 @@ import privateClient from '../privateClient';
 export type GetAllPaginatedProps = {
   statuses?: string[];
   executionStatuses?: string[];
+  sort?: 'asc' | 'desc';
   page?: number;
   perPage?: number;
 };
@@ -50,6 +51,7 @@ const getAllPaginated = async (props: GetAllPaginatedProps) =>
       params: {
         statuses: props.statuses,
         executionStatuses: props.executionStatuses,
+        sort: props.sort,
         page: props.page ?? 0,
         perPage: props.perPage ?? 5,
       },
@@ -71,6 +73,7 @@ const getAllPaginated = async (props: GetAllPaginatedProps) =>
         }
 
         // Serialize pagination params
+        searchParams.append('sort', (props.sort ?? 'desc').toString());
         searchParams.append('page', (props.page ?? 0).toString());
         searchParams.append('perPage', (props.perPage ?? 5).toString());
 
