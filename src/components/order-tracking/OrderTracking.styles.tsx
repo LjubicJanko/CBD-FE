@@ -19,6 +19,15 @@ export const OrderTrackingContainer = styled.div`
 
       border-bottom: 1px solid black;
       padding: 32px;
+
+      h2 {
+        font-size: 32px;
+        font-weight: 600;
+      }
+      h3 {
+        font-size: 18px;
+        font-weight: 300;
+      }
     }
 
     &__body {
@@ -29,6 +38,7 @@ export const OrderTrackingContainer = styled.div`
         width: 100%;
         justify-content: space-between;
         margin-bottom: 32px;
+        gap: 16px;
 
         ${mobile(css`
           flex-direction: column;
@@ -39,6 +49,7 @@ export const OrderTrackingContainer = styled.div`
         &__left-to-pay,
         &__shipping,
         &__shipping-code,
+        &__last-update,
         &__status {
           display: flex;
           flex-direction: column;

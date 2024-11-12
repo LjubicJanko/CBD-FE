@@ -8,6 +8,7 @@ import {
   Chip,
   Divider,
   IconButton,
+  Snackbar,
   Step,
   StepLabel,
   Stepper,
@@ -35,6 +36,7 @@ import * as Styled from './OrderDetails.styles';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
+import classNames from 'classnames';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -55,6 +57,18 @@ type ButtonColors =
 
 export type OrderDetailsProps = { order?: Order };
 
+export type SnackbarProps = {
+  open: boolean;
+  message: string;
+  type: 'success' | 'info' | 'error';
+};
+
+const emptySnackbar = {
+  open: false,
+  message: '',
+  type: 'success',
+} as SnackbarProps;
+
 const OrderDetailsComponent = () => {
   const { t } = useTranslation();
   const { selectedOrder, fetchOrders, setSelectedOrder } =
@@ -62,6 +76,8 @@ const OrderDetailsComponent = () => {
   const privileges = usePrivileges();
   const width = useResponsiveWidth();
 
+  const [snackbarProps, setSnackbarProps] =
+    useState<SnackbarProps>(emptySnackbar);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isStatusHistoryModalOpen, setIsStatusHistoryModalOpen] =
     useState(false);
@@ -82,6 +98,13 @@ const OrderDetailsComponent = () => {
       selectedOrder.executionStatus !== OrderExecutionStatusEnum.ARCHIVED &&
       selectedOrder.executionStatus !== OrderExecutionStatusEnum.CANCELED,
     [selectedOrder?.executionStatus, selectedOrder?.status]
+  );
+
+  const isArchived = useMemo(
+    () =>
+      selectedOrder?.executionStatus === OrderExecutionStatusEnum.ARCHIVED ||
+      selectedOrder?.executionStatus === OrderExecutionStatusEnum.CANCELED,
+    [selectedOrder?.executionStatus]
   );
 
   const shouldShowForm = useMemo(
@@ -126,8 +149,10 @@ const OrderDetailsComponent = () => {
     () => (
       <Tooltip title={selectedOrder?.pausingComment}>
         <Chip
-          className="execution-chip"
-          label={isCanceled ? t('canceled') : t('paused')}
+          className={classNames('execution-chip', {
+            'execution-chip--canceled': isCanceled,
+          })}
+          label={(isCanceled ? t('canceled') : t('paused')).toUpperCase()}
         />
       </Tooltip>
     ),
@@ -163,12 +188,24 @@ const OrderDetailsComponent = () => {
         );
         fetchOrders();
         setSelectedOrder(orderResponse);
+        setSnackbarProps({
+          open: true,
+          message: 'Successfuly changed status',
+          type: 'info',
+        });
+        console.log('changed');
       } catch (error) {
         console.error(error);
       }
       resetConfirmModal();
     },
-    [fetchOrders, selectedOrder?.id, resetConfirmModal, setSelectedOrder]
+    [
+      fetchOrders,
+      selectedOrder?.id,
+      resetConfirmModal,
+      setSelectedOrder,
+      setSnackbarProps,
+    ]
   );
 
   const handleDeleteOrder = useCallback(async () => {
@@ -177,10 +214,15 @@ const OrderDetailsComponent = () => {
     try {
       await orderService.deleteOrder(selectedOrder.id);
       fetchOrders();
+      setSnackbarProps({
+        open: true,
+        message: 'Successfuly deleted',
+        type: 'error',
+      });
     } catch (error) {
       console.error(error);
     }
-  }, [fetchOrders, selectedOrder?.id, setSelectedOrder]);
+  }, [fetchOrders, selectedOrder?.id, setSelectedOrder, setSnackbarProps]);
 
   const toggleStatusModal = useCallback(
     () => setIsStatusModalOpen((prev) => !prev),
@@ -289,9 +331,7 @@ const OrderDetailsComponent = () => {
       >
         {statuses.map((status) => {
           return (
-            <Step
-              key={status}
-            >
+            <Step key={status}>
               <StepLabel>{t(status)}</StepLabel>
             </Step>
           );
@@ -301,7 +341,7 @@ const OrderDetailsComponent = () => {
         <Button onClick={() => setIsStatusHistoryModalOpen(true)}>
           {t('view-status-history')}
         </Button>
-        {selectedOrder.status !== OrderStatusEnum.DONE && (
+        {selectedOrder.status !== OrderStatusEnum.DONE && !isArchived && (
           <Button
             key={isStatusModalOpen ? 'openned' : 'closed'}
             variant="contained"
@@ -359,6 +399,14 @@ const OrderDetailsComponent = () => {
           onClose={() => setIsStatusHistoryModalOpen(false)}
         />
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={snackbarProps.open}
+        onClose={() => setSnackbarProps(emptySnackbar)}
+        key={'top-center'}
+      >
+        <p>{snackbarProps.message}</p>
+      </Snackbar>
       <ConfirmModal {...confirmModalProps} />
     </Styled.OrderDetailsContainer>
   );

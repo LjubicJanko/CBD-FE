@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 const emptyOrderData: CreateOrder = {
   name: '',
   description: '',
-  plannedEndingDate: dayjs().add(1, 'week'),
+  plannedEndingDate: dayjs().add(2, 'week'),
   legalEntity: false,
   acquisitionCost: undefined,
   salePrice: undefined,

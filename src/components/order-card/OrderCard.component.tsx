@@ -1,7 +1,7 @@
 import { Chip } from '@mui/material';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { OrderOverview } from '../../types/Order';
+import { OrderExecutionStatusEnum, OrderOverview } from '../../types/Order';
 import * as Styled from './OrderCard.styles';
 import { statusColors } from '../../util/util';
 
@@ -20,6 +20,8 @@ const OrderCardComponent = ({
     <Styled.OrderCardContainer
       className={classNames('order-card', {
         'order-card--selected': isSelected,
+        'order-card--paused':
+          order.executionStatus === OrderExecutionStatusEnum.PAUSED,
       })}
       onClick={onClick}
     >

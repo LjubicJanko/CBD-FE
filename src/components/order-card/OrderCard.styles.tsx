@@ -5,8 +5,10 @@ export const OrderCardContainer = styled.div`
   flex-direction: column;
   padding: 8px;
   gap: 4px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
-    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.1) 0px 6px 10px -1px;
+  transform: translateY(-2px);
+
   max-width: 400px;
   cursor: pointer;
 
@@ -25,13 +27,16 @@ export const OrderCardContainer = styled.div`
     }
 
     .status-chip {
-      /* width: fit-content; */
       width: 60%;
     }
 
+    &--paused {
+      background-color: rgba(255, 255, 102, 0.1);
+    }
     &--selected {
-      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-        rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+      box-shadow: inset rgba(0, 0, 0, 0.2) 0px 4px 6px -1px,
+        inset rgba(0, 0, 0, 0.1) 0px 6px 10px -1px;
+      transform: translateY(1px);
 
       border: 1px solid rgba(32, 38, 42, 0.15);
     }

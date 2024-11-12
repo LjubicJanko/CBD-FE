@@ -9,6 +9,12 @@ export const OrderDetailsContainer = styled.div`
 
   .execution-chip {
     width: fit-content;
+    background-color: #ffeb3b;
+
+    &--canceled {
+      background-color: #b71c1c;
+      color: white;
+    }
 
     ${mobile(css`
       align-self: center;
@@ -32,7 +38,7 @@ export const OrderDetailsContainer = styled.div`
       gap: 8px;
 
       button {
-        width: 100%
+        width: 100%;
       }
     `)};
   }

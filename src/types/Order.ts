@@ -65,25 +65,6 @@ export type CreateOrder = {
   salePrice?: number;
 };
 
-// export type CreateOrder = {
-//   id: number;
-//   name: string;
-//   description: string;
-//   plannedEndingDate: string;
-//   trackingId: string;
-//   isLegalEntity: boolean;
-//   acquisitionCost: number;
-//   salePrice: number;
-//   salePriceWithTax: number;
-//   priceDifference: number;
-//   amountPaid: number;
-//   amountLeftToPay: number;
-//   amountLeftToPayWithTax: number;
-//   status: OrderStatus;
-//   statusHistory: OrderStatusHistory[];
-//   payments: Payment[];
-// };
-
 export type OrderOverview = {
   id: number;
   name: string;
@@ -112,6 +93,7 @@ export type Order = {
   amountLeftToPay: number;
   payments: Payment[];
   pausingComment: string;
+  priceDifference?: number;
 };
 
 export type OrderTracking = {
@@ -124,6 +106,7 @@ export type OrderTracking = {
   postalService: string;
   postalCode: string;
   plannedEndingDate: string;
+  lastUpdatedDate: string;
   amountLeftToPay: number;
 };
 

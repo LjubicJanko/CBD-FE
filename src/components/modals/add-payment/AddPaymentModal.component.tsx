@@ -1,6 +1,6 @@
 import { Button, MenuItem, TextField } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
-import { useFormik } from 'formik';
+import { FormikHelpers, useFormik } from 'formik';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -55,7 +55,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   });
 
   const onSubmit = useCallback(
-    async (values: PaymentData) => {
+    async (values: PaymentData, { resetForm }: FormikHelpers<PaymentData>) => {
       const newPayment: Payment = {
         id: Date.now(),
         payer: values.payer,
@@ -68,6 +68,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         const order = await orders.addPayment(newPayment, orderId);
         updateOrderInOverviewList(order);
         setSelectedOrder(order);
+        resetForm();
       } catch (err) {
         console.error(err);
       }

@@ -61,7 +61,7 @@ const OrderInfoForm = () => {
         updateOrderInOverviewList(res);
         setSelectedOrder(res);
         resetForm({
-          values
+          values,
         });
       } catch (error) {
         console.error(error);
@@ -157,7 +157,7 @@ const OrderInfoForm = () => {
           {selectedOrder?.legalEntity ? selectedOrder?.salePriceWithTax : '-'}
         </dd>
         <dt>{t('price-difference')}</dt>
-        <dd>{formik.values.salePrice - formik.values.acquisitionCost}</dd>
+        <dd>{formik.values.priceDifference}</dd>
         <dt>{t('paid')}</dt>
         <dd>{selectedOrder?.amountPaid}</dd>
         <dt>{t('left-to-pay')}</dt>
