@@ -3,6 +3,7 @@ import client from '../client';
 
 interface LoginResponse {
   id: number;
+  name: string;
   token: string;
   roles: Role[];
   privileges: string[];

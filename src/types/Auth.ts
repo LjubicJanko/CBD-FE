@@ -2,6 +2,7 @@ export type Role = 'admin' | 'manager' | 'manufacturer' | 'consumer';
 
 export type AuthData = {
   id: number;
+  name: string;
   token: string;
   roles: Role[];
   privileges: string[];

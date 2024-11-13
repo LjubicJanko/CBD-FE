@@ -19,9 +19,9 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       let status = false;
       try {
         const response = await authService.login(data);
-        const { token, id, roles, privileges } = response;
+        const { token, id, roles, privileges, name } = response;
         setToken(token);
-        setAuthData({ id, roles, privileges });
+        setAuthData({ id, roles, privileges, name });
         localStorageService.saveData(response);
         status = true;
         navigate('/dashboard');

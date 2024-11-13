@@ -1,5 +1,5 @@
-import { Button } from '@mui/material';
-import { useContext, useMemo } from 'react';
+import { Button, Menu, MenuItem } from '@mui/material';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import AuthContext from '../../store/AuthProvider/Auth.context';
 import * as Styled from './Header.styles';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -9,13 +9,29 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from 'styled-components';
 
 const HeaderComponent = () => {
-  const { logout, token } = useContext(AuthContext);
+  const { logout, token, authData } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
 
   const { changeLanguage, selectedLanguage } = useChangeLanguage();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    setAnchorEl(null);
+    logout(navigate);
+  }, [logout, navigate]);
 
   const shouldHideLink = useMemo(
     () => location.pathname === '/login',
@@ -64,9 +80,29 @@ const HeaderComponent = () => {
             {t('home')}
           </Button>
         ) : token ? (
-          <Button variant="contained" onClick={() => logout(navigate)}>
-            {t('logout')}
-          </Button>
+          <>
+            <Button
+              id="user-button"
+              aria-controls={open ? 'user-button' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              variant="contained"
+            >
+              {authData?.name}
+            </Button>
+            <Menu
+              id="user-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'user-button',
+              }}
+            >
+              <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
+            </Menu>
+          </>
         ) : (
           <>
             <Button variant="contained" onClick={() => navigate('/login')}>
