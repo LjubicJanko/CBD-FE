@@ -21,11 +21,12 @@ const ConfirmModal = ({
   const { t } = useTranslation();
   const [note, setNote] = useState('');
 
-
   return (
     <Styled.ConfirmModalContainer
+      className="confirm-modal"
       title={text}
       isOpen={isOpen}
+      showClose={!hideNote}
       onClose={onCancel}
     >
       {!hideNote && (
@@ -43,7 +44,7 @@ const ConfirmModal = ({
       )}
       <div className="actions">
         <Button className="cancel" onClick={onCancel}>
-          {t('cancel')}
+          {t('back')}
         </Button>
         <Button
           className="confirm"

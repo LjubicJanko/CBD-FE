@@ -249,8 +249,11 @@ const OrderDetailsComponent = () => {
         color: 'success' as ButtonColors,
         icon: <ReplayIcon />,
         onClick: () =>
-          openConfirmModal(t('reactivate-reason'), (note: string) =>
-            changeOrderStatus(OrderExecutionStatusEnum.ACTIVE, note)
+          openConfirmModal(
+            t('reactivate-reason'),
+            (note: string) =>
+              changeOrderStatus(OrderExecutionStatusEnum.ACTIVE, note),
+            true
           ),
       },
       {

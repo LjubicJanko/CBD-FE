@@ -5,6 +5,7 @@ import * as Styled from './CbdModal.styles';
 interface CbdModalProps {
   isOpen: boolean;
   onClose: () => void;
+  showClose?: boolean;
   children: React.ReactNode;
   title?: string;
   className?: string;
@@ -13,6 +14,7 @@ interface CbdModalProps {
 const CbdModal: React.FC<CbdModalProps> = ({
   isOpen,
   onClose,
+  showClose = true,
   children,
   title,
   className,
@@ -24,7 +26,9 @@ const CbdModal: React.FC<CbdModalProps> = ({
       <Styled.ModalContent className={className}>
         {' '}
         {/* Apply className here */}
-        <Styled.CloseButton onClick={onClose}>&times;</Styled.CloseButton>
+        {showClose && (
+          <Styled.CloseButton onClick={onClose}>&times;</Styled.CloseButton>
+        )}
         {title && <Styled.ModalTitle>{title}</Styled.ModalTitle>}{' '}
         {/* Render title if provided */}
         {children}
