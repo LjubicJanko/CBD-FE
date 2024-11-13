@@ -5,6 +5,7 @@ import useResponsiveWidth from '../../../../hooks/useResponsiveWidth';
 import { Order, OrderExecutionStatusEnum } from '../../../../types/Order';
 import { xxsMax } from '../../../../util/breakpoints';
 import * as Styled from './OrderInfoOverview.styles';
+import classNames from 'classnames';
 
 export type OrderInfoOverviewProps = {
   selectedOrder?: Order;
@@ -52,7 +53,9 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
     return isMobile ? (
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <strong className="pause">{t('pausing-comment')}</strong>
-        <span className="pause">{selectedOrder?.pausingComment}</span>
+        <span className={classNames('pause', 'pausing-value')}>
+          {selectedOrder?.pausingComment}
+        </span>
       </div>
     ) : (
       <TableRow>
@@ -64,7 +67,10 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
         >
           {t('pausing-comment')}
         </Styled.TableCellContainer>
-        <Styled.TableCellContainer className="pause" style={{ color: 'gray' }}>
+        <Styled.TableCellContainer
+          className={classNames('pause', 'pausing-value')}
+          style={{ color: 'gray' }}
+        >
           {selectedOrder?.pausingComment}
         </Styled.TableCellContainer>
       </TableRow>
@@ -102,7 +108,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
                 >
                   {info.label}
                 </Styled.TableCellContainer>
-                <Styled.TableCellContainer className='value'>
+                <Styled.TableCellContainer className="value">
                   {info.value}
                 </Styled.TableCellContainer>
               </TableRow>

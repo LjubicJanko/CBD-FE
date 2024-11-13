@@ -9,9 +9,17 @@ export const MobileContainer = styled.div`
   .pause {
     color: gray;
   }
+
+  .pausing-value {
+    text-align: end !important;
+  }
 `;
 
-export const DesktopContainer = styled(TableContainer)``;
+export const DesktopContainer = styled(TableContainer)`
+  .pausing-value {
+    text-align: end !important;
+  }
+`;
 
 export const TableCellContainer = styled(TableCell)`
   max-width: 200px;
