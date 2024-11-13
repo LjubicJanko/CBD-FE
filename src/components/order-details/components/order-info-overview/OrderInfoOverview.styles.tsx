@@ -17,4 +17,7 @@ export const TableCellContainer = styled(TableCell)`
   max-width: 200px;
   white-space: normal;
   padding: 6px !important;
+  &.value {
+    text-align: end !important;
+  }
 `;

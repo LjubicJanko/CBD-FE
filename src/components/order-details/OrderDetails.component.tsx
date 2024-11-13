@@ -356,15 +356,20 @@ const OrderDetailsComponent = () => {
         )}
       </div>
       <Divider />
-      <OrderPayments
-        payments={selectedOrder.payments}
-        orderId={selectedOrder.id}
-        isAddingDisabled={
-          selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE ||
-          selectedOrder.status === OrderStatusEnum.DONE
-        }
-      />
-      <Divider />
+      {privileges.canAddPayment && (
+        <>
+          <OrderPayments
+            payments={selectedOrder.payments}
+            orderId={selectedOrder.id}
+            isAddingDisabled={
+              selectedOrder.executionStatus !==
+                OrderExecutionStatusEnum.ACTIVE ||
+              selectedOrder.status === OrderStatusEnum.DONE
+            }
+          />
+          <Divider />
+        </>
+      )}
       {selectedOrder.status !== OrderStatusEnum.DONE && (
         <div className="action-buttons">
           {actionButtons.map(

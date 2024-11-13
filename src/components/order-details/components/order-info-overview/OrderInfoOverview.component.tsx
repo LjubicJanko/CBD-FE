@@ -16,8 +16,6 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
   const isMobile = width < xxsMax;
   const isPaused =
     selectedOrder?.executionStatus === OrderExecutionStatusEnum.PAUSED;
-  const priceDifference =
-    (selectedOrder?.salePrice ?? 0) - (selectedOrder?.acquisitionCost ?? 0);
 
   const orderInfoConfig = useMemo(
     () => [
@@ -27,7 +25,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
       { label: t('acquisition-cost'), value: selectedOrder?.acquisitionCost },
       {
         label: t('price-difference'),
-        value: priceDifference,
+        value: selectedOrder?.priceDifference,
       },
       { label: t('paid'), value: selectedOrder?.amountPaid },
       { label: t('left-to-pay'), value: selectedOrder?.amountLeftToPay },
@@ -43,8 +41,8 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
       selectedOrder?.description,
       selectedOrder?.name,
       selectedOrder?.plannedEndingDate,
+      selectedOrder?.priceDifference,
       selectedOrder?.salePrice,
-      priceDifference,
       t,
     ]
   );
@@ -76,35 +74,39 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
   return isMobile ? (
     <Styled.MobileContainer>
       {pausingInfoRow}
-      {orderInfoConfig.map((info, index) => (
-        <div
-          key={index}
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
-          <strong>{info.label}</strong>
-          <span>{info.value}</span>
-        </div>
-      ))}
+      {orderInfoConfig
+        .filter((x) => x.value !== null)
+        .map((info, index) => (
+          <div
+            key={index}
+            style={{ display: 'flex', justifyContent: 'space-between' }}
+          >
+            <strong>{info.label}</strong>
+            <span>{info.value}</span>
+          </div>
+        ))}
     </Styled.MobileContainer>
   ) : (
     <Styled.DesktopContainer>
       <Table aria-label="order info overview">
         <TableBody>
           {pausingInfoRow}
-          {orderInfoConfig.map((info, index) => (
-            <TableRow key={index}>
-              <Styled.TableCellContainer
-                component="th"
-                scope="row"
-                style={{ fontWeight: 'bold' }}
-              >
-                {info.label}
-              </Styled.TableCellContainer>
-              <Styled.TableCellContainer>
-                {info.value}
-              </Styled.TableCellContainer>
-            </TableRow>
-          ))}
+          {orderInfoConfig
+            .filter((x) => x.value !== null)
+            .map((info, index) => (
+              <TableRow key={index}>
+                <Styled.TableCellContainer
+                  component="th"
+                  scope="row"
+                  style={{ fontWeight: 'bold' }}
+                >
+                  {info.label}
+                </Styled.TableCellContainer>
+                <Styled.TableCellContainer className='value'>
+                  {info.value}
+                </Styled.TableCellContainer>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </Styled.DesktopContainer>
