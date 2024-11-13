@@ -69,5 +69,6 @@
   "transaction-date": "Transaction date",
   "user": "User",
   "view-status-history": "View status history",
-  "filters": "Filters"
+  "filters": "Filters",
+  "pagination-total": "Total: {{TOTAL}}"
 }

@@ -69,5 +69,6 @@
   "transaction-date": "Datum transakcije",
   "user": "Korisnik",
   "view-status-history": "Pogledaj istoriju promena",
-  "filters": "Filteri"
+  "filters": "Filteri",
+  "pagination-total": "Ukupno: {{TOTAL}}"
 }
