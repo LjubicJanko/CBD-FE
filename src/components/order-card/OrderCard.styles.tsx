@@ -24,6 +24,13 @@ export const OrderCardContainer = styled.div`
     .description {
       font-size: 18px;
       color: #5e554d;
+      overflow: hidden;
+      white-space: pre-line;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
 
     .status-chip {
