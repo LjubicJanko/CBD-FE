@@ -250,7 +250,7 @@ const OrderDetailsComponent = () => {
         icon: <ReplayIcon />,
         onClick: () =>
           openConfirmModal(
-            t('reactivate-reason'),
+            t('reactivate-confirm'),
             (note: string) =>
               changeOrderStatus(OrderExecutionStatusEnum.ACTIVE, note),
             true

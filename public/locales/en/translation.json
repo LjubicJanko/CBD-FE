@@ -55,7 +55,7 @@
   "postal-service": "Postal service",
   "price-difference": "Price difference",
   "reactivate": "Reactivate",
-  "reactivate-reason": "Reason to reactivate",
+  "reactivate-confirm": "Are you sure you want to reactivate this order?",
   "required": "Required field",
   "sale-price": "Sale price",
   "sale-price-taxed": "Taxed sale price",
