@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { mobile } from '../../util/breakpoints';
+import theme from '../../styles/theme';
 
 export const HeaderContainer = styled.header`
   position: fixed;
@@ -10,9 +11,10 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  min-height: 60px;
+  height: 104px;
   padding: 32px;
-  background-color: gray;
+  background-color: ${theme.primaryBackground};
+  box-shadow: 0px 2px 6px 2px #00000040;
 
   ${mobile(css`
     flex-direction: column;
@@ -20,6 +22,7 @@ export const HeaderContainer = styled.header`
     gap: 4px;
     padding: 16px;
     min-height: 30px;
+    height: 80px;
   `)}
 
   .header {
@@ -40,6 +43,10 @@ export const HeaderContainer = styled.header`
       &__language {
         display: flex;
         gap: 8px;
+
+        &__menu-item {
+          background-color: ${theme.primaryBackground};
+        }
 
         &__button {
           cursor: pointer;

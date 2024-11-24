@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components';
 import { mobile } from './util/breakpoints';
+import theme from './styles/theme';
 
 export const GlobalStyle = createGlobalStyle`
     * {
@@ -14,6 +15,10 @@ export const GlobalStyle = createGlobalStyle`
       p {
         margin: 0;
       }
+
+      .MuiPopover-paper {
+        background-color: ${theme.primaryBackground};
+      }
     }
 
     #root {
@@ -24,8 +29,10 @@ export const GlobalStyle = createGlobalStyle`
         padding-top: 100px;
         
         ${mobile(css`
-          padding-top: 120px;
-        `)}
+          padding-top: 80px;
+        `)};
+        font-family: Satoshi;
+        text-decoration-skip-ink: none;
       }
     };
 

@@ -2,6 +2,7 @@ import {
   DashboardPage,
   // DecisionPage,
   HomePage,
+  IdTrackingPage,
   LoginPage,
   SignUpPage,
 } from '../../pages';
@@ -105,6 +106,11 @@ const CBDRouter: React.FC = (): JSX.Element => {
         <Route
           index
           element={<HomePage />}
+          loader={async () => await isAuthenticated()}
+        />
+        <Route
+          path="track"
+          element={<IdTrackingPage />}
           loader={async () => await isAuthenticated()}
         />
         <Route

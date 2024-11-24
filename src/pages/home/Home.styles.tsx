@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { mobile } from '../../util/breakpoints';
+import theme from '../../styles/theme';
 
 export const HomeContainer = styled.div`
   width: 100%;
@@ -8,55 +9,53 @@ export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 62px;
-  gap: 32px;
+  padding-top: 124px;
+  background-color: ${theme.primaryBackground};
 
   ${mobile(css`
     padding: 16px;
-    gap: 16px;
     width: 100%;
     display: flex;
-    gap: 32px;
     align-items: center;
+    padding-top: 130px;
   `)}
 
-  &.home {
-  }
-
   .home {
-
     &__title {
-      font-size: 36px;
-      word-break: break-word;
-      text-align: center;
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 300;
+      text-align: left;
+      text-decoration-skip-ink: none;
+      color: #ffffff;
+      margin-top: 30px;
+      margin-bottom: 60px;
+
       ${mobile(css`
-        font-size: 24px;
+        margin-top: 18px;
+        margin-bottom: 27px;
+        font-weight: 200;
       `)}
     }
 
-    &__search-container {
+    &__actions {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-      width: 50%;
+      gap: 8px;
 
-      ${mobile(css`
-        width: 100%;
-        justify-content: flex-start;
-      `)}
-
-      .order-id-input {
-        color: white;
-        width: 100%;
+      &__login-btn,
+      &__track-btn {
+        white-space: nowrap;
       }
 
-      .order-id-search {
-        width: 50%;
-        ${mobile(css`
-          width: 100%;
-        `)}
+      &__login-btn {
+        background-color: ${theme.primaryColor};
+        color: black;
+      }
+      &__track-btn {
+        color: ${theme.primaryColor};
+        background-color: transparent;
+        border-color: ${theme.primaryColor};
       }
     }
   }
