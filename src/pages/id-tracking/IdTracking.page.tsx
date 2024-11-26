@@ -48,7 +48,10 @@ const IdTrackingPage = () => {
   );
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setOrder(undefined);
+      return;
+    }
 
     trackOrder(id);
   }, [id, trackOrder]);
@@ -101,23 +104,23 @@ const IdTrackingPage = () => {
 
         <div className="id-tracking-details__order-info">
           <p className="id-tracking-details__order-info--title">
-            {t('Detalji porudžbine')}
+            {t('orderDetails.title')}
           </p>
           <div className="id-tracking-details__order-info__container">
             <div className="id-tracking-details__order-info__container--description">
-              <p>{t('Naziv: ')}</p>
+              <p>{t('orderDetails.name')}</p>
               <p>{order.name}</p>
             </div>
             <div className="id-tracking-details__order-info__container--left-to-pay">
-              <p>{t('Za placanje:')}</p>
+              <p>{t('orderDetails.amountLeftToPay')}</p>
               <p>{order.amountLeftToPay}</p>
             </div>
             <div className="id-tracking-details__order-info__container--last-change">
-              <p>{t('Poslednja izmena:')}</p>
+              <p>{t('orderDetails.lastUpdatedDate')}</p>
               <p>{formatDate(order.lastUpdatedDate)}</p>
             </div>
             <div className="id-tracking-details__order-info__container--expected-due">
-              <p>{t('Ocekivani zavrsetak:')}</p>
+              <p>{t('orderDetails.plannedEndingDate')}</p>
               <p>{formatDate(order.plannedEndingDate)}</p>
             </div>
           </div>
@@ -128,11 +131,7 @@ const IdTrackingPage = () => {
 
   return (
     <Styled.IdTrackingContainer className="id-tracking">
-      <h2 className="id-tracking__title">
-        {t(
-          'Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina.'
-        )}
-      </h2>
+      <h2 className="id-tracking__title">{t('enterTrackingNumber')}</h2>
       <div className="id-tracking__search-container">
         <TextField
           className="order-id-input"

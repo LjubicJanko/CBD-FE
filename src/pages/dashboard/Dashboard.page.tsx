@@ -18,6 +18,9 @@ const DashboardPage = () => {
         {`
           html, body {
             background-color: white;
+            .MuiPopover-paper {
+              background-color: white;
+            }
           }
         `}
       </style>

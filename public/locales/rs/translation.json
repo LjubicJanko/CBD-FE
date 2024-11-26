@@ -87,5 +87,13 @@
   "SEWING-disclaimer": "Naši vredni krojači rade na tome da vaša oprema bude savršena!\nOvaj proces može da potraje do 3 dana. Status će biti automatski\npromenjen kada se pređe na sledeći korak.",
   "SHIP_READY-disclaimer": "Još malo! Vaša porudžbina se upravo priprema za slanje.\nOvaj proces može da potraje do 1 dan. Status će biti\nautomatski promenjen kada se pređe na sledeći korak.",
   "SHIPPED-disclaimer": "Konačno! Vaša porudžbina je upravo poslata i uskoro možete\nočekivati kurira da Vas kontaktira. Ovaj proces može da potraje\ndo 1 dan. Status će biti automatski promenjen kada se pređe\nna sledeći korak.",
-  "DONE-disclaimer": "Konačno u Vašim rukama! Potrudili smo se da porudžbinu\ndostavimo u što kraćem roku. Nadamo se da ste zadovoljni,\nradujemo se da čujemo utiske!"
+  "DONE-disclaimer": "Konačno u Vašim rukama! Potrudili smo se da porudžbinu\ndostavimo u što kraćem roku. Nadamo se da ste zadovoljni,\nradujemo se da čujemo utiske!",
+  "orderDetails": {
+    "title": "Detalji porudžbine",
+    "name": "Naziv:",
+    "amountLeftToPay": "Za plaćanje:",
+    "lastUpdatedDate": "Poslednja izmena:",
+    "plannedEndingDate": "Očekivani završetak:"
+  },
+  "enterTrackingNumber": "Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina."
 }

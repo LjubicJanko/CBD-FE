@@ -11,6 +11,7 @@ import React from 'react';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { xxsMax } from '../../util/breakpoints';
 import theme from '../../styles/theme';
+import useQueryParams from '../../hooks/useQueryParams';
 
 const HeaderComponent = () => {
   const { logout, token, authData } = useContext(AuthContext);
@@ -20,6 +21,10 @@ const HeaderComponent = () => {
 
   const { changeLanguage, selectedLanguage } = useChangeLanguage();
   const width = useResponsiveWidth();
+
+  const {
+    params: { id },
+  } = useQueryParams<{ id: string | undefined }>();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -69,7 +74,7 @@ const HeaderComponent = () => {
           <div className="public-header__with-back-btn">
             <IconButton
               className="public-header__with-back-btn--btn"
-              onClick={() => navigate('/')}
+              onClick={() => navigate(id ? '/track' : '/')}
               edge="end"
             >
               <ChevronLeftIcon />
@@ -86,34 +91,22 @@ const HeaderComponent = () => {
             className="public-header__language"
             onChange={(e) => changeLanguage(e.target.value)}
           >
-            <MenuItem
-              className="public-header__language__menu-item"
-              value="en"
-            >
+            <MenuItem className="public-header__language__menu-item" value="en">
               <img
-                className={classNames(
-                  'public-header__language__button__flag',
-                  {
-                    'public-header__language__button__flag--selected':
-                      selectedLanguage === 'en',
-                  }
-                )}
+                className={classNames('public-header__language__button__flag', {
+                  'public-header__language__button__flag--selected':
+                    selectedLanguage === 'en',
+                })}
                 src="/en.png"
                 alt="english"
               />
             </MenuItem>
-            <MenuItem
-              className="public-header__language__menu-item"
-              value="rs"
-            >
+            <MenuItem className="public-header__language__menu-item" value="rs">
               <img
-                className={classNames(
-                  'public-header__language__button__flag',
-                  {
-                    'public-header__language__button__flag--selected':
-                      selectedLanguage === 'rs',
-                  }
-                )}
+                className={classNames('public-header__language__button__flag', {
+                  'public-header__language__button__flag--selected':
+                    selectedLanguage === 'rs',
+                })}
                 src="/rs.png"
                 alt="serbian"
               />

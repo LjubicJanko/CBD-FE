@@ -69,7 +69,6 @@ const StatusChangeModal = ({
   );
 
   const validationSchema = Yup.object({
-    closingComment: Yup.string().required(t('required')),
     postalCode: Yup.string().when('isShipReady', (_, schema) => {
       return isShipReady
         ? schema.required(t('required'))
