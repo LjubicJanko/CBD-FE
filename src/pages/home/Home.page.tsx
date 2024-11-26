@@ -18,14 +18,14 @@ const HomeComponent = () => {
           className="home__actions__login-btn"
           onClick={() => navigate('/login')}
         >
-          {t('Uloguj se')}
+          {t('login-title')}
         </Button>
         <Button
           variant="outlined"
           className="home__actions__track-btn"
           onClick={() => navigate('/track')}
         >
-          {t('ID praćenje')}
+          {t('id-tracking')}
         </Button>
       </div>
     </Styled.HomeContainer>

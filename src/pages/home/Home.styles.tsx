@@ -10,7 +10,7 @@ export const HomeContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 124px;
-  background-color: ${theme.primaryBackground};
+  background-color: ${theme.PRIMARY_1};
 
   ${mobile(css`
     padding: 16px;
@@ -27,7 +27,7 @@ export const HomeContainer = styled.div`
       font-weight: 300;
       text-align: left;
       text-decoration-skip-ink: none;
-      color: #ffffff;
+      color: ${theme.SECONDARY_1};
       margin-top: 30px;
       margin-bottom: 60px;
 
@@ -49,13 +49,13 @@ export const HomeContainer = styled.div`
       }
 
       &__login-btn {
-        background-color: ${theme.primaryColor};
+        background-color: ${theme.PRIMARY_2};
         color: black;
       }
       &__track-btn {
-        color: ${theme.primaryColor};
+        color: ${theme.PRIMARY_2};
         background-color: transparent;
-        border-color: ${theme.primaryColor};
+        border-color: ${theme.PRIMARY_2};
       }
     }
   }

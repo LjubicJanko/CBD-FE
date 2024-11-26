@@ -4,9 +4,10 @@ import 'styled-components';
 declare module 'styled-components' {
   export interface DefaultTheme {
     logo: string;
-    primaryColor: string;
-    secondaryColor: string;
-    tertiaryColor: string;
-    primaryBackground: string;
+    PRIMARY_1: string;
+    PRIMARY_2: string;
+    SECONDARY_1: string;
+    SECONDARY_2: string;
+    SECONDARY_3: string;
   }
 }

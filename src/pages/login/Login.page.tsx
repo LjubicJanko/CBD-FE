@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useTranslation } from 'react-i18next';
+import { textInputSX } from '../../util/util';
 
 const initialValues: LoginData = {
   username: '',
@@ -54,7 +55,6 @@ const LoginComponent = () => {
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
         <div className="fields">
           <TextField
-            label="username"
             variant="outlined"
             color="primary"
             type="text"
@@ -70,11 +70,11 @@ const LoginComponent = () => {
           <OutlinedInput
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
-            label="password"
             name="password"
             placeholder="password"
             value={formik.values.password}
             onChange={formik.handleChange}
+            sx={textInputSX}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -92,6 +92,7 @@ const LoginComponent = () => {
         </div>
         <Button
           variant="contained"
+          className="login-btn"
           color="primary"
           type="submit"
           fullWidth

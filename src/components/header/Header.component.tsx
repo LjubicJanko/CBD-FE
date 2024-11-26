@@ -1,4 +1,4 @@
-import { Button, Menu, MenuItem, Select } from '@mui/material';
+import { Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import AuthContext from '../../store/AuthProvider/Auth.context';
 import * as Styled from './Header.styles';
@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useChangeLanguage } from '../../hooks/useChangeLanguage';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import React from 'react';
 
 const HeaderComponent = () => {
@@ -32,9 +33,14 @@ const HeaderComponent = () => {
     logout(navigate);
   }, [logout, navigate]);
 
-  const shouldHideLink = useMemo(
-    () => location.pathname === '/login',
+  const url = useMemo(
+    () => location.pathname.split('/').pop(),
     [location.pathname]
+  );
+
+  const showBackButton = useMemo(
+    () => url && ['login', 'track'].includes(url),
+    [url]
   );
 
   return (
@@ -46,63 +52,83 @@ const HeaderComponent = () => {
         onClick={() => navigate('/')}
       /> */}
       <div className="header__actions">
-        <Select
-          id="language"
-          value={selectedLanguage}
-          className="header__actions__language"
-          onChange={(e) => changeLanguage(e.target.value)}
-        >
-          <MenuItem className="header__actions__language__menu-item" value="en">
-            <img
-              className={classNames('header__actions__language__button__flag', {
-                'header__actions__language__button__flag--selected':
-                  selectedLanguage === 'en',
-              })}
-              src="/en.png"
-              alt="english"
-            />
-          </MenuItem>
-          <MenuItem className="header__actions__language__menu-item" value="rs">
-            <img
-              className={classNames('header__actions__language__button__flag', {
-                'header__actions__language__button__flag--selected':
-                  selectedLanguage === 'rs',
-              })}
-              src="/rs.png"
-              alt="serbian"
-            />
-          </MenuItem>
-        </Select>
-        {shouldHideLink ? (
-          <Button variant="contained" onClick={() => navigate('/')}>
-            {t('home')}
-          </Button>
+        {showBackButton ? (
+          <>
+            <IconButton
+              className="header__back-btn"
+              onClick={() => navigate('/')}
+              edge="end"
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+            <h1 className="header__actions--title">{t(`${url}-title`)}</h1>
+          </>
         ) : (
-          token && (
-            <>
-              <Button
-                id="user-button"
-                aria-controls={open ? 'user-button' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-                variant="contained"
-              >
-                {authData?.name}
-              </Button>
-              <Menu
-                id="user-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'user-button',
-                }}
-              >
-                <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
-              </Menu>
-            </>
-          )
+          <Select
+            id="language"
+            value={selectedLanguage}
+            className="header__actions__language"
+            onChange={(e) => changeLanguage(e.target.value)}
+          >
+            <MenuItem
+              className="header__actions__language__menu-item"
+              value="en"
+            >
+              <img
+                className={classNames(
+                  'header__actions__language__button__flag',
+                  {
+                    'header__actions__language__button__flag--selected':
+                      selectedLanguage === 'en',
+                  }
+                )}
+                src="/en.png"
+                alt="english"
+              />
+            </MenuItem>
+            <MenuItem
+              className="header__actions__language__menu-item"
+              value="rs"
+            >
+              <img
+                className={classNames(
+                  'header__actions__language__button__flag',
+                  {
+                    'header__actions__language__button__flag--selected':
+                      selectedLanguage === 'rs',
+                  }
+                )}
+                src="/rs.png"
+                alt="serbian"
+              />
+            </MenuItem>
+          </Select>
+        )}
+
+        {token && (
+          <>
+            <Button
+              id="user-button"
+              aria-controls={open ? 'user-button' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              variant="contained"
+            >
+              {authData?.name}
+            </Button>
+            <Menu
+              id="user-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'user-button',
+              }}
+            >
+              <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </Styled.HeaderContainer>

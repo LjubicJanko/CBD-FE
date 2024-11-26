@@ -15,9 +15,10 @@ export const GlobalStyle = createGlobalStyle`
       p {
         margin: 0;
       }
+      background-color: ${theme.PRIMARY_1};
 
       .MuiPopover-paper {
-        background-color: ${theme.primaryBackground};
+        background-color: ${theme.PRIMARY_1};
       }
     }
 

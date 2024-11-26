@@ -71,5 +71,8 @@
   "user": "Korisnik",
   "view-status-history": "Pogledaj istoriju promena",
   "filters": "Filteri",
-  "pagination-total": "Ukupno: {{TOTAL}}"
+  "pagination-total": "Ukupno: {{TOTAL}}",
+  "track-title": "Praćenje porudžbine",
+  "login-title": "Uloguj se",
+  "id-tracking": "ID praćenje"
 }

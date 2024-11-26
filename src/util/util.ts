@@ -62,5 +62,25 @@ export enum privileges {
   MOVE_TO_SHIP_READY = 'move-to-ship-ready',
   MOVE_TO_SHIPPED = 'move-to-shipped',
   MOVE_TO_DONE = 'move-to-done',
-  PAYMENT_ADD = 'payment-add'
+  PAYMENT_ADD = 'payment-add',
 }
+
+export const textInputSX = {
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'white', // Default border color
+    },
+    '&:hover fieldset': {
+      borderColor: 'white', // Border color on hover
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'white', // Border color when focused
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: 'white', // Optional: Make the label white
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: 'white', // Label color when focused
+  },
+};

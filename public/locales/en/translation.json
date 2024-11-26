@@ -71,5 +71,8 @@
   "user": "User",
   "view-status-history": "View status history",
   "filters": "Filters",
-  "pagination-total": "Total: {{TOTAL}}"
+  "pagination-total": "Total: {{TOTAL}}",
+  "track-title": "Order tracking",
+  "login-title": "Login",
+  "id-tracking": "ID tracking"
 }
