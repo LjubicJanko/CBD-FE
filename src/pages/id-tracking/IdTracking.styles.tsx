@@ -1,6 +1,14 @@
 import styled, { css } from 'styled-components';
-import { mobile } from '../../util/breakpoints';
+import { mobile, tablet } from '../../util/breakpoints';
 import theme from '../../styles/theme';
+
+export const LoaderContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const IdTrackingContainer = styled.div`
   width: 100%;
@@ -98,6 +106,8 @@ export const IdTrackingDetailsContainer = styled.div`
   `)}
 
   .id-tracking-details {
+    background-color: ${theme.PRIMARY_1};
+
     &__status {
       width: 300px;
       border-radius: 20px;
@@ -117,10 +127,14 @@ export const IdTrackingDetailsContainer = styled.div`
     }
 
     &__stepper {
-      width: 100%;
+      width: 70%;
       display: flex;
       flex-direction: column;
       gap: 6px;
+
+      ${mobile(css`
+        width: 100%;
+      `)}
 
       &--title {
         padding-left: 8px;
@@ -161,18 +175,24 @@ export const IdTrackingDetailsContainer = styled.div`
     }
 
     &__status-info {
+      width: 70%;
       background-color: rgba(255, 255, 255, 0.12);
       margin-top: 10px;
       border-radius: 8px;
 
-      width: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      padding: 60px 0px;
+      padding: 60px 100px;
+
+      ${tablet(css`
+        flex-direction: column;
+      `)}
 
       ${mobile(css`
-        flex-direction: column;
+        width: 100%;
+        padding: 60px 16px;
+        margin-top: 15px;
       `)}
 
       img {
@@ -182,28 +202,43 @@ export const IdTrackingDetailsContainer = styled.div`
       &--text {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
         text-align: center;
         gap: 14px;
         color: ${theme.SECONDARY_1};
         font-size: 16px;
         font-weight: 400;
+        text-align: left;
+        max-width: 50%;
+
+        ${tablet(css`
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        `)}
 
         .title {
           font-family: Satoshi;
           font-size: 22px;
           font-weight: 900;
+          text-align: left;
+
+          ${tablet(css`
+            text-align: center;
+          `)}
         }
       }
     }
 
     &__order-info {
-      width: 100%;
+      width: 70%;
       margin-top: 30px;
       display: flex;
       flex-direction: column;
       gap: 12px;
+
+      ${mobile(css`
+        width: 100%;
+      `)}
 
       &--title {
         padding-left: 8px;
@@ -215,14 +250,15 @@ export const IdTrackingDetailsContainer = styled.div`
       &__container {
         border-radius: 8px;
         background-color: rgba(255, 255, 255, 0.12);
-        padding: 24px;
+        padding: 70px;
 
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(4, 1fr);
         justify-content: center;
         margin-bottom: 50px;
 
         ${mobile(css`
+          padding: 24px;
           grid-template-columns: 1fr 1fr;
           grid-row-gap: 18px;
           grid-column-gap: 18px;

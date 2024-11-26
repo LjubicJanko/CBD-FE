@@ -28,7 +28,6 @@
   "description": "Description",
   "enter-order-id": "Please enter your order ID",
   "expected": "Expected",
-  "go-to-login": "Go to login",
   "home": "Home",
   "is-legal-entity": "Is legal entity",
   "last-update": "Last updated",
@@ -74,5 +73,19 @@
   "pagination-total": "Total: {{TOTAL}}",
   "track-title": "Order tracking",
   "login-title": "Login",
-  "id-tracking": "ID tracking"
+  "id-tracking": "ID tracking",
+  "DESIGN-title": "Your order is currently in the design phase!",
+  "PRINT_READY-title": "Your order is currently in the preparation phase!",
+  "PRINTING-title": "Your order is currently in the printing phase!",
+  "SEWING-title": "Your order is currently in the sewing phase!",
+  "SHIP_READY-title": "Your order is currently in the shipment preparation phase!",
+  "SHIPPED-title": "Your order has just been shipped!",
+  "DONE-title": "Your order has been delivered!",
+  "DESIGN-disclaimer": "A unique design is currently being created for your order.\nThis process can take up to 3 days. The status will be\nautomatically updated once the next step begins.",
+  "PRINT_READY-disclaimer": "Files for your order are currently being prepared and sent\nfor printing. This process can take up to 2 days.\nThe status will be automatically updated once the next step begins.",
+  "PRINTING-disclaimer": "One step closer! Your order is currently being printed.\nThis process can take up to 2 days. The status will be\nautomatically updated once the next step begins.",
+  "SEWING-disclaimer": "Our diligent tailors are working hard to ensure your equipment\nis perfect! This process can take up to 3 days. The status\nwill be automatically updated once the next step begins.",
+  "SHIP_READY-disclaimer": "Almost there! Your order is currently being prepared for shipping.\nThis process can take up to 1 day. The status will be\nautomatically updated once the next step begins.",
+  "SHIPPED-disclaimer": "Finally! Your order has been shipped, and you can expect\ncontact from the courier soon. This process can take up to\n1 day. The status will be automatically updated once the next step begins.",
+  "DONE-disclaimer": "Finally in your hands! We made every effort to deliver\nyour order as quickly as possible. We hope you are satisfied\nand look forward to hearing your feedback!"
 }

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { mobile } from '../../util/breakpoints';
+import { mobile, tablet } from '../../util/breakpoints';
 import theme from '../../styles/theme';
 
 export const LoginContainer = styled.div`
@@ -9,6 +9,7 @@ export const LoginContainer = styled.div`
   height: 100%;
   padding-top: 124px;
   align-items: center;
+  background-color: ${theme.PRIMARY_1};
 
   ${mobile(css`
     padding: 8px;
@@ -20,6 +21,13 @@ export const LoginContainer = styled.div`
     flex-direction: column;
     width: fit-content;
     gap: 32px;
+    background-color: #ffffff1f;
+    padding: 40px;
+    border-radius: 20px;
+
+    ${tablet(css`
+      padding: 32px;
+    `)}
 
     .MuiInputBase-root {
       color: white;
@@ -36,6 +44,8 @@ export const LoginContainer = styled.div`
     .login-btn {
       background-color: ${theme.PRIMARY_2};
       color: black;
+      width: fit-content;
+      align-self: center
     }
   }
 `;

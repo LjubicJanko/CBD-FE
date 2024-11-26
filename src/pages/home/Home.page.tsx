@@ -18,7 +18,7 @@ const HomeComponent = () => {
           className="home__actions__login-btn"
           onClick={() => navigate('/login')}
         >
-          {t('login-title')}
+          {t('login')}
         </Button>
         <Button
           variant="outlined"

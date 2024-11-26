@@ -88,6 +88,13 @@ const CreateOrderPage = () => {
 
   return (
     <Styled.CreateOrderPageContainer>
+      <style>
+        {`
+          html, body {
+            background-color: white;
+          }
+        `}
+      </style>
       <form
         autoComplete="off"
         onSubmit={formik.handleSubmit}

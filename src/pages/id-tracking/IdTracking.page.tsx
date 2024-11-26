@@ -1,4 +1,10 @@
-import { Button, Step, Stepper, TextField } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Step,
+  Stepper,
+  TextField,
+} from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { orderService } from '../../api';
 import OrderTrackingComponent from '../../components/order-tracking/OrderTracking.component';
@@ -47,7 +53,12 @@ const IdTrackingPage = () => {
     trackOrder(id);
   }, [id, trackOrder]);
 
-  if (id && !order) return <div>loading</div>;
+  if (id && !order)
+    return (
+      <Styled.LoaderContainer>
+        <CircularProgress />
+      </Styled.LoaderContainer>
+    );
 
   if (order !== undefined) {
     return (
@@ -83,16 +94,8 @@ const IdTrackingPage = () => {
         <div className="id-tracking-details__status-info">
           <img src={`/${order.status}.png`} alt="Current status icon" />
           <div className="id-tracking-details__status-info--text">
-            <p className="title">
-              {t('Vaša porudžbina je trenutno u fazi šivenja!')}
-            </p>
-            <p>
-              {t(
-                'Naši vredni krojači rade na tome da vaša oprema bude savršena!\n' +
-                  'Ovaj proces može da potraje do 3 dana. Status će biti automatski\n' +
-                  'promenjen kada se pređe na sledeći korak.'
-              )}
-            </p>
+            <p className="title">{t(`${order.status}-title`)}</p>
+            <p>{t(`${order.status}-disclaimer`)}</p>
           </div>
         </div>
 
@@ -102,8 +105,8 @@ const IdTrackingPage = () => {
           </p>
           <div className="id-tracking-details__order-info__container">
             <div className="id-tracking-details__order-info__container--description">
-              <p>{t('Opis: ')}</p>
-              <p>{order.description}</p>
+              <p>{t('Naziv: ')}</p>
+              <p>{order.name}</p>
             </div>
             <div className="id-tracking-details__order-info__container--left-to-pay">
               <p>{t('Za placanje:')}</p>

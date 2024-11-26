@@ -8,6 +8,9 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import React from 'react';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+import { xxsMax } from '../../util/breakpoints';
+import theme from '../../styles/theme';
 
 const HeaderComponent = () => {
   const { logout, token, authData } = useContext(AuthContext);
@@ -16,9 +19,12 @@ const HeaderComponent = () => {
   const location = useLocation();
 
   const { changeLanguage, selectedLanguage } = useChangeLanguage();
+  const width = useResponsiveWidth();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const isOnMobile = width < xxsMax;
 
   const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -43,42 +49,52 @@ const HeaderComponent = () => {
     [url]
   );
 
-  return (
-    <Styled.HeaderContainer className="header">
-      {/* <img
+  const logo = useMemo(
+    () => (
+      <img
         src={theme.logo}
+        width={50}
         alt="Logo"
-        className="header__logo"
+        className="logo"
         onClick={() => navigate('/')}
-      /> */}
-      <div className="header__actions">
+      />
+    ),
+    [navigate]
+  );
+
+  if (!token) {
+    return (
+      <Styled.PublicHeaderContainer className="public-header">
         {showBackButton ? (
-          <>
+          <div className="public-header__with-back-btn">
             <IconButton
-              className="header__back-btn"
+              className="public-header__with-back-btn--btn"
               onClick={() => navigate('/')}
               edge="end"
             >
               <ChevronLeftIcon />
             </IconButton>
-            <h1 className="header__actions--title">{t(`${url}-title`)}</h1>
-          </>
+            <h1 className="public-header__with-back-btn--title">
+              {t(`${url}-title`)}
+            </h1>
+            {!isOnMobile && logo}
+          </div>
         ) : (
           <Select
             id="language"
             value={selectedLanguage}
-            className="header__actions__language"
+            className="public-header__language"
             onChange={(e) => changeLanguage(e.target.value)}
           >
             <MenuItem
-              className="header__actions__language__menu-item"
+              className="public-header__language__menu-item"
               value="en"
             >
               <img
                 className={classNames(
-                  'header__actions__language__button__flag',
+                  'public-header__language__button__flag',
                   {
-                    'header__actions__language__button__flag--selected':
+                    'public-header__language__button__flag--selected':
                       selectedLanguage === 'en',
                   }
                 )}
@@ -87,14 +103,14 @@ const HeaderComponent = () => {
               />
             </MenuItem>
             <MenuItem
-              className="header__actions__language__menu-item"
+              className="public-header__language__menu-item"
               value="rs"
             >
               <img
                 className={classNames(
-                  'header__actions__language__button__flag',
+                  'public-header__language__button__flag',
                   {
-                    'header__actions__language__button__flag--selected':
+                    'public-header__language__button__flag--selected':
                       selectedLanguage === 'rs',
                   }
                 )}
@@ -104,33 +120,62 @@ const HeaderComponent = () => {
             </MenuItem>
           </Select>
         )}
+      </Styled.PublicHeaderContainer>
+    );
+  }
 
-        {token && (
-          <>
-            <Button
-              id="user-button"
-              aria-controls={open ? 'user-button' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-              variant="contained"
-            >
-              {authData?.name}
-            </Button>
-            <Menu
-              id="user-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'user-button',
-              }}
-            >
-              <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
-            </Menu>
-          </>
-        )}
-      </div>
+  return (
+    <Styled.HeaderContainer className="header">
+      <Select
+        id="language"
+        value={selectedLanguage}
+        className="header__language"
+        onChange={(e) => changeLanguage(e.target.value)}
+      >
+        <MenuItem className="header__language__menu-item" value="en">
+          <img
+            className={classNames('header__language__button__flag', {
+              'header__language__button__flag--selected':
+                selectedLanguage === 'en',
+            })}
+            src="/en.png"
+            alt="english"
+          />
+        </MenuItem>
+        <MenuItem className="header__language__menu-item" value="rs">
+          <img
+            className={classNames('header__language__button__flag', {
+              'header__language__button__flag--selected':
+                selectedLanguage === 'rs',
+            })}
+            src="/rs.png"
+            alt="serbian"
+          />
+        </MenuItem>
+      </Select>
+      {logo}
+      <Button
+        id="user-button"
+        aria-controls={open ? 'user-button' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+        variant="contained"
+      >
+        {authData?.name}
+      </Button>
+      <Menu
+        id="user-menu"
+        className="user-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'user-button',
+        }}
+      >
+        <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
+      </Menu>
     </Styled.HeaderContainer>
   );
 };

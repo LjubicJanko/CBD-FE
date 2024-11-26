@@ -14,6 +14,13 @@ const DashboardPage = () => {
 
   return (
     <Styled.DashboardContainer className="dashboard-page">
+      <style>
+        {`
+          html, body {
+            background-color: white;
+          }
+        `}
+      </style>
       <div className="dashboard-page__header">
         <FiltersComponent />
         <OrderSearchComponent onSearch={handleSearch} />
@@ -28,9 +35,7 @@ const DashboardPage = () => {
           <OrdersListComponent />
           {selectedOrder && (
             <div className="details">
-              <OrderDetailsComponent
-                key={selectedOrder.id}
-              />
+              <OrderDetailsComponent key={selectedOrder.id} />
             </div>
           )}
         </div>
