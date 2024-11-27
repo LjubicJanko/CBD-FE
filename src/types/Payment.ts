@@ -4,7 +4,7 @@ export type Payment = {
   id: number;
   payer: string;
   amount: number;
-  dateOfTransaction: Dayjs;
+  paymentDate: Dayjs;
   paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE';
   note?: string;
 };

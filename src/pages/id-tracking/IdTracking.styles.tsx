@@ -214,6 +214,7 @@ export const IdTrackingDetailsContainer = styled.div`
           justify-content: center;
           align-items: center;
           text-align: center;
+          max-width: unset;
         `)}
 
         .title {

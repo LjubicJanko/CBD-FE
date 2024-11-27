@@ -19,7 +19,7 @@ type AddPaymentModalProps = {
 type PaymentData = {
   payer: string;
   amount: string;
-  dateOfTransaction: Dayjs | string;
+  paymentDate: Dayjs | string;
   paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE';
   note: string;
 };
@@ -29,7 +29,7 @@ const paymentMethods = ['ACCOUNT', 'CASH', 'INVOICE'];
 const initialValues: PaymentData = {
   payer: '',
   amount: '',
-  dateOfTransaction: dayjs(),
+  paymentDate: dayjs(),
   paymentMethod: 'ACCOUNT',
   note: '',
 };
@@ -49,7 +49,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
     amount: Yup.number()
       .required(t('required'))
       .positive(t('must-be-positive')),
-    dateOfTransaction: Yup.string().required(t('required')),
+    paymentDate: Yup.string().required(t('required')),
     paymentMethod: Yup.string().required(t('required')),
     note: Yup.string(),
   });
@@ -60,7 +60,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         id: Date.now(),
         payer: values.payer,
         amount: parseFloat(values.amount),
-        dateOfTransaction: dayjs(values.dateOfTransaction),
+        paymentDate: dayjs(values.paymentDate),
         paymentMethod: values.paymentMethod,
         note: values.note,
       };
@@ -86,7 +86,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   const handleDateChange = useCallback(
     (newValue: Dayjs | null) => {
       if (newValue) {
-        formik.setFieldValue('dateOfTransaction', newValue);
+        formik.setFieldValue('paymentDate', newValue);
       }
     },
     [formik]
@@ -156,7 +156,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         <BasicDatePicker
           label={t('transaction-date')}
           onChange={handleDateChange}
-          value={formik.values.dateOfTransaction as Dayjs}
+          value={formik.values.paymentDate as Dayjs}
         />
         <TextField
           fullWidth

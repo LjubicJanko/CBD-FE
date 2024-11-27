@@ -85,9 +85,7 @@ const OrderPayments = ({
                     />
                   </TableCell>
                   <TableCell align="right">
-                    {dayjs(payment.dateOfTransaction).format(
-                      'DD-MM-YYYY HH:mm:ss'
-                    )}
+                    {dayjs(payment.paymentDate).format('DD.MM.YYYY')}
                   </TableCell>
                   <TableCell align="right">{payment.note || '-'}</TableCell>
                 </TableRow>
