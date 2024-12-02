@@ -392,6 +392,22 @@ const OrderDetailsComponent = () => {
           )}
         </div>
       )}
+      {selectedOrder.status === OrderStatusEnum.DONE &&
+        privileges.canCancelOrder && (
+          <div className="action-buttons">
+            <Button
+              variant="outlined"
+              color={'error'}
+              onClick={() =>
+                openConfirmModal(t('delete-confirm'), handleDeleteOrder, true)
+              }
+              size="large"
+            >
+              <p>{t('delete')}</p>
+              {<DeleteIcon />}
+            </Button>
+          </div>
+        )}
       {isStatusModalOpen && (
         <StatusChangeModal
           orderId={selectedOrder.id}

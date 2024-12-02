@@ -184,9 +184,11 @@ export const IdTrackingDetailsContainer = styled.div`
       justify-content: space-between;
       align-items: center;
       padding: 60px 100px;
+      gap: 12px;
 
       ${tablet(css`
         flex-direction: column;
+        gap: 0;
       `)}
 
       ${mobile(css`
@@ -197,6 +199,11 @@ export const IdTrackingDetailsContainer = styled.div`
 
       img {
         margin-bottom: 50px;
+        max-width: 50%;
+
+        ${tablet(css`
+          max-width: 100%;
+        `)}
       }
 
       &--text {
