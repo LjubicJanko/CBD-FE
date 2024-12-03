@@ -262,10 +262,22 @@ export const IdTrackingDetailsContainer = styled.div`
 
         display: grid;
         grid-template-columns: repeat(4, 1fr);
+        row-gap: 12px;
         justify-content: center;
         margin-bottom: 50px;
+        max-width: 100%;
 
-        ${mobile(css`
+        &--description {
+          grid-column: span 4;
+          max-width: 100%;
+          white-space: pre;
+          overflow: auto;
+          ${tablet(css`
+            grid-column: span 2;
+          `)}
+        }
+
+        ${tablet(css`
           padding: 24px;
           grid-template-columns: 1fr 1fr;
           grid-row-gap: 18px;

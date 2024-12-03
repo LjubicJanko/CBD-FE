@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { StatusData } from '../../components/modals/status-change/StatusChangeModal.component';
 import {
   CreateOrder,
@@ -6,6 +7,7 @@ import {
   OrderExecutionStatus,
 } from '../../types/Order';
 import { Payment } from '../../types/Payment';
+import { ApiError } from '../../types/Response';
 import client from '../client';
 import privateClient from '../privateClient';
 
@@ -23,8 +25,29 @@ export type SearchProps = {
   perPage?: number;
 };
 
-const trackOrder = async (trackingId: string) =>
-  client.get('/orders/track/' + trackingId).then((res) => res.data);
+const trackOrder = async (trackingId: string) => {
+  try {
+    const response = await client.get(`/orders/track/${trackingId}`);
+    return response.data; // Return the tracking data if successful
+  } catch (error) {
+    const axiosError = error as AxiosError<ApiError>;
+    if (axiosError.response) {
+      const status = axiosError.response.status;
+
+      if (status === 404) {
+        throw new Error('order-not-found');
+      } else {
+        throw new Error(
+          `An error occurred while tracking the order: ${
+            axiosError.response.data?.description || 'Unknown error.'
+          }`
+        );
+      }
+    }
+
+    throw new Error('A network error occurred. Please try again later.');
+  }
+};
 
 const getOrder = async (id: number) =>
   privateClient.get('/orders/get/' + id).then((res) => res.data);
@@ -145,6 +168,16 @@ const addPayment = async (payment: Payment, orderId: number) =>
     .post(`/orders/addPayment/${orderId}`, payment)
     .then((res) => res.data);
 
+const editPayment = async (payment: Payment, orderId: number) =>
+  privateClient
+    .put(`/orders/editPayment/${orderId}`, payment)
+    .then((res) => res.data);
+
+const deletePayment = async (id: number, paymentId: number) =>
+  privateClient
+    .put(`/orders/deletePayment/${id}?paymentId=${paymentId}`)
+    .then((res) => res.data);
+
 export default {
   getOrder,
   trackOrder,
@@ -159,4 +192,6 @@ export default {
   pauseOrder,
   reactivateOrder,
   addPayment,
+  editPayment,
+  deletePayment,
 };

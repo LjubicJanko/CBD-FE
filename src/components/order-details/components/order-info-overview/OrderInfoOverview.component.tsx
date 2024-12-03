@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { Table, TableBody, TableRow } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useResponsiveWidth from '../../../../hooks/useResponsiveWidth';
@@ -6,45 +6,59 @@ import { Order, OrderExecutionStatusEnum } from '../../../../types/Order';
 import { xxsMax } from '../../../../util/breakpoints';
 import * as Styled from './OrderInfoOverview.styles';
 import classNames from 'classnames';
+import AuthContext from '../../../../store/AuthProvider/Auth.context';
 
 export type OrderInfoOverviewProps = {
   selectedOrder?: Order;
 };
 
+type OrderInfoConfigType = {
+  label: string;
+  value: string | undefined;
+};
+
 const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
   const { t } = useTranslation();
   const width = useResponsiveWidth();
+  const { authData } = useContext(AuthContext);
   const isMobile = width < xxsMax;
   const isPaused =
     selectedOrder?.executionStatus === OrderExecutionStatusEnum.PAUSED;
 
-  const orderInfoConfig = useMemo(
-    () => [
-      { label: t('order-name'), value: selectedOrder?.name },
-      { label: t('description'), value: selectedOrder?.description },
-      { label: t('sale-price'), value: selectedOrder?.salePrice },
-      { label: t('acquisition-cost'), value: selectedOrder?.acquisitionCost },
-      {
-        label: t('price-difference'),
-        value: selectedOrder?.priceDifference,
-      },
-      { label: t('paid'), value: selectedOrder?.amountPaid },
-      { label: t('left-to-pay'), value: selectedOrder?.amountLeftToPay },
-      {
-        label: t('expected'),
-        value: selectedOrder?.plannedEndingDate.toString(),
-      },
-    ],
+  const orderInfoConfig: OrderInfoConfigType[] = useMemo(
+    () =>
+      [
+        { label: t('order-name'), value: selectedOrder?.name },
+        authData?.roles?.includes('admin') && {
+          label: t('description'),
+          value: selectedOrder?.description,
+        },
+        { label: t('note'), value: selectedOrder?.note },
+        { label: t('sale-price'), value: selectedOrder?.salePrice },
+        { label: t('acquisition-cost'), value: selectedOrder?.acquisitionCost },
+        {
+          label: t('price-difference'),
+          value: selectedOrder?.priceDifference,
+        },
+        { label: t('paid'), value: selectedOrder?.amountPaid },
+        { label: t('left-to-pay'), value: selectedOrder?.amountLeftToPay },
+        {
+          label: t('expected'),
+          value: selectedOrder?.plannedEndingDate.toString(),
+        },
+      ].filter(Boolean) as OrderInfoConfigType[],
     [
-      selectedOrder?.acquisitionCost,
-      selectedOrder?.amountLeftToPay,
-      selectedOrder?.amountPaid,
-      selectedOrder?.description,
-      selectedOrder?.name,
-      selectedOrder?.plannedEndingDate,
-      selectedOrder?.priceDifference,
-      selectedOrder?.salePrice,
       t,
+      selectedOrder?.name,
+      selectedOrder?.description,
+      selectedOrder?.note,
+      selectedOrder?.salePrice,
+      selectedOrder?.acquisitionCost,
+      selectedOrder?.priceDifference,
+      selectedOrder?.amountPaid,
+      selectedOrder?.amountLeftToPay,
+      selectedOrder?.plannedEndingDate,
+      authData?.roles,
     ]
   );
 

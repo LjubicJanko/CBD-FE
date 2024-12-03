@@ -19,4 +19,12 @@ export const OrderPaymentsContainer = styled.div`
     justify-content: end;
     margin-top: 32px;
   }
+
+  .edit {
+    padding: 0;
+    button {
+      padding: 0;
+      width: fit-content;
+    }
+  }
 `;

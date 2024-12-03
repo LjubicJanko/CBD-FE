@@ -59,6 +59,7 @@ export type OrderStatusHistory = {
 export type CreateOrder = {
   name: string;
   description: string;
+  note: string;
   plannedEndingDate: string | number | Dayjs;
   legalEntity: boolean;
   acquisitionCost?: number;
@@ -79,6 +80,7 @@ export type Order = {
   trackingId: string;
   name: string;
   description: string;
+  note: string;
   status: OrderStatus;
   executionStatus: OrderExecutionStatus;
   statusHistory: OrderStatusHistory[];

@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 const emptyOrderData: CreateOrder = {
   name: '',
   description: '',
+  note: '',
   plannedEndingDate: dayjs().add(2, 'week'),
   legalEntity: false,
   acquisitionCost: undefined,
@@ -44,6 +45,7 @@ const CreateOrderPage = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
+    note: Yup.string().required('Description is required'),
     salePrice: Yup.number()
       .positive()
       .required('Sale price is required')
@@ -123,6 +125,19 @@ const CreateOrderPage = () => {
           onBlur={formik.handleBlur}
           error={!!formik.errors.description}
           helperText={formik.errors.description ?? ''}
+          multiline
+          maxRows={4}
+        />
+        <TextField
+          className="create-order--note-input"
+          label={t('note')}
+          name="note"
+          type="text"
+          value={formik.values.note}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={!!formik.errors.note}
+          helperText={formik.errors.note ?? ''}
           multiline
           maxRows={4}
         />

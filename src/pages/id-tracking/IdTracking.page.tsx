@@ -7,7 +7,6 @@ import {
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { orderService } from '../../api';
-import OrderTrackingComponent from '../../components/order-tracking/OrderTracking.component';
 import { OrderTracking } from '../../types/Order';
 import * as Styled from './IdTracking.styles';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +14,9 @@ import useQueryParams from '../../hooks/useQueryParams';
 import { statuses } from '../../util/util';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
+import { AxiosError } from 'axios';
+import { ApiError } from '../../types/Response';
+import NoContent from '../../components/no-content/NoContent.component';
 
 const IdTrackingPage = () => {
   const { t } = useTranslation();
@@ -27,6 +29,7 @@ const IdTrackingPage = () => {
     id
   );
   const [order, setOrder] = useState<OrderTracking>();
+  const [error, setError] = useState<string>('');
 
   const formatDate = useCallback(
     (date: string) => dayjs(date).format('DD.MM.YYYY.'),
@@ -36,12 +39,13 @@ const IdTrackingPage = () => {
   const trackOrder = useCallback(
     async (trackingId: string) => {
       if (trackingId === order?.trackingId) return;
+      setError('');
 
       try {
         const response = await orderService.trackOrder(trackingId);
         setOrder(response);
       } catch (error) {
-        console.error(error);
+        setError((error as AxiosError<ApiError>).message);
       }
     },
     [order?.trackingId]
@@ -56,7 +60,7 @@ const IdTrackingPage = () => {
     trackOrder(id);
   }, [id, trackOrder]);
 
-  if (id && !order)
+  if (id && !order && !error)
     return (
       <Styled.LoaderContainer>
         <CircularProgress />
@@ -107,7 +111,7 @@ const IdTrackingPage = () => {
             {t('orderDetails.title')}
           </p>
           <div className="id-tracking-details__order-info__container">
-            <div className="id-tracking-details__order-info__container--description">
+            <div className="id-tracking-details__order-info__container--name">
               <p>{t('orderDetails.name')}</p>
               <p>{order.name}</p>
             </div>
@@ -122,6 +126,10 @@ const IdTrackingPage = () => {
             <div className="id-tracking-details__order-info__container--expected-due">
               <p>{t('orderDetails.plannedEndingDate')}</p>
               <p>{formatDate(order.plannedEndingDate)}</p>
+            </div>
+            <div className="id-tracking-details__order-info__container--description">
+              <p>{t('orderDetails.description')}</p>
+              <p>{order.description}</p>
             </div>
           </div>
         </div>
@@ -151,7 +159,11 @@ const IdTrackingPage = () => {
           {t('search')}
         </Button>
       </div>
-      {order && <OrderTrackingComponent order={order} />}
+      {error && (
+        <>
+          <NoContent message={t(error)} />
+        </>
+      )}
     </Styled.IdTrackingContainer>
   );
 };

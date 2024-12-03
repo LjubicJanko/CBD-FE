@@ -17,11 +17,21 @@ import { Payment } from '../../../../types/Payment';
 import AddPaymentModal from '../../../modals/add-payment/AddPaymentModal.component';
 import * as Styled from './OrderPayments.styles';
 import { usePrivileges } from '../../../../hooks/usePrivileges';
+import EditIcon from '@mui/icons-material/Edit';
 
 export type OrderPaymentsProps = {
   payments: Payment[];
   orderId: number;
   isAddingDisabled?: boolean;
+};
+
+type PaymentModalConfig = {
+  isOpen: boolean;
+  paymentToUpdate: Payment | undefined;
+};
+const initialPaymentModalConfig = {
+  isOpen: false,
+  paymentToUpdate: undefined,
 };
 
 const OrderPayments = ({
@@ -32,17 +42,31 @@ const OrderPayments = ({
   const { t } = useTranslation();
   const privileges = usePrivileges();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = useCallback(() => setIsModalOpen(true), []);
-  const handleCloseModal = useCallback(() => setIsModalOpen(false), []);
+  const [paymentModalConfig, setPaymentModalConfig] =
+    useState<PaymentModalConfig>(initialPaymentModalConfig);
+
+  const handleOpenModal = useCallback(
+    (paymentToUpdate?: Payment) =>
+      setPaymentModalConfig({
+        isOpen: true,
+        paymentToUpdate: paymentToUpdate,
+      }),
+    []
+  );
+
+  const handleCloseModal = useCallback(
+    () => setPaymentModalConfig(initialPaymentModalConfig),
+    []
+  );
 
   return (
     <Styled.OrderPaymentsContainer>
       <h2>{t('payments')}</h2>
       <AddPaymentModal
-        isOpen={isModalOpen}
+        isOpen={paymentModalConfig.isOpen}
         orderId={orderId}
         onClose={handleCloseModal}
+        paymentToUpdate={paymentModalConfig.paymentToUpdate}
       />
 
       {payments.length > 0 && (
@@ -55,6 +79,7 @@ const OrderPayments = ({
                 <TableCell align="right">{t('payment-method')}</TableCell>
                 <TableCell align="right">{t('transaction-date')}</TableCell>
                 <TableCell align="right">{t('note')}</TableCell>
+                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -88,6 +113,11 @@ const OrderPayments = ({
                     {dayjs(payment.paymentDate).format('DD.MM.YYYY')}
                   </TableCell>
                   <TableCell align="right">{payment.note || '-'}</TableCell>
+                  <TableCell align="right" className="edit">
+                    <Button onClick={() => handleOpenModal(payment)}>
+                      <EditIcon />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -104,7 +134,7 @@ const OrderPayments = ({
             className="add-button"
             variant="contained"
             color="primary"
-            onClick={handleOpenModal}
+            onClick={() => handleOpenModal()}
           >
             {t('add-payment')}
             <AddIcon />

@@ -11,3 +11,8 @@ export type PaginatedResponse<T> = {
   totalElements: number;
   data: T;
 };
+
+export interface ApiError {
+  status: number;
+  description: string;
+}

@@ -31,6 +31,7 @@
   "home": "Home",
   "is-legal-entity": "Is legal entity",
   "last-update": "Last updated",
+  "update": "update",
   "left-to-pay": "Left to pay",
   "login": "Login",
   "logout": "Logout",
@@ -91,9 +92,11 @@
   "orderDetails": {
     "title": "Order Details",
     "name": "Name:",
+    "description": "Description:",
     "amountLeftToPay": "Amount Left to Pay:",
     "lastUpdatedDate": "Last Updated:",
     "plannedEndingDate": "Expected Completion:"
   },
-  "enterTrackingNumber": "Enter the tracking number to check the status of your order."
+  "enterTrackingNumber": "Enter the tracking number to check the status of your order.",
+  "order-not-found": "Order not found. Please check the tracking ID."
 }

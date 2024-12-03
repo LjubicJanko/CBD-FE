@@ -31,6 +31,7 @@
   "home": "Naslovna",
   "is-legal-entity": "Da li je pravno lice",
   "last-update": "Poslednje ažurirano",
+  "update": "Izmeni",
   "left-to-pay": "Za plaćanje",
   "login": "Prijavi se",
   "logout": "Odjavi se",
@@ -91,9 +92,11 @@
   "orderDetails": {
     "title": "Detalji porudžbine",
     "name": "Naziv:",
+    "description": "Opis:",
     "amountLeftToPay": "Za plaćanje:",
     "lastUpdatedDate": "Poslednja izmena:",
     "plannedEndingDate": "Očekivani završetak:"
   },
-  "enterTrackingNumber": "Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina."
+  "enterTrackingNumber": "Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina.",
+  "order-not-found": "Porudžbina nije pronadjena. Molimo proverite identifikacioni broj."
 }

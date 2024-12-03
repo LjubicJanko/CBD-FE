@@ -193,7 +193,6 @@ const OrderDetailsComponent = () => {
           message: 'Successfuly changed status',
           type: 'info',
         });
-        console.log('changed');
       } catch (error) {
         console.error(error);
       }

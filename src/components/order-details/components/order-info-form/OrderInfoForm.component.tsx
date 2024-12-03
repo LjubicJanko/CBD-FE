@@ -16,6 +16,7 @@ const initialOrderData: Order = {
   trackingId: '',
   name: '',
   description: '',
+  note: '',
   status: 'DESIGN',
   executionStatus: 'ACTIVE',
   statusHistory: [],
@@ -39,6 +40,7 @@ const OrderInfoForm = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
+    note: Yup.string().required('Description is required'),
     salePrice: Yup.number()
       .positive()
       .required('Sale price is required')
@@ -130,6 +132,19 @@ const OrderInfoForm = () => {
         maxRows={4}
       />
       <TextField
+        className="order-note-input"
+        label={t('note')}
+        name="note"
+        type="text"
+        value={formik.values.note}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={!!formik.errors.note}
+        helperText={formik.errors.note ?? ''}
+        multiline
+        maxRows={4}
+      />
+      <TextField
         className="order-sale-price-input"
         label={t('sale-price')}
         type="number"
@@ -157,7 +172,7 @@ const OrderInfoForm = () => {
           {selectedOrder?.legalEntity ? selectedOrder?.salePriceWithTax : '-'}
         </dd>
         <dt>{t('price-difference')}</dt>
-        <dd>{formik.values.priceDifference}</dd>
+        <dd>{selectedOrder?.priceDifference}</dd>
         <dt>{t('paid')}</dt>
         <dd>{selectedOrder?.amountPaid}</dd>
         <dt>{t('left-to-pay')}</dt>
