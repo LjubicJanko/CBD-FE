@@ -56,7 +56,7 @@ const OrderInfoForm = () => {
         const res: Order = await orderService.updateOrder({
           ...values,
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
-            'YYYY-MM-DD'
+            'DD.MM.YYYY'
           ),
         });
         updateOrderInOverviewList(res);
@@ -77,7 +77,7 @@ const OrderInfoForm = () => {
         ? {
             ...selectedOrder,
             plannedEndingDate: selectedOrder?.plannedEndingDate
-              ? dayjs(selectedOrder.plannedEndingDate)
+              ? dayjs(selectedOrder.plannedEndingDate, 'DD.MM.YYYY')
               : dayjs(),
           }
         : initialOrderData,

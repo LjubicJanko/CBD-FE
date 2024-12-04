@@ -125,7 +125,7 @@ const IdTrackingPage = () => {
             </div>
             <div className="id-tracking-details__order-info__container--expected-due">
               <p>{t('orderDetails.plannedEndingDate')}</p>
-              <p>{formatDate(order.plannedEndingDate)}</p>
+              <p>{order.plannedEndingDate}</p>
             </div>
             <div className="id-tracking-details__order-info__container--description">
               <p>{t('orderDetails.description')}</p>

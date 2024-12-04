@@ -13,6 +13,8 @@ import { BasicDatePicker } from '../..';
 import ConfirmModal, {
   ConfirmModalProps,
 } from '../confirm-modal/ConfirmModal.component';
+// import customParseFormat from 'dayjs/plugin/customParseFormat';
+// dayjs.extend(customParseFormat);
 
 type AddPaymentModalProps = {
   isOpen: boolean;
@@ -59,7 +61,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
       payer: paymentToUpdate?.payer ?? '',
       amount: paymentToUpdate?.amount.toString() ?? '',
       paymentDate: paymentToUpdate
-        ? dayjs(paymentToUpdate?.paymentDate)
+        ? dayjs(paymentToUpdate?.paymentDate, 'DD.MM.YYYY')
         : dayjs(),
       paymentMethod: paymentToUpdate?.paymentMethod ?? 'ACCOUNT',
       note: paymentToUpdate?.note ?? '',
@@ -157,6 +159,8 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
     });
   }, [handleDeletePayment, t]);
 
+  console.log(formik.values);
+
   const isSubmitDisabled = useMemo(
     () => !formik.isValid || !formik.dirty,
     [formik.isValid, formik.dirty]
@@ -223,7 +227,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
           <BasicDatePicker
             label={t('transaction-date')}
             onChange={handleDateChange}
-            value={formik.values.paymentDate as Dayjs}
+            value={formik.values.paymentDate}
           />
           <TextField
             fullWidth

@@ -31,7 +31,7 @@ const CreateOrderPage = () => {
         await orderService.createOrder({
           ...values,
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
-            'YYYY-MM-DD'
+            'DD.MM.YYYY'
           ),
         });
         navigate('/');
@@ -45,7 +45,6 @@ const CreateOrderPage = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
-    note: Yup.string().required('Description is required'),
     salePrice: Yup.number()
       .positive()
       .required('Sale price is required')

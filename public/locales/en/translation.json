@@ -48,6 +48,7 @@
   "order-tracking-id": "Order tracking ID",
   "paid": "Paid",
   "pause": "Pause",
+  "paused": "Paused",
   "pause-reason": "Reason to pause",
   "pausing-comment": "Pausing comment",
   "payment-method": "Payment method",

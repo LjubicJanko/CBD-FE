@@ -1,4 +1,3 @@
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -18,14 +17,14 @@ const BasicDatePickerComponent = ({
 }: BasicDatePickerProps) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker']}>
-        <DatePicker
-          className="date-picker"
-          label={label}
-          onChange={onChange}
-          value={value}
-        />
-      </DemoContainer>
+      <DatePicker
+        className="date-picker"
+        sx={{ marginTop: '8px' }}
+        format='DD.MM.YYYY'
+        label={label}
+        onChange={onChange}
+        value={value}
+      />
     </LocalizationProvider>
   );
 };
