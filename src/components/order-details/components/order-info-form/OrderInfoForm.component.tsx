@@ -40,7 +40,6 @@ const OrderInfoForm = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
-    note: Yup.string().required('Description is required'),
     salePrice: Yup.number()
       .positive()
       .required('Sale price is required')
