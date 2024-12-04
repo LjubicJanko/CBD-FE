@@ -24,7 +24,7 @@ type AddPaymentModalProps = {
 type PaymentData = {
   payer: string;
   amount: string;
-  paymentDate: Dayjs | string;
+  paymentDate: Dayjs;
   paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE';
   note: string;
 };
@@ -83,7 +83,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         id: paymentToUpdate?.id ?? Date.now(),
         payer: values.payer,
         amount: parseFloat(values.amount),
-        paymentDate: dayjs(values.paymentDate),
+        paymentDate: values.paymentDate.format('DD.MM.YYYY'),
         paymentMethod: values.paymentMethod,
         note: values.note,
       };
@@ -150,7 +150,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   const openConfirmModal = useCallback(() => {
     setConfirmModalProps({
       isOpen: true,
-      text: t('delete-confirm'),
+      text: t('delete-payment-confirm'),
       hideNote: true,
       onConfirm: handleDeletePayment,
       onCancel: () => setConfirmModalProps(EMPTY_CONFIRM_MODAL),
@@ -165,7 +165,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   return (
     <>
       <Styled.AddPaymentModalContainer
-        title={t('add-payment')}
+        title={t(isUpdating ? 'edit-payment' : 'add-payment')}
         isOpen={isOpen}
         onClose={() => {
           formik.resetForm();

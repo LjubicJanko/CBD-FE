@@ -1,10 +1,8 @@
-import { Dayjs } from 'dayjs';
-
 export type Payment = {
   id: number;
   payer: string;
   amount: number;
-  paymentDate: Dayjs;
+  paymentDate: string;
   paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE';
   note?: string;
 };
