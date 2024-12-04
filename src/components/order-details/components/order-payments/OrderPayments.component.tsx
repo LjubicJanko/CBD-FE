@@ -10,7 +10,6 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Payment } from '../../../../types/Payment';
@@ -110,7 +109,7 @@ const OrderPayments = ({
                     />
                   </TableCell>
                   <TableCell align="right">
-                    {dayjs(payment.paymentDate.toString()).format('DD.MM.YYYY')}
+                    {payment.paymentDate.toString()}
                   </TableCell>
                   <TableCell align="right">{payment.note || '-'}</TableCell>
                   <TableCell align="right" className="edit">
