@@ -72,6 +72,8 @@
   "tracking-id": "Identifikator praćenja: {{TRACKING_ID}}",
   "transaction-date": "Datum transakcije",
   "user": "Korisnik",
+  "username": "Korisničko ime",
+  "password": "Lozinka",
   "view-status-history": "Pogledaj istoriju promena",
   "filters": "Filteri",
   "pagination-total": "Ukupno: {{TOTAL}}",

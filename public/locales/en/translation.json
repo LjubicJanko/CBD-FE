@@ -72,6 +72,8 @@
   "tracking-id": "Tracking ID: {{TRACKING_ID}}",
   "transaction-date": "Transaction date",
   "user": "User",
+  "username": "Username",
+  "password": "Password",
   "view-status-history": "View status history",
   "filters": "Filters",
   "pagination-total": "Total: {{TOTAL}}",

@@ -59,7 +59,7 @@ const LoginComponent = () => {
             color="primary"
             type="text"
             name="username"
-            placeholder="username"
+            placeholder={t('username')}
             fullWidth
             value={formik.values.username}
             onChange={formik.handleChange}
@@ -71,7 +71,7 @@ const LoginComponent = () => {
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
             name="password"
-            placeholder="password"
+            placeholder={t('password')}
             value={formik.values.password}
             onChange={formik.handleChange}
             sx={textInputSX}
