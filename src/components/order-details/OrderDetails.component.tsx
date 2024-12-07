@@ -365,8 +365,7 @@ const OrderDetailsComponent = () => {
             orderId={selectedOrder.id}
             isAddingDisabled={
               selectedOrder.executionStatus !==
-                OrderExecutionStatusEnum.ACTIVE ||
-              selectedOrder.status === OrderStatusEnum.DONE
+                OrderExecutionStatusEnum.ACTIVE
             }
           />
           <Divider />
