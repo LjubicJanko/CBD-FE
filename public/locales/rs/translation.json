@@ -100,8 +100,12 @@
     "description": "Opis:",
     "amountLeftToPay": "Za plaćanje:",
     "lastUpdatedDate": "Poslednja izmena:",
-    "plannedEndingDate": "Očekivani završetak:"
+    "plannedEndingDate": "Očekivani završetak:",
+    "postalCode": "Kod za praćenje",
+    "postalService": "Dostavna služba",
+    "postalLink": "Prati dostavnu službu"
   },
+  "track-here": "Prati ovde",
   "enterTrackingNumber": "Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina.",
   "order-not-found": "Porudžbina nije pronadjena. Molimo proverite identifikacioni broj."
 }

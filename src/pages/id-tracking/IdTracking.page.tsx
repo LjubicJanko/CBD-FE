@@ -7,11 +7,11 @@ import {
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { orderService } from '../../api';
-import { OrderTracking } from '../../types/Order';
+import { OrderTracking, PostServices } from '../../types/Order';
 import * as Styled from './IdTracking.styles';
 import { useTranslation } from 'react-i18next';
 import useQueryParams from '../../hooks/useQueryParams';
-import { statuses } from '../../util/util';
+import { statuses, trackingUrl } from '../../util/util';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { AxiosError } from 'axios';
@@ -131,6 +131,29 @@ const IdTrackingPage = () => {
               <p>{t('orderDetails.description')}</p>
               <p>{order.description}</p>
             </div>
+            {order.status === 'SHIPPED' && (
+              <>
+                <div className="id-tracking-details__order-info__container--postal-service">
+                  <p>{t('orderDetails.postalService')}</p>
+                  <p>{order.postalService}</p>
+                </div>
+                <div className="id-tracking-details__order-info__container--postal-code">
+                  <p>{t('orderDetails.postalCode')}</p>
+                  <p>{order.postalCode}</p>
+                </div>
+                <div className="id-tracking-details__order-info__container--link">
+                  <p>{t('orderDetails.postalLink')}</p>
+                  <Button
+                    variant="outlined"
+                    target="_blank"
+                    href={`${trackingUrl[order.postalService as PostServices]}`}
+                    className="id-tracking-details__order-info__container--link-btn"
+                  >
+                    {t('track-here')}
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </Styled.IdTrackingDetailsContainer>

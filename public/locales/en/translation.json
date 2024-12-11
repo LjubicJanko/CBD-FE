@@ -100,8 +100,12 @@
     "description": "Description:",
     "amountLeftToPay": "Amount Left to Pay:",
     "lastUpdatedDate": "Last Updated:",
-    "plannedEndingDate": "Expected Completion:"
+    "plannedEndingDate": "Expected Completion:",
+    "postalCode": "Postal code",
+    "postalService": "Postal service",
+    "postalLink": "Track postal service"
   },
+  "track-here": "Track here",
   "enterTrackingNumber": "Enter the tracking number to check the status of your order.",
   "order-not-found": "Order not found. Please check the tracking ID."
 }

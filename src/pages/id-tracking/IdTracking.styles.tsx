@@ -270,11 +270,16 @@ export const IdTrackingDetailsContainer = styled.div`
         &--description {
           grid-column: span 4;
           max-width: 100%;
-          white-space: pre;
+          white-space: pre-line;
           overflow: auto;
           ${tablet(css`
             grid-column: span 2;
           `)}
+        }
+
+        &--link-btn {
+          color: ${theme.SECONDARY_1};
+          border-color: ${theme.PRIMARY_1};
         }
 
         ${tablet(css`
