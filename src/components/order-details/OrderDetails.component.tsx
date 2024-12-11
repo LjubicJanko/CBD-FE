@@ -89,8 +89,10 @@ const OrderDetailsComponent = () => {
     [selectedOrder?.executionStatus]
   );
 
-  const isCanceled =
-    selectedOrder?.executionStatus === OrderExecutionStatusEnum.CANCELED;
+  const isCanceled = useMemo(
+    () => selectedOrder?.executionStatus === OrderExecutionStatusEnum.CANCELED,
+    [selectedOrder?.executionStatus]
+  );
 
   const canArchive = useMemo(
     () =>
@@ -108,17 +110,8 @@ const OrderDetailsComponent = () => {
   );
 
   const shouldShowForm = useMemo(
-    () =>
-      privileges.canEditData &&
-      !isPaused &&
-      selectedOrder?.executionStatus !== OrderExecutionStatusEnum.CANCELED &&
-      selectedOrder?.status !== OrderStatusEnum.DONE,
-    [
-      isPaused,
-      selectedOrder?.executionStatus,
-      selectedOrder?.status,
-      privileges.canEditData,
-    ]
+    () => privileges.canEditData && !isPaused && !isArchived,
+    [privileges.canEditData, isPaused, isArchived]
   );
 
   const isMoveButtonDisabled = useMemo(() => {
@@ -364,8 +357,7 @@ const OrderDetailsComponent = () => {
             payments={selectedOrder.payments}
             orderId={selectedOrder.id}
             isAddingDisabled={
-              selectedOrder.executionStatus !==
-                OrderExecutionStatusEnum.ACTIVE
+              selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE
             }
           />
           <Divider />
