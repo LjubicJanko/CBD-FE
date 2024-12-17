@@ -2,7 +2,7 @@ import { PropsWithChildren, useCallback, useState } from 'react';
 import AuthContext from './Auth.context';
 import localStorageService from '../../services/localStorage.service';
 import { authService } from '../../api';
-import { AuthData, LoginData, RegisterData } from '../../types/Auth';
+import { AuthData, LoginData } from '../../types/Auth';
 
 const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
@@ -19,9 +19,9 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       let status = false;
       try {
         const response = await authService.login(data);
-        const { token, id, roles, privileges, name } = response;
+        const { token, id, roles, privileges, name, username } = response;
         setToken(token);
-        setAuthData({ id, roles, privileges, name });
+        setAuthData({ id, roles, privileges, name, username });
         localStorageService.saveData(response);
         status = true;
         navigate('/dashboard');
@@ -35,19 +35,19 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
     []
   );
 
-  const signup = useCallback(async (data: RegisterData): Promise<boolean> => {
-    let status = false;
-    try {
-      await authService.signup(data);
-      status = true;
-      alert('success');
-    } catch (error) {
-      console.error(error);
-      status = false;
-    }
+  // const signup = useCallback(async (data: RegisterData): Promise<boolean> => {
+  //   let status = false;
+  //   try {
+  //     await authService.signup(data);
+  //     status = true;
+  //     alert('success');
+  //   } catch (error) {
+  //     console.error(error);
+  //     status = false;
+  //   }
 
-    return status;
-  }, []);
+  //   return status;
+  // }, []);
 
   const logout = useCallback((navigate: (path: string) => void) => {
     try {
@@ -61,7 +61,7 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, authData, login, signup, logout }}>
+    <AuthContext.Provider value={{ token, authData, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

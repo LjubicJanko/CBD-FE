@@ -159,8 +159,6 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
     });
   }, [handleDeletePayment, t]);
 
-  console.log(formik.values);
-
   const isSubmitDisabled = useMemo(
     () => !formik.isValid || !formik.dirty,
     [formik.isValid, formik.dirty]

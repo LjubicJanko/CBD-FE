@@ -1,6 +1,7 @@
 import {
   Button,
   CircularProgress,
+  IconButton,
   Step,
   Stepper,
   TextField,
@@ -16,6 +17,7 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { AxiosError } from 'axios';
 import { ApiError } from '../../types/Response';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import NoContent from '../../components/no-content/NoContent.component';
 
 const IdTrackingPage = () => {
@@ -72,7 +74,7 @@ const IdTrackingPage = () => {
       <Styled.IdTrackingDetailsContainer className="id-tracking-details">
         {/* Order Status */}
         <div className="id-tracking-details__status">
-          {t(`Status: ${t(order.status)}`)}
+          {`Status: ${t(order.status)}`}
         </div>
 
         {/* Stepper */}
@@ -139,7 +141,17 @@ const IdTrackingPage = () => {
                 </div>
                 <div className="id-tracking-details__order-info__container--postal-code">
                   <p>{t('orderDetails.postalCode')}</p>
-                  <p>{order.postalCode}</p>
+                  <p>
+                    {order.postalCode}
+                    <IconButton
+                      onClick={() =>
+                        navigator.clipboard.writeText(order.postalCode)
+                      }
+                      edge="end"
+                    >
+                      <ContentCopyIcon />
+                    </IconButton>
+                  </p>
                 </div>
                 <div className="id-tracking-details__order-info__container--link">
                   <p>{t('orderDetails.postalLink')}</p>

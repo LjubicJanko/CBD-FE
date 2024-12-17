@@ -23,6 +23,10 @@ export const HeaderContainer = styled.header`
     min-height: 30px;
     height: 80px;
   `)}
+
+  .user-button {
+    background-color: ${theme.SECONDARY_3};
+  }
 `;
 
 export const PublicHeaderContainer = styled.header`

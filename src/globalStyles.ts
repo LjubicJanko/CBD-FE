@@ -44,4 +44,24 @@ export const GlobalStyle = createGlobalStyle`
       align-items: center;
       justify-content: center;
     }
+
+    
+  .user-menu {
+    .MuiPopover-paper {
+      width: 200px;
+      ${mobile(css`
+        width: unset;
+      `)}
+      li {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .MuiButtonBase-root {
+    &.role-item {
+      color: white;
+    }
+  }
 `;

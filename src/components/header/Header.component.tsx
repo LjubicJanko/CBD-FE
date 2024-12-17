@@ -11,6 +11,8 @@ import React from 'react';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { xxsMax } from '../../util/breakpoints';
 import theme from '../../styles/theme';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
 import useQueryParams from '../../hooks/useQueryParams';
 
 const HeaderComponent = () => {
@@ -43,6 +45,11 @@ const HeaderComponent = () => {
     setAnchorEl(null);
     logout(navigate);
   }, [logout, navigate]);
+
+  const handleGoToProfile = useCallback(() => {
+    setAnchorEl(null);
+    navigate('/profile');
+  }, [navigate]);
 
   const url = useMemo(
     () => location.pathname.split('/').pop(),
@@ -149,6 +156,7 @@ const HeaderComponent = () => {
       {logo}
       <Button
         id="user-button"
+        className="user-button"
         aria-controls={open ? 'user-button' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
@@ -167,7 +175,14 @@ const HeaderComponent = () => {
           'aria-labelledby': 'user-button',
         }}
       >
-        <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
+        <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
+          {t('profile')}
+          <PersonIcon />
+        </MenuItem>
+        <MenuItem className="user-menu__item" onClick={handleLogout}>
+          {t('logout')}
+          <LogoutIcon />
+        </MenuItem>
       </Menu>
     </Styled.HeaderContainer>
   );
