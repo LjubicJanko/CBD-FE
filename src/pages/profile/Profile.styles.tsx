@@ -3,22 +3,48 @@ import theme from '../../styles/theme';
 import { tablet } from '../../util/breakpoints';
 
 export const ProfilePageContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-areas: 'cards panel';
+  grid-template-columns: fit-content(40%) auto;
   flex-direction: column;
   padding: 32px;
   gap: 32px;
 
   width: 100%;
 
+  ${tablet(css`
+    display: flex;
+    flex-direction: column;
+  `)}
+
   .profile {
     &__cards {
+      grid-area: cards;
+
       display: flex;
       flex-direction: column;
-      width: fit-content;
-      padding-top: 16px;
-      padding-bottom: 16px;
-      background-color: ${theme.SECONDARY_2};
+      height: 100%;
+      gap: 8px;
 
+      h3 {
+        font-size: 32px;
+        color: ${theme.SECONDARY_2};
+        padding-bottom: 16px;
+        text-align: center;
+      }
+
+      button {
+        color: ${theme.SECONDARY_2};
+
+        &.selected {
+          border-right: 3px solid ${theme.PRIMARY_2};
+          border-bottom: 1px solid ${theme.PRIMARY_2};
+        }
+      }
+    }
+
+    &__panel {
+      grid-area: panel;
     }
 
     &__change-password {
@@ -53,56 +79,4 @@ export const ProfilePageContainer = styled.div`
       }
     }
   }
-`;
-
-export const SignupContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  border-radius: 8px;
-  width: 50%;
-
-  gap: 16px;
-  padding: 32px;
-  background-color: ${theme.SECONDARY_2};
-
-  ${tablet(css`
-    padding: 16px;
-    width: 100%;
-  `)};
-
-  form {
-    max-width: unset;
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 16px;
-    .add-user {
-      margin-top: 16px;
-      /* background-color: ${theme.SECONDARY_3}; */
-      width: fit-content;
-      padding: 16px 32px;
-    }
-  }
-  &.signup-container {
-    .role-item {
-      color: white;
-    }
-  }
-`;
-
-export const UsersContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  border-radius: 8px;
-  width: 100%;
-
-  gap: 16px;
-  padding: 32px;
-  background-color: ${theme.SECONDARY_2};
 `;

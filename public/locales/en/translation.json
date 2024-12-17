@@ -115,6 +115,7 @@
   "track-here": "Track here",
   "new-password": "New Password",
   "old-password": "Old Password",
+  "personal-info": "Personal info",
   "enterTrackingNumber": "Enter the tracking number to check the status of your order.",
   "order-not-found": "Order not found. Please check the tracking ID."
 }

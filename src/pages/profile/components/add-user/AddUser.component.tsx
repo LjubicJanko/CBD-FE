@@ -1,0 +1,255 @@
+import CloseIcon from '@mui/icons-material/Close';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Snackbar,
+  TextField,
+} from '@mui/material';
+import { FormikHelpers, useFormik } from 'formik';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
+import { profileService } from '../../../../api';
+import { RegisterData, User } from '../../../../types/Auth';
+import { textInputSX } from '../../../../util/util';
+import UsersTable from '../UsersTable.component';
+import * as Styled from './AddUser.styles';
+
+const signUpInitialValues = {
+  username: '',
+  password: '',
+  fullName: '',
+  role: '',
+} as RegisterData;
+
+type SnackbarConfigProps = {
+  isOpen: boolean;
+  message: string;
+};
+
+const initialSnackbarConfig = {
+  isOpen: false,
+  message: '',
+};
+
+const roles = ['admin', 'manager', 'manufacturer'];
+const AddUser = () => {
+  const { t } = useTranslation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [snackbarConfig, setSnackbarConfig] = useState<SnackbarConfigProps>(
+    initialSnackbarConfig
+  );
+  const [areUsersLoading, setAreUsersLoading] = useState(false);
+
+  const fetchAllUsers = useCallback(async () => {
+    try {
+      const users = await profileService.getAllUsers();
+      setAllUsers(users);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const handleSignUp = useCallback(
+    async (
+      values: RegisterData,
+      { resetForm }: FormikHelpers<RegisterData>
+    ) => {
+      setAreUsersLoading(true);
+      try {
+        await profileService.signup(values);
+        resetForm();
+        fetchAllUsers();
+        setSnackbarConfig({
+          isOpen: true,
+          message: 'successfully added new user',
+        });
+      } catch (e) {
+        console.error(e);
+        setSnackbarConfig({
+          isOpen: true,
+          message: 'failed',
+        });
+      } finally {
+        setAreUsersLoading(false);
+      }
+    },
+    [fetchAllUsers]
+  );
+
+  const validationSignupSchema = Yup.object({
+    fullName: Yup.string().required(t('required')),
+    username: Yup.string().required(t('required')),
+    password: Yup.string().required(t('required')),
+    role: Yup.string().required(t('required')),
+  });
+
+  const signUpFormik = useFormik({
+    initialValues: signUpInitialValues,
+    validationSchema: validationSignupSchema,
+    onSubmit: handleSignUp,
+    enableReinitialize: true,
+  });
+
+  const isSubmitDisabled = useMemo(
+    () => !signUpFormik.isValid || !signUpFormik.dirty,
+    [signUpFormik.isValid, signUpFormik.dirty]
+  );
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleClose = useCallback(
+    () => setSnackbarConfig(initialSnackbarConfig),
+    []
+  );
+
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, [fetchAllUsers]);
+
+  if (areUsersLoading) {
+    return (
+      <div className="loader-wrapper">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  return (
+    <Styled.AddUserContainer className="signup-container">
+      <form onSubmit={signUpFormik.handleSubmit}>
+        <h3>{t('add-user')}</h3>
+        <TextField
+          className="fullname-input"
+          label={t('full-name')}
+          name="fullName"
+          type="text"
+          value={signUpFormik.values.fullName}
+          onChange={signUpFormik.handleChange}
+          onBlur={signUpFormik.handleBlur}
+          error={
+            signUpFormik.touched.fullName &&
+            Boolean(signUpFormik.errors.fullName)
+          }
+          helperText={
+            signUpFormik.touched.fullName && signUpFormik.errors.fullName
+          }
+        />
+        <TextField
+          className="signup-username-input"
+          label={t('username')}
+          name="username"
+          type="text"
+          value={signUpFormik.values.username}
+          onChange={signUpFormik.handleChange}
+          onBlur={signUpFormik.handleBlur}
+          error={
+            signUpFormik.touched.username &&
+            Boolean(signUpFormik.errors.username)
+          }
+          helperText={
+            signUpFormik.touched.username && signUpFormik.errors.username
+          }
+        />
+        <OutlinedInput
+          id="outlined-adornment-password"
+          type={showPassword ? 'text' : 'password'}
+          name="password"
+          placeholder={t('password')}
+          value={signUpFormik.values.password}
+          onChange={signUpFormik.handleChange}
+          sx={textInputSX}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                onMouseUp={handleMouseUpPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+        <FormControl fullWidth>
+          <InputLabel id="role-input-label">{t('role')}</InputLabel>
+          <Select
+            labelId="role-input-label"
+            className="role-input"
+            id="role-input"
+            name="role"
+            value={signUpFormik.values.role}
+            label={t('role')}
+            onChange={signUpFormik.handleChange}
+            onBlur={signUpFormik.handleBlur}
+          >
+            {roles.map((role) => (
+              <MenuItem className="role-item" key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button
+          className="add-user"
+          variant="contained"
+          type="submit"
+          fullWidth
+          disabled={isSubmitDisabled}
+        >
+          {t('add-user')}
+        </Button>
+      </form>
+      <Styled.UsersContainer className="users-container">
+        <h3>{t('all-users')}</h3>
+        <UsersTable users={allUsers} />
+      </Styled.UsersContainer>
+      <Snackbar
+        open={snackbarConfig.isOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={snackbarConfig.message}
+        action={action}
+      />
+    </Styled.AddUserContainer>
+  );
+};
+
+export default AddUser;
