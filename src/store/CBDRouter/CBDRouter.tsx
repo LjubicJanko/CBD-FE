@@ -1,11 +1,9 @@
 import {
   DashboardPage,
-  // DecisionPage,
   HomePage,
   IdTrackingPage,
   LoginPage,
   ProfilePage,
-  SignUpPage,
 } from '../../pages';
 import {
   Navigate,
@@ -118,11 +116,6 @@ const CBDRouter: React.FC = (): JSX.Element => {
         <Route
           path="login"
           element={<LoginPage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route
-          path="signup"
-          element={<SignUpPage />}
           loader={async () => await isAuthenticated()}
         />
         <Route path="*" element={<Navigate to="/" />} />
