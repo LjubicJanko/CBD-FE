@@ -47,7 +47,7 @@ const FiltersComponent = () => {
   return (
     <Styled.FiltersComponentContainer className="filters">
       {canAddOrder && (
-        <Tooltip title="add order">
+        <Tooltip title={t('create-order')}>
           <Button
             variant="contained"
             size="large"

@@ -28,6 +28,7 @@
   "comment": "Komentar",
   "confirm": "Potvrdi",
   "create": "Kreiraj",
+  "create-order": "Kreiraj narudžbinu",
   "delete": "Obriši",
   "delete-confirm": "Da li si siguran da želiš da obrišeš ovu narudžbinu?",
   "delete-payment-confirm": "Da li si siguran da želiš da obrišeš ovu uplatu?",
@@ -109,6 +110,24 @@
     "postalCode": "Kod za praćenje",
     "postalService": "Dostavna služba",
     "postalLink": "Prati dostavnu službu"
+  },
+  "validation": {
+    "required": {
+      "name": "Ime je obavezno",
+      "description": "Opis je obavezan",
+      "sale-price": "Prodajna cena je obavezna",
+      "acquisition-cost": "Nabavna cena je obavezna",
+      "payer": "Uplatilac je obavezan",
+      "amount": "Iznos je obavezan",
+      "postal-code": "Kod za praćenje je obavezan",
+      "postal-service": "Dostavna služba je obavezna",
+      "new-password": "Nova lozinka je obavezna",
+      "old-password": "Stara lozinka je obavezna",
+      "full-name": "Ime i prezime je obavezno",
+      "username": "Korisničko ime je obavezno",
+      "password": "Lozinka je obavezna",
+      "role": "Rola je obavezna"
+    }
   },
   "change-password": "Promeni lozinku",
   "add-user": "Dodaj korisnika",

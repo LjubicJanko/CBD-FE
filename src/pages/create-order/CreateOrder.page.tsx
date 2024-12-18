@@ -1,4 +1,10 @@
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  TextField,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import { useCallback, useMemo } from 'react';
 import { orderService } from '../../api';
@@ -25,6 +31,19 @@ const CreateOrderPage = () => {
   const { t } = useTranslation();
   const initialValues = useMemo(() => emptyOrderData, []);
 
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t('validation.required.name')),
+    description: Yup.string().required(t('validation.required.description')),
+    salePrice: Yup.number()
+      .positive(t('validation.invalid.sale-price'))
+      .required(t('validation.required.sale-price'))
+      .min(0),
+    acquisitionCost: Yup.number()
+      .positive(t('validation.invalid.acquisition-cost'))
+      .required(t('validation.required.acquisition-cost'))
+      .min(0),
+  });
+
   const onSubmit = useCallback(
     async (values: CreateOrder) => {
       try {
@@ -42,41 +61,13 @@ const CreateOrderPage = () => {
     [navigate]
   );
 
-  const validationSchema = Yup.object({
-    name: Yup.string().required('Name is required'),
-    description: Yup.string().required('Description is required'),
-    salePrice: Yup.number()
-      .positive()
-      .required('Sale price is required')
-      .min(0),
-    acquisitionCost: Yup.number()
-      .positive()
-      .required('Acquisition cost is required')
-      .min(0),
-  });
-
   const formik = useFormik<CreateOrder>({
     initialValues,
     validationSchema,
     onSubmit,
     validateOnChange: false,
-    validateOnBlur: false,
+    validateOnBlur: true,
   });
-
-  const isSubmitDisabled = useMemo(() => {
-    const hasErrors = Object.keys(formik.errors).length > 0;
-    const isFormNotTouched = !formik.dirty && !formik.touched;
-    const isFormInvalid = !formik.isValid;
-    const isFormEmpty = Object.values(formik.values).every((x) => !x);
-
-    return hasErrors || isFormNotTouched || isFormInvalid || isFormEmpty;
-  }, [
-    formik.dirty,
-    formik.errors,
-    formik.isValid,
-    formik.touched,
-    formik.values,
-  ]);
 
   const handleDateChange = useCallback(
     (newValue: Dayjs | null) => {
@@ -87,20 +78,30 @@ const CreateOrderPage = () => {
     [formik]
   );
 
+  const isSubmitDisabled = useMemo(() => {
+    const requiredFields: (keyof CreateOrder)[] = [
+      'name',
+      'description',
+      'salePrice',
+      'acquisitionCost',
+    ];
+
+    const areAllRequiredFieldsValid = requiredFields.every(
+      (field) => formik.touched[field] && !formik.errors[field]
+    );
+
+    return !areAllRequiredFieldsValid;
+  }, [formik.errors, formik.touched]);
+
   return (
     <Styled.CreateOrderPageContainer>
-      <style>
-        {`
-          html, body {
-            background-color: white;
-          }
-        `}
-      </style>
       <form
         autoComplete="off"
         onSubmit={formik.handleSubmit}
         className="create-order"
       >
+        <h2 className="title">{t('create-order')}</h2>
+        <Divider />
         <TextField
           className="create-order--name-input"
           label={t('order-name')}
@@ -109,8 +110,8 @@ const CreateOrderPage = () => {
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={!!formik.errors.name}
-          helperText={formik.errors.name ?? ''}
+          error={!!formik.errors.name && formik.touched.name}
+          helperText={formik.touched.name && formik.errors.name}
           multiline
           maxRows={4}
         />
@@ -122,8 +123,8 @@ const CreateOrderPage = () => {
           value={formik.values.description}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={!!formik.errors.description}
-          helperText={formik.errors.description ?? ''}
+          error={!!formik.errors.description && formik.touched.description}
+          helperText={formik.touched.description && formik.errors.description}
           multiline
           maxRows={4}
         />
@@ -135,8 +136,8 @@ const CreateOrderPage = () => {
           value={formik.values.note}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={!!formik.errors.note}
-          helperText={formik.errors.note ?? ''}
+          error={!!formik.errors.note && formik.touched.note}
+          helperText={formik.touched.note && formik.errors.note}
           multiline
           maxRows={4}
         />
@@ -155,8 +156,8 @@ const CreateOrderPage = () => {
           value={formik.values.salePrice}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={!!formik.errors.salePrice}
-          helperText={formik.errors.salePrice ?? ''}
+          error={!!formik.errors.salePrice && formik.touched.salePrice}
+          helperText={formik.touched.salePrice && formik.errors.salePrice}
         />
 
         <TextField
@@ -167,8 +168,12 @@ const CreateOrderPage = () => {
           value={formik.values.acquisitionCost}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={!!formik.errors.acquisitionCost}
-          helperText={formik.errors.acquisitionCost ?? ''}
+          error={
+            !!formik.errors.acquisitionCost && formik.touched.acquisitionCost
+          }
+          helperText={
+            formik.touched.acquisitionCost && formik.errors.acquisitionCost
+          }
         />
 
         <FormControlLabel
@@ -183,6 +188,7 @@ const CreateOrderPage = () => {
             />
           }
         />
+        <Divider />
         <div className="create-order__footer">
           <Button
             className="create-order__footer--cancel-button"

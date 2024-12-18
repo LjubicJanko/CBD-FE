@@ -70,12 +70,14 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   );
 
   const validationSchema = Yup.object({
-    payer: Yup.string().required(t('required')),
+    payer: Yup.string().required(t('validation.required.payer')),
     amount: Yup.number()
-      .required(t('required'))
+      .required(t('validation.required.amount'))
       .positive(t('must-be-positive')),
-    paymentDate: Yup.string().required(t('required')),
-    paymentMethod: Yup.string().required(t('required')),
+    paymentDate: Yup.string().required(t('validation.required.payment-date')),
+    paymentMethod: Yup.string().required(
+      t('validation.required.payment-method')
+    ),
     note: Yup.string(),
   });
 

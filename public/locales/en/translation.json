@@ -25,6 +25,7 @@
   "cancel-reason": "Reason to cancel",
   "created-at": "Crated at",
   "change-language": "Change language",
+  "create-order": "Create order",
   "comment": "Comment",
   "confirm": "Confirm",
   "create": "Create",
@@ -109,6 +110,28 @@
     "postalCode": "Postal code",
     "postalService": "Postal service",
     "postalLink": "Track postal service"
+  },
+  "validation": {
+    "invalid": {
+      "sale-price": "Sale price must be positive number",
+      "acquisition-cost": "Acquisition cost must be positive number"
+    },
+    "required": {
+      "name": "Name is required",
+      "description": "Description is required",
+      "sale-price": "Sale price is required",
+      "acquisition-cost": "Acquisition cost is required",
+      "payer": "Payer is required",
+      "amount": "Amount is required",
+      "postal-code": "Postal code is required",
+      "postal-service": "Postal service is required",
+      "new-password": "New password is required",
+      "old-password": "Old Password is required",
+      "full-name": "Full name is required",
+      "username": "Username is required",
+      "password": "Password is required",
+      "role": "Role is required"
+    }
   },
   "change-password": "Change password",
   "add-user": "Add user",

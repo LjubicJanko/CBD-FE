@@ -88,10 +88,10 @@ const AddUser = () => {
   );
 
   const validationSignupSchema = Yup.object({
-    fullName: Yup.string().required(t('required')),
-    username: Yup.string().required(t('required')),
-    password: Yup.string().required(t('required')),
-    role: Yup.string().required(t('required')),
+    fullName: Yup.string().required(t('validation.required.full-name')),
+    username: Yup.string().required(t('validation.required.username')),
+    password: Yup.string().required(t('validation.required.password')),
+    role: Yup.string().required(t('validation.required.role')),
   });
 
   const signUpFormik = useFormik({

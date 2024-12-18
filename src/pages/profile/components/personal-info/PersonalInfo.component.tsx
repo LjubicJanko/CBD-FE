@@ -73,8 +73,8 @@ const PersonalInfo = () => {
   );
 
   const validationChangePasswordSchema = Yup.object({
-    newPassword: Yup.string().required(t('required')),
-    oldPassword: Yup.string().required(t('required')),
+    newPassword: Yup.string().required(t('validation.required.new-password')),
+    oldPassword: Yup.string().required(t('validation.required.old-password')),
   });
 
   const changePasswordFormik = useFormik({

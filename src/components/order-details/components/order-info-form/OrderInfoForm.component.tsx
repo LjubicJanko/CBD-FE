@@ -38,18 +38,17 @@ const OrderInfoForm = () => {
     useContext(OrdersContext);
 
   const validationSchema = Yup.object({
-    name: Yup.string().required('Name is required'),
-    description: Yup.string().required('Description is required'),
+    name: Yup.string().required(t('validation.required.name')),
+    description: Yup.string().required(t('validation.required.description')),
     salePrice: Yup.number()
-      .positive()
-      .required('Sale price is required')
+      .positive(t('validation.invalid.sale-price'))
+      .required(t('validation.required.sale-price'))
       .min(0),
     acquisitionCost: Yup.number()
-      .positive()
-      .required('Acquisition cost is required')
+      .positive(t('validation.invalid.acquisition-cost'))
+      .required(t('validation.required.acquisition-cost'))
       .min(0),
   });
-
   const onSubmit = useCallback(
     async (values: Order, { resetForm }: FormikHelpers<Order>) => {
       try {

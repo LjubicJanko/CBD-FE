@@ -71,12 +71,12 @@ const StatusChangeModal = ({
   const validationSchema = Yup.object({
     postalCode: Yup.string().when('isShipReady', (_, schema) => {
       return isShipReady
-        ? schema.required(t('required'))
+        ? schema.required(t('validation.required.postal-code'))
         : schema.notRequired();
     }),
     postalService: Yup.string().when('isShipReady', (_, schema) => {
       return isShipReady
-        ? schema.required(t('required'))
+        ? schema.required(t('validation.required.postal-service'))
         : schema.notRequired();
     }),
   });
