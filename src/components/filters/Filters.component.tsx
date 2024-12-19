@@ -58,7 +58,7 @@ const FiltersComponent = () => {
           </Button>
         </Tooltip>
       )}
-      <Tooltip title="filter orders">
+      <Tooltip title={t('filters-tooltip')}>
         <Button variant="outlined" onClick={toggleFiltersModal}>
           <FilterAltIcon />
         </Button>

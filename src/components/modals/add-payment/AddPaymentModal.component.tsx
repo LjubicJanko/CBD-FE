@@ -27,11 +27,11 @@ type PaymentData = {
   payer: string;
   amount: string;
   paymentDate: Dayjs;
-  paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE';
+  paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE' | 'ON_SHIP';
   note: string;
 };
 
-const paymentMethods = ['ACCOUNT', 'CASH', 'INVOICE'];
+const paymentMethods = ['ACCOUNT', 'CASH', 'INVOICE', 'ON_SHIP'];
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,

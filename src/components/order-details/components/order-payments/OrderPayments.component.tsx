@@ -103,6 +103,8 @@ const OrderPayments = ({
                             ? 'green'
                             : payment.paymentMethod === 'ACCOUNT'
                             ? 'blue'
+                            : payment.paymentMethod === 'ON_SHIP'
+                            ? 'purple'
                             : 'orange',
                         color: 'white',
                       }}

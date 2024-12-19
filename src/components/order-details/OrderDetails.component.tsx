@@ -38,6 +38,7 @@ import OrderInfoForm from './components/order-info-form/OrderInfoForm.component'
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
 import classNames from 'classnames';
+import AuthContext from '../../store/AuthProvider/Auth.context';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -75,6 +76,9 @@ const OrderDetailsComponent = () => {
     useContext(OrdersContext);
   const privileges = usePrivileges();
   const width = useResponsiveWidth();
+  const { authData } = useContext(AuthContext);
+  const { roles: userRoles } = authData ?? {};
+  const isAdmin = userRoles?.includes('admin');
 
   const [snackbarProps, setSnackbarProps] =
     useState<SnackbarProps>(emptySnackbar);
@@ -96,10 +100,11 @@ const OrderDetailsComponent = () => {
 
   const canArchive = useMemo(
     () =>
+      isAdmin &&
       selectedOrder?.status === OrderStatusEnum.DONE &&
       selectedOrder.executionStatus !== OrderExecutionStatusEnum.ARCHIVED &&
       selectedOrder.executionStatus !== OrderExecutionStatusEnum.CANCELED,
-    [selectedOrder?.executionStatus, selectedOrder?.status]
+    [isAdmin, selectedOrder?.executionStatus, selectedOrder?.status]
   );
 
   const isArchived = useMemo(
@@ -289,12 +294,16 @@ const OrderDetailsComponent = () => {
       {canArchive && (
         <Button
           variant="contained"
+          className="archive-btn"
           color="primary"
           fullWidth
           size="medium"
           onClick={() =>
-            openConfirmModal(t('archive-reason'), (note: string) =>
-              changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note)
+            openConfirmModal(
+              t('archive-title'),
+              (note: string) =>
+                changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note),
+              true
             )
           }
         >
@@ -304,6 +313,7 @@ const OrderDetailsComponent = () => {
       <div className="tracking-id">
         <p>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</p>
         <IconButton
+          className="postal-code-copy"
           onClick={() => {
             navigator.clipboard.writeText(selectedOrder.trackingId);
             setSnackbarProps({
