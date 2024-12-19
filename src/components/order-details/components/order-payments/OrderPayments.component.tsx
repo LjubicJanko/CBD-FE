@@ -78,7 +78,7 @@ const OrderPayments = ({
                 <TableCell align="right">{t('payment-method')}</TableCell>
                 <TableCell align="right">{t('transaction-date')}</TableCell>
                 <TableCell align="right">{t('note')}</TableCell>
-                <TableCell align="right"></TableCell>
+                {!isAddingDisabled && <TableCell align="right"></TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -112,11 +112,13 @@ const OrderPayments = ({
                     {payment.paymentDate.toString()}
                   </TableCell>
                   <TableCell align="right">{payment.note || '-'}</TableCell>
-                  <TableCell align="right" className="edit">
-                    <Button onClick={() => handleOpenModal(payment)}>
-                      <EditIcon />
-                    </Button>
-                  </TableCell>
+                  {!isAddingDisabled && (
+                    <TableCell align="right" className="edit">
+                      <Button onClick={() => handleOpenModal(payment)}>
+                        <EditIcon />
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

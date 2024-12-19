@@ -1,7 +1,9 @@
 import {
+  Alert,
   Button,
   CircularProgress,
   IconButton,
+  Snackbar,
   Step,
   Stepper,
   TextField,
@@ -32,6 +34,7 @@ const IdTrackingPage = () => {
   );
   const [order, setOrder] = useState<OrderTracking>();
   const [error, setError] = useState<string>('');
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
   const formatDate = useCallback(
     (date: string) => dayjs(date).format('DD.MM.YYYY.'),
@@ -137,16 +140,17 @@ const IdTrackingPage = () => {
               <>
                 <div className="id-tracking-details__order-info__container--postal-service">
                   <p>{t('orderDetails.postalService')}</p>
-                  <p>{order.postalService}</p>
+                  <p>{t(order.postalService)}</p>
                 </div>
                 <div className="id-tracking-details__order-info__container--postal-code">
                   <p>{t('orderDetails.postalCode')}</p>
                   <p>
                     {order.postalCode}
                     <IconButton
-                      onClick={() =>
-                        navigator.clipboard.writeText(order.postalCode)
-                      }
+                      onClick={() => {
+                        navigator.clipboard.writeText(order.postalCode);
+                        setIsSnackbarOpen(true);
+                      }}
                       edge="end"
                     >
                       <ContentCopyIcon />
@@ -168,6 +172,19 @@ const IdTrackingPage = () => {
             )}
           </div>
         </div>
+        <Snackbar
+          open={isSnackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => setIsSnackbarOpen(false)}
+        >
+          <Alert
+            onClose={() => setIsSnackbarOpen(false)}
+            severity="success"
+            variant="filled"
+          >
+            {t('postal-code-coppied')}
+          </Alert>
+        </Snackbar>
       </Styled.IdTrackingDetailsContainer>
     );
   }

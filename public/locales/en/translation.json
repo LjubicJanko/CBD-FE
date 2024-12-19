@@ -130,15 +130,23 @@
       "full-name": "Full name is required",
       "username": "Username is required",
       "password": "Password is required",
-      "role": "Role is required"
+      "role": "Role is required",
+      "payment-date": "Payment date is required",
+      "payment-method": "Payment method is required"
     }
   },
+  "d": "D express",
+  "city": "City express",
+  "aks": "Aks express",
+  "post": "Post of Serbia",
+  "bex": "Bex express",
   "change-password": "Change password",
   "add-user": "Add user",
   "track-here": "Track here",
   "new-password": "New Password",
   "old-password": "Old Password",
   "personal-info": "Personal info",
+  "postal-code-coppied": "Postal code is coppied to clipboard",
   "enterTrackingNumber": "Enter the tracking number to check the status of your order.",
   "order-not-found": "Order not found. Please check the tracking ID."
 }

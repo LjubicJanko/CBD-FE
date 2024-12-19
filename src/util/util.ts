@@ -87,7 +87,8 @@ export const textInputSX = {
 
 export const trackingUrl: Record<PostServices, string> = {
   aks: 'https://www.aks.rs/pracenje-posiljke/',
-  'd-express': 'https://www.dexpress.rs/rs/pracenje-posiljaka',
-  'city-express': 'https://www.cityexpress.rs/pracenje-posiljke',
-  'post-express': 'https://www.posta.rs/cir/alati/pracenje-posiljke.aspx',
+  d: 'https://www.dexpress.rs/rs/pracenje-posiljaka',
+  city: 'https://www.cityexpress.rs/pracenje-posiljke',
+  post: 'https://www.posta.rs/cir/alati/pracenje-posiljke.aspx',
+  bex: 'https://bexexpress.rs/pracenje-posiljke',
 };

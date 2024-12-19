@@ -9,7 +9,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { Order, OrderStatus } from '../../../types/Order';
+import { Order, OrderStatus, PostServices } from '../../../types/Order';
 import { getNextStatus } from '../../../util/util';
 import { orderService } from '../../../api';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ export type StatusData = {
   postalService?: string;
 };
 
-const postServices = ['d-express', 'city-express', 'aks', 'post-express'];
+const postServices: PostServices[] = ['d', 'city', 'aks', 'post', 'bex'];
 
 const StatusChangeModal = ({
   currentStatus,
@@ -129,16 +129,16 @@ const StatusChangeModal = ({
                 >
                   {postServices.map((postService) => (
                     <MenuItem key={postService} value={postService}>
-                      {postService}
+                      {t(postService)}
                     </MenuItem>
                   ))}
                 </Select>
+                {formik.errors.postalService && (
+                  <p className="postalService--error">
+                    {formik.errors.postalService}
+                  </p>
+                )}
               </FormControl>
-              {formik.errors.postalService && (
-                <span className="postalService--error">
-                  {formik.errors.postalService}
-                </span>
-              )}
               <TextField
                 className="postal-code-input"
                 label={t('postal-code')}

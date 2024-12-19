@@ -120,4 +120,9 @@ export type GetAllPaginatedResponse = {
   data: OrderOverview[];
 };
 
-export type PostServices = 'd-express' | 'city-express' | 'aks' | 'post-express';
+export type PostServices =
+  | 'd'
+  | 'city'
+  | 'aks'
+  | 'post'
+  | 'bex';

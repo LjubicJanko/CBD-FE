@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
 import {
+  Alert,
   Button,
   Chip,
   Divider,
@@ -60,13 +61,12 @@ export type OrderDetailsProps = { order?: Order };
 export type SnackbarProps = {
   open: boolean;
   message: string;
-  type: 'success' | 'info' | 'error';
+  type: 'success' | 'info' | 'warning' | 'error';
 };
 
 const emptySnackbar = {
   open: false,
   message: '',
-  type: 'success',
 } as SnackbarProps;
 
 const OrderDetailsComponent = () => {
@@ -304,9 +304,14 @@ const OrderDetailsComponent = () => {
       <div className="tracking-id">
         <p>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</p>
         <IconButton
-          onClick={() =>
-            navigator.clipboard.writeText(selectedOrder.trackingId)
-          }
+          onClick={() => {
+            navigator.clipboard.writeText(selectedOrder.trackingId);
+            setSnackbarProps({
+              open: true,
+              message: t('postal-code-coppied'),
+              type: 'info',
+            });
+          }}
           edge="end"
         >
           <ContentCopyIcon />
@@ -413,14 +418,21 @@ const OrderDetailsComponent = () => {
           onClose={() => setIsStatusHistoryModalOpen(false)}
         />
       )}
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={snackbarProps.open}
-        onClose={() => setSnackbarProps(emptySnackbar)}
-        key={'top-center'}
-      >
-        <p>{snackbarProps.message}</p>
-      </Snackbar>
+      {snackbarProps.open && (
+        <Snackbar
+          autoHideDuration={3000}
+          open={snackbarProps.open}
+          onClose={() => setSnackbarProps(emptySnackbar)}
+        >
+          <Alert
+            onClose={() => setSnackbarProps(emptySnackbar)}
+            severity={snackbarProps.type}
+            variant="filled"
+          >
+            {snackbarProps.message}
+          </Alert>
+        </Snackbar>
+      )}
       <ConfirmModal {...confirmModalProps} />
     </Styled.OrderDetailsContainer>
   );

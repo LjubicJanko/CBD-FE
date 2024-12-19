@@ -112,6 +112,10 @@
     "postalLink": "Prati dostavnu službu"
   },
   "validation": {
+    "invalid": {
+      "sale-price": "Prodajna cena mora biti pozitivan broj",
+      "acquisition-cost": "Nabavna cena mora biti pozitivan broj"
+    },
     "required": {
       "name": "Ime je obavezno",
       "description": "Opis je obavezan",
@@ -126,15 +130,23 @@
       "full-name": "Ime i prezime je obavezno",
       "username": "Korisničko ime je obavezno",
       "password": "Lozinka je obavezna",
-      "role": "Rola je obavezna"
+      "role": "Rola je obavezna",
+      "payment-date": "Datum plaćanja je obavezan",
+      "payment-method": "Metod plaćanja je obavezan"
     }
   },
+  "d": "D express",
+  "city": "City express",
+  "aks": "Aks express",
+  "post": "Pošta Srbije",
+  "bex": "Bex express",
   "change-password": "Promeni lozinku",
   "add-user": "Dodaj korisnika",
   "track-here": "Prati ovde",
   "new-password": "Nova lozinka",
   "old-password": "Stara lozinka",
   "personal-info": "Moje informacije",
+  "postal-code-coppied": "Kod za praćenje je uspesno kopiran",
   "enterTrackingNumber": "Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina.",
   "order-not-found": "Porudžbina nije pronadjena. Molimo proverite identifikacioni broj."
 }
