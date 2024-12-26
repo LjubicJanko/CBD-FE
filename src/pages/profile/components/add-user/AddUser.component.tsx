@@ -61,7 +61,7 @@ const AddUser = () => {
         await profileService.signup(values);
         resetForm();
         fetchAllUsers();
-        showSnackbar('user-created', 'success');
+        showSnackbar(t('user-created'), 'success');
       } catch (e) {
         console.error(e);
         showSnackbar('Failed', 'error');
@@ -69,7 +69,7 @@ const AddUser = () => {
         setAreUsersLoading(false);
       }
     },
-    [fetchAllUsers, showSnackbar]
+    [fetchAllUsers, showSnackbar, t]
   );
 
   const validationSignupSchema = Yup.object({

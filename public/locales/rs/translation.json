@@ -119,22 +119,22 @@
       "acquisition-cost": "Nabavna cena mora biti pozitivan broj"
     },
     "required": {
-      "name": "Ime je obavezno",
-      "description": "Opis je obavezan",
-      "sale-price": "Prodajna cena je obavezna",
-      "acquisition-cost": "Nabavna cena je obavezna",
-      "payer": "Uplatilac je obavezan",
-      "amount": "Iznos je obavezan",
-      "postal-code": "Kod za praćenje je obavezan",
-      "postal-service": "Dostavna služba je obavezna",
-      "new-password": "Nova lozinka je obavezna",
-      "old-password": "Stara lozinka je obavezna",
-      "full-name": "Ime i prezime je obavezno",
-      "username": "Korisničko ime je obavezno",
-      "password": "Lozinka je obavezna",
-      "role": "Rola je obavezna",
-      "payment-date": "Datum plaćanja je obavezan",
-      "payment-method": "Metod plaćanja je obavezan"
+      "name": "Naziv je obavezno polje.",
+      "description": "Opis je obavezno polje.",
+      "sale-price": "Prodajna cena je obavezno polje.",
+      "acquisition-cost": "Nabavna cena je obavezno polje.",
+      "payer": "Uplatilac je obavezno polje.",
+      "amount": "Iznos je obavezno polje.",
+      "postal-code": "Kod za praćenje je obavezno polje.",
+      "postal-service": "Dostavna služba je obavezno polje.",
+      "new-password": "Nova lozinka je obavezno polje.",
+      "old-password": "Stara lozinka je obavezno polje.",
+      "full-name": "Ime i prezime je obavezno polje.",
+      "username": "Korisničko ime je obavezno polje.",
+      "password": "Lozinka je obavezno polje.",
+      "role": "Rola je obavezno polje.",
+      "payment-date": "Datum plaćanja je obavezno polje.",
+      "payment-method": "Metod plaćanja je obavezno polje."
     }
   },
   "d": "D express",
@@ -148,7 +148,12 @@
   "new-password": "Nova lozinka",
   "old-password": "Stara lozinka",
   "personal-info": "Moje informacije",
-  "postal-code-coppied": "Kod za praćenje je uspesno kopiran",
+  "postal-code-coppied": "Kod za praćenje je uspešno kopiran",
   "enterTrackingNumber": "Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina.",
-  "order-not-found": "Porudžbina nije pronadjena. Molimo proverite identifikacioni broj."
+  "order-not-found": "Porudžbina nije pronadjena. Molimo proverite identifikacioni broj.",
+  "status-changed": "Uspešno promenjen status",
+  "order-deleted": "Porudžbina je uspešno obrisana",
+  "order-created": "Porudžbina je uspešno kreirana",
+  "user-created": "Korisnik je uspešno kreiran",
+  "password-changed": "Lozinka je uspešno promenjena"
 }

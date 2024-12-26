@@ -47,14 +47,14 @@ const PersonalInfo = () => {
           newPassword,
           oldPassword,
         });
-        showSnackbar('password-changed', 'success');
+        showSnackbar(t('password-changed'), 'success');
         resetForm();
       } catch (error) {
         console.log(error);
         showSnackbar('Failed', 'error');
       }
     },
-    [authData, showSnackbar]
+    [authData, showSnackbar, t]
   );
 
   const validationChangePasswordSchema = Yup.object({

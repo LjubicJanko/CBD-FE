@@ -58,13 +58,13 @@ const CreateOrderPage = () => {
             'DD.MM.YYYY'
           ),
         });
-        showSnackbar('order-created', 'success');
+        showSnackbar(t('order-created'), 'success');
         navigate('/');
       } catch (error) {
         console.error(error);
       }
     },
-    [navigate, showSnackbar]
+    [navigate, showSnackbar, t]
   );
 
   const formik = useFormik<CreateOrder>({
