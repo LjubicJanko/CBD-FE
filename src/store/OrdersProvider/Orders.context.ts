@@ -9,6 +9,7 @@ interface OrdersContext {
   isLoading: boolean;
   selectedOrder: Order | null;
   updateOrderInOverviewList: (orderToUpdate: Order) => void;
+  removeOrderInOverviewList: (orderToUpdate: Order) => void;
   fetchOrders: () => Promise<void>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setSelectedOrder: Dispatch<SetStateAction<Order | null>>;
@@ -25,6 +26,7 @@ export default createContext<OrdersContext>({
   isLoading: false,
   selectedOrder: null,
   updateOrderInOverviewList: () => {},
+  removeOrderInOverviewList: () => {},
   fetchOrders: () => new Promise(() => {}),
   setPage: () => {},
   setSelectedOrder: () => {},

@@ -18,7 +18,7 @@ export const ShippedInfoTooltip = ({ row }: ShippedInfoTooltipProps) => {
         <Styled.TooltipContent>
           <Styled.TooltipRow>
             <p style={{ fontWeight: 'bold' }}>{t('postal-service')}:</p>
-            <p>{row?.postalService}</p>
+            <p>{t(`${row?.postalService}`)}</p>
           </Styled.TooltipRow>
           <Styled.TooltipRow>
             <p style={{ fontWeight: 'bold' }}>{t('postal-code')}:</p>

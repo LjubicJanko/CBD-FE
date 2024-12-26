@@ -35,20 +35,6 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
     []
   );
 
-  // const signup = useCallback(async (data: RegisterData): Promise<boolean> => {
-  //   let status = false;
-  //   try {
-  //     await authService.signup(data);
-  //     status = true;
-  //     alert('success');
-  //   } catch (error) {
-  //     console.error(error);
-  //     status = false;
-  //   }
-
-  //   return status;
-  // }, []);
-
   const logout = useCallback((navigate: (path: string) => void) => {
     try {
       setToken('');

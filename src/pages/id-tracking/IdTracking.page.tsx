@@ -1,26 +1,25 @@
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
-  Alert,
   Button,
   CircularProgress,
   IconButton,
-  Snackbar,
   Step,
   Stepper,
   TextField,
 } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
-import { orderService } from '../../api';
-import { OrderTracking, PostServices } from '../../types/Order';
-import * as Styled from './IdTracking.styles';
-import { useTranslation } from 'react-i18next';
-import useQueryParams from '../../hooks/useQueryParams';
-import { statuses, trackingUrl } from '../../util/util';
+import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { AxiosError } from 'axios';
-import { ApiError } from '../../types/Response';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { orderService } from '../../api';
 import NoContent from '../../components/no-content/NoContent.component';
+import useQueryParams from '../../hooks/useQueryParams';
+import { useSnackbar } from '../../hooks/useSnackbar';
+import { OrderTracking, PostServices } from '../../types/Order';
+import { ApiError } from '../../types/Response';
+import { statuses, trackingUrl } from '../../util/util';
+import * as Styled from './IdTracking.styles';
 
 const IdTrackingPage = () => {
   const { t } = useTranslation();
@@ -34,7 +33,8 @@ const IdTrackingPage = () => {
   );
   const [order, setOrder] = useState<OrderTracking>();
   const [error, setError] = useState<string>('');
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+
+  const { showSnackbar } = useSnackbar();
 
   const formatDate = useCallback(
     (date: string) => dayjs(date).format('DD.MM.YYYY.'),
@@ -149,7 +149,7 @@ const IdTrackingPage = () => {
                     <IconButton
                       onClick={() => {
                         navigator.clipboard.writeText(order.postalCode);
-                        setIsSnackbarOpen(true);
+                        showSnackbar(t('postal-code-coppied'), 'success');
                       }}
                       edge="end"
                     >
@@ -172,19 +172,6 @@ const IdTrackingPage = () => {
             )}
           </div>
         </div>
-        <Snackbar
-          open={isSnackbarOpen}
-          autoHideDuration={6000}
-          onClose={() => setIsSnackbarOpen(false)}
-        >
-          <Alert
-            onClose={() => setIsSnackbarOpen(false)}
-            severity="success"
-            variant="filled"
-          >
-            {t('postal-code-coppied')}
-          </Alert>
-        </Snackbar>
       </Styled.IdTrackingDetailsContainer>
     );
   }

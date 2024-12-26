@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { BasicDatePicker } from '../../components';
 import dayjs, { Dayjs } from 'dayjs';
 import * as Yup from 'yup';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 const emptyOrderData: CreateOrder = {
   name: '',
@@ -28,7 +29,11 @@ const emptyOrderData: CreateOrder = {
 
 const CreateOrderPage = () => {
   const navigate = useNavigate();
+
   const { t } = useTranslation();
+
+  const { showSnackbar } = useSnackbar();
+
   const initialValues = useMemo(() => emptyOrderData, []);
 
   const validationSchema = Yup.object({
@@ -53,12 +58,13 @@ const CreateOrderPage = () => {
             'DD.MM.YYYY'
           ),
         });
+        showSnackbar('order-created', 'success');
         navigate('/');
       } catch (error) {
         console.error(error);
       }
     },
-    [navigate]
+    [navigate, showSnackbar]
   );
 
   const formik = useFormik<CreateOrder>({

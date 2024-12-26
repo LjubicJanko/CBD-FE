@@ -49,7 +49,7 @@ export const ProfilePageContainer = styled.div`
 
     &__change-password {
       width: fit-content;
-      background-color: ${theme.SECONDARY_2};
+      background-color: ${theme.SECONDARY_1};
       padding: 32px;
       border-radius: 8px;
 

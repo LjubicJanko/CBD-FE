@@ -119,22 +119,22 @@
       "acquisition-cost": "Acquisition cost must be positive number"
     },
     "required": {
-      "name": "Name is required",
-      "description": "Description is required",
-      "sale-price": "Sale price is required",
-      "acquisition-cost": "Acquisition cost is required",
-      "payer": "Payer is required",
-      "amount": "Amount is required",
-      "postal-code": "Postal code is required",
-      "postal-service": "Postal service is required",
-      "new-password": "New password is required",
-      "old-password": "Old Password is required",
-      "full-name": "Full name is required",
-      "username": "Username is required",
-      "password": "Password is required",
-      "role": "Role is required",
-      "payment-date": "Payment date is required",
-      "payment-method": "Payment method is required"
+      "name": "Name is required field.",
+      "description": "Description is required field.",
+      "sale-price": "Sale price is required field.",
+      "acquisition-cost": "Acquisition cost is required field.",
+      "payer": "Payer is required field.",
+      "amount": "Amount is required field.",
+      "postal-code": "Postal code is required field.",
+      "postal-service": "Postal service is required field.",
+      "new-password": "New password is required field.",
+      "old-password": "Old Password is required field.",
+      "full-name": "Full name is required field.",
+      "username": "Username is required field.",
+      "password": "Password is required field.",
+      "role": "Role is required field.",
+      "payment-date": "Payment date is required field.",
+      "payment-method": "Payment method is required field."
     }
   },
   "d": "D express",
@@ -150,5 +150,10 @@
   "personal-info": "Personal info",
   "postal-code-coppied": "Postal code is coppied to clipboard",
   "enterTrackingNumber": "Enter the tracking number to check the status of your order.",
-  "order-not-found": "Order not found. Please check the tracking ID."
+  "order-not-found": "Order not found. Please check the tracking ID.",
+  "status-changed": "Successfuly changed status",
+  "order-deleted": "Successfully deleted",
+  "order-created": "Order successfully created",
+  "user-created": "User successfully created",
+  "password-changed": "Password successfully changed"
 }

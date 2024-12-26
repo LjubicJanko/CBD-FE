@@ -4,22 +4,23 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
 import {
-  Alert,
   Button,
   Chip,
   Divider,
   IconButton,
-  Snackbar,
   Step,
   StepLabel,
   Stepper,
   Tooltip,
 } from '@mui/material';
+import classNames from 'classnames';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { orderService } from '../../api';
 import { usePrivileges } from '../../hooks/usePrivileges';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+import { useSnackbar } from '../../hooks/useSnackbar';
+import AuthContext from '../../store/AuthProvider/Auth.context';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import {
   Order,
@@ -37,8 +38,6 @@ import * as Styled from './OrderDetails.styles';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
-import classNames from 'classnames';
-import AuthContext from '../../store/AuthProvider/Auth.context';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -59,29 +58,27 @@ type ButtonColors =
 
 export type OrderDetailsProps = { order?: Order };
 
-export type SnackbarProps = {
-  open: boolean;
-  message: string;
-  type: 'success' | 'info' | 'warning' | 'error';
-};
-
-const emptySnackbar = {
-  open: false,
-  message: '',
-} as SnackbarProps;
-
 const OrderDetailsComponent = () => {
   const { t } = useTranslation();
-  const { selectedOrder, fetchOrders, setSelectedOrder } =
-    useContext(OrdersContext);
+  const {
+    selectedOrder,
+    setSelectedOrder,
+    updateOrderInOverviewList,
+    removeOrderInOverviewList,
+  } = useContext(OrdersContext);
+
   const privileges = usePrivileges();
+
   const width = useResponsiveWidth();
+
   const { authData } = useContext(AuthContext);
+
+  const { showSnackbar } = useSnackbar();
+
   const { roles: userRoles } = authData ?? {};
+
   const isAdmin = userRoles?.includes('admin');
 
-  const [snackbarProps, setSnackbarProps] =
-    useState<SnackbarProps>(emptySnackbar);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isStatusHistoryModalOpen, setIsStatusHistoryModalOpen] =
     useState(false);
@@ -177,49 +174,48 @@ const OrderDetailsComponent = () => {
 
   const changeOrderStatus = useCallback(
     async (status: OrderExecutionStatusEnum, note: string) => {
-      if (!selectedOrder?.id) return;
+      if (!selectedOrder || !selectedOrder?.id) return;
       try {
         const orderResponse = await orderService.changeExecutionStatus(
           selectedOrder.id,
           status,
           note
         );
-        fetchOrders();
+        showSnackbar(t('status-changed'), 'success');
+        updateOrderInOverviewList(orderResponse);
         setSelectedOrder(orderResponse);
-        setSnackbarProps({
-          open: true,
-          message: 'Successfuly changed status',
-          type: 'info',
-        });
       } catch (error) {
         console.error(error);
       }
       resetConfirmModal();
     },
     [
-      fetchOrders,
-      selectedOrder?.id,
+      selectedOrder,
       resetConfirmModal,
+      showSnackbar,
+      t,
+      updateOrderInOverviewList,
       setSelectedOrder,
-      setSnackbarProps,
     ]
   );
 
   const handleDeleteOrder = useCallback(async () => {
     if (!selectedOrder?.id) return;
-    setSelectedOrder(null);
     try {
       await orderService.deleteOrder(selectedOrder.id);
-      fetchOrders();
-      setSnackbarProps({
-        open: true,
-        message: 'Successfuly deleted',
-        type: 'error',
-      });
+      showSnackbar(t('order-deleted'), 'success');
+      removeOrderInOverviewList(selectedOrder);
+      setSelectedOrder(null);
     } catch (error) {
       console.error(error);
     }
-  }, [fetchOrders, selectedOrder?.id, setSelectedOrder, setSnackbarProps]);
+  }, [
+    removeOrderInOverviewList,
+    selectedOrder,
+    setSelectedOrder,
+    showSnackbar,
+    t,
+  ]);
 
   const toggleStatusModal = useCallback(
     () => setIsStatusModalOpen((prev) => !prev),
@@ -316,11 +312,7 @@ const OrderDetailsComponent = () => {
           className="postal-code-copy"
           onClick={() => {
             navigator.clipboard.writeText(selectedOrder.trackingId);
-            setSnackbarProps({
-              open: true,
-              message: t('postal-code-coppied'),
-              type: 'info',
-            });
+            showSnackbar(t('postal-code-coppied'), 'success');
           }}
           edge="end"
         >
@@ -427,21 +419,6 @@ const OrderDetailsComponent = () => {
           isOpen={isStatusHistoryModalOpen}
           onClose={() => setIsStatusHistoryModalOpen(false)}
         />
-      )}
-      {snackbarProps.open && (
-        <Snackbar
-          autoHideDuration={3000}
-          open={snackbarProps.open}
-          onClose={() => setSnackbarProps(emptySnackbar)}
-        >
-          <Alert
-            onClose={() => setSnackbarProps(emptySnackbar)}
-            severity={snackbarProps.type}
-            variant="filled"
-          >
-            {snackbarProps.message}
-          </Alert>
-        </Snackbar>
       )}
       <ConfirmModal {...confirmModalProps} />
     </Styled.OrderDetailsContainer>

@@ -25,14 +25,23 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [perPage, setPerPage] = useState(5);
   const [shouldShowArchived, setShouldShowArchived] = useState(false);
 
-  const updateOrderInOverviewList = useCallback((orderToUpdate: Order) => {
-    setOrders((old) =>
-      old.map((order) =>
-        order.id === orderToUpdate.id ? (orderToUpdate as OrderOverview) : order
-      )
-    );
-  }, []);
+  const updateOrderInOverviewList = useCallback(
+    (orderToUpdate: Order) =>
+      setOrders((old) =>
+        old.map((order) =>
+          order.id === orderToUpdate.id
+            ? (orderToUpdate as OrderOverview)
+            : order
+        )
+      ),
+    []
+  );
 
+  const removeOrderInOverviewList = useCallback(
+    (orderToRemove: Order) =>
+      setOrders((old) => old.filter((order) => order.id !== orderToRemove.id)),
+    []
+  );
 
   const fetchOrders = useCallback(async () => {
     setIsLoading(true);
@@ -122,6 +131,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         isLoading,
         selectedOrder,
         updateOrderInOverviewList,
+        removeOrderInOverviewList,
         handleSearch,
         fetchOrders,
         setSelectedOrder,

@@ -4,7 +4,7 @@ import { tablet } from '../../../../util/breakpoints';
 
 export const PersonalInfoContainer = styled.div`
   width: fit-content;
-  background-color: ${theme.SECONDARY_2};
+  background-color: ${theme.SECONDARY_1};
   padding: 32px;
   border-radius: 8px;
 

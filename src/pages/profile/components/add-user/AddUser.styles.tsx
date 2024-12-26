@@ -10,7 +10,7 @@ export const AddUserContainer = styled.div`
 
   gap: 16px;
   padding: 32px;
-  background-color: ${theme.SECONDARY_2};
+  background-color: ${theme.SECONDARY_1};
 
   ${tablet(css`
     padding: 16px;
@@ -31,7 +31,6 @@ export const AddUserContainer = styled.div`
     gap: 16px;
     .add-user {
       margin-top: 16px;
-      /* background-color: ${theme.SECONDARY_3}; */
       width: fit-content;
       padding: 16px 32px;
     }
@@ -52,5 +51,4 @@ export const UsersContainer = styled.div`
 
   gap: 16px;
   margin-top: 32px;
-  background-color: ${theme.SECONDARY_2};
 `;

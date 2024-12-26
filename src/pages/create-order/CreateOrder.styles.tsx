@@ -17,7 +17,7 @@ export const CreateOrderPageContainer = styled.div`
 
   .title {
     font-size: 32px;
-    color: ${theme.SECONDARY_1};
+    color: ${theme.PRIMARY_1};
     font-weight: 400;
   }
 
@@ -28,8 +28,9 @@ export const CreateOrderPageContainer = styled.div`
     padding: 48px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 50%;
-    background-color: ${theme.SECONDARY_3};
+    background-color: ${theme.SECONDARY_1};
     text-align: center;
+    border-radius: 8px;
 
     ${tablet(css`
       width: 100%;

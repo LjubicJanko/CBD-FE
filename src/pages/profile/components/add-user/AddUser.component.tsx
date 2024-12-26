@@ -1,4 +1,3 @@
-import CloseIcon from '@mui/icons-material/Close';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
@@ -11,7 +10,6 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  Snackbar,
   TextField,
 } from '@mui/material';
 import { FormikHelpers, useFormik } from 'formik';
@@ -23,6 +21,7 @@ import { RegisterData, User } from '../../../../types/Auth';
 import { textInputSX } from '../../../../util/util';
 import UsersTable from '../UsersTable.component';
 import * as Styled from './AddUser.styles';
+import { useSnackbar } from '../../../../hooks/useSnackbar';
 
 const signUpInitialValues = {
   username: '',
@@ -31,24 +30,16 @@ const signUpInitialValues = {
   role: '',
 } as RegisterData;
 
-type SnackbarConfigProps = {
-  isOpen: boolean;
-  message: string;
-};
-
-const initialSnackbarConfig = {
-  isOpen: false,
-  message: '',
-};
-
 const roles = ['admin', 'manager', 'manufacturer'];
 const AddUser = () => {
   const { t } = useTranslation();
+
   const [showPassword, setShowPassword] = useState(false);
+
   const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [snackbarConfig, setSnackbarConfig] = useState<SnackbarConfigProps>(
-    initialSnackbarConfig
-  );
+
+  const { showSnackbar } = useSnackbar();
+
   const [areUsersLoading, setAreUsersLoading] = useState(false);
 
   const fetchAllUsers = useCallback(async () => {
@@ -70,21 +61,15 @@ const AddUser = () => {
         await profileService.signup(values);
         resetForm();
         fetchAllUsers();
-        setSnackbarConfig({
-          isOpen: true,
-          message: 'successfully added new user',
-        });
+        showSnackbar('user-created', 'success');
       } catch (e) {
         console.error(e);
-        setSnackbarConfig({
-          isOpen: true,
-          message: 'failed',
-        });
+        showSnackbar('Failed', 'error');
       } finally {
         setAreUsersLoading(false);
       }
     },
-    [fetchAllUsers]
+    [fetchAllUsers, showSnackbar]
   );
 
   const validationSignupSchema = Yup.object({
@@ -119,24 +104,6 @@ const AddUser = () => {
   ) => {
     event.preventDefault();
   };
-
-  const handleClose = useCallback(
-    () => setSnackbarConfig(initialSnackbarConfig),
-    []
-  );
-
-  const action = (
-    <>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </>
-  );
 
   useEffect(() => {
     fetchAllUsers();
@@ -241,13 +208,6 @@ const AddUser = () => {
         <h3>{t('all-users')}</h3>
         <UsersTable users={allUsers} />
       </Styled.UsersContainer>
-      <Snackbar
-        open={snackbarConfig.isOpen}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message={snackbarConfig.message}
-        action={action}
-      />
     </Styled.AddUserContainer>
   );
 };

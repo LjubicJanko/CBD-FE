@@ -1,21 +1,20 @@
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
   Button,
   IconButton,
   InputAdornment,
   OutlinedInput,
-  Snackbar,
 } from '@mui/material';
 import { FormikHelpers, useFormik } from 'formik';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
 import { profileService } from '../../../../api';
+import { useSnackbar } from '../../../../hooks/useSnackbar';
 import AuthContext from '../../../../store/AuthProvider/Auth.context';
 import { ChangePasswordData } from '../../../../types/Auth';
 import { textInputSX } from '../../../../util/util';
-import CloseIcon from '@mui/icons-material/Close';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import * as Yup from 'yup';
 import * as Styled from './PersonalInfo.styles';
 
 const initialValues: ChangePasswordData = {
@@ -23,23 +22,15 @@ const initialValues: ChangePasswordData = {
   newPassword: '',
   oldPassword: '',
 };
-const initialSnackbarConfig = {
-  isOpen: false,
-  message: '',
-};
-
-type SnackbarConfigProps = {
-  isOpen: boolean;
-  message: string;
-};
 
 const PersonalInfo = () => {
   const { authData } = useContext(AuthContext);
+
   const { t } = useTranslation();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [snackbarConfig, setSnackbarConfig] = useState<SnackbarConfigProps>(
-    initialSnackbarConfig
-  );
+
+  const { showSnackbar } = useSnackbar();
 
   const handleChangePassword = useCallback(
     async (
@@ -56,20 +47,14 @@ const PersonalInfo = () => {
           newPassword,
           oldPassword,
         });
-        setSnackbarConfig({
-          isOpen: true,
-          message: 'successfully changed password',
-        });
+        showSnackbar('password-changed', 'success');
         resetForm();
       } catch (error) {
         console.log(error);
-        setSnackbarConfig({
-          isOpen: true,
-          message: 'Failed',
-        });
+        showSnackbar('Failed', 'error');
       }
     },
-    [authData]
+    [authData, showSnackbar]
   );
 
   const validationChangePasswordSchema = Yup.object({
@@ -102,24 +87,6 @@ const PersonalInfo = () => {
   ) => {
     event.preventDefault();
   };
-
-  const handleClose = useCallback(
-    () => setSnackbarConfig(initialSnackbarConfig),
-    []
-  );
-
-  const action = (
-    <>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </>
-  );
 
   return (
     <Styled.PersonalInfoContainer className="change-password">
@@ -191,13 +158,6 @@ const PersonalInfo = () => {
         >
           {t('change-password')}
         </Button>
-        <Snackbar
-          open={snackbarConfig.isOpen}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          message={snackbarConfig.message}
-          action={action}
-        />
       </form>
     </Styled.PersonalInfoContainer>
   );
