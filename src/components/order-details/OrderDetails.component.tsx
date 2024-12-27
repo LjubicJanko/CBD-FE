@@ -320,56 +320,89 @@ const OrderDetailsComponent = () => {
         </IconButton>
       </div>
       <Divider />
-      {shouldShowForm ? (
-        <OrderInfoForm />
-      ) : (
-        <OrderInfoOverview selectedOrder={selectedOrder} />
-      )}
-      <Stepper
-        className="stepper"
-        activeStep={statuses.indexOf(selectedOrder?.status)}
-        orientation={width < xxsMax ? 'vertical' : 'horizontal'}
-        alternativeLabel={width >= xxsMax}
-      >
-        {statuses.map((status) => {
-          return (
-            <Step key={status}>
-              <StepLabel>{t(status)}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      <div className="status-history-butons">
-        <Button onClick={() => setIsStatusHistoryModalOpen(true)}>
-          {t('view-status-history')}
-        </Button>
-        {selectedOrder.status !== OrderStatusEnum.DONE && !isArchived && (
-          <Button
-            key={isStatusModalOpen ? 'openned' : 'closed'}
-            variant="contained"
-            color="primary"
-            fullWidth
-            size="medium"
-            disabled={isMoveButtonDisabled}
-            onClick={toggleStatusModal}
+      <div className="stepper-container">
+        {width >= xxsMax ? (
+          <Stepper
+            className="stepper-container__stepper"
+            activeStep={statuses.indexOf(selectedOrder?.status)}
+            orientation={width < xxsMax ? 'vertical' : 'horizontal'}
+            alternativeLabel={width >= xxsMax}
           >
-            {t('move-to-next-state')}
+            {statuses.map((status) => {
+              return (
+                <Step key={status}>
+                  <StepLabel>{t(status)}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        ) : (
+          <>
+            <div className="stepper-container__status">
+              {`Status: ${t(selectedOrder.status)}`}
+            </div>
+            <Stepper
+              className="stepper-container__stepper-mobile"
+              activeStep={statuses.indexOf(selectedOrder.status)}
+            >
+              {statuses.map((status) => (
+                <Step
+                  key={status}
+                  className={classNames({
+                    active: status === selectedOrder.status,
+                  })}
+                >
+                  <div className="step"></div>
+                </Step>
+              ))}
+            </Stepper>
+          </>
+        )}
+        <div className="status-history-butons">
+          <Button
+            variant="outlined"
+            onClick={() => setIsStatusHistoryModalOpen(true)}
+          >
+            {t('view-status-history')}
           </Button>
+          {selectedOrder.status !== OrderStatusEnum.DONE && !isArchived && (
+            <Button
+              key={isStatusModalOpen ? 'openned' : 'closed'}
+              variant="contained"
+              color="primary"
+              fullWidth
+              size="medium"
+              disabled={isMoveButtonDisabled}
+              onClick={toggleStatusModal}
+            >
+              {t('move-to-next-state')}
+            </Button>
+          )}
+        </div>
+      </div>
+      <Divider />
+      <div className="order-info-container">
+        <div className="order-info-container__data">
+          {shouldShowForm ? (
+            <OrderInfoForm />
+          ) : (
+            <OrderInfoOverview selectedOrder={selectedOrder} />
+          )}
+        </div>
+        {privileges.canAddPayment && (
+          <div className="order-info-container__payments">
+            <OrderPayments
+              payments={selectedOrder.payments}
+              orderId={selectedOrder.id}
+              isAddingDisabled={
+                selectedOrder.executionStatus !==
+                OrderExecutionStatusEnum.ACTIVE
+              }
+            />
+          </div>
         )}
       </div>
       <Divider />
-      {privileges.canAddPayment && (
-        <>
-          <OrderPayments
-            payments={selectedOrder.payments}
-            orderId={selectedOrder.id}
-            isAddingDisabled={
-              selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE
-            }
-          />
-          <Divider />
-        </>
-      )}
       {selectedOrder.status !== OrderStatusEnum.DONE && (
         <div className="action-buttons">
           {actionButtons.map(

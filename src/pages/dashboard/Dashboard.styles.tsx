@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { tablet } from '../../util/breakpoints';
+import { laptop, tablet } from '../../util/breakpoints';
 
 export const DashboardContainer = styled.div`
   width: 100%;
@@ -50,6 +50,17 @@ export const DashboardContainer = styled.div`
     }
 
     .details {
+      flex-grow: 1;
+      max-width: 60%;
+
+      ${laptop(css`
+        max-width: 80%;
+      `)}
+
+      ${tablet(css`
+        max-width: 100%;
+      `)}
+
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       padding: 16px;
       padding-bottom: 16px;
@@ -73,8 +84,11 @@ export const DashboardContainer = styled.div`
     &__body {
       display: flex;
       justify-content: space-between;
+      gap: 64px;
+
       ${tablet(css`
         flex-direction: column;
+        gap: 64px;
       `)}
     }
   }

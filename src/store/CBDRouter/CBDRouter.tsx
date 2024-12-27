@@ -21,34 +21,6 @@ import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import { privileges } from '../../util/util';
-// type Route = {
-//   path: string;
-//   component: React.FC | any;
-//   title: string;
-// };
-
-// const routes: Route[] = [
-//   {
-//     path: "/",
-//     title: "Landing page",
-//     component: DecisionComponent,
-//   },
-//   {
-//     path: "/home",
-//     title: "Home page",
-//     component: HomeComponent,
-//   },
-//   {
-//     path: "/login",
-//     component: LoginComponent,
-//     title: "Log in",
-//   },
-//   {
-//     path: "/dashboard",
-//     component: DashboardComponent,
-//     title: "Dashboard",
-//   },
-// ];
 
 const Layout: React.FC = () => {
   return (
@@ -62,25 +34,6 @@ const Layout: React.FC = () => {
 };
 
 const CBDRouter: React.FC = (): JSX.Element => {
-  // return <Router history={history}>{renderRoutes(routes)}</Router>;
-  // return (
-  //   <Router history={historyConfig}>
-  //     <HeaderComponent />
-  //     <Switch>
-  //       <Route exact path="/" component={DecisionPage} />
-  //       {/* <PublicRouteWrapper> */}
-  //       <Route path="/home" component={HomePage} />
-  //       {/* </PublicRouteWrapper> */}
-  //       <Route path="/login" component={LoginPage} />
-  //       {/* <PublicRouteWrapper> */}
-  //       <Route path="/signup" component={SignUpPage} />
-  //       {/* </PublicRouteWrapper> */}
-  //       {/* <PrivateRouteWrapper> */}
-  //       <Route path="/dashboard" component={DashboardPage} />
-  //       {/* </PrivateRouteWrapper> */}
-  //     </Switch>
-  //   </Router>
-  // );
 
   const router = createBrowserRouter(
     createRoutesFromElements(

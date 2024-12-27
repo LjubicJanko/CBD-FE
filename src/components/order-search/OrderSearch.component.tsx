@@ -2,18 +2,20 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Divider, IconButton, InputBase, Paper } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { useTranslation } from 'react-i18next';
 
 type OrderSearchProps = {
   onSearch: (query: string) => void;
 };
 
 const OrderSearch: React.FC<OrderSearchProps> = ({ onSearch }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchActive, setSearchActive] = useState(false);
 
   const handleSearch = useCallback(
     (e: React.FormEvent) => {
-      e.preventDefault(); 
+      e.preventDefault();
       onSearch(searchTerm);
       setSearchActive(true);
     },
@@ -35,7 +37,7 @@ const OrderSearch: React.FC<OrderSearchProps> = ({ onSearch }) => {
       )}
       <InputBase
         sx={{ ml: 1, flex: 1 }}
-        placeholder="Search orders"
+        placeholder={t('search-orders')}
         inputProps={{ 'aria-label': 'search orders' }}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}

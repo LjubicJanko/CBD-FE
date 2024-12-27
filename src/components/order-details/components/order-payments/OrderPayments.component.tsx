@@ -60,77 +60,78 @@ const OrderPayments = ({
 
   return (
     <Styled.OrderPaymentsContainer>
-      <h2>{t('payments')}</h2>
-      <AddPaymentModal
-        isOpen={paymentModalConfig.isOpen}
-        orderId={orderId}
-        onClose={handleCloseModal}
-        paymentToUpdate={paymentModalConfig.paymentToUpdate}
-      />
+      <div className='data'>
+        <h2>{t('payments')}</h2>
+        <AddPaymentModal
+          isOpen={paymentModalConfig.isOpen}
+          orderId={orderId}
+          onClose={handleCloseModal}
+          paymentToUpdate={paymentModalConfig.paymentToUpdate}
+        />
 
-      {payments.length > 0 && (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="payments table">
-            <TableHead>
-              <TableRow>
-                <TableCell>{t('payer')}</TableCell>
-                <TableCell align="right">{t('amount')}</TableCell>
-                <TableCell align="right">{t('payment-method')}</TableCell>
-                <TableCell align="right">{t('transaction-date')}</TableCell>
-                <TableCell align="right">{t('note')}</TableCell>
-                {!isAddingDisabled && <TableCell align="right"></TableCell>}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {payments.map((payment) => (
-                <TableRow
-                  key={payment.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {payment.payer}
-                  </TableCell>
-                  <TableCell align="right">
-                    {payment.amount.toFixed(2)}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Chip
-                      label={t(payment.paymentMethod)}
-                      className="payment-method-chip"
-                      style={{
-                        backgroundColor:
-                          payment.paymentMethod === 'CASH'
-                            ? 'green'
-                            : payment.paymentMethod === 'ACCOUNT'
-                            ? 'blue'
-                            : payment.paymentMethod === 'ON_SHIP'
-                            ? 'purple'
-                            : 'orange',
-                        color: 'white',
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    {payment.paymentDate.toString()}
-                  </TableCell>
-                  <TableCell align="right">{payment.note || '-'}</TableCell>
-                  {!isAddingDisabled && (
-                    <TableCell align="right" className="edit">
-                      <Button onClick={() => handleOpenModal(payment)}>
-                        <EditIcon />
-                      </Button>
-                    </TableCell>
-                  )}
+        {payments.length > 0 && (
+          <TableContainer component={Paper}>
+            <Table aria-label="payments table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t('payer')}</TableCell>
+                  <TableCell align="right">{t('amount')}</TableCell>
+                  <TableCell align="right">{t('payment-method')}</TableCell>
+                  <TableCell align="right">{t('transaction-date')}</TableCell>
+                  <TableCell align="right">{t('note')}</TableCell>
+                  {!isAddingDisabled && <TableCell align="right"></TableCell>}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-      {payments.length === 0 && (
-        <img className="no-content" src="/no_content.png" alt="no-content" />
-      )}
-
+              </TableHead>
+              <TableBody>
+                {payments.map((payment) => (
+                  <TableRow
+                    key={payment.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {payment.payer}
+                    </TableCell>
+                    <TableCell align="right">
+                      {payment.amount.toFixed(2)}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Chip
+                        label={t(payment.paymentMethod)}
+                        className="payment-method-chip"
+                        style={{
+                          backgroundColor:
+                            payment.paymentMethod === 'CASH'
+                              ? 'green'
+                              : payment.paymentMethod === 'ACCOUNT'
+                              ? 'blue'
+                              : payment.paymentMethod === 'ON_SHIP'
+                              ? 'purple'
+                              : 'orange',
+                          color: 'white',
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      {payment.paymentDate.toString()}
+                    </TableCell>
+                    <TableCell align="right">{payment.note || '-'}</TableCell>
+                    {!isAddingDisabled && (
+                      <TableCell align="right" className="edit">
+                        <Button onClick={() => handleOpenModal(payment)}>
+                          <EditIcon />
+                        </Button>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+        {payments.length === 0 && (
+          <img className="no-content" src="/no_content.png" alt="no-content" />
+        )}
+      </div>
       {privileges.canAddPayment && !isAddingDisabled && (
         <div className="actions">
           <Button

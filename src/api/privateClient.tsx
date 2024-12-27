@@ -14,12 +14,29 @@ privateClient.interceptors.request.use(
       config.headers.set(
         'Authorization',
         `Bearer ${localStorageService.token}`
-      ); 
+      );
     }
 
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+privateClient.interceptors.response.use(
+  (response) => {
+    // If the response is successful, just return it
+    return response;
+  },
+  (error) => {
+    // Handle 401 Unauthorized error
+    if (error.response?.status === 498) {
+      console.error('Token expired or unauthorized access');
+
+      localStorageService.clearData();
+    }
+
     return Promise.reject(error);
   }
 );

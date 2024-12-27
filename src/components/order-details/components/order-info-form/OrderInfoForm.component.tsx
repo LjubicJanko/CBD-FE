@@ -165,10 +165,12 @@ const OrderInfoForm = () => {
         onBlur={formik.handleBlur}
       />
       <dl className="order-const-difference">
-        <dt>{t('sale-price-taxed')}</dt>
-        <dd>
-          {selectedOrder?.legalEntity ? selectedOrder?.salePriceWithTax : '-'}
-        </dd>
+        {selectedOrder?.legalEntity && (
+          <>
+            <dt>{t('sale-price-taxed')}</dt>
+            <dd>{selectedOrder?.salePriceWithTax}</dd>
+          </>
+        )}
         <dt>{t('price-difference')}</dt>
         <dd>{selectedOrder?.priceDifference}</dd>
         <dt>{t('paid')}</dt>
