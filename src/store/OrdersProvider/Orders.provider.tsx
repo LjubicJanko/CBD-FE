@@ -9,6 +9,11 @@ import { orderService } from '../../api';
 import useQueryParams from '../../hooks/useQueryParams';
 import { Order, OrderOverview, orderStatusArray } from '../../types/Order';
 import OrdersContext from './Orders.context';
+import { Q_PARAM } from '../../util/constants';
+import {
+  SortCriteriaType,
+  SortType,
+} from '../../components/modals/filters/FiltersModal.component';
 
 const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
@@ -53,7 +58,8 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       );
       const response = await orderService.getAllPaginated({
         statuses,
-        sort: params['sort'] as 'asc' | 'desc',
+        sortCriteria: params[Q_PARAM.SORT_CRITERIA] as SortCriteriaType,
+        sort: params[Q_PARAM.SORT] as SortType,
         executionStatuses: shouldShowArchived ? ['ARCHIVED', 'CANCELED'] : [],
         page: isPageUnchanged ? 0 : page,
         perPage,

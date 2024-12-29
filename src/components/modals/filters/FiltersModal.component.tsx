@@ -16,6 +16,7 @@ import {
   OrderStatusEnum,
 } from '../../../types/Order';
 import * as Styled from './FiltersModal.styles';
+import { Q_PARAM } from '../../../util/constants';
 
 export type FiltersModalProps = {
   isOpen: boolean;
@@ -26,15 +27,19 @@ type ButtonVariants = {
   [key: string]: boolean;
 };
 
-type SortType = 'asc' | 'desc';
+export type SortCriteriaType = 'expected-date' | 'creation-date';
+export type SortType = 'asc' | 'desc';
 
 const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
   const { t } = useTranslation();
   const { setSelectedOrderId } = useContext(OrdersContext);
   const { params, setMultipleQParams, setQParam, removeMultipleQParams } =
     useQueryParams();
+  const [sortByCriteria, setSortByCriteria] = useState(
+    (params[Q_PARAM.SORT_CRITERIA] as SortCriteriaType) ?? 'expected-date'
+  );
   const [sort, setSort] = useState<SortType>(
-    (params['sort'] as SortType) ?? 'desc'
+    (params[Q_PARAM.SORT] as SortType) ?? 'desc'
   );
 
   const initialVariants: ButtonVariants = useMemo(
@@ -111,10 +116,6 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     [selectedStatuses, t]
   );
 
-  const handleChange = useCallback((event: SelectChangeEvent) => {
-    setSort(event.target.value as SortType);
-  }, []);
-
   const toggleVariant = useCallback((key: OrderStatus) => {
     setSelectedStatuses((old) => ({
       ...old,
@@ -129,6 +130,7 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
         return acc;
       }, {} as ButtonVariants)
     );
+    setSortByCriteria('expected-date');
     setSort('asc');
   }, []);
 
@@ -141,7 +143,8 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
 
     setSelectedOrderId(0);
     setMultipleQParams(activeStatuses);
-    setQParam('sort', sort);
+    setQParam(Q_PARAM.SORT_CRITERIA, sortByCriteria);
+    setQParam(Q_PARAM.SORT, sort);
     onClose();
   }, [
     onClose,
@@ -151,6 +154,7 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     setQParam,
     setSelectedOrderId,
     sort,
+    sortByCriteria,
   ]);
 
   return (
@@ -173,10 +177,22 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
       </div>
       <Divider />
       <Select
+        id="sort-by-criteria"
+        value={sortByCriteria}
+        onChange={(event: SelectChangeEvent) =>
+          setSortByCriteria(event.target.value as SortCriteriaType)
+        }
+      >
+        <MenuItem value="expected-date">{t('sort-by-expected-date')}</MenuItem>
+        <MenuItem value="creation-date">{t('sort-by-creation-date')}</MenuItem>
+      </Select>
+      <Select
         labelId="sort-by-creation-date-label"
         id="sort-by-select"
         value={sort}
-        onChange={handleChange}
+        onChange={(event: SelectChangeEvent) =>
+          setSort(event.target.value as SortType)
+        }
       >
         <MenuItem value="desc">{t('newest-to-oldest')}</MenuItem>
         <MenuItem value="asc">{t('oldest-to-newest')}</MenuItem>

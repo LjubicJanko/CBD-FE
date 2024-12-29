@@ -10,11 +10,16 @@ import { Payment } from '../../types/Payment';
 import { ApiError } from '../../types/Response';
 import client from '../client';
 import privateClient from '../privateClient';
+import {
+  SortCriteriaType,
+  SortType,
+} from '../../components/modals/filters/FiltersModal.component';
 
 export type GetAllPaginatedProps = {
   statuses?: string[];
   executionStatuses?: string[];
-  sort?: 'asc' | 'desc';
+  sortCriteria: SortCriteriaType;
+  sort?: SortType;
   page?: number;
   perPage?: number;
 };
@@ -74,6 +79,7 @@ const getAllPaginated = async (props: GetAllPaginatedProps) =>
       params: {
         statuses: props.statuses,
         executionStatuses: props.executionStatuses,
+        sortCriteria: props.sortCriteria,
         sort: props.sort,
         page: props.page ?? 0,
         perPage: props.perPage ?? 5,
@@ -96,6 +102,7 @@ const getAllPaginated = async (props: GetAllPaginatedProps) =>
         }
 
         // Serialize pagination params
+        searchParams.append('sortCriteria', (props.sortCriteria ?? 'expected-date').toString());
         searchParams.append('sort', (props.sort ?? 'desc').toString());
         searchParams.append('page', (props.page ?? 0).toString());
         searchParams.append('perPage', (props.perPage ?? 5).toString());
