@@ -15,10 +15,11 @@ import {
   SortType,
 } from '../../components/modals/filters/FiltersModal.component';
 
-export type GetAllPaginatedProps = {
+export type FetchPaginatedProps = {
+  searchTerm?: string;
   statuses?: string[];
   executionStatuses?: string[];
-  sortCriteria: SortCriteriaType;
+  sortCriteria?: SortCriteriaType;
   sort?: SortType;
   page?: number;
   perPage?: number;
@@ -73,10 +74,11 @@ const getAll = async (statuses?: string[]) =>
     })
     .then((res) => res.data);
 
-const getAllPaginated = async (props: GetAllPaginatedProps) =>
+const fetchPaginated = async (props: FetchPaginatedProps) =>
   privateClient
-    .get('/orders/getPageable', {
+    .get('/orders/fetchPageable', {
       params: {
+        searchTerm: props.searchTerm,
         statuses: props.statuses,
         executionStatuses: props.executionStatuses,
         sortCriteria: props.sortCriteria,
@@ -102,7 +104,11 @@ const getAllPaginated = async (props: GetAllPaginatedProps) =>
         }
 
         // Serialize pagination params
-        searchParams.append('sortCriteria', (props.sortCriteria ?? 'expected-date').toString());
+        searchParams.append(
+          'sortCriteria',
+          (props.sortCriteria ?? 'expected-date').toString()
+        );
+        searchParams.append('searchTerm', (props.searchTerm ?? '').toString());
         searchParams.append('sort', (props.sort ?? 'desc').toString());
         searchParams.append('page', (props.page ?? 0).toString());
         searchParams.append('perPage', (props.perPage ?? 5).toString());
@@ -189,7 +195,6 @@ export default {
   getOrder,
   trackOrder,
   getAll,
-  getAllPaginated,
   changeStatus,
   searchOrders,
   createOrder,
@@ -201,4 +206,5 @@ export default {
   addPayment,
   editPayment,
   deletePayment,
+  fetchPaginated,
 };

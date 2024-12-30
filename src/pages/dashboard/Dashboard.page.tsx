@@ -10,7 +10,7 @@ import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import * as Styled from './Dashboard.styles';
 
 const DashboardPage = () => {
-  const { selectedOrder, isLoading, handleSearch } = useContext(OrdersContext);
+  const { selectedOrder, isLoading } = useContext(OrdersContext);
 
   return (
     <Styled.DashboardContainer className="dashboard-page">
@@ -26,7 +26,7 @@ const DashboardPage = () => {
       </style>
       <div className="dashboard-page__header">
         <FiltersComponent />
-        <OrderSearchComponent onSearch={handleSearch} />
+        <OrderSearchComponent />
       </div>
       {isLoading && (
         <div className="loader-wrapper">

@@ -3,30 +3,30 @@ import { Divider, IconButton, InputBase, Paper } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useTranslation } from 'react-i18next';
+import { Q_PARAM } from '../../util/constants';
+import useQueryParams from '../../hooks/useQueryParams';
 
-type OrderSearchProps = {
-  onSearch: (query: string) => void;
-};
 
-const OrderSearch: React.FC<OrderSearchProps> = ({ onSearch }) => {
+const OrderSearch = () => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchActive, setSearchActive] = useState(false);
+  const { setQParam, removeQParam } = useQueryParams();
 
   const handleSearch = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      onSearch(searchTerm);
+      setQParam(Q_PARAM.SEARCH_TERM, searchTerm);
       setSearchActive(true);
     },
-    [searchTerm, onSearch]
+    [searchTerm, setQParam]
   );
 
   const resetSearch = useCallback(() => {
     setSearchTerm('');
     setSearchActive(false);
-    onSearch('');
-  }, [onSearch]);
+    removeQParam(Q_PARAM.SEARCH_TERM);
+  }, [removeQParam]);
 
   return (
     <Paper component="form" className="search" onSubmit={handleSearch}>
