@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 export const OrderCardContainer = styled.div`
   display: flex;
@@ -55,6 +56,18 @@ export const OrderCardContainer = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
+
+      &__planned-ending-date {
+        padding: 2px;
+        &--in-past {
+          background-color: #e57373;
+          color: ${theme.SECONDARY_1};
+        }
+        &--today {
+          background-color: #FFD700;
+          color: ${theme.SECONDARY_1};
+        }
+      }
     }
   }
 `;

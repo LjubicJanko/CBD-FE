@@ -7,7 +7,7 @@ interface CbdModalProps {
   onClose: () => void;
   showClose?: boolean;
   children: React.ReactNode;
-  title?: string;
+  title?: React.ReactNode | string;
   className?: string;
 }
 
@@ -25,12 +25,14 @@ const CbdModal: React.FC<CbdModalProps> = ({
     <Styled.ModalOverlay>
       <Styled.ModalContent className={className}>
         {' '}
-        {/* Apply className here */}
+        {title && (
+          <Styled.ModalTitle className="modal-title">{title}</Styled.ModalTitle>
+        )}{' '}
         {showClose && (
-          <Styled.CloseButton onClick={onClose}>&times;</Styled.CloseButton>
+          <Styled.CloseButton className="modal-close-button" onClick={onClose}>
+            &times;
+          </Styled.CloseButton>
         )}
-        {title && <Styled.ModalTitle>{title}</Styled.ModalTitle>}{' '}
-        {/* Render title if provided */}
         {children}
       </Styled.ModalContent>
     </Styled.ModalOverlay>,

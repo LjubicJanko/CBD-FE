@@ -1,5 +1,6 @@
 import {
   Button,
+  Chip,
   Divider,
   MenuItem,
   Select,
@@ -17,6 +18,8 @@ import {
 } from '../../../types/Order';
 import * as Styled from './FiltersModal.styles';
 import { Q_PARAM } from '../../../util/constants';
+import theme from '../../../styles/theme';
+import TuneIcon from '@mui/icons-material/Tune';
 
 export type FiltersModalProps = {
   isOpen: boolean;
@@ -60,60 +63,68 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
   const filterButtonsConfig: {
     label: string;
     key: OrderStatus;
-    variant: 'contained' | 'outlined';
+    variant: 'filled' | 'outlined';
   }[] = useMemo(
     () => [
       {
         label: t('DESIGN'),
         key: 'DESIGN',
         variant: selectedStatuses[OrderStatusEnum.DESIGN]
-          ? 'contained'
+          ? 'filled'
           : 'outlined',
       },
       {
         label: t('PRINT_READY'),
         key: 'PRINT_READY',
         variant: selectedStatuses[OrderStatusEnum.PRINT_READY]
-          ? 'contained'
+          ? 'filled'
           : 'outlined',
       },
       {
         label: t('PRINTING'),
         key: 'PRINTING',
         variant: selectedStatuses[OrderStatusEnum.PRINTING]
-          ? 'contained'
+          ? 'filled'
           : 'outlined',
       },
       {
         label: t('SEWING'),
         key: 'SEWING',
         variant: selectedStatuses[OrderStatusEnum.SEWING]
-          ? 'contained'
+          ? 'filled'
           : 'outlined',
       },
       {
         label: t('SHIP_READY'),
         key: 'SHIP_READY',
         variant: selectedStatuses[OrderStatusEnum.SHIP_READY]
-          ? 'contained'
+          ? 'filled'
           : 'outlined',
       },
       {
         label: t('SHIPPED'),
         key: 'SHIPPED',
         variant: selectedStatuses[OrderStatusEnum.SHIPPED]
-          ? 'contained'
+          ? 'filled'
           : 'outlined',
       },
       {
         label: t('DONE'),
         key: 'DONE',
-        variant: selectedStatuses[OrderStatusEnum.DONE]
-          ? 'contained'
-          : 'outlined',
+        variant: selectedStatuses[OrderStatusEnum.DONE] ? 'filled' : 'outlined',
       },
     ],
     [selectedStatuses, t]
+  );
+
+  const filterTitle = useMemo(
+    () => (
+      <span className="title">
+        <TuneIcon />
+        {t('filters')}
+      </span>
+    ),
+    [t]
   );
 
   const toggleVariant = useCallback((key: OrderStatus) => {
@@ -159,50 +170,71 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
 
   return (
     <Styled.FiltersModalContainer
-      title={t('filters')}
+      title={filterTitle}
       isOpen={isOpen}
       onClose={onClose}
     >
       <div className="statuses">
         {filterButtonsConfig.map(({ key, label, variant }) => (
-          <Button
+          <Chip
             key={key}
             className={classNames('filter-button', key)}
-            variant={variant}
+            label={label}
+            variant="outlined"
             onClick={() => toggleVariant(key)}
-          >
-            {label}
-          </Button>
+            style={{
+              backgroundColor:
+                variant === 'filled' ? theme.SECONDARY_2 : theme.PRIMARY_1,
+            }}
+          />
         ))}
       </div>
-      <Divider />
+      <Divider color={theme.SECONDARY_2} />
+      <label id="sort-by-label">{t('sort-by')}</label>
       <Select
+        labelId="sort-by-label"
         id="sort-by-criteria"
         value={sortByCriteria}
         onChange={(event: SelectChangeEvent) =>
           setSortByCriteria(event.target.value as SortCriteriaType)
         }
+        className="custom-select"
       >
         <MenuItem value="expected-date">{t('sort-by-expected-date')}</MenuItem>
         <MenuItem value="creation-date">{t('sort-by-creation-date')}</MenuItem>
       </Select>
+
+      <label id="sort-order-label">{t('sort-order')}</label>
       <Select
-        labelId="sort-by-creation-date-label"
+        labelId="sort-order-label"
         id="sort-by-select"
         value={sort}
         onChange={(event: SelectChangeEvent) =>
           setSort(event.target.value as SortType)
         }
+        className="custom-select"
       >
-        <MenuItem value="desc">{t('newest-to-oldest')}</MenuItem>
+        <MenuItem value="desc">
+          {t('newest-to-oldest')}
+        </MenuItem>
         <MenuItem value="asc">{t('oldest-to-newest')}</MenuItem>
       </Select>
       <Divider />
       <div className="actions">
-        <Button variant="outlined" color="info" onClick={clearAllStatuses}>
+        <Button
+          className="clear-button"
+          variant="outlined"
+          color="info"
+          onClick={clearAllStatuses}
+        >
           {t('clear')}
         </Button>
-        <Button variant="contained" color="secondary" onClick={updateQParams}>
+        <Button
+          className="submit-button"
+          variant="contained"
+          color="secondary"
+          onClick={updateQParams}
+        >
           {t('apply')}
         </Button>
       </div>
