@@ -73,6 +73,7 @@ export type OrderOverview = {
   status: OrderStatus;
   executionStatus: OrderExecutionStatus;
   plannedEndingDate: string;
+  dateWhenMovedToDone?: string;
 };
 
 export type Order = {
@@ -109,7 +110,9 @@ export type OrderTracking = {
   postalCode: string;
   plannedEndingDate: string;
   lastUpdatedDate: string;
+  legalEntity: boolean;
   amountLeftToPay: number;
+  amountLeftToPayWithTax?: number;
 };
 
 export type GetAllPaginatedResponse = {

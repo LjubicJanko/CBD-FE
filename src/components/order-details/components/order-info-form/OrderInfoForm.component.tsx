@@ -181,6 +181,7 @@ const OrderInfoForm = () => {
       <BasicDatePicker
         label={t('expected')}
         value={formik.values.plannedEndingDate as Dayjs}
+        disablePast
         onChange={handleDateChange}
       />
 

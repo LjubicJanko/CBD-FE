@@ -1,7 +1,10 @@
-import { Chip } from '@mui/material';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { OrderExecutionStatusEnum, OrderOverview } from '../../types/Order';
+import {
+  OrderExecutionStatusEnum,
+  OrderOverview,
+  OrderStatusEnum,
+} from '../../types/Order';
 import * as Styled from './OrderCard.styles';
 import { statusColors } from '../../util/util';
 import { useMemo } from 'react';
@@ -40,27 +43,36 @@ const OrderCardComponent = ({
       })}
       onClick={onClick}
     >
-      <h2 className="title">{order.name}</h2>
-      <h3 className="description">{order.description}</h3>
-      <div className="order-card__footer">
-        <p
-          className={classNames('order-card__footer__planned-ending-date', {
-            'order-card__footer__planned-ending-date--in-past': isInPast,
-            'order-card__footer__planned-ending-date--today': isPlannedForToday,
-          })}
-        >
-          {order.plannedEndingDate}
-        </p>
-
-        <Chip
-          className="status-chip"
-          label={t(order.status)}
-          style={{
-            backgroundColor: statusColors[order.status],
-            color: 'white',
-          }}
-        />
-      </div>
+      <Styled.StatusChip
+        className="status-chip"
+        label={t(order.status)}
+        $backgroundColor={statusColors[order.status]}
+      />
+      <Styled.Title className="title">{order.name}</Styled.Title>
+      <Styled.Description className="description">
+        {order.description}
+      </Styled.Description>
+      <Styled.Footer className="order-card__footer">
+        {order.status !== OrderStatusEnum.DONE ? (
+          <>
+            <p>{t('orderDetails.plannedEndingDate')}</p>
+            <Styled.PlannedDate
+              className={classNames('order-card__footer__planned-ending-date', {
+                'order-card__footer__planned-ending-date--in-past': isInPast,
+                'order-card__footer__planned-ending-date--today':
+                  isPlannedForToday,
+              })}
+            >
+              {order.plannedEndingDate}
+            </Styled.PlannedDate>
+          </>
+        ) : (
+          <>
+            <p>{t('orderDetails.dateWhenMovedToDone')}</p>
+            <p>{dayjs(order.dateWhenMovedToDone)?.format('DD.MM.YYYY')}</p>
+          </>
+        )}
+      </Styled.Footer>
     </Styled.OrderCardContainer>
   );
 };

@@ -122,7 +122,11 @@ const IdTrackingPage = () => {
             </div>
             <div className="id-tracking-details__order-info__container--left-to-pay">
               <p>{t('orderDetails.amountLeftToPay')}</p>
-              <p>{order.amountLeftToPay}</p>
+              <p>
+                {order.legalEntity
+                  ? order.amountLeftToPayWithTax
+                  : order.amountLeftToPay}
+              </p>
             </div>
             <div className="id-tracking-details__order-info__container--last-change">
               <p>{t('orderDetails.lastUpdatedDate')}</p>

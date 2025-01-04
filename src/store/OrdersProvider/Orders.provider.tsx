@@ -42,11 +42,10 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
     []
   );
 
-  const removeOrderInOverviewList = useCallback(
-    (orderToRemove: Order) =>
-      setOrders((old) => old.filter((order) => order.id !== orderToRemove.id)),
-    []
-  );
+  const removeOrderInOverviewList = useCallback((orderToRemove: Order) => {
+    setOrders((old) => old.filter((order) => order.id !== orderToRemove.id));
+    setTotalElements((old) => old - 1);
+  }, []);
 
   const fetchOrders = useCallback(async () => {
     setIsLoading(true);
@@ -90,7 +89,6 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
     },
     [updateOrderInOverviewList]
   );
-
 
   useEffect(() => {
     fetchOrders();

@@ -151,6 +151,7 @@ const CreateOrderPage = () => {
         <BasicDatePicker
           label={t('expected')}
           onChange={handleDateChange}
+          disablePast
           value={formik.values.plannedEndingDate as Dayjs}
         />
 
