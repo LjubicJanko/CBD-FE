@@ -35,7 +35,10 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       setOrders((old) =>
         old.map((order) =>
           order.id === orderToUpdate.id
-            ? (orderToUpdate as OrderOverview)
+            ? ({
+                ...orderToUpdate,
+                dateWhenMovedToDone: order.dateWhenMovedToDone,
+              } as OrderOverview)
             : order
         )
       ),
