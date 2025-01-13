@@ -197,6 +197,7 @@ const IdTrackingPage = () => {
         <Button
           className="order-id-search-btn"
           variant="outlined"
+          disabled={!trackingOrderId}
           onClick={() => trackingOrderId && setQParam('id', trackingOrderId)}
         >
           {t('search')}

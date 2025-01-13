@@ -85,6 +85,11 @@ export const IdTrackingContainer = styled.div`
           font-size: 12px;
         `)}
       }
+      .order-id-search-btn:disabled {
+        background-color: ${theme.SECONDARY_2};
+        color: rgb(100, 100, 100);
+        opacity: 0.6;
+      }
     }
   }
 `;

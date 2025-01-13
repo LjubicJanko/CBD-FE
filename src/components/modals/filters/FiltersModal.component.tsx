@@ -142,7 +142,7 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
       }, {} as ButtonVariants)
     );
     setSortByCriteria('expected-date');
-    setSort('asc');
+    setSort('desc');
   }, []);
 
   const updateQParams = useCallback(() => {
