@@ -22,7 +22,7 @@ const initialOrderData: Order = {
   statusHistory: [],
   postalService: '',
   postalCode: '',
-  plannedEndingDate: dayjs().add(1, 'week'),
+  plannedEndingDate: dayjs().add(1, 'week').format('DD.MM.YYYY'),
   amountLeftToPay: 0,
   legalEntity: false,
   acquisitionCost: 0,
@@ -55,7 +55,7 @@ const OrderInfoForm = () => {
         const res: Order = await orderService.updateOrder({
           ...values,
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
-            'DD.MM.YYYY'
+            'YYYY-MM-DD'
           ),
         });
         updateOrderInOverviewList(res);
@@ -75,9 +75,7 @@ const OrderInfoForm = () => {
       selectedOrder
         ? {
             ...selectedOrder,
-            plannedEndingDate: selectedOrder?.plannedEndingDate
-              ? dayjs(selectedOrder.plannedEndingDate, 'DD.MM.YYYY')
-              : dayjs(),
+            plannedEndingDate: selectedOrder?.plannedEndingDate,
           }
         : initialOrderData,
     [selectedOrder]
@@ -180,7 +178,7 @@ const OrderInfoForm = () => {
       </dl>
       <BasicDatePicker
         label={t('expected')}
-        value={formik.values.plannedEndingDate as Dayjs}
+        value={formik.values.plannedEndingDate}
         disablePast
         onChange={handleDateChange}
       />

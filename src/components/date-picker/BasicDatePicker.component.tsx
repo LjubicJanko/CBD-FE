@@ -1,10 +1,10 @@
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 export type BasicDatePickerProps = {
-  value?: Dayjs;
+  value?: Dayjs | string;
   label?: string;
   errorMessage?: string;
   disablePast?: boolean;
@@ -26,7 +26,7 @@ const BasicDatePickerComponent = ({
         label={label}
         onChange={onChange}
         disablePast={disablePast}
-        value={value}
+        value={dayjs(value)}
       />
     </LocalizationProvider>
   );

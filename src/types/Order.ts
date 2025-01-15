@@ -91,7 +91,7 @@ export type Order = {
   legalEntity: boolean;
   postalService: string;
   postalCode: string;
-  plannedEndingDate: Dayjs | string;
+  plannedEndingDate: string;
   amountPaid: number;
   amountLeftToPay: number;
   payments: Payment[];

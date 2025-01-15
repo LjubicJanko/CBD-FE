@@ -63,7 +63,7 @@ const OrderCardComponent = ({
                   isPlannedForToday,
               })}
             >
-              {order.plannedEndingDate}
+              {dayjs(order.plannedEndingDate).format('DD.MM.YYYY')}
             </Styled.PlannedDate>
           </>
         ) : (

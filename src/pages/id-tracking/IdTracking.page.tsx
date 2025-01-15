@@ -134,7 +134,7 @@ const IdTrackingPage = () => {
             </div>
             <div className="id-tracking-details__order-info__container--expected-due">
               <p>{t('orderDetails.plannedEndingDate')}</p>
-              <p>{order.plannedEndingDate}</p>
+              <p>{dayjs(order.plannedEndingDate).format('DD.MM.YYYY')}</p>
             </div>
             <div className="id-tracking-details__order-info__container--description">
               <p>{t('orderDetails.description')}</p>

@@ -55,7 +55,7 @@ const CreateOrderPage = () => {
         await orderService.createOrder({
           ...values,
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
-            'DD.MM.YYYY'
+            'YYYY-MM-DD'
           ),
         });
         showSnackbar(t('order-created'), 'success');
