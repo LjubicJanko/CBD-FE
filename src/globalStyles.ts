@@ -33,7 +33,8 @@ export const GlobalStyle = createGlobalStyle`
         ${mobile(css`
           padding-top: 80px;
         `)};
-        font-family: Satoshi;
+        font-family: "Afacad", serif;
+        font-optical-sizing: auto;
         text-decoration-skip-ink: none;
       }
     };

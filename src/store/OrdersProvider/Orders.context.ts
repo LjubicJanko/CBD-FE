@@ -14,7 +14,6 @@ interface OrdersContext {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setSelectedOrder: Dispatch<SetStateAction<Order | null>>;
   setSelectedOrderId: React.Dispatch<React.SetStateAction<number>>;
-  setShouldShowArchived: Dispatch<SetStateAction<boolean>>;
 }
 
 export default createContext<OrdersContext>({
@@ -30,5 +29,4 @@ export default createContext<OrdersContext>({
   setPage: () => {},
   setSelectedOrder: () => {},
   setSelectedOrderId: () => {},
-  setShouldShowArchived: () => {},
 });

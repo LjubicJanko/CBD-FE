@@ -10,6 +10,7 @@ import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
 import { Order } from '../../../../types/Order';
 import * as Styled from './OrderInfoForm.styles';
 import dayjs from 'dayjs'; // Import dayjs
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 
 const initialOrderData: Order = {
   id: 0,
@@ -98,113 +99,123 @@ const OrderInfoForm = () => {
 
   return (
     <Styled.OrderInfoFormContainer
+      className="order-info"
       autoComplete="off"
       onSubmit={formik.handleSubmit}
     >
-      <TextField
-        className="order-name-input"
-        label={t('order-name')}
-        name="name"
-        type="text"
-        value={formik.values.name}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={!!formik.errors.name}
-        helperText={formik.errors.name ?? ''}
-        multiline
-        maxRows={4}
-      />
-      <TextField
-        className="order-description-input"
-        label={t('description')}
-        name="description"
-        type="text"
-        value={formik.values.description}
-        error={!!formik.errors.description}
-        helperText={formik.errors.description ?? ''}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        multiline
-        maxRows={4}
-      />
-      <TextField
-        className="order-note-input"
-        label={t('note')}
-        name="note"
-        type="text"
-        value={formik.values.note}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={!!formik.errors.note}
-        helperText={formik.errors.note ?? ''}
-        multiline
-        maxRows={4}
-      />
-      <TextField
-        className="order-sale-price-input"
-        label={t('sale-price')}
-        type="number"
-        name="salePrice"
-        value={formik.values.salePrice}
-        error={!!formik.errors.salePrice}
-        helperText={formik.errors.salePrice ?? ''}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-      />
-      <TextField
-        className="order-acquisition-cost-input"
-        label={t('acquisition-cost')}
-        type="number"
-        name="acquisitionCost"
-        value={formik.values.acquisitionCost}
-        error={!!formik.errors.acquisitionCost}
-        helperText={formik.errors.acquisitionCost ?? ''}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-      />
-      <dl className="order-const-difference">
-        {selectedOrder?.legalEntity && (
-          <>
-            <dt>{t('sale-price-taxed')}</dt>
-            <dd>{selectedOrder?.salePriceWithTax}</dd>
-          </>
-        )}
-        <dt>{t('price-difference')}</dt>
-        <dd>{selectedOrder?.priceDifference}</dd>
-        <dt>{t('paid')}</dt>
-        <dd>{selectedOrder?.amountPaid}</dd>
-        <dt>{t('left-to-pay')}</dt>
-        <dd>{selectedOrder?.amountLeftToPay}</dd>
-      </dl>
-      <BasicDatePicker
-        label={t('expected')}
-        value={formik.values.plannedEndingDate}
-        disablePast
-        onChange={handleDateChange}
-      />
+      <div className="order-info__left">
+        <TextField
+          className="order-info__name"
+          label={t('order-name')}
+          name="name"
+          type="text"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={!!formik.errors.name}
+          helperText={formik.errors.name ?? ''}
+          multiline
+          maxRows={4}
+        />
+        <TextField
+          className="order-info__description"
+          label={t('description')}
+          name="description"
+          type="text"
+          value={formik.values.description}
+          error={!!formik.errors.description}
+          helperText={formik.errors.description ?? ''}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          multiline
+          maxRows={4}
+        />
+        <TextField
+          className="order-info__note"
+          label={t('note')}
+          name="note"
+          type="text"
+          value={formik.values.note}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={!!formik.errors.note}
+          helperText={formik.errors.note ?? ''}
+          multiline
+          maxRows={4}
+        />
+        <BasicDatePicker
+          label={t('expected')}
+          value={formik.values.plannedEndingDate}
+          disablePast
+          onChange={handleDateChange}
+        />
+      </div>
+      <div className="order-info__right">
+        <TextField
+          className="order-info__sale-price"
+          label={t('sale-price')}
+          type="number"
+          name="salePrice"
+          value={formik.values.salePrice}
+          error={!!formik.errors.salePrice}
+          helperText={formik.errors.salePrice ?? ''}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        <TextField
+          className="order-info__acquisition-cost"
+          label={t('acquisition-cost')}
+          type="number"
+          name="acquisitionCost"
+          value={formik.values.acquisitionCost}
+          error={!!formik.errors.acquisitionCost}
+          helperText={formik.errors.acquisitionCost ?? ''}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        <dl className="order-info__calculations">
+          {selectedOrder?.legalEntity && (
+            <>
+              <dt>{t('sale-price-taxed')}:</dt>
+              <dd>{selectedOrder?.salePriceWithTax} RSD</dd>
+            </>
+          )}
+          <dt>{t('price-difference')}:</dt>
+          <dd>{selectedOrder?.priceDifference} RSD</dd>
+          <dt>{t('paid')}:</dt>
+          <dd>{selectedOrder?.amountPaid} RSD</dd>
+          <dt>{t('left-to-pay')}:</dt>
+          <dd>{selectedOrder?.amountLeftToPay} RSD</dd>
+          <dt>{t('is-legal-entity')}:</dt>
+          <dd>
+            <FormControlLabel
+              label=""
+              className="order-info__is-legal"
+              control={
+                <Checkbox
+                  name="legalEntity"
+                  checked={formik.values.legalEntity}
+                  onChange={formik.handleChange}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              }
+            />
+          </dd>
+        </dl>
 
-      <FormControlLabel
-        label={t('is-legal-entity')}
-        className="create-order--is-legal-input"
-        control={
-          <Checkbox
-            name="legalEntity"
-            checked={formik.values.legalEntity}
-            onChange={formik.handleChange}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        }
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        fullWidth
-        size="medium"
-        disabled={!formik.isValid || !formik.dirty}
-      >
-        {t('save-changes')}
-      </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          fullWidth
+          size="medium"
+          className="order-info__save-changes"
+          disabled={!formik.isValid || !formik.dirty}
+        >
+          {t('save-changes')}
+          <SaveOutlinedIcon />
+        </Button>
+      </div>
     </Styled.OrderInfoFormContainer>
   );
 };

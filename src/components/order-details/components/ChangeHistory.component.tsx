@@ -1,17 +1,13 @@
 import {
-  Chip,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { OrderStatusEnum, OrderStatusHistory } from '../../../types/Order';
-import { statusColors } from '../../../util/util';
 import * as Styled from './ChangeHistory.styles';
 import { ShippedInfoTooltip } from './shipped-tooltip/ShippedTooltip.component';
 
@@ -23,51 +19,58 @@ const ChangeHistoryComponent = ({ statusHistory }: ChangeHistoryProps) => {
   const { t } = useTranslation();
 
   return (
-    <Styled.ChangeHistoryContainer>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('status')}</TableCell>
-              <TableCell align="right">{t('user')}</TableCell>
-              <TableCell align="right">{t('comment')}</TableCell>
-              <TableCell align="right">{t('timestamp')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {statusHistory.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    <Styled.ChangeHistoryContainer className="change-history">
+      <Table
+        sx={{ minWidth: 650 }}
+        aria-label="simple table"
+        className="change-history__table"
+      >
+        <TableHead className="change-history__header">
+          <TableRow>
+            <TableCell className="change-history__header-cell">
+              {t('status')}
+            </TableCell>
+            <TableCell className="change-history__header-cell">
+              {t('user')}
+            </TableCell>
+            <TableCell className="change-history__header-cell">
+              {t('comment')}
+            </TableCell>
+            <TableCell className="change-history__header-cell">
+              {t('timestamp')}
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {statusHistory.map((row) => (
+            <TableRow
+              key={row.id}
+              className="change-history__row"
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell
+                component="th"
+                scope="row"
+                className="change-history__cell change-history__cell--status"
               >
-                <TableCell component="th" scope="row">
-                  <div>
-                    <Chip
-                      className="status-chip"
-                      label={t(row.status)}
-                      style={{
-                        backgroundColor: statusColors[row.status],
-                        color: 'white',
-                      }}
-                    />
-                  </div>
-                </TableCell>
-                <TableCell align="right">{row.user}</TableCell>
-                <TableCell align="right">{row.closingComment}</TableCell>
-                <TableCell align="right">
-                  {dayjs(row.creationTime).format('DD-MM-YYYY HH:mm:ss')}
-                </TableCell>
-
+                <div>{t(row.status)}</div>
+              </TableCell>
+              <TableCell className="change-history__cell change-history__cell--user">
+                {row.user}
+              </TableCell>
+              <TableCell className="change-history__cell change-history__cell--comment">
+                {row.closingComment}
+              </TableCell>
+              <TableCell className="change-history__cell change-history__cell--timestamp">
+                <p>{dayjs(row.creationTime).format('DD.MM.YYYY HH:mm')}</p>
                 {row.status === OrderStatusEnum.SHIPPED && (
-                  <TableCell align="right">
-                    <ShippedInfoTooltip row={row} />
-                  </TableCell>
+                  <ShippedInfoTooltip row={row} />
                 )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Styled.ChangeHistoryContainer>
   );
 };

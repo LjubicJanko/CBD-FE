@@ -2,7 +2,10 @@ import {
   Button,
   Chip,
   Divider,
+  FormControlLabel,
   MenuItem,
+  Radio,
+  RadioGroup,
   Select,
   SelectChangeEvent,
 } from '@mui/material';
@@ -32,6 +35,7 @@ type ButtonVariants = {
 
 export type SortCriteriaType = 'expected-date' | 'creation-date';
 export type SortType = 'asc' | 'desc';
+export type ExecutionStatusType = 'ACTIVE' | 'ARCHIVED';
 
 const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
   const { t } = useTranslation();
@@ -43,6 +47,9 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
   );
   const [sort, setSort] = useState<SortType>(
     (params[Q_PARAM.SORT] as SortType) ?? 'desc'
+  );
+  const [executionStatus, setExecutionStatus] = useState<ExecutionStatusType>(
+    (params[Q_PARAM.EXECUTION_STATUS] as ExecutionStatusType) ?? 'ACTIVE'
   );
 
   const initialVariants: ButtonVariants = useMemo(
@@ -143,6 +150,7 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     );
     setSortByCriteria('expected-date');
     setSort('desc');
+    setExecutionStatus('ACTIVE');
   }, []);
 
   const updateQParams = useCallback(() => {
@@ -156,8 +164,11 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     setMultipleQParams(activeStatuses);
     setQParam(Q_PARAM.SORT_CRITERIA, sortByCriteria);
     setQParam(Q_PARAM.SORT, sort);
+    setQParam(Q_PARAM.EXECUTION_STATUS, executionStatus);
+
     onClose();
   }, [
+    executionStatus,
     onClose,
     removeMultipleQParams,
     selectedStatuses,
@@ -167,6 +178,14 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     sort,
     sortByCriteria,
   ]);
+
+  const handleChangeExecutionStatus = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = (event.target as HTMLInputElement).value;
+      setExecutionStatus(value as ExecutionStatusType);
+    },
+    []
+  );
 
   return (
     <Styled.FiltersModalContainer
@@ -214,11 +233,27 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
         }
         className="custom-select"
       >
-        <MenuItem value="desc">
-          {t('newest-to-oldest')}
-        </MenuItem>
+        <MenuItem value="desc">{t('newest-to-oldest')}</MenuItem>
         <MenuItem value="asc">{t('oldest-to-newest')}</MenuItem>
       </Select>
+      <Divider />
+      <RadioGroup
+        value={executionStatus}
+        className="archive-radio"
+        row
+        onChange={handleChangeExecutionStatus}
+      >
+        <FormControlLabel
+          value="ACTIVE"
+          control={<Radio />}
+          label={t('active-orders')}
+        />
+        <FormControlLabel
+          value="ARCHIVED"
+          control={<Radio />}
+          label={t('archive-orders')}
+        />
+      </RadioGroup>
       <Divider />
       <div className="actions">
         <Button

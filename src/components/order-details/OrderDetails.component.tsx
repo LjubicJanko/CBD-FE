@@ -1,9 +1,11 @@
 import CancelIcon from '@mui/icons-material/Cancel';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
 import {
+  Box,
   Button,
   Chip,
   Divider,
@@ -11,10 +13,12 @@ import {
   Step,
   StepLabel,
   Stepper,
+  Tab,
+  Tabs,
   Tooltip,
 } from '@mui/material';
 import classNames from 'classnames';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { orderService } from '../../api';
 import { usePrivileges } from '../../hooks/usePrivileges';
@@ -33,8 +37,8 @@ import ConfirmModal, {
   ConfirmModalProps,
 } from '../modals/confirm-modal/ConfirmModal.component';
 import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
-import StatusHistoryModal from '../modals/status-history/StatusHistoryModal.component';
 import * as Styled from './OrderDetails.styles';
+import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
@@ -47,16 +51,29 @@ const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   onCancel: () => {},
 };
 
-type ButtonColors =
-  | 'inherit'
-  | 'primary'
-  | 'secondary'
-  | 'success'
-  | 'error'
-  | 'info'
-  | 'warning';
-
 export type OrderDetailsProps = { order?: Order };
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
 
 const OrderDetailsComponent = () => {
   const { t } = useTranslation();
@@ -80,8 +97,6 @@ const OrderDetailsComponent = () => {
   const isAdmin = userRoles?.includes('admin');
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-  const [isStatusHistoryModalOpen, setIsStatusHistoryModalOpen] =
-    useState(false);
   const [confirmModalProps, setConfirmModalProps] =
     useState(EMPTY_CONFIRM_MODAL);
 
@@ -115,6 +130,12 @@ const OrderDetailsComponent = () => {
     () => privileges.canEditData && !isPaused && !isArchived,
     [privileges.canEditData, isPaused, isArchived]
   );
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const isMoveButtonDisabled = useMemo(() => {
     const movePermissions = {
@@ -229,7 +250,6 @@ const OrderDetailsComponent = () => {
           privileges.canPauseOrder &&
           selectedOrder?.executionStatus === OrderExecutionStatusEnum.ACTIVE,
         label: t('pause'),
-        color: 'warning' as ButtonColors,
         icon: <PauseIcon />,
         onClick: () =>
           openConfirmModal(t('pause-reason'), (note: string) =>
@@ -239,7 +259,6 @@ const OrderDetailsComponent = () => {
       {
         show: privileges.canPauseOrder && isPaused,
         label: t('reactivate'),
-        color: 'success' as ButtonColors,
         icon: <ReplayIcon />,
         onClick: () =>
           openConfirmModal(
@@ -254,7 +273,6 @@ const OrderDetailsComponent = () => {
           privileges.canCancelOrder &&
           ['ACTIVE', 'PAUSED'].includes(selectedOrder?.executionStatus || ''),
         label: t('cancel'),
-        color: 'error' as ButtonColors,
         icon: <CancelIcon />,
         onClick: () =>
           openConfirmModal(t('cancel-reason'), (note: string) =>
@@ -264,13 +282,25 @@ const OrderDetailsComponent = () => {
       {
         show: privileges.canCancelOrder,
         label: t('delete'),
-        color: 'error' as ButtonColors,
         icon: <DeleteIcon />,
         onClick: () =>
           openConfirmModal(t('delete-confirm'), handleDeleteOrder, true),
       },
+      {
+        show: canArchive,
+        label: t('archive'),
+        icon: <Inventory2OutlinedIcon />,
+        onClick: () =>
+          openConfirmModal(
+            t('archive-title'),
+            (note: string) =>
+              changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note),
+            true
+          ),
+      },
     ],
     [
+      canArchive,
       changeOrderStatus,
       handleDeleteOrder,
       isPaused,
@@ -285,45 +315,48 @@ const OrderDetailsComponent = () => {
   if (!selectedOrder) return null;
 
   return (
-    <Styled.OrderDetailsContainer key={selectedOrder?.id}>
+    <Styled.OrderDetailsContainer
+      className="order-details"
+      key={selectedOrder?.id}
+    >
       {(isCanceled || isPaused) && nonActiveBanner}
-      {canArchive && (
-        <Button
-          variant="contained"
-          className="archive-btn"
-          color="primary"
-          fullWidth
-          size="medium"
-          onClick={() =>
-            openConfirmModal(
-              t('archive-title'),
-              (note: string) =>
-                changeOrderStatus(OrderExecutionStatusEnum.ARCHIVED, note),
-              true
-            )
-          }
-        >
-          {t('archive')}
-        </Button>
-      )}
-      <div className="tracking-id">
-        <p>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</p>
-        <IconButton
-          className="postal-code-copy"
-          onClick={() => {
-            navigator.clipboard.writeText(selectedOrder.trackingId);
-            showSnackbar(t('postal-code-coppied'), 'success');
-          }}
-          edge="end"
-        >
-          <ContentCopyIcon />
-        </IconButton>
+
+      <div className="order-details__header">
+        <div className="order-details__header__tracking-id">
+          <p>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</p>
+          <IconButton
+            className="postal-code-copy"
+            onClick={() => {
+              navigator.clipboard.writeText(selectedOrder.trackingId);
+              showSnackbar(t('postal-code-coppied'), 'success');
+            }}
+            edge="end"
+          >
+            <ContentCopyIcon />
+          </IconButton>
+        </div>
+        <div className="order-details__header__actions">
+          {actionButtons.map(
+            ({ show, label, icon, onClick }, index) =>
+              show && (
+                <Tooltip key={index} title={label}>
+                  <IconButton
+                    className="order-details__header__actions--btn"
+                    onClick={onClick}
+                    edge="end"
+                  >
+                    {icon}
+                  </IconButton>
+                </Tooltip>
+              )
+          )}
+        </div>
       </div>
       <Divider />
-      <div className="stepper-container">
+      <div className="order-details__stepper-container">
         {width >= xxsMax ? (
           <Stepper
-            className="stepper-container__stepper"
+            className="order-details__stepper-container__stepper"
             activeStep={statuses.indexOf(selectedOrder?.status)}
             orientation={width < xxsMax ? 'vertical' : 'horizontal'}
             alternativeLabel={width >= xxsMax}
@@ -338,11 +371,11 @@ const OrderDetailsComponent = () => {
           </Stepper>
         ) : (
           <>
-            <div className="stepper-container__status">
+            <div className="order-details__stepper-container__status">
               {`Status: ${t(selectedOrder.status)}`}
             </div>
             <Stepper
-              className="stepper-container__stepper-mobile"
+              className="order-details__stepper-container__stepper-mobile"
               activeStep={statuses.indexOf(selectedOrder.status)}
             >
               {statuses.map((status) => (
@@ -358,13 +391,7 @@ const OrderDetailsComponent = () => {
             </Stepper>
           </>
         )}
-        <div className="status-history-butons">
-          <Button
-            variant="outlined"
-            onClick={() => setIsStatusHistoryModalOpen(true)}
-          >
-            {t('view-status-history')}
-          </Button>
+        <div className="order-details__stepper-container__butons">
           {selectedOrder.status !== OrderStatusEnum.DONE && !isArchived && (
             <Button
               key={isStatusModalOpen ? 'openned' : 'closed'}
@@ -380,77 +407,52 @@ const OrderDetailsComponent = () => {
           )}
         </div>
       </div>
-      <Divider />
-      <div className="order-info-container">
-        <div className="order-info-container__data">
-          {shouldShowForm ? (
-            <OrderInfoForm />
-          ) : (
-            <OrderInfoOverview selectedOrder={selectedOrder} />
-          )}
-        </div>
+      <Box
+        className="order-details__tabs-box"
+        sx={{ borderBottom: 1, borderColor: 'red' }}
+      >
+        <Tabs
+          className="order-details__tabs-box__tabs"
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Informations" />
+          <Tab label="Change history" />
+          <Tab label="Payments" />
+          <Tab label="Files" />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        {shouldShowForm ? (
+          <OrderInfoForm />
+        ) : (
+          <OrderInfoOverview selectedOrder={selectedOrder} />
+        )}
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <ChangeHistoryComponent statusHistory={selectedOrder.statusHistory} />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
         {privileges.canAddPayment && (
-          <div className="order-info-container__payments">
-            <OrderPayments
-              payments={selectedOrder.payments}
-              orderId={selectedOrder.id}
-              isAddingDisabled={
-                selectedOrder.executionStatus !==
-                OrderExecutionStatusEnum.ACTIVE
-              }
-            />
-          </div>
+          <OrderPayments
+            payments={selectedOrder.payments}
+            orderId={selectedOrder.id}
+            isAddingDisabled={
+              selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE
+            }
+          />
         )}
-      </div>
-      <Divider />
-      {selectedOrder.status !== OrderStatusEnum.DONE && (
-        <div className="action-buttons">
-          {actionButtons.map(
-            ({ show, label, color, icon, onClick }, index) =>
-              show && (
-                <Button
-                  key={index}
-                  variant="outlined"
-                  color={color}
-                  onClick={onClick}
-                  size="large"
-                >
-                  <p>{label}</p>
-                  {icon}
-                </Button>
-              )
-          )}
-        </div>
-      )}
-      {selectedOrder.status === OrderStatusEnum.DONE &&
-        privileges.canCancelOrder && (
-          <div className="action-buttons">
-            <Button
-              variant="outlined"
-              color={'error'}
-              onClick={() =>
-                openConfirmModal(t('delete-confirm'), handleDeleteOrder, true)
-              }
-              size="large"
-            >
-              <p>{t('delete')}</p>
-              {<DeleteIcon />}
-            </Button>
-          </div>
-        )}
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        TODO
+      </CustomTabPanel>
       {isStatusModalOpen && (
         <StatusChangeModal
           orderId={selectedOrder.id}
           currentStatus={selectedOrder.status}
           isOpen={isStatusModalOpen}
           onClose={toggleStatusModal}
-        />
-      )}
-      {isStatusHistoryModalOpen && (
-        <StatusHistoryModal
-          selectedOrder={selectedOrder}
-          isOpen={isStatusHistoryModalOpen}
-          onClose={() => setIsStatusHistoryModalOpen(false)}
         />
       )}
       <ConfirmModal {...confirmModalProps} />

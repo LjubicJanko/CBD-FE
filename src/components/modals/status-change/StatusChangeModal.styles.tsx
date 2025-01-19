@@ -29,7 +29,7 @@ export const StatusChangeModalContainer = styled(CbdModal)`
       padding-left: 16px;
       font-size: 14px;
       margin: 0;
-      font-family: unset;
+      /* font-family: unset; */
       margin-top: 4px;
     }
   }

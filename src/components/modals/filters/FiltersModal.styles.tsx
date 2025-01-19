@@ -74,6 +74,18 @@ export const FiltersModalContainer = styled(CbdModal)`
     }
   }
 
+  .archive-radio .MuiFormControlLabel-label {
+    color: ${theme.SECONDARY_1};
+  }
+
+  .archive-radio .MuiRadio-root {
+    color: ${theme.SECONDARY_1};
+  }
+
+  .archive-radio .Mui-checked {
+    color: ${theme.SECONDARY_1};
+  }
+
   .actions {
     width: 100%;
     display: flex;
@@ -115,5 +127,4 @@ export const FiltersModalContainer = styled(CbdModal)`
   .MuiMenuItem-root:hover {
     background-color: #3a3a3a;
   }
-
 `;

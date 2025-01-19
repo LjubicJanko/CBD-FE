@@ -74,6 +74,9 @@ export type OrderOverview = {
   executionStatus: OrderExecutionStatus;
   plannedEndingDate: string;
   dateWhenMovedToDone?: string;
+  amountLeftToPay?: number;
+  postalCode?: string;
+  postalService?: string;
 };
 
 export type Order = {
@@ -123,9 +126,4 @@ export type GetAllPaginatedResponse = {
   data: OrderOverview[];
 };
 
-export type PostServices =
-  | 'd'
-  | 'city'
-  | 'aks'
-  | 'post'
-  | 'bex';
+export type PostServices = 'd' | 'city' | 'aks' | 'post' | 'bex';

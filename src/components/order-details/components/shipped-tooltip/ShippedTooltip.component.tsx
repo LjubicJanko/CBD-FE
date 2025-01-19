@@ -4,6 +4,8 @@ import { OrderStatusHistory } from '../../../../types/Order';
 import { useTranslation } from 'react-i18next';
 import InfoIcon from '@mui/icons-material/Info';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useCallback } from 'react';
+import { useSnackbar } from '../../../../hooks/useSnackbar';
 
 export type ShippedInfoTooltipProps = {
   row: OrderStatusHistory;
@@ -12,26 +14,23 @@ export type ShippedInfoTooltipProps = {
 export const ShippedInfoTooltip = ({ row }: ShippedInfoTooltipProps) => {
   const { t } = useTranslation();
 
+  const { showSnackbar } = useSnackbar();
+
+  const copyCode = useCallback(() => {
+    navigator.clipboard.writeText(row?.postalCode ?? '');
+    showSnackbar(t('postal-code-coppied'), 'success');
+  }, [row?.postalCode, showSnackbar, t]);
+
   return (
     <Tooltip
       title={
         <Styled.TooltipContent>
-          <Styled.TooltipRow>
-            <p style={{ fontWeight: 'bold' }}>{t('postal-service')}:</p>
-            <p>{t(`${row?.postalService}`)}</p>
-          </Styled.TooltipRow>
-          <Styled.TooltipRow>
-            <p style={{ fontWeight: 'bold' }}>{t('postal-code')}:</p>
-            <p>{row?.postalCode}</p>
-            <IconButton
-              onClick={() =>
-                navigator.clipboard.writeText(row?.postalCode ?? '')
-              }
-              edge="end"
-            >
-              <ContentCopyIcon />
-            </IconButton>
-          </Styled.TooltipRow>
+          <p>
+            {t(`${row?.postalService}`)}: {row?.postalCode}
+          </p>
+          <IconButton onClick={copyCode} edge="end">
+            <ContentCopyIcon />
+          </IconButton>
         </Styled.TooltipContent>
       }
       arrow

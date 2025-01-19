@@ -65,7 +65,7 @@ export const PublicHeaderContainer = styled.header`
       }
       &--title {
         padding: 0;
-        font-family: Satoshi;
+        /* font-family: Satoshi; */
         font-size: 14px;
         font-weight: 700;
         color: ${theme.SECONDARY_1};
