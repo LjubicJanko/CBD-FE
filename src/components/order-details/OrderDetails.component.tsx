@@ -419,7 +419,7 @@ const OrderDetailsComponent = () => {
         >
           <Tab label="Informations" />
           <Tab label="Change history" />
-          <Tab label="Payments" />
+          {privileges.canAddPayment && <Tab label="Payments" />}
           <Tab label="Files" />
         </Tabs>
       </Box>
@@ -433,8 +433,8 @@ const OrderDetailsComponent = () => {
       <CustomTabPanel value={value} index={1}>
         <ChangeHistoryComponent statusHistory={selectedOrder.statusHistory} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        {privileges.canAddPayment && (
+      {privileges.canAddPayment && (
+        <CustomTabPanel value={value} index={2}>
           <OrderPayments
             payments={selectedOrder.payments}
             orderId={selectedOrder.id}
@@ -442,8 +442,8 @@ const OrderDetailsComponent = () => {
               selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE
             }
           />
-        )}
-      </CustomTabPanel>
+        </CustomTabPanel>
+      )}
       <CustomTabPanel value={value} index={3}>
         TODO
       </CustomTabPanel>
