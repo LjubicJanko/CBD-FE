@@ -62,6 +62,10 @@ export const OrderInfoFormContainer = styled.form`
       display: flex;
       align-items: center;
       gap: 4px;
+
+      .MuiSvgIcon-root {
+        color: ${theme.PRIMARY_1};
+      }
     }
   }
 
@@ -88,5 +92,9 @@ export const OrderInfoFormContainer = styled.form`
 
   .MuiOutlinedInput-notchedOutline {
     border-color: ${theme.SECONDARY_1};
+  }
+
+  .MuiSvgIcon-root {
+    color: ${theme.PRIMARY_2};
   }
 `;

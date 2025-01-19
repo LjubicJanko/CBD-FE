@@ -8,7 +8,8 @@ export const NoContentContainer = styled.div`
   text-align: center;
 
   .no-content-img {
-    width: 200px;
+    max-width: 200px;
+    margin: 0;
   }
 `;
 

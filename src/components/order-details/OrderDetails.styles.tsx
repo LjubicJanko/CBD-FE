@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { laptop, mobile, tablet } from '../../util/breakpoints';
+import { mobile, tablet } from '../../util/breakpoints';
 import theme from '../../styles/theme';
 
 export const OrderDetailsContainer = styled.div`
@@ -78,12 +78,18 @@ export const OrderDetailsContainer = styled.div`
 
       svg {
         color: ${theme.SECONDARY_1};
+
         text {
           color: ${theme.PRIMARY_1};
           fill: ${theme.PRIMARY_1};
           font-size: 16px;
         }
+
         &.Mui-active {
+          color: ${theme.PRIMARY_2};
+        }
+
+        &.Mui-completed {
           color: ${theme.PRIMARY_2};
         }
       }
@@ -182,68 +188,8 @@ export const OrderDetailsContainer = styled.div`
     `)}
   }
 
-  .order-info-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 32px;
-
-    ${tablet(css`
-      flex-direction: column;
-    `)};
-
-    &__data {
-      width: 40%;
-      ${laptop(css`
-        width: 50%;
-      `)}
-
-      ${tablet(css`
-        width: 100%;
-      `)}
-    }
-    &__payments {
-      flex-grow: 1;
-      border-left: 1px solid ${theme.PRIMARY_1};
-      padding-left: 16px;
-      ${laptop(css`
-        width: 50%;
-      `)}
-
-      ${tablet(css`
-        width: 100%;
-        border-top: 1px solid ${theme.PRIMARY_1};
-        padding-top: 16px;
-        border-left: unset;
-        padding-left: unset;
-      `)}
-    }
-  }
-
-  .action-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    width: 100%;
-
-    ${tablet(css`
-      position: relative;
-    `)};
-
-    ${mobile(css`
-      flex-direction: column;
-      button {
-        width: 100%;
-      }
-    `)}
-
-    button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 4px;
-    }
+  hr {
+    border-color: ${theme.SECONDARY_1};
   }
 
   button {
