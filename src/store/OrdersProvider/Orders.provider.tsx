@@ -29,19 +29,29 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
 
+  const mapOrderToOverview = useCallback((order: Order) => {
+    const shippedHistoryStatus = order.statusHistory.find(
+      (x) => x.status === 'SHIPPED'
+    );
+    return {
+      ...order,
+      ...(shippedHistoryStatus && {
+        postalCode: shippedHistoryStatus.postalCode,
+        postalService: shippedHistoryStatus.postalService,
+      }),
+    };
+  }, []);
+
   const updateOrderInOverviewList = useCallback(
     (orderToUpdate: Order) =>
       setOrders((old) =>
         old.map((order) =>
           order.id === orderToUpdate.id
-            ? ({
-                ...orderToUpdate,
-                dateWhenMovedToDone: order.dateWhenMovedToDone,
-              } as OrderOverview)
+            ? mapOrderToOverview(orderToUpdate)
             : order
         )
       ),
-    []
+    [mapOrderToOverview]
   );
 
   const removeOrderInOverviewList = useCallback((orderToRemove: Order) => {

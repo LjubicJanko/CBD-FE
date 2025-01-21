@@ -392,19 +392,21 @@ const OrderDetailsComponent = () => {
           </>
         )}
         <div className="order-details__stepper-container__butons">
-          {selectedOrder.status !== OrderStatusEnum.DONE && !isArchived && (
-            <Button
-              key={isStatusModalOpen ? 'openned' : 'closed'}
-              variant="contained"
-              color="primary"
-              fullWidth
-              size="medium"
-              disabled={isMoveButtonDisabled}
-              onClick={toggleStatusModal}
-            >
-              {t('move-to-next-state')}
-            </Button>
-          )}
+          {selectedOrder.status !== OrderStatusEnum.DONE &&
+            !isArchived &&
+            !isMoveButtonDisabled && (
+              <Button
+                key={isStatusModalOpen ? 'openned' : 'closed'}
+                variant="contained"
+                color="primary"
+                fullWidth
+                size="medium"
+                disabled={isMoveButtonDisabled}
+                onClick={toggleStatusModal}
+              >
+                {t('move-to-next-state')}
+              </Button>
+            )}
         </div>
       </div>
       <Box
