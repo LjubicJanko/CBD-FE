@@ -46,6 +46,10 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
           label: t('expected'),
           value: selectedOrder?.plannedEndingDate.toString(),
         },
+        {
+          label: t('priority'),
+          value: t(selectedOrder?.priority ?? '-'),
+        },
       ].filter(Boolean) as OrderInfoConfigType[],
     [
       t,
@@ -58,6 +62,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
       selectedOrder?.amountPaid,
       selectedOrder?.amountLeftToPay,
       selectedOrder?.plannedEndingDate,
+      selectedOrder?.priority,
       authData?.roles,
     ]
   );

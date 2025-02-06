@@ -48,6 +48,13 @@ export const CreateOrderPageContainer = styled.div`
       width: 200px;
     }
 
+    &--priority-input {
+      text-align: left;
+      .MuiPopover-paper {
+        background-color: unset;
+      }
+    }
+
     &__footer {
       width: 100%;
       display: flex;

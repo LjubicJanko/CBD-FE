@@ -85,6 +85,13 @@ export const Footer = styled.div`
       align-items: center;
       justify-content: left;
       gap: 8px;
+
+      &--priority-value {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+      }
     }
   }
 

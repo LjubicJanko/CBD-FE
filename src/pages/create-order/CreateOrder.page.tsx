@@ -2,13 +2,17 @@ import {
   Button,
   Checkbox,
   Divider,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useCallback, useMemo } from 'react';
 import { orderService } from '../../api';
-import { CreateOrder } from '../../types/Order';
+import { CreateOrder, OrderPriorityEnum } from '../../types/Order';
 import * as Styled from './CreateOrder.styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +29,7 @@ const emptyOrderData: CreateOrder = {
   legalEntity: false,
   acquisitionCost: undefined,
   salePrice: undefined,
+  priority: OrderPriorityEnum.MEDIUM,
 };
 
 const CreateOrderPage = () => {
@@ -147,6 +152,32 @@ const CreateOrderPage = () => {
           multiline
           maxRows={4}
         />
+        <FormControl fullWidth>
+          <InputLabel id="create-order--priority-label">
+            {t('priority')}
+          </InputLabel>
+          <Select
+            labelId="create-order--priority-label"
+            className="create-order--priority-input"
+            id="priority-input"
+            name="priority"
+            value={formik.values.priority}
+            label={t('priority')}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={!!formik.errors.priority}
+          >
+            <MenuItem value={OrderPriorityEnum.LOW}>
+              {t(OrderPriorityEnum.LOW)}
+            </MenuItem>
+            <MenuItem value={OrderPriorityEnum.MEDIUM}>
+              {t(OrderPriorityEnum.MEDIUM)}
+            </MenuItem>
+            <MenuItem value={OrderPriorityEnum.HIGH}>
+              {t(OrderPriorityEnum.HIGH)}
+            </MenuItem>
+          </Select>
+        </FormControl>
 
         <BasicDatePicker
           label={t('expected')}

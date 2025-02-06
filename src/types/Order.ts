@@ -1,12 +1,6 @@
 import { Dayjs } from 'dayjs';
 import { Payment } from './Payment';
 
-export type OrderExecutionStatus =
-  | 'ACTIVE'
-  | 'PAUSED'
-  | 'CANCELED'
-  | 'ARCHIVED';
-
 export const OrderExecutionStatusEnum = {
   ACTIVE: 'ACTIVE',
   PAUSED: 'PAUSED',
@@ -14,17 +8,10 @@ export const OrderExecutionStatusEnum = {
   ARCHIVED: 'ARCHIVED',
 } as const;
 
+export type OrderExecutionStatus = keyof typeof OrderExecutionStatusEnum;
+
 export type OrderExecutionStatusEnum =
   (typeof OrderExecutionStatusEnum)[keyof typeof OrderExecutionStatusEnum];
-
-export type OrderStatus =
-  | 'DESIGN'
-  | 'PRINT_READY'
-  | 'PRINTING'
-  | 'SEWING'
-  | 'SHIP_READY'
-  | 'SHIPPED'
-  | 'DONE';
 
 export enum OrderStatusEnum {
   DESIGN = 'DESIGN',
@@ -35,6 +22,16 @@ export enum OrderStatusEnum {
   SHIPPED = 'SHIPPED',
   DONE = 'DONE',
 }
+
+export type OrderStatus = keyof typeof OrderStatusEnum;
+
+export enum OrderPriorityEnum {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
+
+export type OrderPriority = keyof typeof OrderPriorityEnum;
 
 export const orderStatusArray = [
   'DESIGN',
@@ -64,6 +61,7 @@ export type CreateOrder = {
   legalEntity: boolean;
   acquisitionCost?: number;
   salePrice?: number;
+  priority: OrderPriority;
 };
 
 export type OrderOverview = {
@@ -71,6 +69,7 @@ export type OrderOverview = {
   name: string;
   description: string;
   status: OrderStatus;
+  priority: OrderPriority;
   executionStatus: OrderExecutionStatus;
   plannedEndingDate: string;
   dateWhenMovedToDone?: string;
@@ -86,6 +85,7 @@ export type Order = {
   description: string;
   note: string;
   status: OrderStatus;
+  priority: OrderPriority;
   executionStatus: OrderExecutionStatus;
   statusHistory: OrderStatusHistory[];
   acquisitionCost: number;

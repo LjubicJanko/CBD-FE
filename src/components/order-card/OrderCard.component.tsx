@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   OrderExecutionStatusEnum,
   OrderOverview,
+  OrderPriorityEnum,
   OrderStatusEnum,
 } from '../../types/Order';
 import * as Styled from './OrderCard.styles';
@@ -11,6 +12,9 @@ import { useMemo } from 'react';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import dayjs from 'dayjs';
 import { Tooltip } from '@mui/material';
+import LowPriorityIcon from '@mui/icons-material/LowPriority';
+import ClearAllIcon from '@mui/icons-material/ClearAll';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 export type OrderCardComponentProps = {
   order: OrderOverview;
@@ -30,12 +34,16 @@ const OrderCardComponent = ({
     () => dayjs(plannedEndingDate, 'YYYY.MM.DD').isBefore(dayjs()),
     [plannedEndingDate]
   );
-  console.log(order);
 
-  // const isPlannedForToday = useMemo(
-  //   () => dayjs(plannedEndingDate, 'DD.MM.YYYY').isSame(dayjs(), 'day'),
-  //   [plannedEndingDate]
-  // );
+  const PriorityIcon = useMemo(() => {
+    const priorityIconMap = {
+      [OrderPriorityEnum.LOW]: LowPriorityIcon,
+      [OrderPriorityEnum.MEDIUM]: ClearAllIcon,
+      [OrderPriorityEnum.HIGH]: PriorityHighIcon,
+    };
+
+    return priorityIconMap[order.priority] || PriorityHighIcon;
+  }, [order.priority]);
 
   return (
     <Styled.OrderCardContainer
@@ -67,19 +75,6 @@ const OrderCardComponent = ({
                 <ReportProblemIcon style={{ color: '#D4FF00' }} />
               </Tooltip>
             )}
-            {/* <Styled.PlannedDate
-              className={classNames(
-                'order-card__footer__info__planned-ending-date',
-                {
-                  'order-card__footer__info__planned-ending-date--in-past':
-                    isInPast,
-                  'order-card__footer__info__planned-ending-date--today':
-                    isPlannedForToday,
-                }
-              )}
-            >
-              {dayjs(order.plannedEndingDate).format('DD.MM.YYYY')}
-            </Styled.PlannedDate> */}
           </div>
         ) : (
           <div className="order-card__footer__info">
@@ -99,6 +94,13 @@ const OrderCardComponent = ({
             </p>
           </div>
         )}
+        <div className="order-card__footer__info">
+          <p>{t('priority')}: </p>
+          <p className="order-card__footer__info--priority-value">
+            {t(order.priority)}
+            <PriorityIcon />
+          </p>
+        </div>
       </Styled.Footer>
     </Styled.OrderCardContainer>
   );

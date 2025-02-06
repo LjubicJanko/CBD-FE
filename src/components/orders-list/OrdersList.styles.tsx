@@ -6,6 +6,7 @@ export const OrdersListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
+  padding-bottom: 32px;
 
   .pagination-total {
     font-size: 18px;

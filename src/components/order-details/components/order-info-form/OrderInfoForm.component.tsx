@@ -1,4 +1,13 @@
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
 import { useCallback, useContext, useMemo } from 'react';
@@ -7,7 +16,7 @@ import * as Yup from 'yup';
 import { BasicDatePicker } from '../../..';
 import { orderService } from '../../../../api';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
-import { Order } from '../../../../types/Order';
+import { Order, OrderPriorityEnum } from '../../../../types/Order';
 import * as Styled from './OrderInfoForm.styles';
 import dayjs from 'dayjs'; // Import dayjs
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
@@ -20,6 +29,7 @@ const initialOrderData: Order = {
   note: '',
   status: 'DESIGN',
   executionStatus: 'ACTIVE',
+  priority: OrderPriorityEnum.MEDIUM,
   statusHistory: [],
   postalService: '',
   postalCode: '',
@@ -143,6 +153,29 @@ const OrderInfoForm = () => {
           multiline
           maxRows={4}
         />
+        <FormControl fullWidth>
+          <InputLabel id="order-priority-label">{t('priority')}</InputLabel>
+          <Select
+            labelId="order-priority-label"
+            id="priority-input"
+            name="priority"
+            value={formik.values.priority}
+            label={t('priority')}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={!!formik.errors.priority}
+          >
+            <MenuItem value={OrderPriorityEnum.LOW}>
+              {t(OrderPriorityEnum.LOW)}
+            </MenuItem>
+            <MenuItem value={OrderPriorityEnum.MEDIUM}>
+              {t(OrderPriorityEnum.MEDIUM)}
+            </MenuItem>
+            <MenuItem value={OrderPriorityEnum.HIGH}>
+              {t(OrderPriorityEnum.HIGH)}
+            </MenuItem>
+          </Select>
+        </FormControl>
         <BasicDatePicker
           label={t('expected')}
           value={formik.values.plannedEndingDate}

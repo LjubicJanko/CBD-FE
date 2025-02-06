@@ -9,34 +9,13 @@ export type OrdersListProps = {
 };
 
 const OrdersList = ({ className }: OrdersListProps) => {
-  // const { t } = useTranslation();
-  const {
-    orders,
-    selectedOrder,
-    // page,
-    // total,
-    // totalElements,
-    // setPage,
-    setSelectedOrderId,
-  } = useContext(OrdersContext);
-
-  // const handleChange = (_event: unknown, value: number) => {
-  //   setPage(value - 1);
-  //   setSelectedOrderId(-1);
-  // };
+  const { orders, selectedOrder, setSelectedOrderId } =
+    useContext(OrdersContext);
 
   if (!orders.length) return <NoContent />;
 
   return (
     <Styled.OrdersListContainer className={className}>
-      {/* <span className="pagination-total">
-        {t('pagination-total', {
-          TOTAL: totalElements,
-        })}
-      </span> */}
-      {/* <div className="pagination">
-        <Pagination count={total} page={page + 1} onChange={handleChange} />
-      </div> */}
       {orders.map((order, index) => (
         <OrderCardComponent
           order={order}

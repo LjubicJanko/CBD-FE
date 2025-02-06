@@ -20,6 +20,7 @@ export const GlobalStyle = createGlobalStyle`
 
       .MuiPopover-paper {
         background-color: ${theme.PRIMARY_1};
+        color: ${theme.SECONDARY_1};
       }
     }
 
