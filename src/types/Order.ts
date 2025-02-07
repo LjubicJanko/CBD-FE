@@ -43,6 +43,8 @@ export const orderStatusArray = [
   'DONE',
 ];
 
+export const orderPriorityArray = ['LOW', 'MEDIUM', 'HIGH'];
+
 export type OrderStatusHistory = {
   id: number;
   status: OrderStatus;

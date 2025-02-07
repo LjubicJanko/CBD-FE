@@ -18,6 +18,7 @@ import {
 export type FetchPaginatedProps = {
   searchTerm?: string;
   statuses?: string[];
+  priorities?: string[];
   executionStatuses?: string[];
   sortCriteria?: SortCriteriaType;
   sort?: SortType;
@@ -80,6 +81,7 @@ const fetchPaginated = async (props: FetchPaginatedProps) =>
       params: {
         searchTerm: props.searchTerm,
         statuses: props.statuses,
+        priorities: props.priorities,
         executionStatuses: props.executionStatuses,
         sortCriteria: props.sortCriteria,
         sort: props.sort,
@@ -93,6 +95,13 @@ const fetchPaginated = async (props: FetchPaginatedProps) =>
         if (params.statuses) {
           params.statuses.forEach((status: string) =>
             searchParams.append('statuses', status)
+          );
+        }
+
+        // Serialize priorities
+        if (params.priorities) {
+          params.priorities.forEach((priority: string) =>
+            searchParams.append('priorities', priority)
           );
         }
 

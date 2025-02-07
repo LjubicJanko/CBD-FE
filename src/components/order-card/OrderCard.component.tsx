@@ -83,12 +83,12 @@ const OrderCardComponent = ({
           </div>
         )}
         <div className="order-card__footer__info">
-          <p>{t('Preostalo za uplatu:')}</p>
+          <p>{t('amountLeftToPay')}</p>
           <p>{order.amountLeftToPay} RSD</p>
         </div>
         {order.postalService && (
           <div className="order-card__footer__info">
-            <p>{t('Kurirska sluzba: ')}</p>
+            <p>{t('postal-service')}</p>
             <p>
               {t(order.postalService)} ({order.postalCode})
             </p>

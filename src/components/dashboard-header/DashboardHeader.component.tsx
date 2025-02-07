@@ -11,7 +11,7 @@ import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import { privileges } from '../../util/util';
 import FiltersModal from '../modals/filters/FiltersModal.component';
 import useQueryParams from '../../hooks/useQueryParams';
-import { orderStatusArray } from '../../types/Order';
+import { orderPriorityArray, orderStatusArray } from '../../types/Order';
 import { Q_PARAM } from '../../util/constants';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { xxsMax } from '../../util/breakpoints';
@@ -36,6 +36,11 @@ const DashboardHeader = () => {
 
   const activeFilters = useMemo(
     () => Object.keys(params).filter((key) => orderStatusArray.includes(key)),
+    [params]
+  );
+
+  const activePriorities = useMemo(
+    () => Object.keys(params).filter((key) => orderPriorityArray.includes(key)),
     [params]
   );
 
@@ -98,6 +103,11 @@ const DashboardHeader = () => {
         {activeFilters.map((activeFilter) => (
           <div className="dashboard-header__active-filters--chip">
             {t(activeFilter)}
+          </div>
+        ))}
+        {activePriorities.map((activeFilter) => (
+          <div className="dashboard-header__active-filters--chip">
+            {`${t(activeFilter)} ${'priority'}`}
           </div>
         ))}
       </div>

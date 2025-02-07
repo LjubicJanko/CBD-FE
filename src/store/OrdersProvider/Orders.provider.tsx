@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { orderService } from '../../api';
 import useQueryParams from '../../hooks/useQueryParams';
-import { Order, OrderOverview, orderStatusArray } from '../../types/Order';
+import { Order, OrderOverview, orderPriorityArray, orderStatusArray } from '../../types/Order';
 import OrdersContext from './Orders.context';
 import { Q_PARAM } from '../../util/constants';
 import {
@@ -68,10 +68,15 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         orderStatusArray.includes(key)
       );
 
+      const priorities = Object.keys(params).filter((key) =>
+        orderPriorityArray.includes(key)
+      );
+
       const executionStatuses = params[Q_PARAM.EXECUTION_STATUS];
 
       const response = await orderService.fetchPaginated({
         statuses,
+        priorities,
         searchTerm: params[Q_PARAM.SEARCH_TERM],
         sortCriteria: params[Q_PARAM.SORT_CRITERIA] as SortCriteriaType,
         sort: params[Q_PARAM.SORT] as SortType,

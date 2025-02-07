@@ -15,6 +15,9 @@ import { useTranslation } from 'react-i18next';
 import useQueryParams from '../../../hooks/useQueryParams';
 import OrdersContext from '../../../store/OrdersProvider/Orders.context';
 import {
+  OrderPriority,
+  orderPriorityArray,
+  OrderPriorityEnum,
   OrderStatus,
   orderStatusArray,
   OrderStatusEnum,
@@ -65,7 +68,19 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     [params]
   );
 
+  const initialPriorityVariants: ButtonVariants = useMemo(
+    () => ({
+      LOW: 'LOW' in params,
+      MEDIUM: 'MEDIUM' in params,
+      HIGH: 'HIGH' in params,
+    }),
+    [params]
+  );
+
   const [selectedStatuses, setSelectedStatuses] = useState(initialVariants);
+  const [selectedPriorities, setSelectedPriorities] = useState(
+    initialPriorityVariants
+  );
 
   const filterButtonsConfig: {
     label: string;
@@ -124,6 +139,37 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     [selectedStatuses, t]
   );
 
+  const prioritiesButtonsConfig: {
+    label: string;
+    key: OrderPriority;
+    variant: 'filled' | 'outlined';
+  }[] = useMemo(
+    () => [
+      {
+        label: t('LOW'),
+        key: 'LOW',
+        variant: selectedPriorities[OrderPriorityEnum.LOW]
+          ? 'filled'
+          : 'outlined',
+      },
+      {
+        label: t('MEDIUM'),
+        key: 'MEDIUM',
+        variant: selectedPriorities[OrderPriorityEnum.MEDIUM]
+          ? 'filled'
+          : 'outlined',
+      },
+      {
+        label: t('HIGH'),
+        key: 'HIGH',
+        variant: selectedPriorities[OrderPriorityEnum.HIGH]
+          ? 'filled'
+          : 'outlined',
+      },
+    ],
+    [selectedPriorities, t]
+  );
+
   const filterTitle = useMemo(
     () => (
       <span className="title">
@@ -141,10 +187,23 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     }));
   }, []);
 
+  const togglePriorityVariant = useCallback((key: OrderPriority) => {
+    setSelectedPriorities((old) => ({
+      ...old,
+      [key]: !old[key],
+    }));
+  }, []);
+
   const clearAllStatuses = useCallback(() => {
     setSelectedStatuses((old) =>
       Object.keys(old).reduce((acc, key) => {
         acc[key as OrderStatus] = false;
+        return acc;
+      }, {} as ButtonVariants)
+    );
+    setSelectedPriorities((old) =>
+      Object.keys(old).reduce((acc, key) => {
+        acc[key as OrderPriority] = false;
         return acc;
       }, {} as ButtonVariants)
     );
@@ -155,13 +214,19 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
 
   const updateQParams = useCallback(() => {
     removeMultipleQParams(orderStatusArray);
+    removeMultipleQParams(orderPriorityArray);
 
     const activeStatuses = Object.entries(selectedStatuses)
       .filter(([, isActive]) => isActive)
       .reduce((acc, [key]) => ({ ...acc, [key]: 'true' }), {});
 
+    const activePriorities = Object.entries(selectedPriorities)
+      .filter(([, isActive]) => isActive)
+      .reduce((acc, [key]) => ({ ...acc, [key]: 'true' }), {});
+
     setSelectedOrderId(0);
     setMultipleQParams(activeStatuses);
+    setMultipleQParams(activePriorities);
     setQParam(Q_PARAM.SORT_CRITERIA, sortByCriteria);
     setQParam(Q_PARAM.SORT, sort);
     setQParam(Q_PARAM.EXECUTION_STATUS, executionStatus);
@@ -171,6 +236,7 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     executionStatus,
     onClose,
     removeMultipleQParams,
+    selectedPriorities,
     selectedStatuses,
     setMultipleQParams,
     setQParam,
@@ -201,6 +267,23 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
             label={label}
             variant="outlined"
             onClick={() => toggleVariant(key)}
+            style={{
+              backgroundColor:
+                variant === 'filled' ? theme.SECONDARY_2 : theme.PRIMARY_1,
+            }}
+          />
+        ))}
+      </div>
+      <Divider color={theme.SECONDARY_2} />
+      <label id="choose-priority-label">{t('choose-priority')}</label>
+      <div className="priorities">
+        {prioritiesButtonsConfig.map(({ key, label, variant }) => (
+          <Chip
+            key={key}
+            className={classNames('filter-button', key)}
+            label={label}
+            variant="outlined"
+            onClick={() => togglePriorityVariant(key)}
             style={{
               backgroundColor:
                 variant === 'filled' ? theme.SECONDARY_2 : theme.PRIMARY_1,
