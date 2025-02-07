@@ -18,6 +18,10 @@ export const FiltersModalContainer = styled(CbdModal)`
 
   min-width: 788px;
 
+  max-height: 100%;
+
+  overflow: auto;
+
   ${tablet(css`
     min-width: unset;
     padding: 24px 36px;
