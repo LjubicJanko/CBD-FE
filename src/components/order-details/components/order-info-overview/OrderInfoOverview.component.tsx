@@ -1,12 +1,17 @@
-import { useContext, useMemo } from 'react';
-import { Table, TableBody, TableRow } from '@mui/material';
+import { ReactNode, useContext, useMemo } from 'react';
+import { Rating, Table, TableBody, TableRow } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useResponsiveWidth from '../../../../hooks/useResponsiveWidth';
-import { Order, OrderExecutionStatusEnum } from '../../../../types/Order';
+import {
+  Order,
+  OrderExecutionStatusEnum,
+  orderPriorityArray,
+} from '../../../../types/Order';
 import { xxsMax } from '../../../../util/breakpoints';
 import * as Styled from './OrderInfoOverview.styles';
 import classNames from 'classnames';
 import AuthContext from '../../../../store/AuthProvider/Auth.context';
+import theme from '../../../../styles/theme';
 
 export type OrderInfoOverviewProps = {
   selectedOrder?: Order;
@@ -14,7 +19,7 @@ export type OrderInfoOverviewProps = {
 
 type OrderInfoConfigType = {
   label: string;
-  value: string | undefined;
+  value: string | ReactNode | undefined;
 };
 
 const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
@@ -37,7 +42,12 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
         { label: t('acquisition-cost'), value: selectedOrder?.acquisitionCost },
         { label: t('sale-price'), value: selectedOrder?.salePrice },
         ...(selectedOrder?.legalEntity
-          ? [{ label: t('sale-price-taxed'), value: selectedOrder?.salePriceWithTax }]
+          ? [
+              {
+                label: t('sale-price-taxed'),
+                value: selectedOrder?.salePriceWithTax,
+              },
+            ]
           : []),
         {
           label: t('price-difference'),
@@ -51,7 +61,16 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
         },
         {
           label: t('priority'),
-          value: t(selectedOrder?.priority ?? '-'),
+          value: selectedOrder?.priority ? (
+            <Rating
+              readOnly
+              max={3}
+              style={{ color: theme.SECONDARY_1 }}
+              value={orderPriorityArray.indexOf(selectedOrder?.priority) + 1}
+            />
+          ) : (
+            ''
+          ),
         },
       ].filter(Boolean) as OrderInfoConfigType[],
     [
