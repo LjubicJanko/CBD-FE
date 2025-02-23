@@ -34,8 +34,11 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
           value: selectedOrder?.description,
         },
         { label: t('note'), value: selectedOrder?.note },
-        { label: t('sale-price'), value: selectedOrder?.salePrice },
         { label: t('acquisition-cost'), value: selectedOrder?.acquisitionCost },
+        { label: t('sale-price'), value: selectedOrder?.salePrice },
+        ...(selectedOrder?.legalEntity
+          ? [{ label: t('sale-price-taxed'), value: selectedOrder?.salePriceWithTax }]
+          : []),
         {
           label: t('price-difference'),
           value: selectedOrder?.priceDifference,
@@ -78,17 +81,11 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
       </div>
     ) : (
       <TableRow>
-        <Styled.TableCellContainer
-          component="th"
-          scope="row"
-          className="pause"
-          style={{ fontWeight: 'bold', color: 'gray' }}
-        >
+        <Styled.TableCellContainer component="th" scope="row" className="pause">
           {t('pausing-comment')}
         </Styled.TableCellContainer>
         <Styled.TableCellContainer
           className={classNames('pause', 'pausing-value')}
-          style={{ color: 'gray' }}
         >
           {selectedOrder?.pausingComment}
         </Styled.TableCellContainer>
@@ -113,7 +110,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
     </Styled.MobileContainer>
   ) : (
     <Styled.DesktopContainer>
-      <Table aria-label="order info overview">
+      <Table className="order-info-table" aria-label="order info overview">
         <TableBody>
           {pausingInfoRow}
           {orderInfoConfig

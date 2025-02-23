@@ -1,14 +1,12 @@
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import {
   Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
-  InputLabel,
-  MenuItem,
-  Select,
+  Rating,
   TextField,
 } from '@mui/material';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
 import { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,10 +14,12 @@ import * as Yup from 'yup';
 import { BasicDatePicker } from '../../..';
 import { orderService } from '../../../../api';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
-import { Order, OrderPriorityEnum } from '../../../../types/Order';
+import {
+  Order,
+  orderPriorityArray,
+  OrderPriorityEnum,
+} from '../../../../types/Order';
 import * as Styled from './OrderInfoForm.styles';
-import dayjs from 'dayjs'; // Import dayjs
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 
 const initialOrderData: Order = {
   id: 0,
@@ -153,29 +153,6 @@ const OrderInfoForm = () => {
           multiline
           maxRows={4}
         />
-        <FormControl fullWidth>
-          <InputLabel id="order-priority-label">{t('priority')}</InputLabel>
-          <Select
-            labelId="order-priority-label"
-            id="priority-input"
-            name="priority"
-            value={formik.values.priority}
-            label={t('priority')}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={!!formik.errors.priority}
-          >
-            <MenuItem value={OrderPriorityEnum.LOW}>
-              {t(OrderPriorityEnum.LOW)}
-            </MenuItem>
-            <MenuItem value={OrderPriorityEnum.MEDIUM}>
-              {t(OrderPriorityEnum.MEDIUM)}
-            </MenuItem>
-            <MenuItem value={OrderPriorityEnum.HIGH}>
-              {t(OrderPriorityEnum.HIGH)}
-            </MenuItem>
-          </Select>
-        </FormControl>
         <BasicDatePicker
           label={t('expected')}
           value={formik.values.plannedEndingDate}
@@ -185,17 +162,6 @@ const OrderInfoForm = () => {
       </div>
       <div className="order-info__right">
         <TextField
-          className="order-info__sale-price"
-          label={t('sale-price')}
-          type="number"
-          name="salePrice"
-          value={formik.values.salePrice}
-          error={!!formik.errors.salePrice}
-          helperText={formik.errors.salePrice ?? ''}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        <TextField
           className="order-info__acquisition-cost"
           label={t('acquisition-cost')}
           type="number"
@@ -203,6 +169,17 @@ const OrderInfoForm = () => {
           value={formik.values.acquisitionCost}
           error={!!formik.errors.acquisitionCost}
           helperText={formik.errors.acquisitionCost ?? ''}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        <TextField
+          className="order-info__sale-price"
+          label={t('sale-price')}
+          type="number"
+          name="salePrice"
+          value={formik.values.salePrice}
+          error={!!formik.errors.salePrice}
+          helperText={formik.errors.salePrice ?? ''}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
@@ -232,6 +209,21 @@ const OrderInfoForm = () => {
                   inputProps={{ 'aria-label': 'controlled' }}
                 />
               }
+            />
+          </dd>
+          <dt>{t('priority')}</dt>
+          <dd>
+            <Rating
+              name="priority"
+              max={3}
+              value={orderPriorityArray.indexOf(formik.values.priority) + 1}
+              onChange={(_, newValue) => {
+                newValue &&
+                  formik.setFieldValue(
+                    'priority',
+                    orderPriorityArray[newValue - 1]
+                  );
+              }}
             />
           </dd>
         </dl>

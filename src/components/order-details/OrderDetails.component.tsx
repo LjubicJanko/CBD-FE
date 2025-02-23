@@ -424,10 +424,10 @@ const OrderDetailsComponent = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Informations" />
-          <Tab label="Change history" />
-          {privileges.canAddPayment && <Tab label="Payments" />}
-          <Tab label="Files" />
+          <Tab label={t('information')} />
+          <Tab label={t('change-history')} />
+          {privileges.canAddPayment && <Tab label={t('payments')} />}
+          <Tab label={t('files')} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

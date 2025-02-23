@@ -2,24 +2,25 @@ import {
   Button,
   Checkbox,
   Divider,
-  FormControl,
   FormControlLabel,
-  InputLabel,
-  MenuItem,
-  Select,
+  Rating,
   TextField,
 } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
 import { useCallback, useMemo } from 'react';
-import { orderService } from '../../api';
-import { CreateOrder, OrderPriorityEnum } from '../../types/Order';
-import * as Styled from './CreateOrder.styles';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { BasicDatePicker } from '../../components';
-import dayjs, { Dayjs } from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { orderService } from '../../api';
+import { BasicDatePicker } from '../../components';
 import { useSnackbar } from '../../hooks/useSnackbar';
+import {
+  CreateOrder,
+  orderPriorityArray,
+  OrderPriorityEnum,
+} from '../../types/Order';
+import * as Styled from './CreateOrder.styles';
 
 const emptyOrderData: CreateOrder = {
   name: '',
@@ -152,50 +153,11 @@ const CreateOrderPage = () => {
           multiline
           maxRows={4}
         />
-        <FormControl fullWidth>
-          <InputLabel id="create-order--priority-label">
-            {t('priority')}
-          </InputLabel>
-          <Select
-            labelId="create-order--priority-label"
-            className="create-order--priority-input"
-            id="priority-input"
-            name="priority"
-            value={formik.values.priority}
-            label={t('priority')}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={!!formik.errors.priority}
-          >
-            <MenuItem value={OrderPriorityEnum.LOW}>
-              {t(OrderPriorityEnum.LOW)}
-            </MenuItem>
-            <MenuItem value={OrderPriorityEnum.MEDIUM}>
-              {t(OrderPriorityEnum.MEDIUM)}
-            </MenuItem>
-            <MenuItem value={OrderPriorityEnum.HIGH}>
-              {t(OrderPriorityEnum.HIGH)}
-            </MenuItem>
-          </Select>
-        </FormControl>
-
         <BasicDatePicker
           label={t('expected')}
           onChange={handleDateChange}
           disablePast
           value={formik.values.plannedEndingDate as Dayjs}
-        />
-
-        <TextField
-          label={t('sale-price')}
-          name="salePrice"
-          className="create-order--sale-price-input"
-          type="number"
-          value={formik.values.salePrice}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={!!formik.errors.salePrice && formik.touched.salePrice}
-          helperText={formik.touched.salePrice && formik.errors.salePrice}
         />
 
         <TextField
@@ -214,6 +176,18 @@ const CreateOrderPage = () => {
           }
         />
 
+        <TextField
+          label={t('sale-price')}
+          name="salePrice"
+          className="create-order--sale-price-input"
+          type="number"
+          value={formik.values.salePrice}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={!!formik.errors.salePrice && formik.touched.salePrice}
+          helperText={formik.touched.salePrice && formik.errors.salePrice}
+        />
+
         <FormControlLabel
           label={t('is-legal-entity')}
           className="create-order--is-legal-input"
@@ -226,6 +200,20 @@ const CreateOrderPage = () => {
             />
           }
         />
+
+        <Rating
+          name="priority"
+          max={3}
+          value={orderPriorityArray.indexOf(formik.values.priority) + 1}
+          onChange={(_, newValue) => {
+            newValue &&
+              formik.setFieldValue(
+                'priority',
+                orderPriorityArray[newValue - 1]
+              );
+          }}
+        />
+
         <Divider />
         <div className="create-order__footer">
           <Button

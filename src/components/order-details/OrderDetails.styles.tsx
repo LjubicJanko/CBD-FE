@@ -143,6 +143,9 @@ export const OrderDetailsContainer = styled.div`
       }
 
       &__buttons {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
         button {
           border-radius: 20px;
           color: ${theme.PRIMARY_1};

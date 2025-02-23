@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   OrderExecutionStatusEnum,
   OrderOverview,
-  OrderPriorityEnum,
+  orderPriorityArray,
   OrderStatusEnum,
 } from '../../types/Order';
 import * as Styled from './OrderCard.styles';
@@ -11,10 +11,7 @@ import { statusColors } from '../../util/util';
 import { useMemo } from 'react';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import dayjs from 'dayjs';
-import { Tooltip } from '@mui/material';
-import LowPriorityIcon from '@mui/icons-material/LowPriority';
-import ClearAllIcon from '@mui/icons-material/ClearAll';
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import { Rating, Tooltip } from '@mui/material';
 
 export type OrderCardComponentProps = {
   order: OrderOverview;
@@ -34,16 +31,6 @@ const OrderCardComponent = ({
     () => dayjs(plannedEndingDate, 'YYYY.MM.DD').isBefore(dayjs()),
     [plannedEndingDate]
   );
-
-  const PriorityIcon = useMemo(() => {
-    const priorityIconMap = {
-      [OrderPriorityEnum.LOW]: LowPriorityIcon,
-      [OrderPriorityEnum.MEDIUM]: ClearAllIcon,
-      [OrderPriorityEnum.HIGH]: PriorityHighIcon,
-    };
-
-    return priorityIconMap[order.priority] || PriorityHighIcon;
-  }, [order.priority]);
 
   return (
     <Styled.OrderCardContainer
@@ -97,8 +84,7 @@ const OrderCardComponent = ({
         <div className="order-card__footer__info">
           <p>{t('priority')}: </p>
           <p className="order-card__footer__info--priority-value">
-            {t(order.priority)}
-            <PriorityIcon />
+            <Rating readOnly max={3} value={orderPriorityArray.indexOf(order.priority) + 1} />
           </p>
         </div>
       </Styled.Footer>

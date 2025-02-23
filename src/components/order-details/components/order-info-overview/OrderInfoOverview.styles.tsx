@@ -1,5 +1,6 @@
 import { TableCell, TableContainer } from '@mui/material';
 import styled from 'styled-components';
+import theme from '../../../../styles/theme';
 
 export const MobileContainer = styled.div`
   display: flex;
@@ -7,7 +8,8 @@ export const MobileContainer = styled.div`
   gap: 8px;
 
   .pause {
-    color: gray;
+    font-weight: 800;
+    color: ${theme.SECONDARY_3};
   }
 
   .pausing-value {
@@ -16,7 +18,19 @@ export const MobileContainer = styled.div`
 `;
 
 export const DesktopContainer = styled(TableContainer)`
+  .order-info-table {
+    th,
+    td {
+      color: ${theme.SECONDARY_1};
+    }
+    .pause {
+      font-weight: 800;
+      font-size: 18px;
+    }
+  }
   .pausing-value {
+    font-weight: 800;
+    color: ${theme.SECONDARY_1};
     text-align: end !important;
   }
 `;
