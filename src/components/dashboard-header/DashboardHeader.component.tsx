@@ -100,14 +100,20 @@ const DashboardHeader = () => {
               : 'active-orders'
           )}
         </div>
-        {activeFilters.map((activeFilter) => (
-          <div className="dashboard-header__active-filters--chip">
+        {activeFilters.map((activeFilter, index) => (
+          <div
+            className="dashboard-header__active-filters--chip"
+            key={`filter-${index}`}
+          >
             {t(activeFilter)}
           </div>
         ))}
-        {activePriorities.map((activeFilter) => (
-          <div className="dashboard-header__active-filters--chip">
-            {`${t(activeFilter)} ${'priority'}`}
+        {activePriorities.map((activePriority, index) => (
+          <div
+            className="dashboard-header__active-filters--chip"
+            key={`priority-${index}`}
+          >
+            {`${t(activePriority)} ${t('priority')}`}
           </div>
         ))}
       </div>

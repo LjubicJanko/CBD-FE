@@ -42,6 +42,7 @@ import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
+import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -391,7 +392,7 @@ const OrderDetailsComponent = () => {
             </Stepper>
           </>
         )}
-        <div className="order-details__stepper-container__butons">
+        <div className="order-details__stepper-container__buttons">
           {selectedOrder.status !== OrderStatusEnum.DONE &&
             !isArchived &&
             !isMoveButtonDisabled && (
@@ -405,6 +406,13 @@ const OrderDetailsComponent = () => {
                 onClick={toggleStatusModal}
               >
                 {t('move-to-next-state')}
+                <img
+                  src="/arrow-icon.svg"
+                  alt="icon"
+                  style={{ width: '18px' }}
+                />
+                {/* <ArrowIcon /> */}
+                {/* <ReplyOutlinedIcon className="order-details__stepper-container__buttons--icon"/> */}
               </Button>
             )}
         </div>

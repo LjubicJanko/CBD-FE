@@ -5,6 +5,7 @@ import './i18n';
 import { CircularProgress } from '@mui/material';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
+import './dayJsConfig.ts'
 
 dayjs.extend(customParseFormat);
 const container = document.getElementById('root');

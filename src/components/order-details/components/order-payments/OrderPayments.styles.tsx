@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import theme from '../../../../styles/theme';
-import { tablet } from '../../../../util/breakpoints';
+import { mobile, tablet } from '../../../../util/breakpoints';
 
 export const OrderPaymentsContainer = styled.div`
   color: ${theme.SECONDARY_1};
@@ -63,7 +63,11 @@ export const OrderPaymentsContainer = styled.div`
     &__no-content {
       display: block;
       margin: 0 auto;
-      width: 50%;
+      width: 15%;
+
+      ${mobile(css`
+        width: 30%;
+      `)}
     }
 
     &__actions {

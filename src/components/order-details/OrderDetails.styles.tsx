@@ -142,11 +142,12 @@ export const OrderDetailsContainer = styled.div`
         }
       }
 
-      &__butons {
+      &__buttons {
         button {
           border-radius: 20px;
           color: ${theme.PRIMARY_1};
           background-color: ${theme.PRIMARY_2};
+          gap: 4px;
 
           ${mobile(css`
             width: 100%;
