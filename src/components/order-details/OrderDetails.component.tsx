@@ -42,7 +42,6 @@ import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
-import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -411,8 +410,6 @@ const OrderDetailsComponent = () => {
                   alt="icon"
                   style={{ width: '18px' }}
                 />
-                {/* <ArrowIcon /> */}
-                {/* <ReplyOutlinedIcon className="order-details__stepper-container__buttons--icon"/> */}
               </Button>
             )}
         </div>
