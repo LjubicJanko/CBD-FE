@@ -7,9 +7,11 @@ export const MobileContainer = styled.div`
   flex-direction: column;
   gap: 8px;
 
+  color: ${theme.SECONDARY_1};
+
   .pause {
     font-weight: 800;
-    color: ${theme.SECONDARY_3};
+    color: ${theme.SECONDARY_1};
   }
 
   .pausing-value {

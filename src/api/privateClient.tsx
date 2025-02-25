@@ -1,6 +1,8 @@
 import axios, { AxiosHeaders } from 'axios';
 import localStorageService from '../services/localStorage.service';
 
+import authBus from '../services/bus';
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const privateClient = axios.create({
@@ -33,6 +35,7 @@ privateClient.interceptors.response.use(
     // Handle 401 Unauthorized error
     if (error.response?.status === 498) {
       console.error('Token expired or unauthorized access');
+      authBus.emit('token-expired');
 
       localStorageService.clearData();
     }
