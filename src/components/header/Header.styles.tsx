@@ -38,8 +38,8 @@ export const PublicHeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 104px;
-  padding: 32px;
+  height: 80px;
+  padding: 20px;
   background-color: ${theme.PRIMARY_1};
   box-shadow: 0px 2px 6px 2px #00000040;
 

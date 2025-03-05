@@ -8,6 +8,7 @@ export const CreateOrderPageContainer = styled.div`
   width: 100%;
   height: 100%;
   padding-top: 64px;
+  margin-bottom: 32px;
   align-items: center;
 
   ${tablet(css`
@@ -31,6 +32,7 @@ export const CreateOrderPageContainer = styled.div`
     background-color: ${theme.SECONDARY_1};
     text-align: center;
     border-radius: 8px;
+    margin-bottom: 32px;
 
     ${tablet(css`
       width: 100%;
