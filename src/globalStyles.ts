@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components';
 import { mobile } from './util/breakpoints';
+import theme from './styles/theme';
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -66,12 +67,37 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .MuiOutlinedInput-root {
-    &.Mui-focused {
-      .MuiOutlinedInput-notchedOutline {
-        border-color: ${(props) => props.theme.PRIMARY_2};
-      }
+    
+    color: ${(props) => props.theme.SECONDARY_1} !important;
+    
+    .MuiOutlinedInput-notchedOutline {
+      border-color: ${(props) => props.theme.SECONDARY_1} !important;
+    }
+
+    &:hover .MuiOutlinedInput-notchedOutline {
+      border-color: ${(props) => props.theme.PRIMARY_2} !important;
+    }
+
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: ${(props) => props.theme.PRIMARY_2} !important;
     }
   }
+
+  .MuiInputLabel-root {
+    color: ${(props) => props.theme.SECONDARY_1} !important;
+  }
+
+  /* .MuiInputLabel-root {
+    color: ${(props) => props.theme.SECONDARY_1} !important;
+  }
+
+  .MuiOutlinedInput-root {
+    &.Mui-focused {
+      .MuiOutlinedInput-notchedOutline {
+        border-color: ${(props) => props.theme.PRIMARY_2} !important;
+      }
+    }
+  } */
 
   .spinner-wrapper {
     width: 100%;

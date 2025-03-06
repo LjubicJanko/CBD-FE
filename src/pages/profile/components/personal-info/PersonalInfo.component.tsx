@@ -16,6 +16,7 @@ import AuthContext from '../../../../store/AuthProvider/Auth.context';
 import { ChangePasswordData } from '../../../../types/Auth';
 import { textInputSX } from '../../../../util/util';
 import * as Styled from './PersonalInfo.styles';
+import classNames from 'classnames';
 
 const initialValues: ChangePasswordData = {
   username: '',
@@ -151,7 +152,9 @@ const PersonalInfo = () => {
           </div>
         </div>
         <Button
-          className="change-password__form__button"
+          className={classNames('change-password__form__button', {
+            'change-password__form__button--disabled': isChangePasswordDisabled,
+          })}
           variant="contained"
           type="submit"
           disabled={isChangePasswordDisabled}

@@ -20,6 +20,7 @@ import {
   OrderPriorityEnum,
 } from '../../../../types/Order';
 import * as Styled from './OrderInfoForm.styles';
+import classNames from 'classnames';
 
 const initialOrderData: Order = {
   id: 0,
@@ -234,7 +235,10 @@ const OrderInfoForm = () => {
           type="submit"
           fullWidth
           size="medium"
-          className="order-info__save-changes"
+          className={classNames('order-info__save-changes', {
+            'order-info__save-changes--disabled':
+              !formik.isValid || !formik.dirty,
+          })}
           disabled={!formik.isValid || !formik.dirty}
         >
           {t('save-changes')}

@@ -63,6 +63,11 @@ export const OrderInfoFormContainer = styled.form`
       align-items: center;
       gap: 4px;
 
+      &--disabled {
+        background-color: ${theme.SECONDARY_3};
+        opacity: 0.7;
+      }
+
       .MuiSvgIcon-root {
         color: ${theme.PRIMARY_1};
       }
@@ -87,7 +92,7 @@ export const OrderInfoFormContainer = styled.form`
   }
 
   .MuiFormHelperText-root {
-    color: ${theme.SECONDARY_1};
+    /* color: ${theme.SECONDARY_1}; */
   }
 
   .MuiOutlinedInput-notchedOutline {

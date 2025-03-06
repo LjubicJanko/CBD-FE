@@ -10,7 +10,7 @@ export const AddUserContainer = styled.div`
 
   gap: 16px;
   padding: 32px;
-  background-color: ${theme.SECONDARY_1};
+  background-color: ${theme.SECONDARY_2};
 
   ${tablet(css`
     padding: 16px;
@@ -29,10 +29,25 @@ export const AddUserContainer = styled.div`
     `)}
 
     gap: 16px;
+
+    h3 {
+      color: ${theme.SECONDARY_1};
+    }
+
     .add-user {
       margin-top: 16px;
       width: fit-content;
       padding: 16px 32px;
+
+      background-color: ${theme.PRIMARY_2};
+      /* background-color: yellow; */
+      color: ${theme.PRIMARY_1};
+
+      &--disabled {
+        background-color: ${theme.SECONDARY_3};
+        color: ${theme.PRIMARY_1};
+        opacity: 0.7;
+      }
     }
   }
   &.signup-container {

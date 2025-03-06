@@ -90,6 +90,7 @@ const StatusChangeModal = ({
   return (
     <Styled.StatusChangeModalContainer
       title={t('move-to-next-state')}
+      className='status-change-modal'
       isOpen={isOpen}
       onClose={() => {
         formik.resetForm();

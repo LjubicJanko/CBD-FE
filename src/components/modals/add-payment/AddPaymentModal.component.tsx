@@ -13,8 +13,7 @@ import { BasicDatePicker } from '../..';
 import ConfirmModal, {
   ConfirmModalProps,
 } from '../confirm-modal/ConfirmModal.component';
-// import customParseFormat from 'dayjs/plugin/customParseFormat';
-// dayjs.extend(customParseFormat);
+import classNames from 'classnames';
 
 type AddPaymentModalProps = {
   isOpen: boolean;
@@ -169,6 +168,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   return (
     <>
       <Styled.AddPaymentModalContainer
+        className="add-payment"
         title={t(isUpdating ? 'edit-payment' : 'add-payment')}
         isOpen={isOpen}
         onClose={() => {
@@ -249,6 +249,9 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
               fullWidth
               variant="contained"
               type="submit"
+              className={classNames('actions__submit', {
+                'actions__submit--disabled': isSubmitDisabled,
+              })}
               disabled={isSubmitDisabled}
             >
               {t(isUpdating ? 'update' : 'add')}

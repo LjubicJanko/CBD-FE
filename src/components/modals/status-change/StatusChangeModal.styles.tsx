@@ -1,8 +1,18 @@
 import styled from 'styled-components';
 import CbdModal from '../../cbd-modal/CbdModal.component';
+import theme from '../../../styles/theme';
 
 export const StatusChangeModalContainer = styled(CbdModal)`
-  /* min-width: 500px; */
+  background-color: ${theme.SECONDARY_2};
+
+  &.status-change-modal {
+    h2 {
+      font-weight: 400;
+      font-size: 20px;
+      color: ${theme.SECONDARY_1};
+    }
+  }
+
   form {
     width: 100%;
     height: 100%;
@@ -22,6 +32,11 @@ export const StatusChangeModalContainer = styled(CbdModal)`
       flex-direction: column;
       gap: 16px;
       margin-bottom: 16px;
+    }
+
+    .submit-button {
+      background-color: ${theme.PRIMARY_2};
+      color: ${theme.PRIMARY_1};
     }
 
     p {

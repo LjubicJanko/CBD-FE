@@ -43,13 +43,14 @@ const ConfirmModal = ({
         />
       )}
       <div className="actions">
-        <Button className="cancel" onClick={onCancel}>
+        <Button className="actions__cancel" onClick={onCancel}>
           {t('back')}
         </Button>
         <Button
-          className="confirm"
+          className="actions__confirm"
           disabled={note === '' && !hideNote}
           onClick={() => onConfirm(note)}
+          variant='contained'
         >
           {t('confirm')}
         </Button>

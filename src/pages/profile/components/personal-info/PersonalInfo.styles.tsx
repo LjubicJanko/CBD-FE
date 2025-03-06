@@ -4,9 +4,9 @@ import { tablet } from '../../../../util/breakpoints';
 
 export const PersonalInfoContainer = styled.div`
   width: fit-content;
-  background-color: ${theme.SECONDARY_1};
   padding: 32px;
   border-radius: 8px;
+  background-color: ${theme.SECONDARY_2};
 
   ${tablet(css`
     width: 100%;
@@ -14,11 +14,13 @@ export const PersonalInfoContainer = styled.div`
 
   h3 {
     margin-bottom: 18px;
+    color: ${theme.SECONDARY_1};
   }
 
   .change-password {
     &__form {
       &__input {
+        color: ${theme.SECONDARY_1};
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -30,9 +32,15 @@ export const PersonalInfoContainer = styled.div`
 
       &__button {
         margin-top: 16px;
-        /* background-color: ${theme.SECONDARY_3}; */
         width: fit-content;
         padding: 16px 32px;
+        background-color: ${theme.PRIMARY_2};
+        color: ${theme.PRIMARY_1};
+        &--disabled {
+          background-color: ${theme.SECONDARY_3};
+          color: ${theme.PRIMARY_1};
+          opacity: 0.7;
+        }
       }
     }
   }

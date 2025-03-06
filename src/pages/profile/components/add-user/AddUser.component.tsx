@@ -22,6 +22,7 @@ import { textInputSX } from '../../../../util/util';
 import UsersTable from '../UsersTable.component';
 import * as Styled from './AddUser.styles';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
+import classNames from 'classnames';
 
 const signUpInitialValues = {
   username: '',
@@ -195,7 +196,9 @@ const AddUser = () => {
           </Select>
         </FormControl>
         <Button
-          className="add-user"
+          className={classNames('add-user', {
+            'add-user--disabled': isSubmitDisabled,
+          })}
           variant="contained"
           type="submit"
           fullWidth

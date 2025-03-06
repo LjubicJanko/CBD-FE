@@ -29,7 +29,7 @@ export const CreateOrderPageContainer = styled.div`
     padding: 48px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 50%;
-    background-color: ${theme.SECONDARY_1};
+    background-color: ${theme.SECONDARY_2};
     text-align: center;
     border-radius: 8px;
     margin-bottom: 32px;
@@ -41,7 +41,6 @@ export const CreateOrderPageContainer = styled.div`
 
     p {
       font-size: 12px;
-      color: red;
       font-weight: 600;
     }
 
