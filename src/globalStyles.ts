@@ -1,6 +1,5 @@
 import { createGlobalStyle, css } from 'styled-components';
 import { mobile } from './util/breakpoints';
-import theme from './styles/theme';
 
 export const GlobalStyle = createGlobalStyle`
   * {
