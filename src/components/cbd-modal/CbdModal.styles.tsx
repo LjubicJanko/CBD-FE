@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 // Styled component for modal overlay
 export const ModalOverlay = styled.div`
@@ -34,6 +35,7 @@ export const CloseButton = styled.button`
   top: 10px;
   right: 10px;
   cursor: pointer;
+  color: ${theme.SECONDARY_1};
 `;
 
 // Styled component for modal title

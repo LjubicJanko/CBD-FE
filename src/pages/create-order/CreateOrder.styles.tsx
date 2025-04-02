@@ -18,7 +18,7 @@ export const CreateOrderPageContainer = styled.div`
 
   .title {
     font-size: 32px;
-    color: ${theme.PRIMARY_1};
+    /* color: ${theme.PRIMARY_1}; */
     font-weight: 400;
   }
 
@@ -29,7 +29,9 @@ export const CreateOrderPageContainer = styled.div`
     padding: 48px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 50%;
-    background-color: ${theme.SECONDARY_2};
+    /* background-color:  */
+    border: 2px solid ${theme.SECONDARY_2};
+    color: ${theme.SECONDARY_1};
     text-align: center;
     border-radius: 8px;
     margin-bottom: 32px;
@@ -63,13 +65,13 @@ export const CreateOrderPageContainer = styled.div`
       margin-top: 32px;
 
       &--submit-button {
-        /* background-color: ${theme.PRIMARY_2};
-        color: ${theme.PRIMARY_1}; */
+        background-color: ${theme.PRIMARY_2};
+        color: ${theme.PRIMARY_1};
       }
 
       &--cancel-button {
-        color: ${theme.PRIMARY_1};
-        border-color: ${theme.PRIMARY_1};
+        color: ${theme.SECONDARY_2};
+        border-color: ${theme.SECONDARY_2};
       }
     }
   }
