@@ -15,6 +15,9 @@ export const HeaderContainer = styled.header`
   padding: 20px;
   background-color: ${theme.PRIMARY_1};
   box-shadow: 0px 2px 6px 2px #00000040;
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
 
   ${mobile(css`
     align-items: center;
