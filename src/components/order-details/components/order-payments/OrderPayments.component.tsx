@@ -6,7 +6,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Payment } from '../../../../types/Payment';
 import AddPaymentModal from '../../../modals/add-payment/AddPaymentModal.component';
@@ -18,9 +18,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmModal from '../../../modals/confirm-modal/ConfirmModal.component';
 import orders from '../../../../api/services/orders';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
+import { orderService } from '../../../../api';
 
 export type OrderPaymentsProps = {
-  payments: Payment[];
   orderId: number;
   isAddingDisabled?: boolean;
 };
@@ -36,7 +36,6 @@ const initialPaymentModalConfig: PaymentModalConfig = {
 };
 
 const OrderPayments = ({
-  payments,
   orderId,
   isAddingDisabled = false,
 }: OrderPaymentsProps) => {
@@ -44,8 +43,23 @@ const OrderPayments = ({
 
   const privileges = usePrivileges();
 
+  const [payments, setPayments] = useState<Payment[]>([]);
+
   const { updateOrderInOverviewList, setSelectedOrder } =
     useContext(OrdersContext);
+
+  const fetchPayments = useCallback(async () => {
+    try {
+      const data = await orderService.getPayments(orderId);
+      setPayments(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   const [paymentModalConfig, setPaymentModalConfig] =
     useState<PaymentModalConfig>(initialPaymentModalConfig);
@@ -62,10 +76,10 @@ const OrderPayments = ({
     []
   );
 
-  const handleCloseModal = useCallback(
-    () => setPaymentModalConfig(initialPaymentModalConfig),
-    []
-  );
+  const handleCloseModal = useCallback(() => {
+    setPaymentModalConfig(initialPaymentModalConfig);
+    fetchPayments();
+  }, []);
 
   const handleDeletePayment = useCallback(async () => {
     try {
@@ -77,6 +91,7 @@ const OrderPayments = ({
       );
       updateOrderInOverviewList(order);
       setSelectedOrder(order);
+      fetchPayments();
     } catch (error) {
       console.error(error);
     }
@@ -91,7 +106,7 @@ const OrderPayments = ({
   return (
     <Styled.OrderPaymentsContainer className="order-payments">
       <div className="order-payments__data">
-        {payments.length > 0 && (
+        {payments?.length > 0 && (
           <Table className="order-payments__table" aria-label="payments table">
             <TableHead className="order-payments__table-header">
               <TableRow>
@@ -170,7 +185,7 @@ const OrderPayments = ({
             </TableBody>
           </Table>
         )}
-        {payments.length === 0 && (
+        {payments?.length === 0 && (
           <img
             className="order-payments__no-content"
             src="/no_content.png"

@@ -443,7 +443,6 @@ const OrderDetailsComponent = () => {
       {privileges.canAddPayment && (
         <CustomTabPanel value={value} index={2}>
           <OrderPayments
-            payments={selectedOrder.payments}
             orderId={selectedOrder.id}
             isAddingDisabled={
               selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE

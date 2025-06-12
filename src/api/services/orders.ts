@@ -200,6 +200,9 @@ const deletePayment = async (id: number, paymentId: number) =>
     .put(`/orders/deletePayment/${id}?paymentId=${paymentId}`)
     .then((res) => res.data);
 
+const getPayments = async (id: number) =>
+  privateClient.get(`/orders/payments/${id}`).then((res) => res.data);
+
 export default {
   getOrder,
   trackOrder,
@@ -216,4 +219,5 @@ export default {
   editPayment,
   deletePayment,
   fetchPaginated,
+  getPayments
 };
