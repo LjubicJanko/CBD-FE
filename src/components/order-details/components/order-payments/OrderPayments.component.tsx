@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -45,15 +46,20 @@ const OrderPayments = ({
 
   const [payments, setPayments] = useState<Payment[]>([]);
 
+  const [arePaymentsLoading, setArePaymentsLoading] = useState(false);
+
   const { updateOrderInOverviewList, setSelectedOrder } =
     useContext(OrdersContext);
 
   const fetchPayments = useCallback(async () => {
     try {
+      setArePaymentsLoading(true);
       const data = await orderService.getPayments(orderId);
       setPayments(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setArePaymentsLoading(false);
     }
   }, []);
 
@@ -102,6 +108,14 @@ const OrderPayments = ({
     setSelectedOrder,
     updateOrderInOverviewList,
   ]);
+
+  if (arePaymentsLoading) {
+    return (
+      <div className="loader-wrapper">
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <Styled.OrderPaymentsContainer className="order-payments">

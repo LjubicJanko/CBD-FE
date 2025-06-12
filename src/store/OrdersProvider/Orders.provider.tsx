@@ -7,7 +7,12 @@ import {
 } from 'react';
 import { orderService } from '../../api';
 import useQueryParams from '../../hooks/useQueryParams';
-import { Order, OrderOverview, orderPriorityArray, orderStatusArray } from '../../types/Order';
+import {
+  Order,
+  OrderOverview,
+  orderPriorityArray,
+  orderStatusArray,
+} from '../../types/Order';
 import OrdersContext from './Orders.context';
 import { Q_PARAM } from '../../util/constants';
 import {
@@ -101,11 +106,14 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const fetchSelectedOrder = useCallback(
     async (orderId: number) => {
       try {
+        setIsLoading(true);
         const response = await orderService.getOrder(orderId);
         setSelectedOrder(response);
         updateOrderInOverviewList(response);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     },
     [updateOrderInOverviewList]

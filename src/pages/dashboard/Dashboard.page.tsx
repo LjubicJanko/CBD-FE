@@ -16,16 +16,14 @@ const DashboardPage = () => {
           <CircularProgress />
         </div>
       )}
-      {!isLoading && (
-        <div className="dashboard-page__body">
-          <OrdersListComponent />
-          {selectedOrder && (
-            <div className="details">
-              <OrderDetailsComponent key={selectedOrder.id} />
-            </div>
-          )}
-        </div>
-      )}
+      <div className="dashboard-page__body">
+        <OrdersListComponent />
+        {selectedOrder && (
+          <div className="details">
+            <OrderDetailsComponent key={selectedOrder.id} />
+          </div>
+        )}
+      </div>
     </Styled.DashboardContainer>
   );
 };
