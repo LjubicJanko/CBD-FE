@@ -4,7 +4,7 @@ import { AuthData, LoginData } from '../../types/Auth';
 interface AuthContext {
   token: string;
   authData: Omit<AuthData, 'token'> | null;
-  isLoading: boolean;
+  isLoading?: boolean;
   login: (
     data: LoginData,
     navigate: (path: string) => void

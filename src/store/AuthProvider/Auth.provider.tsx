@@ -19,8 +19,8 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       navigate: (path: string) => void
     ): Promise<boolean> => {
       let status = false;
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         const response = await authService.login(data);
         const { token, id, roles, privileges, name, username } = response;
         setToken(token);
