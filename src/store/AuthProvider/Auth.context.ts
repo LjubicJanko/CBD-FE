@@ -4,6 +4,7 @@ import { AuthData, LoginData } from '../../types/Auth';
 interface AuthContext {
   token: string;
   authData: Omit<AuthData, 'token'> | null;
+  isLoading: boolean;
   login: (
     data: LoginData,
     navigate: (path: string) => void
@@ -14,6 +15,7 @@ interface AuthContext {
 export default createContext<AuthContext>({
   token: '',
   authData: null,
+  isLoading: false,
   login: async () => false,
   logout: () => {},
 });

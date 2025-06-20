@@ -11,6 +11,7 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   const [authData, setAuthData] = useState<Omit<AuthData, 'token'> | null>(
     localStorageService.authData
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const login = useCallback(
     async (
@@ -19,6 +20,7 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
     ): Promise<boolean> => {
       let status = false;
       try {
+        setIsLoading(true);
         const response = await authService.login(data);
         const { token, id, roles, privileges, name, username } = response;
         setToken(token);
@@ -29,6 +31,8 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       } catch (error) {
         console.error(error);
         status = false;
+      } finally {
+        setIsLoading(false);
       }
 
       return status;
@@ -55,7 +59,7 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   }, [logout]);
 
   return (
-    <AuthContext.Provider value={{ token, authData, login, logout }}>
+    <AuthContext.Provider value={{ token, authData, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

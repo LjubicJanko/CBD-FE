@@ -23,22 +23,13 @@ const initialValues: LoginData = {
 };
 
 const LoginComponent = () => {
-  const { login } = useContext(AuthContext);
+  const { login, isLoading } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values: LoginData) => {
-    setIsLoading(true);
-    try {
-      login(values, navigate);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+    login(values, navigate);
   };
-  console.log({ isLoading });
 
   const formik = useFormik<LoginData>({
     initialValues,
