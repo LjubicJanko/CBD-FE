@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   IconButton,
   InputAdornment,
   OutlinedInput,
@@ -25,10 +26,19 @@ const LoginComponent = () => {
   const { login } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values: LoginData) => {
-    login(values, navigate);
+    setIsLoading(true);
+    try {
+      login(values, navigate);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+  console.log({ isLoading });
 
   const formik = useFormik<LoginData>({
     initialValues,
@@ -52,6 +62,11 @@ const LoginComponent = () => {
 
   return (
     <Styled.LoginContainer className="login-container">
+      {isLoading && (
+        <div className="login-container__loader-wrapper">
+          <CircularProgress />
+        </div>
+      )}
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
         <div className="fields">
           <TextField
