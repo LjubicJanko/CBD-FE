@@ -10,7 +10,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'rs', // Default language if none is detected
-    debug: true,
+    debug: false,
     backend: {
       loadPath: 'https://ljubicjanko.github.io/CBD-Locales/locales/{{lng}}/translation.json',
     },

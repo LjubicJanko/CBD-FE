@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -6,17 +7,33 @@ import {
   TableRow,
 } from '@mui/material';
 import dayjs from 'dayjs';
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { OrderStatusEnum, OrderStatusHistory } from '../../../types/Order';
+import OrdersContext from '../../../store/OrdersProvider/Orders.context';
+import { OrderStatusEnum } from '../../../types/Order';
 import * as Styled from './ChangeHistory.styles';
 import { ShippedInfoTooltip } from './shipped-tooltip/ShippedTooltip.component';
 
 export type ChangeHistoryProps = {
-  statusHistory: OrderStatusHistory[];
+  orderId: number;
 };
 
-const ChangeHistoryComponent = ({ statusHistory }: ChangeHistoryProps) => {
+const ChangeHistoryComponent = ({ orderId }: ChangeHistoryProps) => {
   const { t } = useTranslation();
+  const { statusHistory, isHistoryLoading, fetchStatusHistory } =
+    useContext(OrdersContext);
+
+  useEffect(() => {
+    fetchStatusHistory(orderId);
+  }, [fetchStatusHistory, orderId]);
+
+  if (isHistoryLoading) {
+    return (
+      <div className="loader-wrapper">
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <Styled.ChangeHistoryContainer className="change-history">

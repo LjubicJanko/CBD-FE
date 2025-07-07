@@ -203,6 +203,9 @@ const deletePayment = async (id: number, paymentId: number) =>
 const getPayments = async (id: number) =>
   privateClient.get(`/orders/payments/${id}`).then((res) => res.data);
 
+const getHistory = async (id: number) => 
+  privateClient.get(`/orders/history/${id}`).then((res) => res.data);
+
 export default {
   getOrder,
   trackOrder,
@@ -219,5 +222,6 @@ export default {
   editPayment,
   deletePayment,
   fetchPaginated,
-  getPayments
+  getPayments,
+  getHistory
 };

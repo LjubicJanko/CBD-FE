@@ -1,3 +1,6 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import {
   Button,
   CircularProgress,
@@ -9,17 +12,13 @@ import {
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import orders from '../../../../api/services/orders';
+import { usePrivileges } from '../../../../hooks/usePrivileges';
+import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
 import { Payment } from '../../../../types/Payment';
 import AddPaymentModal from '../../../modals/add-payment/AddPaymentModal.component';
-import * as Styled from './OrderPayments.styles';
-import { usePrivileges } from '../../../../hooks/usePrivileges';
-import EditIcon from '@mui/icons-material/Edit';
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmModal from '../../../modals/confirm-modal/ConfirmModal.component';
-import orders from '../../../../api/services/orders';
-import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
-import { orderService } from '../../../../api';
+import * as Styled from './OrderPayments.styles';
 
 export type OrderPaymentsProps = {
   orderId: number;
@@ -44,28 +43,12 @@ const OrderPayments = ({
 
   const privileges = usePrivileges();
 
-  const [payments, setPayments] = useState<Payment[]>([]);
-
-  const [arePaymentsLoading, setArePaymentsLoading] = useState(false);
-
-  const { updateOrderInOverviewList, setSelectedOrder } =
-    useContext(OrdersContext);
-
-  const fetchPayments = useCallback(async () => {
-    try {
-      setArePaymentsLoading(true);
-      const data = await orderService.getPayments(orderId);
-      setPayments(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setArePaymentsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchPayments();
-  }, []);
+  const {
+    payments,
+    arePaymentsLoading,
+    fetchPayments,
+    updatePaymentInOverview,
+  } = useContext(OrdersContext);
 
   const [paymentModalConfig, setPaymentModalConfig] =
     useState<PaymentModalConfig>(initialPaymentModalConfig);
@@ -84,30 +67,26 @@ const OrderPayments = ({
 
   const handleCloseModal = useCallback(() => {
     setPaymentModalConfig(initialPaymentModalConfig);
-    fetchPayments();
   }, []);
 
   const handleDeletePayment = useCallback(async () => {
     try {
       if (!confirmModalConfig?.paymentToUpdate) return;
 
-      const order = await orders.deletePayment(
+      const updatePaymentsResponse = await orders.deletePayment(
         orderId,
         confirmModalConfig?.paymentToUpdate?.id
       );
-      updateOrderInOverviewList(order);
-      setSelectedOrder(order);
-      fetchPayments();
+      updatePaymentInOverview(updatePaymentsResponse);
     } catch (error) {
       console.error(error);
     }
     setConfirmModalConfig(initialPaymentModalConfig);
-  }, [
-    confirmModalConfig?.paymentToUpdate,
-    orderId,
-    setSelectedOrder,
-    updateOrderInOverviewList,
-  ]);
+  }, [confirmModalConfig?.paymentToUpdate, orderId, updatePaymentInOverview]);
+
+  useEffect(() => {
+    fetchPayments(orderId);
+  }, [fetchPayments, orderId]);
 
   if (arePaymentsLoading) {
     return (

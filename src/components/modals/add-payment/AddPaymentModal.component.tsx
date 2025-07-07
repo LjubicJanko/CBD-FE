@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import orders from '../../../api/services/orders';
 import OrdersContext from '../../../store/OrdersProvider/Orders.context';
-import { Payment } from '../../../types/Payment';
+import { UpdatePaymentsResponse, Payment } from '../../../types/Payment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import * as Styled from './AddPaymentModal.styles';
 import { BasicDatePicker } from '../..';
@@ -48,8 +48,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const { updateOrderInOverviewList, setSelectedOrder } =
-    useContext(OrdersContext);
+  const { updatePaymentInOverview } = useContext(OrdersContext);
 
   const isUpdating = Boolean(paymentToUpdate);
   const [confirmModalProps, setConfirmModalProps] =
@@ -91,27 +90,23 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         note: values.note,
       };
       try {
-        let order;
+        let updatePaymentsResponse: UpdatePaymentsResponse;
         if (paymentToUpdate) {
-          order = await orders.editPayment(newPayment, orderId);
+          updatePaymentsResponse = await orders.editPayment(
+            newPayment,
+            orderId
+          );
         } else {
-          order = await orders.addPayment(newPayment, orderId);
+          updatePaymentsResponse = await orders.addPayment(newPayment, orderId);
         }
-        updateOrderInOverviewList(order);
-        setSelectedOrder(order);
+        updatePaymentInOverview(updatePaymentsResponse);
         resetForm();
       } catch (err) {
         console.error(err);
       }
       onClose();
     },
-    [
-      paymentToUpdate,
-      onClose,
-      updateOrderInOverviewList,
-      setSelectedOrder,
-      orderId,
-    ]
+    [paymentToUpdate, onClose, updatePaymentInOverview, orderId]
   );
 
   const formik = useFormik({
@@ -134,21 +129,17 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
     try {
       if (!paymentToUpdate) return;
 
-      const order = await orders.deletePayment(orderId, paymentToUpdate?.id);
-      updateOrderInOverviewList(order);
-      setSelectedOrder(order);
+      const updatePaymentsResponse = await orders.deletePayment(
+        orderId,
+        paymentToUpdate?.id
+      );
+      updatePaymentInOverview(updatePaymentsResponse);
       onClose();
     } catch (error) {
       console.error(error);
     }
     setConfirmModalProps(EMPTY_CONFIRM_MODAL);
-  }, [
-    onClose,
-    orderId,
-    paymentToUpdate,
-    setSelectedOrder,
-    updateOrderInOverviewList,
-  ]);
+  }, [onClose, orderId, paymentToUpdate, updatePaymentInOverview]);
 
   const openConfirmModal = useCallback(() => {
     setConfirmModalProps({

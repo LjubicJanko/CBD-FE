@@ -12,6 +12,7 @@ import {
   OrderOverview,
   orderPriorityArray,
   orderStatusArray,
+  OrderStatusHistory,
 } from '../../types/Order';
 import OrdersContext from './Orders.context';
 import { Q_PARAM } from '../../util/constants';
@@ -19,6 +20,7 @@ import {
   SortCriteriaType,
   SortType,
 } from '../../components/modals/filters/FiltersModal.component';
+import { UpdatePaymentsResponse, Payment } from '../../types/Payment';
 
 const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
@@ -26,8 +28,16 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
 
   const [orders, setOrders] = useState<OrderOverview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<number>(-1);
+
+  const [statusHistory, setStatusHistory] = useState<OrderStatusHistory[]>([]);
+  const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [arePaymentsLoading, setArePaymentsLoading] = useState(false);
+
   const [page, setPage] = useState(0);
   const lastPageValueRef = useRef<number>(page);
   const [total, setTotal] = useState(0);
@@ -57,6 +67,36 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         )
       ),
     [mapOrderToOverview]
+  );
+
+  const updatePaymentInOverview = useCallback(
+    (paymentResponse: UpdatePaymentsResponse) => {
+      const orderToUpdate = orders.find((x) => x.id === selectedOrder?.id);
+      if (!orderToUpdate) return;
+
+      setPayments(paymentResponse.payments);
+      setOrders((old) =>
+        old.map((order) =>
+          order.id === orderToUpdate.id
+            ? {
+                ...orderToUpdate,
+                amountLeftToPay: paymentResponse.amountLeftToPay,
+                payments: paymentResponse.payments,
+              }
+            : order
+        )
+      );
+      setSelectedOrder((old) =>
+        old
+          ? {
+              ...old,
+              amountLeftToPay: paymentResponse.amountLeftToPay,
+              amountPaid: paymentResponse.amountPaid,
+            }
+          : null
+      );
+    },
+    [orders, selectedOrder?.id]
   );
 
   const removeOrderInOverviewList = useCallback((orderToRemove: Order) => {
@@ -124,13 +164,49 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   }, [fetchOrders, page, perPage]);
 
   useEffect(() => {
+    setStatusHistory([]);
+    setPayments([]);
     if (selectedOrderId > 0) {
       fetchSelectedOrder(selectedOrderId);
     } else {
       setSelectedOrder(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOrderId]);
+  }, [fetchSelectedOrder, selectedOrderId]);
+
+  const fetchStatusHistory = useCallback(async () => {
+    if (statusHistory.length > 0) return;
+
+    try {
+      setIsHistoryLoading(true);
+      const data = await orderService.getHistory(selectedOrderId);
+      setStatusHistory(data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsHistoryLoading(false);
+    }
+  }, [selectedOrderId, statusHistory.length]);
+
+  const updateStatusHistory = useCallback(
+    (newStatusHistory: OrderStatusHistory[]) => {
+      setStatusHistory(newStatusHistory);
+    },
+    []
+  );
+
+  const fetchPayments = useCallback(async () => {
+    if (payments.length > 0) return;
+
+    try {
+      setArePaymentsLoading(true);
+      const data = await orderService.getPayments(selectedOrderId);
+      setPayments(data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setArePaymentsLoading(false);
+    }
+  }, [payments.length, selectedOrderId]);
 
   return (
     <OrdersContext.Provider
@@ -141,12 +217,20 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         totalElements,
         isLoading,
         selectedOrder,
+        statusHistory,
+        isHistoryLoading,
+        payments,
+        arePaymentsLoading,
         updateOrderInOverviewList,
         removeOrderInOverviewList,
         fetchOrders,
         setSelectedOrder,
         setPage,
         setSelectedOrderId,
+        fetchStatusHistory,
+        fetchPayments,
+        updateStatusHistory,
+        updatePaymentInOverview,
       }}
     >
       {children}

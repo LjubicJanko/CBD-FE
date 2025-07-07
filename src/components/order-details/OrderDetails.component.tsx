@@ -438,7 +438,7 @@ const OrderDetailsComponent = () => {
         )}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <ChangeHistoryComponent statusHistory={selectedOrder.statusHistory} />
+        <ChangeHistoryComponent orderId={selectedOrder.id} />
       </CustomTabPanel>
       {privileges.canAddPayment && (
         <CustomTabPanel value={value} index={2}>

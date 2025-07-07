@@ -14,9 +14,9 @@ export const AddPaymentModalContainer = styled(CbdModal)`
     display: flex;
     justify-content: space-between;
     gap: 8px;
+    margin-top: 12px;
 
     &__submit {
-      margin-top: 12px;
       background-color: ${theme.PRIMARY_2};
       color: ${theme.PRIMARY_1};
 

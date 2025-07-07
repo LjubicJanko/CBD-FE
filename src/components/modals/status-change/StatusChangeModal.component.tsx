@@ -38,7 +38,7 @@ const StatusChangeModal = ({
   onClose,
 }: StatusChangeModalProps) => {
   const { t } = useTranslation();
-  const { setSelectedOrder, updateOrderInOverviewList } =
+  const { setSelectedOrder, updateOrderInOverviewList, updateStatusHistory } =
     useContext(OrdersContext);
   const initialValues: StatusData = {
     closingComment: '',
@@ -59,13 +59,20 @@ const StatusChangeModal = ({
         );
         setSelectedOrder(response);
         updateOrderInOverviewList(response);
+        updateStatusHistory(response?.statusHistory);
       } catch (error) {
         console.error(error);
       } finally {
         onClose();
       }
     },
-    [onClose, orderId, setSelectedOrder, updateOrderInOverviewList]
+    [
+      onClose,
+      orderId,
+      setSelectedOrder,
+      updateOrderInOverviewList,
+      updateStatusHistory,
+    ]
   );
 
   const validationSchema = Yup.object({
@@ -90,7 +97,7 @@ const StatusChangeModal = ({
   return (
     <Styled.StatusChangeModalContainer
       title={t('move-to-next-state')}
-      className='status-change-modal'
+      className="status-change-modal"
       isOpen={isOpen}
       onClose={() => {
         formik.resetForm();

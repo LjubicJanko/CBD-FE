@@ -6,3 +6,9 @@ export type Payment = {
   paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE' | 'ON_SHIP';
   note?: string;
 };
+
+export type UpdatePaymentsResponse = {
+  amountPaid: number;
+  amountLeftToPay: number;
+  payments: Payment[];
+};
