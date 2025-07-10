@@ -80,6 +80,8 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
           order.id === orderToUpdate.id
             ? {
                 ...orderToUpdate,
+                postalCode: order?.postalCode,
+                postalService: order?.postalService,
                 amountLeftToPay: paymentResponse.amountLeftToPay,
                 payments: paymentResponse.payments,
               }
@@ -148,6 +150,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       try {
         setIsLoading(true);
         const response = await orderService.getOrder(orderId);
+        console.log(response);
         setSelectedOrder(response);
         updateOrderInOverviewList(response);
       } catch (error) {
