@@ -12,6 +12,11 @@ export const OrderDetailsContainer = styled.div`
   .order-details {
     display: flex;
 
+
+    &__close-icon {
+      color: ${theme.SECONDARY_1};
+    }
+
     &__header {
       display: flex;
       justify-content: space-between;

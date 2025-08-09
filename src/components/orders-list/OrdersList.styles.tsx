@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { mobile } from '../../util/breakpoints';
+import { mobile, tablet } from '../../util/breakpoints';
 
 export const OrdersListContainer = styled.div`
   grid-area: orders;
@@ -7,6 +7,11 @@ export const OrdersListContainer = styled.div`
   flex-direction: column;
   gap: 32px;
   padding-bottom: 32px;
+
+  ${tablet(css`
+    flex-direction: row;
+    flex-wrap: wrap;
+  `)}
 
   .pagination-total {
     font-size: 18px;

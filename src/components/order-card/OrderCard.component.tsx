@@ -82,7 +82,7 @@ const OrderCardComponent = ({
           </div>
         )}
         <div className="order-card__footer__info">
-          <p>{t('priority')}: </p>
+          <p>{t('priority')} </p>
           <p className="order-card__footer__info--priority-value">
             <Rating readOnly max={3} value={orderPriorityArray.indexOf(order.priority) + 1} />
           </p>

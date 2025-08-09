@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { laptop, mobile, tablet } from '../../util/breakpoints';
+import { mobile, tablet } from '../../util/breakpoints';
 import theme from '../../styles/theme';
 
 export const DashboardContainer = styled.div`
@@ -60,20 +60,15 @@ export const DashboardContainer = styled.div`
     }
 
     .details {
+      ${tablet(css`
+        position: absolute;
+        left: 0;
+        top: 80px;
+      `)}
       background-color: ${theme.SECONDARY_2};
       border-radius: 20px;
       border: 2px solid ${theme.PRIMARY_2};
       width: 100%;
-      /* flex-grow: 1; */
-      /* max-width: 60%; */
-
-      ${laptop(css`
-        /* max-width: 80%; */
-      `)}
-
-      ${tablet(css`
-        /* max-width: 100%; */
-      `)}
 
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       padding: 16px;

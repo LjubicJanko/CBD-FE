@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Button,
@@ -80,6 +81,7 @@ const OrderDetailsComponent = () => {
   const {
     selectedOrder,
     setSelectedOrder,
+    setSelectedOrderId,
     updateOrderInOverviewList,
     removeOrderInOverviewList,
   } = useContext(OrdersContext);
@@ -319,8 +321,14 @@ const OrderDetailsComponent = () => {
       className="order-details"
       key={selectedOrder?.id}
     >
+      <IconButton
+        size="large"
+        onClick={() => setSelectedOrderId(0)}
+        className="order-details__close-icon"
+      >
+        <CloseIcon />
+      </IconButton>
       {(isCanceled || isPaused) && nonActiveBanner}
-
       <div className="order-details__header">
         <div className="order-details__header__tracking-id">
           <p>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</p>
