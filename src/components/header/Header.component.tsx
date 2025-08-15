@@ -1,22 +1,21 @@
-import { Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
-import { useCallback, useContext, useMemo, useState } from 'react';
-import AuthContext from '../../store/AuthProvider/Auth.context';
-import * as Styled from './Header.styles';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useChangeLanguage } from '../../hooks/useChangeLanguage';
-import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import React from 'react';
-import useResponsiveWidth from '../../hooks/useResponsiveWidth';
-import { xxsMax } from '../../util/breakpoints';
-import theme from '../../styles/theme';
-import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import { Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
+import classNames from 'classnames';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useChangeLanguage } from '../../hooks/useChangeLanguage';
 import useQueryParams from '../../hooks/useQueryParams';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+import AuthContext from '../../store/AuthProvider/Auth.context';
+import theme from '../../styles/theme';
+import { xxsMax } from '../../util/breakpoints';
+import * as Styled from './Header.styles';
 
 const HeaderComponent = () => {
-  const { logout, token, authData } = useContext(AuthContext);
+  const { logout, token, authData, companiesInfo } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,6 +26,8 @@ const HeaderComponent = () => {
   const {
     params: { id },
   } = useQueryParams<{ id: string | undefined }>();
+  const { id: companyId } = useParams<{ id: string }>();
+  console.log(companyId);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -124,9 +125,11 @@ const HeaderComponent = () => {
     );
   }
 
+  // console.log(authData);
+
   return (
     <Styled.HeaderContainer className="header">
-      <Select
+      {/* <Select
         id="language"
         value={selectedLanguage}
         className="header__language"
@@ -152,6 +155,20 @@ const HeaderComponent = () => {
             alt="serbian"
           />
         </MenuItem>
+      </Select> */}
+      <Select
+        id="companies"
+        className="header__companies-menu"
+        value={companyId}
+        onChange={(e) => {
+          console.log(e);
+        }}
+      >
+        {companiesInfo?.map((company) => (
+          <MenuItem className="header__companies-menu__item" value={+company.id}>
+            {company.name}
+          </MenuItem>
+        ))}
       </Select>
       {logo}
       <Button

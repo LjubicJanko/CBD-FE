@@ -1,10 +1,4 @@
-import {
-  DashboardPage,
-  HomePage,
-  IdTrackingPage,
-  LoginPage,
-  ProfilePage,
-} from '../../pages';
+import { HomePage, IdTrackingPage, LoginPage, ProfilePage } from '../../pages';
 import {
   Navigate,
   Outlet,
@@ -16,11 +10,15 @@ import {
 import PrivateRouteWrapper from './PrivateRouteWrapper';
 import { isAuthenticated } from './helpers';
 import { HeaderComponent } from '../../components';
-import OrdersProvider from '../OrdersProvider/Orders.provider';
 import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import { privileges } from '../../util/util';
+import CompaniesPage from '../../pages/companies/Companies.page';
+import CompanyPage from '../../pages/company/Company.page';
+import CompanyProvider from '../CompanyProvider/Company.provider';
+import CompanyInfoPage from '../../pages/company-info/CompanyInfo.page';
+import OrdersPage from '../../pages/orders/Orders.page';
 
 const Layout: React.FC = () => {
   return (
@@ -34,19 +32,23 @@ const Layout: React.FC = () => {
 };
 
 const CBDRouter: React.FC = (): JSX.Element => {
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
+          <Route path="companies-overview" element={<CompaniesPage />} />
           <Route
-            path="dashboard"
+            path="company/:id"
             element={
-              <OrdersProvider>
-                <DashboardPage />
-              </OrdersProvider>
+              <CompanyProvider>
+                <CompanyPage />
+              </CompanyProvider>
             }
-          />
+          >
+            <Route index element={<Navigate to="orders" replace />} />
+            <Route path="info" element={<CompanyInfoPage />} />
+            <Route path="orders" element={<OrdersPage />} />
+          </Route>
           <Route
             element={
               <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />

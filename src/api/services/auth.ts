@@ -8,6 +8,7 @@ export interface LoginResponse {
   token: string;
   roles: Role[];
   privileges: string[];
+  companyIds: number[]
 }
 
 export const login = async (data: LoginData): Promise<LoginResponse> =>

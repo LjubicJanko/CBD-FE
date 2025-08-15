@@ -4,12 +4,17 @@ import localStorageService from '../../services/localStorage.service';
 import { authService } from '../../api';
 import { AuthData, LoginData } from '../../types/Auth';
 import authBus from '../../services/bus';
+import { CompanyOverview } from '../../types/Company';
 
 const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [authData, setAuthData] = useState<Omit<AuthData, 'token'> | null>(
     localStorageService.authData
+  );
+  const [companiesInfo, setCompaniesInfo] = useState<CompanyOverview[]>(localStorageService.companiesInfo);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(
+    localStorageService.authData?.isSuperAdmin
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,12 +27,26 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       setIsLoading(true);
       try {
         const response = await authService.login(data);
-        const { token, id, roles, privileges, name, username } = response;
+        const { token, id, roles, privileges, name, username, companyIds } =
+          response;
         setToken(token);
-        setAuthData({ id, roles, privileges, name, username });
-        localStorageService.saveData(response);
+        const _isSuperAdmin = roles.includes('super_admin');
+        setAuthData({
+          id,
+          roles,
+          privileges,
+          name,
+          username,
+          companyIds,
+          isSuperAdmin: _isSuperAdmin,
+        });
+        localStorageService.saveData({
+          ...response,
+          isSuperAdmin: _isSuperAdmin,
+        });
+        setIsSuperAdmin(_isSuperAdmin);
         status = true;
-        navigate('/dashboard');
+        navigate('/companies-overview');
       } catch (error) {
         console.error(error);
         status = false;
@@ -45,7 +64,7 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       setToken('');
       setAuthData(null);
       localStorageService.clearData();
-      navigate && navigate('/login');
+      navigate?.('/login');
     } catch (error) {
       console.error(error);
     }
@@ -59,7 +78,18 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   }, [logout]);
 
   return (
-    <AuthContext.Provider value={{ token, authData, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        isSuperAdmin,
+        authData,
+        isLoading,
+        companiesInfo,
+        setCompaniesInfo,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
