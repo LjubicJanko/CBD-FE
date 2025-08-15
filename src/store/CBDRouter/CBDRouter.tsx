@@ -1,10 +1,4 @@
-import {
-  DashboardPage,
-  HomePage,
-  IdTrackingPage,
-  LoginPage,
-  ProfilePage,
-} from '../../pages';
+import { DashboardPage, HomePage, IdTrackingPage, LoginPage, ProfilePage } from '../../pages';
 import {
   Navigate,
   Outlet,
@@ -16,14 +10,17 @@ import {
 import PrivateRouteWrapper from './PrivateRouteWrapper';
 import { isAuthenticated } from './helpers';
 import { HeaderComponent } from '../../components';
-import OrdersProvider from '../OrdersProvider/Orders.provider';
 import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import { privileges } from '../../util/util';
+import CompaniesPage from '../../pages/companies/Companies.page';
+import CompanyPage from '../../pages/company/Company.page';
+import CompanyProvider from '../CompanyProvider/Company.provider';
+import CompanyInfoPage from '../../pages/company-info/CompanyInfo.page';
+import OrdersPage from '../../pages/orders/Orders.page';
 import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
-import PublicFooter from '../../components/public-footer/PublicFooter.component';
-import React from 'react';
+import OrdersProvider from '../OrdersProvider/Orders.provider';
 
 const PrivateLayout: React.FC = () => {
   return (
@@ -36,28 +33,24 @@ const PrivateLayout: React.FC = () => {
   );
 };
 
-const PublicLayout: React.FC = () => {
-  return (
-    <>
-      <HeaderComponent />
-      <main>
-        <Outlet />
-      </main>
-      <PublicFooter />
-    </>
-  );
-};
-
 const CBDRouter: React.FC = (): JSX.Element => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <>
-        <Route element={<PublicLayout />}>
+      <Route path="/" element={<Layout />}>
+        <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
+          <Route path="companies-overview" element={<CompaniesPage />} />
           <Route
-            index
-            element={<HomePage />}
-            loader={async () => await isAuthenticated()}
-          />
+            path="company/:id"
+            element={
+              <CompanyProvider>
+                <CompanyPage />
+              </CompanyProvider>
+            }
+          >
+            <Route index element={<Navigate to="orders" replace />} />
+            <Route path="info" element={<CompanyInfoPage />} />
+            <Route path="orders" element={<OrdersPage />} />
+          </Route>
           <Route
             path="track"
             element={<IdTrackingPage />}

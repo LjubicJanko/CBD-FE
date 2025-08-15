@@ -69,6 +69,13 @@ const DashboardHeader = () => {
           <FilterAltIcon />
         </Button>
       </Tooltip>
+      <Button
+        onClick={() => navigate('../info')}
+        variant="contained"
+        className="dashboard-header__create--btn"
+      >
+        Company config
+      </Button>
       <p className="dashboard-header__total">
         {t('pagination-total', { TOTAL: totalElements })}
       </p>
