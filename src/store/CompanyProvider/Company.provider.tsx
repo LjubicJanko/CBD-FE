@@ -34,6 +34,7 @@ const CompanyProvider: React.FC<PropsWithChildren> = (props) => {
     fetchOrders();
   }, [fetchOrders]);
 
+  // todo change to fetch more details
   const fetchCompany = useCallback(async () => {
     if (!id) return;
 

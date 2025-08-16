@@ -15,6 +15,7 @@ export default {
   clearData(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('authData');
+    localStorage.removeItem('companiesInfo');
   },
   get token(): string | null {
     return localStorage.getItem('token');

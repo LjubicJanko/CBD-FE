@@ -27,6 +27,15 @@ export const HeaderContainer = styled.header`
     height: 80px;
   `)}
 
+  .header {
+    &__company {
+      color: ${theme.PRIMARY_2};
+      display: flex;
+      align-items: center;
+    }
+
+  }
+
   .user-button {
     background-color: ${theme.SECONDARY_3};
   }

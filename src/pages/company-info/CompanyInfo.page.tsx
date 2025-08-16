@@ -6,7 +6,6 @@ import SideMenu from '../../components/side-menu/SideMenu.component';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const menuItems = [
@@ -39,6 +38,7 @@ const CompanyInfoPage = () => {
         return <div>General info about {company?.name}</div>;
     }
   }, [activeTab, company?.name]);
+
   return (
     <Styled.CompanyInfoContainer className="company-info">
       <div className="company-info__heading">

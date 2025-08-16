@@ -15,11 +15,13 @@ export const CompaniesPageContainer = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
+      text-align: center;
       width: 100px;
       height: 100px;
       background-color: ${theme.SECONDARY_1};
       border: 1px solid ${theme.SECONDARY_2};
       border-radius: 8px;
+      cursor: pointer;
     }
   }
 `;
