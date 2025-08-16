@@ -1,7 +1,7 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
-import { Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
+import { Box, Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
 import classNames from 'classnames';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +27,6 @@ const HeaderComponent = () => {
     params: { id },
   } = useQueryParams<{ id: string | undefined }>();
   const { id: companyId } = useParams<{ id: string }>();
-  console.log(companyId);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -74,6 +73,34 @@ const HeaderComponent = () => {
     ),
     [navigate]
   );
+
+  const companiesSelect = useMemo(() => {
+    if (!companyId) return <></>;
+
+    if (companiesInfo?.length === 1) {
+      return <p className="header__company">{companiesInfo?.[0].name}</p>;
+    }
+
+    return (
+      <Select
+        id="companies"
+        className="header__companies-menu"
+        value={companyId}
+        onChange={(e) => {
+          navigate(`/company/${e.target.value}/orders`);
+        }}
+      >
+        {companiesInfo?.map((company) => (
+          <MenuItem
+            className="header__companies-menu__item"
+            value={+company.id}
+          >
+            {company.name}
+          </MenuItem>
+        ))}
+      </Select>
+    );
+  }, [companiesInfo, companyId, navigate]);
 
   if (!token) {
     return (
@@ -125,51 +152,9 @@ const HeaderComponent = () => {
     );
   }
 
-  // console.log(authData);
-
   return (
     <Styled.HeaderContainer className="header">
-      {/* <Select
-        id="language"
-        value={selectedLanguage}
-        className="header__language"
-        onChange={(e) => changeLanguage(e.target.value)}
-      >
-        <MenuItem className="header__language__menu-item" value="en">
-          <img
-            className={classNames('header__language__button__flag', {
-              'header__language__button__flag--selected':
-                selectedLanguage === 'en',
-            })}
-            src="/en.png"
-            alt="english"
-          />
-        </MenuItem>
-        <MenuItem className="header__language__menu-item" value="rs">
-          <img
-            className={classNames('header__language__button__flag', {
-              'header__language__button__flag--selected':
-                selectedLanguage === 'rs',
-            })}
-            src="/rs.png"
-            alt="serbian"
-          />
-        </MenuItem>
-      </Select> */}
-      <Select
-        id="companies"
-        className="header__companies-menu"
-        value={companyId}
-        onChange={(e) => {
-          console.log(e);
-        }}
-      >
-        {companiesInfo?.map((company) => (
-          <MenuItem className="header__companies-menu__item" value={+company.id}>
-            {company.name}
-          </MenuItem>
-        ))}
-      </Select>
+      {companiesSelect}
       {logo}
       <Button
         id="user-button"
@@ -192,6 +177,36 @@ const HeaderComponent = () => {
           'aria-labelledby': 'user-button',
         }}
       >
+        <Box sx={{ display: 'flex', flexDirection: 'row', px: 1 }}>
+          <MenuItem
+            className="user-menu__item--language"
+            onClick={() => changeLanguage('en')}
+          >
+            <img
+              className={classNames('header__language__button__flag', {
+                'header__language__button__flag--selected':
+                  selectedLanguage === 'en',
+              })}
+              src="/en.png"
+              alt="english"
+            />
+            <p>ENG</p>
+          </MenuItem>
+          <MenuItem
+            className="user-menu__item--language"
+            onClick={() => changeLanguage('rs')}
+          >
+            <img
+              className={classNames('header__language__button__flag', {
+                'header__language__button__flag--selected':
+                  selectedLanguage === 'rs',
+              })}
+              src="/rs.png"
+              alt="serbian"
+            />
+            <p>SRB</p>
+          </MenuItem>
+        </Box>
         <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
           {t('profile')}
           <PersonIcon />

@@ -105,6 +105,9 @@ export const GlobalStyle = createGlobalStyle`
       li {
         display: flex;
         justify-content: space-between;
+        &.user-menu__item--language {
+          gap: 4px;
+        }
       }
     }
   }
