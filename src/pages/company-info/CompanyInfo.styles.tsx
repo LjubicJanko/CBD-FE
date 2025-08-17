@@ -36,33 +36,6 @@ export const CompanyInfoContainer = styled.div`
       }
     }
 
-    &__menu {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-
-      &__item {
-        background: ${theme.SECONDARY_1};
-        color: ${theme.PRIMARY_1};
-        border-radius: 8px;
-        cursor: pointer;
-        border: 1px solid ${theme.SECONDARY_2};
-        padding: 1rem;
-        text-align: left;
-        border-radius: 8px;
-        font-weight: 500;
-
-        &:hover {
-          background-color: ${theme.PRIMARY_2};
-          color: ${theme.PRIMARY_1};
-        }
-
-        &--active {
-          background: ${theme.PRIMARY_2};
-          color: ${theme.PRIMARY_1};
-        }
-      }
-    }
 
     &__content-column {
       flex: 1;

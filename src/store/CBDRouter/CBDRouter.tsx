@@ -1,4 +1,4 @@
-import { DashboardPage, HomePage, IdTrackingPage, LoginPage, ProfilePage } from '../../pages';
+import { DashboardPage, ProfilePage } from '../../pages';
 import {
   Navigate,
   Outlet,
@@ -8,7 +8,6 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import PrivateRouteWrapper from './PrivateRouteWrapper';
-import { isAuthenticated } from './helpers';
 import { HeaderComponent } from '../../components';
 import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
@@ -19,8 +18,8 @@ import CompanyPage from '../../pages/company/Company.page';
 import CompanyProvider from '../CompanyProvider/Company.provider';
 import CompanyInfoPage from '../../pages/company-info/CompanyInfo.page';
 import OrdersPage from '../../pages/orders/Orders.page';
-import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
 import OrdersProvider from '../OrdersProvider/Orders.provider';
+import { ConfigPage } from '../../pages/config/Config.page';
 
 const PrivateLayout: React.FC = () => {
   return (
@@ -52,21 +51,20 @@ const CBDRouter: React.FC = (): JSX.Element => {
             <Route path="orders" element={<OrdersPage />} />
           </Route>
           <Route
-            path="track"
-            element={<IdTrackingPage />}
-            loader={async () => await isAuthenticated()}
-          />
+            element={
+              <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
+            }
+          >
+            <Route path="createOrder" element={<CreateOrderPage />} />
+          </Route>
           <Route
-            path="order-extension"
-            element={<OrderExtensionPage />}
-            loader={async () => await isAuthenticated()}
-          />
-          <Route
-            path="login"
-            element={<LoginPage />}
-            loader={async () => await isAuthenticated()}
-          />
-          <Route path="*" element={<Navigate to="/" />} />
+            element={
+              <ProtectedRoute requiredPrivilege={privileges.SUPER_PERMISSION} />
+            }
+          >
+            <Route path="config" element={<ConfigPage />} />
+          </Route>
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
         <Route path="/" element={<PrivateLayout />}>
           <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
