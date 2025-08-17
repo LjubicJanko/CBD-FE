@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import * as Styled from './SideMenu.styles'
+import * as Styled from './SideMenu.styles';
 import { useTranslation } from 'react-i18next';
 
 export interface MenuItem {
@@ -12,12 +12,18 @@ interface SideMenuProps {
   items: MenuItem[];
   activeKey: string;
   onSelect: (key: string) => void;
+  className?: string;
 }
 
-const SideMenu: React.FC<SideMenuProps> = ({ items, activeKey, onSelect }) => {
-  const {t} = useTranslation();
+const SideMenu: React.FC<SideMenuProps> = ({
+  items,
+  activeKey,
+  className,
+  onSelect,
+}) => {
+  const { t } = useTranslation();
   return (
-    <Styled.SideMenuContainer>
+    <Styled.SideMenuContainer className={classNames('side-menu', className)}>
       {items.map((item) => (
         <div
           key={item.key}

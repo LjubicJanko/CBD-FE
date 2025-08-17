@@ -13,9 +13,11 @@ import AuthContext from '../../store/AuthProvider/Auth.context';
 import theme from '../../styles/theme';
 import { xxsMax } from '../../util/breakpoints';
 import * as Styled from './Header.styles';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const HeaderComponent = () => {
-  const { logout, token, authData, companiesInfo } = useContext(AuthContext);
+  const { logout, token, authData, isSuperAdmin, companiesInfo } =
+    useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,9 +48,9 @@ const HeaderComponent = () => {
     logout(navigate);
   }, [logout, navigate]);
 
-  const handleGoToProfile = useCallback(() => {
+  const handleGoTo = useCallback((target: string) => {
     setAnchorEl(null);
-    navigate('/profile');
+    navigate(target);
   }, [navigate]);
 
   const url = useMemo(
@@ -207,7 +209,13 @@ const HeaderComponent = () => {
             <p>SRB</p>
           </MenuItem>
         </Box>
-        <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
+        {isSuperAdmin && 
+        <MenuItem className="user-menu__item" onClick={() => handleGoTo('/config')}>
+          {t('Konfiguracija')}
+          <SettingsIcon />
+        </MenuItem>
+        }
+        <MenuItem className="user-menu__item" onClick={() => handleGoTo('/profile')}>
           {t('profile')}
           <PersonIcon />
         </MenuItem>

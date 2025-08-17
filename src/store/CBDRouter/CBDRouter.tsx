@@ -19,6 +19,7 @@ import CompanyPage from '../../pages/company/Company.page';
 import CompanyProvider from '../CompanyProvider/Company.provider';
 import CompanyInfoPage from '../../pages/company-info/CompanyInfo.page';
 import OrdersPage from '../../pages/orders/Orders.page';
+import { ConfigPage } from '../../pages/config/Config.page';
 
 const Layout: React.FC = () => {
   return (
@@ -55,6 +56,13 @@ const CBDRouter: React.FC = (): JSX.Element => {
             }
           >
             <Route path="createOrder" element={<CreateOrderPage />} />
+          </Route>
+          <Route
+            element={
+              <ProtectedRoute requiredPrivilege={privileges.SUPER_PERMISSION} />
+            }
+          >
+            <Route path="config" element={<ConfigPage />} />
           </Route>
           <Route path="profile" element={<ProfilePage />} />
         </Route>

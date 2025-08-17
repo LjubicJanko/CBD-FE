@@ -11,10 +11,6 @@ const getAll = async () =>
 const getCompanies = async (ids: number[]) =>
   privateClient.post('/company/getCompanies', ids).then((res) => res.data);
 
-// const getCompanyOrders = async (id: number) =>
-//   privateClient.get(`/company/${id}/orders`).then((res) => res.data);
-
-
 const getCompanyOrders = async (id: number, props: FetchPaginatedProps) =>
   privateClient
     .get(`/company/${id}/orders`, {

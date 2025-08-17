@@ -10,10 +10,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const menuItems = [
   { key: 'info', label: 'Info' },
-  { key: 'price-list', label: 'Price List' },
+  { key: 'PRICE_LIST', label: 'Price List' },
   { key: 'size-table', label: 'Size Table' },
-  { key: 'equipment-type', label: 'Equipment Type' },
-  { key: 'templates', label: 'Templates' },
+  { key: 'EQUIPMENT_TYPE', label: 'Equipment Type' },
+  { key: 'TEMPLATES', label: 'TEMPLATES' },
 ];
 
 const CompanyInfoPage = () => {
@@ -26,14 +26,14 @@ const CompanyInfoPage = () => {
 
   const renderContent = useCallback(() => {
     switch (activeTab) {
-      case 'price-list':
+      case 'PRICE_LIST':
         return <div>Price list for {company?.name}</div>;
       case 'size-table':
         return <div>Size table for {company?.name}</div>;
-      case 'equipment-type':
+      case 'EQUIPMENT_TYPE':
         return <div>Equipment types for {company?.name}</div>;
-      case 'templates':
-        return <div>Templates for {company?.name}</div>;
+      case 'TEMPLATES':
+        return <div>TEMPLATES for {company?.name}</div>;
       default:
         return <div>General info about {company?.name}</div>;
     }
