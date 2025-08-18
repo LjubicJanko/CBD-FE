@@ -9,6 +9,7 @@ export const HeaderContainer = styled.header`
   right: 0;
   z-index: 1000;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   height: 80px;
@@ -27,13 +28,33 @@ export const HeaderContainer = styled.header`
     height: 80px;
   `)}
 
-  .header {
-    &__company {
-      color: ${theme.PRIMARY_2};
-      display: flex;
-      align-items: center;
-    }
+  .header__section {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+  }
 
+  .header__left {
+    justify-content: flex-start;
+  }
+
+  .header__center {
+    justify-content: center;
+  }
+
+  .header__right {
+    justify-content: flex-end;
+  }
+
+  .logo {
+    cursor: pointer;
+    /* remove absolute positioning */
+  }
+
+  .header__company {
+    color: ${theme.PRIMARY_2};
+    display: flex;
+    align-items: center;
   }
 
   .user-button {

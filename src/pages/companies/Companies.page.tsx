@@ -5,10 +5,12 @@ import companyService from '../../api/services/companies';
 import { CompanyOverview } from '../../types/Company';
 import { useNavigate } from 'react-router-dom';
 import localStorageService from '../../services/localStorage.service';
+import { useTranslation } from 'react-i18next';
 
 const CompaniesPage = () => {
   const { companiesInfo, setCompaniesInfo, authData, isSuperAdmin } =
     useContext(AuthContext);
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const goToCompany = useCallback(
@@ -74,15 +76,18 @@ const CompaniesPage = () => {
 
   return (
     <Styled.CompaniesPageContainer className="companies-overview">
-      {companiesInfo?.map((company) => (
-        <div
-          className="companies-overview__company"
-          onClick={() => goToCompany(company?.id ?? 0)}
-          key={`company-${company.id}`}
-        >
-          <p className="companies-overview__company--name">{company.name}</p>
-        </div>
-      ))}
+      <h1>{t('Izaberi kompaniju')}</h1>
+      <div className="companies-overview__list">
+        {companiesInfo?.map((company) => (
+          <div
+            className="companies-overview__list__company"
+            onClick={() => goToCompany(company?.id ?? 0)}
+            key={`company-${company.id}`}
+          >
+            <p className="companies-overview__list__company--name">{company.name}</p>
+          </div>
+        ))}
+      </div>
     </Styled.CompaniesPageContainer>
   );
 };

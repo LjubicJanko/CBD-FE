@@ -48,10 +48,13 @@ const HeaderComponent = () => {
     logout(navigate);
   }, [logout, navigate]);
 
-  const handleGoTo = useCallback((target: string) => {
-    setAnchorEl(null);
-    navigate(target);
-  }, [navigate]);
+  const handleGoTo = useCallback(
+    (target: string) => {
+      setAnchorEl(null);
+      navigate(target);
+    },
+    [navigate]
+  );
 
   const url = useMemo(
     () => location.pathname.split('/').pop(),
@@ -156,19 +159,21 @@ const HeaderComponent = () => {
 
   return (
     <Styled.HeaderContainer className="header">
-      {companiesSelect}
-      {logo}
-      <Button
-        id="user-button"
-        className="user-button"
-        aria-controls={open ? 'user-button' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        variant="contained"
-      >
-        {authData?.name}
-      </Button>
+      <div className="header__section header__left">{companiesSelect}</div>
+      <div className="header__section header__center">{logo}</div>
+      <div className="header__section header__right">
+        <Button
+          id="user-button"
+          className="user-button"
+          aria-controls={open ? 'user-button' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          variant="contained"
+        >
+          {authData?.name}
+        </Button>
+      </div>
       <Menu
         id="user-menu"
         className="user-menu"
@@ -209,13 +214,19 @@ const HeaderComponent = () => {
             <p>SRB</p>
           </MenuItem>
         </Box>
-        {isSuperAdmin && 
-        <MenuItem className="user-menu__item" onClick={() => handleGoTo('/config')}>
-          {t('Konfiguracija')}
-          <SettingsIcon />
-        </MenuItem>
-        }
-        <MenuItem className="user-menu__item" onClick={() => handleGoTo('/profile')}>
+        {isSuperAdmin && (
+          <MenuItem
+            className="user-menu__item"
+            onClick={() => handleGoTo('/config')}
+          >
+            {t('Konfiguracija')}
+            <SettingsIcon />
+          </MenuItem>
+        )}
+        <MenuItem
+          className="user-menu__item"
+          onClick={() => handleGoTo('/profile')}
+        >
           {t('profile')}
           <PersonIcon />
         </MenuItem>
