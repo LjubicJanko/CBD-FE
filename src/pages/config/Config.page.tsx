@@ -99,15 +99,25 @@ export const ConfigPage = () => {
         ),
       },
       EQUIPMENT_TYPE: {
-        onCancel: () => console.log('cancel'),
-        onSubmit: () => console.log('submit'),
-        title: 'Tip opreme',
+        hideFooter: true,
+        title: 'EQUIPMENT_TYPE',
         component: (
           <ChipConfigComponent
-            items={[]}
-            onAdd={(item: string) => console.log(`add item: ${item}`)}
-            onRemove={(itemId: number) => console.log(`remove item: ${itemId}`)}
-            title={'Tip opreme'}
+            items={items}
+            onAdd={async (item: string) => {
+              const response = await configService.createConfig({
+                type: activeTab as GenericConfigType,
+                value: item,
+              });
+
+              setItems((old) => [...old, response]);
+            }}
+            onRemove={async (itemId: number) => {
+              await configService.deleteConfig(itemId);
+
+              setItems((old) => old.filter((x) => x.id !== itemId));
+            }}
+            title={'EQUIPMENT_TYPE'}
           />
         ),
       },

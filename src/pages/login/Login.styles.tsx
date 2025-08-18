@@ -27,7 +27,6 @@ export const LoginContainer = styled.div`
     padding: 8px;
     caret-color: ${theme.PRIMARY_2};
     color: ${theme.PRIMARY_2};
-
     &:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 1000px ${theme.PRIMARY_1} inset;
       -webkit-text-fill-color: ${theme.PRIMARY_2};
@@ -42,10 +41,6 @@ export const LoginContainer = styled.div`
     font-size: 20px;
     line-height: 25px;
     margin-left: 8px;
-
-    ${mobile(css`
-      font-size: 16px;
-    `)}
   }
 
   .login-container {
@@ -53,8 +48,6 @@ export const LoginContainer = styled.div`
     &__password {
       display: flex;
       flex-direction: column;
-      width: 100%;
-
       .MuiInputBase-root {
         border-radius: 25px;
         background-color: ${theme.PRIMARY_1};
@@ -64,13 +57,10 @@ export const LoginContainer = styled.div`
     &__title {
       font-weight: 400;
       font-size: 32px;
-      line-height: 40px;
+      line-height: 25px;
       text-align: center;
+      vertical-align: middle;
       color: ${theme.PRIMARY_2};
-
-      ${mobile(css`
-        font-size: 24px;
-      `)}
     }
 
     &__loader-wrapper {
@@ -84,6 +74,21 @@ export const LoginContainer = styled.div`
       justify-content: center;
       align-items: center;
       z-index: 9999;
+    }
+
+    &__instagram {
+      color: ${theme.PRIMARY_2};
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      right: 50%;
+      gap: 4px;
+    }
+  }
+
+  .login-container__password {
+    .MuiButtonBase-root {
+      color: ${theme.PRIMARY_2};
     }
   }
 
@@ -102,25 +107,19 @@ export const LoginContainer = styled.div`
     background-color: ${theme.PRIMARY_1};
     border-radius: 20px;
     border: 2px solid ${theme.PRIMARY_2};
-    padding: 48px 32px;
+    padding: 48px 100px;
+    width: 607px;
+    height: 424px;
 
     ${tablet(css`
       padding: 32px;
-    `)}
-
-    ${mobile(css`
-      padding: 24px 16px;
-      gap: 24px;
     `)}
 
     .fields {
       display: flex;
       flex-direction: column;
       gap: 30px;
-
-      ${mobile(css`
-        gap: 16px;
-      `)}
+      width: 100%;
     }
 
     .login-btn {
