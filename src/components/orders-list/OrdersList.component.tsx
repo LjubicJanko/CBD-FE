@@ -1,16 +1,16 @@
 import { useContext } from 'react';
-import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import NoContent from '../no-content/NoContent.component';
 import OrderCardComponent from '../order-card/OrderCard.component';
 import * as Styled from './OrdersList.styles';
+import CompanyContext from '../../store/CompanyProvider/Company.context';
 
 export type OrdersListProps = {
   className?: string;
 };
 
 const OrdersList = ({ className }: OrdersListProps) => {
-  const { orders, selectedOrder, setSelectedOrderId } =
-    useContext(OrdersContext);
+  const { orders, selectedOrder, changeSelectedOrderId } =
+    useContext(CompanyContext);
 
   if (!orders.length) return <NoContent />;
 
@@ -22,7 +22,7 @@ const OrdersList = ({ className }: OrdersListProps) => {
           key={index}
           isSelected={order.id === selectedOrder?.id}
           onClick={() =>
-            setSelectedOrderId(order.id === selectedOrder?.id ? 0 : order.id)
+            changeSelectedOrderId(order.id === selectedOrder?.id ? 0 : order.id)
           }
         />
       ))}

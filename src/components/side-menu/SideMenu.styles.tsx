@@ -7,11 +7,10 @@ export const SideMenuContainer = styled.div`
   gap: 12px;
 
   .side-menu__item {
-    background: ${theme.SECONDARY_3};
-    color: ${theme.PRIMARY_1};
+    background: ${theme.PRIMARY_1};
+    color: ${theme.PRIMARY_2};
     border-radius: 8px;
     cursor: pointer;
-    border: 1px solid ${theme.SECONDARY_2};
     padding: 1rem;
     text-align: left;
     font-weight: 500;

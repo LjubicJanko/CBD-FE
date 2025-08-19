@@ -1,10 +1,12 @@
 import classNames from 'classnames';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import configService from '../../api/services/config';
+import gearService from '../../api/services/gear';
 import ChipConfigComponent from '../../components/chip-config/ChipConfig.component';
+import Gear from '../../components/gear/Gear.component';
 import SideMenu from '../../components/side-menu/SideMenu.component';
 import useQueryParams from '../../hooks/useQueryParams';
-import ConfigTabLayout from '../../layouts/config-tab/ConfigTabLayout';
+import { GearResDto } from '../../types/Gear';
 import {
   ConfigType,
   GenericConfig,
@@ -29,8 +31,12 @@ const menuItems: {
     label: 'Kurirska sluzba',
   },
   {
-    key: 'EQUIPMENT_TYPE',
-    label: 'Tip opreme',
+    key: 'GEAR_CATEGORY',
+    label: 'Kategorija opreme',
+  },
+  {
+    key: 'GEAR',
+    label: 'Oprema',
   },
   {
     key: 'PRINT_TYPE',
@@ -51,19 +57,29 @@ const menuItems: {
 ];
 
 const isGenericTab = (tab: ConfigType): tab is GenericConfigType => {
-  return ['POST_SERVICE', 'EQUIPMENT_TYPE', 'PRINT_TYPE'].includes(tab);
+  return ['POST_SERVICE', 'GEAR_CATEGORY', 'PRINT_TYPE'].includes(tab);
 };
 
 export const ConfigPage = () => {
   const { params, setQParam } = useQueryParams<{ tab: ConfigType }>();
   const activeTab: ConfigType = (params['tab'] as ConfigType) || 'POST_SERVICE';
 
-  const [items, setItems] = useState<GenericConfig[]>([]);
+  const [genericConfigs, setGenericConfigs] = useState<GenericConfig[]>([]);
+  const [gears, setGears] = useState<GearResDto[]>([]);
 
   useEffect(() => {
     if (isGenericTab(activeTab)) {
-      console.log(activeTab);
-      configService.getConfigsByType(activeTab).then(setItems);
+      configService.getConfigsByType(activeTab).then(setGenericConfigs);
+    }
+
+    if (activeTab === 'GEAR') {
+      configService.getConfigsByType('GEAR_CATEGORY').then(setGenericConfigs);
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'GEAR') {
+      gearService.getAllGears().then(setGears);
     }
   }, [activeTab]);
 
@@ -80,44 +96,55 @@ export const ConfigPage = () => {
         title: 'PRINT_TYPE',
         component: (
           <ChipConfigComponent
-            items={items}
+            items={genericConfigs}
             onAdd={async (item: string) => {
               const response = await configService.createConfig({
                 type: activeTab as GenericConfigType,
                 value: item,
               });
 
-              setItems((old) => [...old, response]);
+              setGenericConfigs((old) => [...old, response]);
             }}
             onRemove={async (itemId: number) => {
               await configService.deleteConfig(itemId);
 
-              setItems((old) => old.filter((x) => x.id !== itemId));
+              setGenericConfigs((old) => old.filter((x) => x.id !== itemId));
             }}
             title={'Tip stampe'}
           />
         ),
       },
-      EQUIPMENT_TYPE: {
+      GEAR_CATEGORY: {
         hideFooter: true,
-        title: 'EQUIPMENT_TYPE',
+        title: 'GEAR_CATEGORY',
         component: (
           <ChipConfigComponent
-            items={items}
+            items={genericConfigs}
             onAdd={async (item: string) => {
               const response = await configService.createConfig({
                 type: activeTab as GenericConfigType,
                 value: item,
               });
 
-              setItems((old) => [...old, response]);
+              setGenericConfigs((old) => [...old, response]);
             }}
             onRemove={async (itemId: number) => {
               await configService.deleteConfig(itemId);
 
-              setItems((old) => old.filter((x) => x.id !== itemId));
+              setGenericConfigs((old) => old.filter((x) => x.id !== itemId));
             }}
-            title={'EQUIPMENT_TYPE'}
+            title={'GEAR_CATEGORY'}
+          />
+        ),
+      },
+      GEAR: {
+        hideFooter: true,
+        title: 'GEAR',
+        component: (
+          <Gear
+            gears={gears}
+            gearCategories={genericConfigs}
+            setGears={setGears}
           />
         ),
       },
@@ -153,7 +180,7 @@ export const ConfigPage = () => {
         component: <></>,
       },
     };
-  }, [activeTab, items]);
+  }, [activeTab, gears, genericConfigs]);
 
   return (
     <Styled.ConfigPageContainer
@@ -170,16 +197,19 @@ export const ConfigPage = () => {
       {activeTab === 'GENERAL' ? (
         <></>
       ) : (
-        <ConfigTabLayout
-          className="config-page__content"
-          title={content[activeTab].title}
-          onClose={() => setQParam('tab', 'general')}
-          onCancel={content[activeTab]?.onCancel}
-          onSubmit={content[activeTab]?.onSubmit}
-          hideFooter={content[activeTab]?.hideFooter}
-        >
+        <div className="config-page__content">
           {content[activeTab].component}
-        </ConfigTabLayout>
+        </div>
+        // <ConfigTabLayout
+        //   className="config-page__content"
+        //   title={content[activeTab].title}
+        //   onClose={() => setQParam('tab', 'general')}
+        //   onCancel={content[activeTab]?.onCancel}
+        //   onSubmit={content[activeTab]?.onSubmit}
+        //   hideFooter={content[activeTab]?.hideFooter}
+        // >
+        //   {content[activeTab].component}
+        // </ConfigTabLayout>
       )}
     </Styled.ConfigPageContainer>
   );
