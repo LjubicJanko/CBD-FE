@@ -14,6 +14,8 @@ import theme from '../../styles/theme';
 import { xxsMax } from '../../util/breakpoints';
 import * as Styled from './Header.styles';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import BusinessIcon from '@mui/icons-material/Business';
 
 const HeaderComponent = () => {
   const { logout, token, authData, isSuperAdmin, companiesInfo } =
@@ -83,27 +85,51 @@ const HeaderComponent = () => {
     if (!companyId) return <></>;
 
     if (companiesInfo?.length === 1) {
-      return <p className="header__company">{companiesInfo?.[0].name}</p>;
+      return (
+        // todo check if user has access
+        <Button
+          className="header__company"
+          onClick={() => navigate(`/company/${companyId}/info`)}
+          variant="text"
+          startIcon={<BusinessIcon className="header__company__business" />}
+        >
+          {companiesInfo?.[0].name}
+        </Button>
+      );
     }
 
     return (
-      <Select
-        id="companies"
-        className="header__companies-menu"
-        value={companyId}
-        onChange={(e) => {
-          navigate(`/company/${e.target.value}/orders`);
-        }}
-      >
-        {companiesInfo?.map((company) => (
-          <MenuItem
-            className="header__companies-menu__item"
-            value={+company.id}
-          >
-            {company.name}
-          </MenuItem>
-        ))}
-      </Select>
+      <>
+        <Button
+          className="header__company"
+          onClick={() => navigate(`/company/${companyId}/info`)}
+          variant="text"
+          startIcon={<BusinessIcon className="header__company__business" />}
+        >
+          {companiesInfo?.[0].name}
+        </Button>
+        <Select
+          id="companies"
+          className="header__company__menu"
+          value={companyId}
+          renderValue={() => (
+            <ExpandMoreIcon className="header__company__menu__expand" />
+          )}
+          displayEmpty={true}
+          onChange={(e) => {
+            navigate(`/company/${e.target.value}/orders`);
+          }}
+        >
+          {companiesInfo?.map((company) => (
+            <MenuItem
+              className="header__company__menu__item"
+              value={+company.id}
+            >
+              {company.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </>
     );
   }, [companiesInfo, companyId, navigate]);
 

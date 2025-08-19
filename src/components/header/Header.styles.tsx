@@ -29,7 +29,7 @@ export const HeaderContainer = styled.header`
   `)}
 
   .header__section {
-    flex: 1; 
+    flex: 1;
     display: flex;
     align-items: center;
   }
@@ -48,13 +48,34 @@ export const HeaderContainer = styled.header`
 
   .logo {
     cursor: pointer;
-    /* remove absolute positioning */
+  }
+
+  .MuiSvgIcon-root {
+    display: none;
+  }
+
+  .header__company__menu__expand,
+  .header__company__business {
+    display: block;
+    color: ${theme.PRIMARY_2};
   }
 
   .header__company {
     color: ${theme.PRIMARY_2};
     display: flex;
     align-items: center;
+
+    &__menu {
+      #companies {
+        padding: 0;
+        height: unset;
+      }
+    }
+  }
+
+  .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border: unset;
+    color: ${theme.SECONDARY_1};
   }
 
   .user-button {

@@ -1,28 +1,30 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
-import * as Styled from './DashboardHeader.styles';
-import { Tooltip, Button, Pagination } from '@mui/material';
-import OrderSearchComponent from '../order-search/OrderSearch.component';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import AddIcon from '@mui/icons-material/Add';
-import { useNavigate } from 'react-router-dom';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { Button, Pagination, Tooltip } from '@mui/material';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useHasPrivilege } from '../../hooks/useHasPrivilege';
-import OrdersContext from '../../store/OrdersProvider/Orders.context';
+import useQueryParams from '../../hooks/useQueryParams';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+import CompanyContext from '../../store/CompanyProvider/Company.context';
+import { orderPriorityArray, orderStatusArray } from '../../types/Order';
+import { xxsMax } from '../../util/breakpoints';
+import { Q_PARAM } from '../../util/constants';
 import { privileges } from '../../util/util';
 import FiltersModal from '../modals/filters/FiltersModal.component';
-import useQueryParams from '../../hooks/useQueryParams';
-import { orderPriorityArray, orderStatusArray } from '../../types/Order';
-import { Q_PARAM } from '../../util/constants';
-import useResponsiveWidth from '../../hooks/useResponsiveWidth';
-import { xxsMax } from '../../util/breakpoints';
+import OrderSearchComponent from '../order-search/OrderSearch.component';
+import * as Styled from './DashboardHeader.styles';
 
 const DashboardHeader = () => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
 
-  const { totalElements, page, total, setPage, setSelectedOrderId } =
-    useContext(OrdersContext);
+  const { paginationConfig, changeSelectedOrderId, updatePaginationConfig } =
+    useContext(CompanyContext);
+
+  const { page, total, totalElements } = paginationConfig;
 
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
 
@@ -51,10 +53,10 @@ const DashboardHeader = () => {
 
   const handleChangePage = useCallback(
     (_event: unknown, value: number) => {
-      setPage(value - 1);
-      setSelectedOrderId(-1);
+      updatePaginationConfig({ ...paginationConfig, page: value - 1 });
+      changeSelectedOrderId(-1);
     },
-    [setPage, setSelectedOrderId]
+    [updatePaginationConfig, paginationConfig, changeSelectedOrderId]
   );
 
   return (
@@ -69,13 +71,6 @@ const DashboardHeader = () => {
           <FilterAltIcon />
         </Button>
       </Tooltip>
-      <Button
-        onClick={() => navigate('../info')}
-        variant="contained"
-        className="dashboard-header__create--btn"
-      >
-        Company config
-      </Button>
       <p className="dashboard-header__total">
         {t('pagination-total', { TOTAL: totalElements })}
       </p>

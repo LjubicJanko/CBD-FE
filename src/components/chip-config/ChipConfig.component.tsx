@@ -39,6 +39,13 @@ const ChipConfigComponent: React.FC<ChipConfigProps> = ({
     <Styled.ChipConfigContainer
       className={classNames('chip-config', className)}
     >
+      <Button
+        className="chip-config__add-btn"
+        variant="contained"
+        onClick={handleAddItem}
+      >
+        Add item <AddIcon />
+      </Button>
       <div className="chip-config__items">
         {items.map((item) => (
           <Chip
@@ -52,13 +59,6 @@ const ChipConfigComponent: React.FC<ChipConfigProps> = ({
           />
         ))}
       </div>
-      <Button
-        className="chip-config__add-btn"
-        variant="contained"
-        onClick={handleAddItem}
-      >
-        Add item <AddIcon />
-      </Button>
       <AddItemModal
         key={`add-item-modal-${isAddModalOpen}`}
         isOpen={isAddModalOpen}

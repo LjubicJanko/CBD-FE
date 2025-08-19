@@ -12,7 +12,7 @@ const menuItems = [
   { key: 'info', label: 'Info' },
   { key: 'PRICE_LIST', label: 'Price List' },
   { key: 'size-table', label: 'Size Table' },
-  { key: 'EQUIPMENT_TYPE', label: 'Equipment Type' },
+  { key: 'GEAR_CATEGORY', label: 'Equipment Type' },
   { key: 'TEMPLATES', label: 'TEMPLATES' },
 ];
 
@@ -30,7 +30,7 @@ const CompanyInfoPage = () => {
         return <div>Price list for {company?.name}</div>;
       case 'size-table':
         return <div>Size table for {company?.name}</div>;
-      case 'EQUIPMENT_TYPE':
+      case 'GEAR_CATEGORY':
         return <div>Equipment types for {company?.name}</div>;
       case 'TEMPLATES':
         return <div>TEMPLATES for {company?.name}</div>;

@@ -4,9 +4,9 @@ import { mobile } from '../../util/breakpoints';
 
 export const ConfigPageContainer = styled.div`
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 386px 1fr;
   padding: 16px;
-  gap: 16px;
+  gap: 46px;
   height: 100%;
 
   &.config-page--general {
@@ -20,9 +20,7 @@ export const ConfigPageContainer = styled.div`
     &__content {
       flex: 1;
       background-color: ${theme.PRIMARY_1};
-      border: 1px solid ${theme.SECONDARY_2};
       border-radius: 8px;
-      padding: 2rem;
       color: ${theme.SECONDARY_1};
 
       /* this should only apply if class is not ending in --general */
