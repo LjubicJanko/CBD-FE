@@ -3,6 +3,7 @@ export interface GearReqDto {
   id?: number;
   name: string;
   categoryId: number;
+  typeId: number;
 }
 
 export interface GearResDto {
@@ -10,4 +11,6 @@ export interface GearResDto {
   name: string;
   categoryId: number;
   categoryName: string;
+  typeId: number;
+  typeName: string;
 }

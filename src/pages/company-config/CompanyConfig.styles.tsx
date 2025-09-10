@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-export const CompanyInfoContainer = styled.div`
+export const CompanyConfigContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -13,7 +13,7 @@ export const CompanyInfoContainer = styled.div`
 
   .company-info {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 200px auto;
     /* Todo responsive */
     gap: 16px;
     height: 100%;

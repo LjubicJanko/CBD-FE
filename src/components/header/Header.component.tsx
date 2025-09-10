@@ -89,7 +89,7 @@ const HeaderComponent = () => {
         // todo check if user has access
         <Button
           className="header__company"
-          onClick={() => navigate(`/company/${companyId}/info`)}
+          onClick={() => navigate(`/company/${companyId}/config`)}
           variant="text"
           startIcon={<BusinessIcon className="header__company__business" />}
         >
@@ -98,15 +98,19 @@ const HeaderComponent = () => {
       );
     }
 
+    const selectedCompanyName = companiesInfo?.find(
+      (x) => x.id === +companyId
+    )?.name;
+
     return (
       <>
         <Button
           className="header__company"
-          onClick={() => navigate(`/company/${companyId}/info`)}
+          onClick={() => navigate(`/company/${companyId}/config`)}
           variant="text"
           startIcon={<BusinessIcon className="header__company__business" />}
         >
-          {companiesInfo?.[0].name}
+          {selectedCompanyName}
         </Button>
         <Select
           id="companies"
@@ -124,6 +128,7 @@ const HeaderComponent = () => {
             <MenuItem
               className="header__company__menu__item"
               value={+company.id}
+              key={company.id}
             >
               {company.name}
             </MenuItem>

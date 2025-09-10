@@ -35,6 +35,18 @@ const menuItems: {
     label: 'Kategorija opreme',
   },
   {
+    key: 'GEAR_TYPE',
+    label: 'Tip opreme',
+  },
+  {
+    key: 'VAT',
+    label: 'PDV',
+  },
+  {
+    key: 'CURRENCY',
+    label: 'Valuta',
+  },
+  {
     key: 'GEAR',
     label: 'Oprema',
   },
@@ -57,7 +69,14 @@ const menuItems: {
 ];
 
 const isGenericTab = (tab: ConfigType): tab is GenericConfigType => {
-  return ['POST_SERVICE', 'GEAR_CATEGORY', 'PRINT_TYPE'].includes(tab);
+  return [
+    'POST_SERVICE',
+    'GEAR_CATEGORY',
+    'GEAR_TYPE',
+    'PRINT_TYPE',
+    'VAT',
+    'CURRENCY',
+  ].includes(tab);
 };
 
 export const ConfigPage = () => {
@@ -72,9 +91,9 @@ export const ConfigPage = () => {
       configService.getConfigsByType(activeTab).then(setGenericConfigs);
     }
 
-    if (activeTab === 'GEAR') {
-      configService.getConfigsByType('GEAR_CATEGORY').then(setGenericConfigs);
-    }
+    // if (activeTab === 'GEAR') {
+    //   configService.getConfigsByType('GEAR_CATEGORY').then(setGenericConfigs);
+    // }
   }, [activeTab]);
 
   useEffect(() => {
@@ -90,6 +109,52 @@ export const ConfigPage = () => {
         onSubmit: () => console.log('submit'),
         title: 'Kurirska sluzba',
         component: <>kurirska sluzba</>,
+      },
+      VAT: {
+        hideFooter: true,
+        title: 'VAT',
+        component: (
+          <ChipConfigComponent
+            items={genericConfigs}
+            onAdd={async (item: string) => {
+              const response = await configService.createConfig({
+                type: activeTab as GenericConfigType,
+                value: item,
+              });
+
+              setGenericConfigs((old) => [...old, response]);
+            }}
+            onRemove={async (itemId: number) => {
+              await configService.deleteConfig(itemId);
+
+              setGenericConfigs((old) => old.filter((x) => x.id !== itemId));
+            }}
+            title={'PDV'}
+          />
+        ),
+      },
+      CURRENCY: {
+        hideFooter: true,
+        title: 'CURRENCY',
+        component: (
+          <ChipConfigComponent
+            items={genericConfigs}
+            onAdd={async (item: string) => {
+              const response = await configService.createConfig({
+                type: activeTab as GenericConfigType,
+                value: item,
+              });
+
+              setGenericConfigs((old) => [...old, response]);
+            }}
+            onRemove={async (itemId: number) => {
+              await configService.deleteConfig(itemId);
+
+              setGenericConfigs((old) => old.filter((x) => x.id !== itemId));
+            }}
+            title={'Valuta'}
+          />
+        ),
       },
       PRINT_TYPE: {
         hideFooter: true,
@@ -137,13 +202,35 @@ export const ConfigPage = () => {
           />
         ),
       },
+      GEAR_TYPE: {
+        hideFooter: true,
+        title: 'GEAR_TYPE',
+        component: (
+          <ChipConfigComponent
+            items={genericConfigs}
+            onAdd={async (item: string) => {
+              const response = await configService.createConfig({
+                type: activeTab as GenericConfigType,
+                value: item,
+              });
+
+              setGenericConfigs((old) => [...old, response]);
+            }}
+            onRemove={async (itemId: number) => {
+              await configService.deleteConfig(itemId);
+
+              setGenericConfigs((old) => old.filter((x) => x.id !== itemId));
+            }}
+            title={'GEAR_TYPE'}
+          />
+        ),
+      },
       GEAR: {
         hideFooter: true,
         title: 'GEAR',
         component: (
           <Gear
             gears={gears}
-            gearCategories={genericConfigs}
             setGears={setGears}
           />
         ),

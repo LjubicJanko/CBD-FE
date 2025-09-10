@@ -1,3 +1,4 @@
+import { Company } from '../../types/Company';
 import { GetAllPaginatedResponse } from '../../types/Order';
 import privateClient from '../privateClient';
 import { FetchPaginatedProps } from './orders';
@@ -63,10 +64,31 @@ const getCompanyOrders = async (id: number, props: FetchPaginatedProps) =>
     })
     .then((res) => res.data as GetAllPaginatedResponse);
 
+const uploadLogo = async (companyId: number, file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return privateClient
+    .post(`/company/${companyId}/uploadLogo`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((res) => res.data);
+};
+
+const updateInfo = async (company: Company) =>
+  privateClient
+    .put(`/company/updateInfo`, company, {
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((res) => res.data);
 
 export default {
   getCompanies,
   getAll,
   getCompany,
-  getCompanyOrders
+  getCompanyOrders,
+  uploadLogo,
+  updateInfo,
 };

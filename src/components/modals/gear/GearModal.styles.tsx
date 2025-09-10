@@ -14,6 +14,15 @@ export const GearModalContainer = styled(CbdModal)`
     padding: 24px 40px 16px 40px;
   `)}
 
+  .MuiOutlinedInput-notchedOutline {
+    legend {
+      display: none;
+    }
+  }
+  .MuiFormLabel-root {
+    padding-bottom: 6px;
+  }
+
   &.gear-modal {
     h2 {
       font-weight: 400;
