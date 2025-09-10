@@ -1,6 +1,9 @@
 export type ConfigType =
   | 'POST_SERVICE'
   | 'GEAR_CATEGORY'
+  | 'GEAR_TYPE'
+  | 'VAT'
+  | 'CURRENCY'
   | 'GEAR'
   | 'PRINT_TYPE'
   | 'SIZES'
@@ -10,7 +13,7 @@ export type ConfigType =
 
 export type GenericConfigType = Extract<
   ConfigType,
-  'POST_SERVICE' | 'GEAR_CATEGORY' | 'PRINT_TYPE'
+  'CURRENCY' | 'POST_SERVICE' | 'GEAR_CATEGORY' | 'GEAR_TYPE' | 'VAT' | 'PRINT_TYPE'
 >;
 
 export type GenericConfig = {

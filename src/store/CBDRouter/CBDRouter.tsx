@@ -17,7 +17,7 @@ import { privileges } from '../../util/util';
 import CompaniesPage from '../../pages/companies/Companies.page';
 import CompanyPage from '../../pages/company/Company.page';
 import CompanyProvider from '../CompanyProvider/Company.provider';
-import CompanyInfoPage from '../../pages/company-info/CompanyInfo.page';
+import CompanyInfoPage from '../../pages/company-config/CompanyConfig.page';
 import OrdersPage from '../../pages/orders/Orders.page';
 import { ConfigPage } from '../../pages/config/Config.page';
 
@@ -47,7 +47,7 @@ const CBDRouter: React.FC = (): JSX.Element => {
             }
           >
             <Route index element={<Navigate to="orders" replace />} />
-            <Route path="info" element={<CompanyInfoPage />} />
+            <Route path="config" element={<CompanyInfoPage />} />
             <Route path="orders" element={<OrdersPage />} />
           </Route>
           <Route

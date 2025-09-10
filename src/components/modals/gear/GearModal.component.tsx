@@ -1,3 +1,4 @@
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import {
   Button,
   FormControl,
@@ -8,16 +9,15 @@ import {
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import configService from '../../../api/services/config';
 import { GearReqDto, GearResDto } from '../../../types/Gear';
 import { GenericConfig } from '../../../types/GenericConfig';
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import * as Styled from './GearModal.styles';
 
 export type GearModalProps = {
   gear?: GearResDto;
   title: string;
   isOpen: boolean;
-  gearCategories: GenericConfig[];
   onConfirm: (gear: GearReqDto | GearResDto) => void;
   onCancel: () => void;
 };
@@ -26,7 +26,6 @@ export const GearModal = ({
   gear,
   title,
   isOpen,
-  gearCategories,
   onCancel,
   onConfirm,
 }: GearModalProps) => {
@@ -36,16 +35,27 @@ export const GearModal = ({
   const [categoryId, setCategoryId] = useState<number | ''>(
     gear?.categoryId ?? ''
   );
+  const [typeId, setTypeId] = useState<number | ''>(gear?.typeId ?? '');
+
+  const [categories, setCategories] = useState<GenericConfig[]>([]);
+  const [types, setTypes] = useState<GenericConfig[]>([]);
 
   useEffect(() => {
     if (gear) {
       setName(gear.name);
       setCategoryId(gear.categoryId ?? '');
+      setTypeId(gear.typeId ?? '');
     } else {
       setName('');
       setCategoryId('');
+      setTypeId('');
     }
   }, [gear, isOpen]);
+
+  useEffect(() => {
+    configService.getConfigsByType('GEAR_CATEGORY').then(setCategories);
+    configService.getConfigsByType('GEAR_TYPE').then(setTypes);
+  }, []);
 
   const isSubmitDisabled = useMemo(
     () => !(name && categoryId),
@@ -54,12 +64,16 @@ export const GearModal = ({
 
   const handleSubmit = () => {
     if (!name || !categoryId) return;
-    const categoryName = gearCategories.find((x) => x.id === categoryId)?.value;
+    const categoryName = categories.find((x) => x.id === categoryId)?.value;
+    const typeName = types.find((x) => x.id === typeId)?.value;
+    console.log(typeName);
 
     onConfirm({
       name,
       categoryId: Number(categoryId),
       categoryName: categoryName,
+      typeId: Number(typeId),
+      typeName: typeName,
       id: gear?.id,
     });
   };
@@ -90,9 +104,26 @@ export const GearModal = ({
               onChange={(e) => setCategoryId(e.target.value as number)}
               label={t('gearCategory')}
             >
-              {gearCategories.map((cat) => (
-                <MenuItem key={cat.id} value={cat.id}>
+              {categories.map((cat) => (
+                <MenuItem key={`gear-category-${cat.id}`} value={cat.id}>
                   {cat.value}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+
+        <div className="gear-modal__fields__types">
+          <InputLabel>{t('Tip')}</InputLabel>
+          <FormControl fullWidth margin="normal">
+            <Select
+              value={typeId}
+              onChange={(e) => setTypeId(e.target.value as number)}
+              label={t('gearType')}
+            >
+              {types.map((gearType) => (
+                <MenuItem key={`gear-type-${gearType.id}`} value={gearType.id}>
+                  {gearType.value}
                 </MenuItem>
               ))}
             </Select>

@@ -14,7 +14,6 @@ import {
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import gearService from '../../api/services/gear';
 import { GearReqDto, GearResDto } from '../../types/Gear';
-import { GenericConfig } from '../../types/GenericConfig';
 import { DeleteModal } from '../modals/delete-modal/DeleteModal.component';
 import { GearModal, GearModalProps } from '../modals/gear/GearModal.component';
 import * as Styled from './Gear.styles';
@@ -33,14 +32,12 @@ const closedGearModalProps: Omit<GearModalProps, 'gearCategories'> = {
 
 export interface GearProps {
   gears: GearResDto[];
-  gearCategories: GenericConfig[];
   isLoading?: boolean;
   setGears: Dispatch<SetStateAction<GearResDto[]>>;
 }
 
 const Gear = ({
   gears,
-  gearCategories,
   isLoading = false,
   setGears,
 }: GearProps) => {
@@ -70,6 +67,8 @@ const Gear = ({
         name: gearToEdit?.name,
         categoryId: gearToEdit?.categoryId,
         categoryName: gearToEdit?.categoryName,
+        typeId: gearToEdit?.typeId,
+        typeName: gearToEdit?.typeName
       });
       setGears((old) => old.map((x) => (x.id === response.id ? response : x)));
       setGearModalProps(closedGearModalProps);
@@ -110,6 +109,9 @@ const Gear = ({
             <TableRow>
               <TableCell className="gear__table__header-cell">Name</TableCell>
               <TableCell className="gear__table__header-cell">
+                Type
+              </TableCell>
+              <TableCell className="gear__table__header-cell">
                 Category
               </TableCell>
               <TableCell sx={{ borderBottom: 'none' }}></TableCell>
@@ -120,6 +122,7 @@ const Gear = ({
             {gears.map((gear) => (
               <TableRow key={gear.id} hover className="gear__table__body__row">
                 <TableCell>{gear.name}</TableCell>
+                <TableCell>{gear.typeName}</TableCell>
                 <TableCell>{gear.categoryName}</TableCell>
                 <TableCell className="gear__table__body__row__action-cell">
                   <IconButton
@@ -153,7 +156,7 @@ const Gear = ({
           </TableBody>
         </Table>
       )}
-      <GearModal {...gearModalProps} gearCategories={gearCategories} />
+      <GearModal {...gearModalProps} />
       <DeleteModal
         title={'Da li si siguran da zelis da izbrises'}
         isOpen={deleteModalProps?.isOpen}
