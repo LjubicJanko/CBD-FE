@@ -14,7 +14,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import orders from '../../../../api/services/orders';
 import { usePrivileges } from '../../../../hooks/usePrivileges';
-import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
+import CompanyContext from '../../../../store/CompanyProvider/Company.context';
 import { Payment } from '../../../../types/Payment';
 import AddPaymentModal from '../../../modals/add-payment/AddPaymentModal.component';
 import ConfirmModal from '../../../modals/confirm-modal/ConfirmModal.component';
@@ -48,7 +48,7 @@ const OrderPayments = ({
     arePaymentsLoading,
     fetchPayments,
     updatePaymentInOverview,
-  } = useContext(OrdersContext);
+  } = useContext(CompanyContext);
 
   const [paymentModalConfig, setPaymentModalConfig] =
     useState<PaymentModalConfig>(initialPaymentModalConfig);

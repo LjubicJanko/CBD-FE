@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import * as Styled from './PostServiceModal.styles';
 import { PostServiceReqDto } from '../../../types/PostService';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { Button, InputLabel, TextField } from '@mui/material';
 
@@ -19,11 +19,13 @@ const PostServiceModal = ({
   onSubmit,
 }: PostServiceModalProps) => {
   const { t } = useTranslation();
-
-  console.log({ postServiceProp });
-
   const [postService, setPostService] =
     useState<PostServiceReqDto>(postServiceProp);
+
+  const isSubmitDisabled = useMemo(
+    () => Object.values(postService).some((x) => !x),
+    [postService]
+  );
 
   const handleSubmit = useCallback(() => {
     onSubmit(postService);
@@ -64,7 +66,7 @@ const PostServiceModal = ({
           variant="contained"
           onClick={handleSubmit}
           className="postService-modal__fields__confirm"
-          // disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled}
           endIcon={<SaveOutlinedIcon />}
         >
           {t('confirm')}

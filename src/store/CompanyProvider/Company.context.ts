@@ -1,6 +1,7 @@
-import { createContext } from 'react';
-import { Order, OrderOverview } from '../../types/Order';
+import { createContext, Dispatch, SetStateAction } from 'react';
 import { Company } from '../../types/Company';
+import { Order, OrderOverview, OrderStatusHistory } from '../../types/Order';
+import { Payment, UpdatePaymentsResponse } from '../../types/Payment';
 import { PaginationConfig } from './Company.provider';
 
 interface CompanyContext {
@@ -13,8 +14,22 @@ interface CompanyContext {
     total: number;
     totalElements: number;
   };
+  isLoading: boolean;
+  statusHistory: OrderStatusHistory[];
+  isHistoryLoading: boolean;
+  payments: Payment[];
+  arePaymentsLoading: boolean;
+  updateOrderInOverviewList: (orderToUpdate: Order) => void;
+  removeOrderInOverviewList: (orderToUpdate: Order) => void;
   changeSelectedOrderId: (newId: number) => void;
+  setSelectedOrder: Dispatch<SetStateAction<Order | null>>;
+  setSelectedOrderId: React.Dispatch<React.SetStateAction<number>>;
   updatePaginationConfig: (newPaginationConfig: PaginationConfig) => void;
+  fetchOrders: () => Promise<void>;
+  fetchStatusHistory: (orderId: number) => void;
+  fetchPayments: (orderId: number) => void;
+  updateStatusHistory: (newStatusHistory: OrderStatusHistory[]) => void;
+  updatePaymentInOverview: (payment: UpdatePaymentsResponse) => void;
 }
 
 export default createContext<CompanyContext>({
@@ -27,6 +42,20 @@ export default createContext<CompanyContext>({
     total: 0,
     totalElements: 0,
   },
+  isLoading: false,
+  statusHistory: [],
+  isHistoryLoading: false,
+  payments: [],
+  arePaymentsLoading: false,
+  updateOrderInOverviewList: () => {},
+  removeOrderInOverviewList: () => {},
   changeSelectedOrderId: () => {},
+  setSelectedOrder: () => {},
+  setSelectedOrderId: () => {},
   updatePaginationConfig: () => {},
+  fetchOrders: () => new Promise(() => {}),
+  fetchStatusHistory: () => {},
+  fetchPayments: () => {},
+  updateStatusHistory: () => {},
+  updatePaymentInOverview: () => {},
 });

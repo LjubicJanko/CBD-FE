@@ -28,8 +28,12 @@ const menuItems: {
   label: string;
 }[] = [
   {
-    key: 'POST_SERVICE',
-    label: 'Kurirska sluzba',
+    key: 'CURRENCY',
+    label: 'Valuta',
+  },
+  {
+    key: 'VAT',
+    label: 'PDV',
   },
   {
     key: 'GEAR_CATEGORY',
@@ -40,32 +44,28 @@ const menuItems: {
     label: 'Tip opreme',
   },
   {
-    key: 'VAT',
-    label: 'PDV',
-  },
-  {
-    key: 'CURRENCY',
-    label: 'Valuta',
-  },
-  {
     key: 'GEAR',
     label: 'Oprema',
-  },
-  {
-    key: 'PRINT_TYPE',
-    label: 'Nacin stampe',
   },
   {
     key: 'SIZES',
     label: 'Velicine',
   },
   {
+    key: 'PRICE_LIST',
+    label: 'Cenovnik',
+  },
+  {
+    key: 'PRINT_TYPE',
+    label: 'Nacin stampe',
+  },
+  {
     key: 'TEMPLATES',
     label: 'Sabloni',
   },
   {
-    key: 'PRICE_LIST',
-    label: 'Cenovnik',
+    key: 'POST_SERVICE',
+    label: 'Kurirska sluzba',
   },
 ];
 
