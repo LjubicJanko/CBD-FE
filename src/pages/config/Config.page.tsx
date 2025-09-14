@@ -13,6 +13,7 @@ import {
   GenericConfigType,
 } from '../../types/GenericConfig';
 import * as Styled from './Config.style';
+import PostService from '../../components/post-services/PostServices.component';
 
 interface TabContent {
   onCancel?: () => void;
@@ -70,7 +71,6 @@ const menuItems: {
 
 const isGenericTab = (tab: ConfigType): tab is GenericConfigType => {
   return [
-    'POST_SERVICE',
     'GEAR_CATEGORY',
     'GEAR_TYPE',
     'PRINT_TYPE',
@@ -108,7 +108,7 @@ export const ConfigPage = () => {
         onCancel: () => console.log('cancel'),
         onSubmit: () => console.log('submit'),
         title: 'Kurirska sluzba',
-        component: <>kurirska sluzba</>,
+        component: <PostService />,
       },
       VAT: {
         hideFooter: true,
@@ -228,12 +228,7 @@ export const ConfigPage = () => {
       GEAR: {
         hideFooter: true,
         title: 'GEAR',
-        component: (
-          <Gear
-            gears={gears}
-            setGears={setGears}
-          />
-        ),
+        component: <Gear gears={gears} setGears={setGears} />,
       },
       SIZES: {
         onCancel: () => console.log('cancel'),

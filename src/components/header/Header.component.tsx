@@ -68,18 +68,19 @@ const HeaderComponent = () => {
     [url]
   );
 
-  const logo = useMemo(
-    () => (
+  const logo = useMemo(() => {
+    const target = companyId ? `/company/${companyId}/orders` : '/';
+
+    return (
       <img
         src={theme.logo}
         width={50}
         alt="Logo"
         className="logo"
-        onClick={() => navigate('/')}
+        onClick={() => navigate(target)}
       />
-    ),
-    [navigate]
-  );
+    );
+  }, [companyId, navigate]);
 
   const companiesSelect = useMemo(() => {
     if (!companyId) return <></>;
