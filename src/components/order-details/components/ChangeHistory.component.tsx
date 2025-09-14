@@ -9,10 +9,10 @@ import {
 import dayjs from 'dayjs';
 import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import OrdersContext from '../../../store/OrdersProvider/Orders.context';
 import { OrderStatusEnum } from '../../../types/Order';
 import * as Styled from './ChangeHistory.styles';
 import { ShippedInfoTooltip } from './shipped-tooltip/ShippedTooltip.component';
+import CompanyContext from '../../../store/CompanyProvider/Company.context';
 
 export type ChangeHistoryProps = {
   orderId: number;
@@ -21,7 +21,7 @@ export type ChangeHistoryProps = {
 const ChangeHistoryComponent = ({ orderId }: ChangeHistoryProps) => {
   const { t } = useTranslation();
   const { statusHistory, isHistoryLoading, fetchStatusHistory } =
-    useContext(OrdersContext);
+    useContext(CompanyContext);
 
   useEffect(() => {
     fetchStatusHistory(orderId);

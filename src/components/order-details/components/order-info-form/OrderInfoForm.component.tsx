@@ -6,6 +6,7 @@ import {
   Rating,
   TextField,
 } from '@mui/material';
+import classNames from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
 import { useCallback, useContext, useMemo } from 'react';
@@ -13,14 +14,13 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { BasicDatePicker } from '../../..';
 import { orderService } from '../../../../api';
-import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
+import CompanyContext from '../../../../store/CompanyProvider/Company.context';
 import {
   Order,
   orderPriorityArray,
   OrderPriorityEnum,
 } from '../../../../types/Order';
 import * as Styled from './OrderInfoForm.styles';
-import classNames from 'classnames';
 
 const initialOrderData: Order = {
   id: 0,
@@ -47,7 +47,7 @@ const initialOrderData: Order = {
 const OrderInfoForm = () => {
   const { t } = useTranslation();
   const { selectedOrder, setSelectedOrder, updateOrderInOverviewList } =
-    useContext(OrdersContext);
+    useContext(CompanyContext);
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t('validation.required.name')),
@@ -219,11 +219,12 @@ const OrderInfoForm = () => {
               max={3}
               value={orderPriorityArray.indexOf(formik.values.priority) + 1}
               onChange={(_, newValue) => {
-                newValue &&
+                if (newValue) {
                   formik.setFieldValue(
                     'priority',
                     orderPriorityArray[newValue - 1]
                   );
+                }
               }}
             />
           </dd>

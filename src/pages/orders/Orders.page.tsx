@@ -3,13 +3,20 @@ import { OrderDetailsComponent, OrdersListComponent } from '../../components';
 import DashboardHeader from '../../components/dashboard-header/DashboardHeader.component';
 import CompanyContext from '../../store/CompanyProvider/Company.context';
 import * as Styled from './Orders.styles';
+import { CircularProgress } from '@mui/material';
 
 const OrdersPage = () => {
-  const { selectedOrder } = useContext(CompanyContext);
+  const { selectedOrder, isLoading } = useContext(CompanyContext);
+
   return (
-    <Styled.OrdersPageContainer className='orders'>
+    <Styled.OrdersPageContainer className="orders">
       <DashboardHeader />
-      <div className='orders__content'>
+      {isLoading && (
+        <div className="loader-wrapper">
+          <CircularProgress />
+        </div>
+      )}
+      <div className="orders__content">
         <OrdersListComponent />
         {selectedOrder && (
           <div className="details">

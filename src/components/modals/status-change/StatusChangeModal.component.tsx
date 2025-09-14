@@ -1,6 +1,3 @@
-import { useFormik } from 'formik';
-import * as Styled from './StatusChangeModal.styles';
-import { useCallback, useContext } from 'react';
 import {
   Button,
   FormControl,
@@ -9,12 +6,15 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { useFormik } from 'formik';
+import { useCallback, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
+import { orderService } from '../../../api';
 import { Order, OrderStatus, PostServices } from '../../../types/Order';
 import { getNextStatus } from '../../../util/util';
-import { orderService } from '../../../api';
-import { useTranslation } from 'react-i18next';
-import OrdersContext from '../../../store/OrdersProvider/Orders.context';
-import * as Yup from 'yup';
+import * as Styled from './StatusChangeModal.styles';
+import CompanyContext from '../../../store/CompanyProvider/Company.context';
 
 export type StatusChangeModalProps = {
   currentStatus: OrderStatus;
@@ -39,7 +39,8 @@ const StatusChangeModal = ({
 }: StatusChangeModalProps) => {
   const { t } = useTranslation();
   const { setSelectedOrder, updateOrderInOverviewList, updateStatusHistory } =
-    useContext(OrdersContext);
+    useContext(CompanyContext);
+
   const initialValues: StatusData = {
     closingComment: '',
     postalCode: '',

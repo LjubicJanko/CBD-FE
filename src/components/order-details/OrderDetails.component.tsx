@@ -26,7 +26,6 @@ import { usePrivileges } from '../../hooks/usePrivileges';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import AuthContext from '../../store/AuthProvider/Auth.context';
-import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import {
   Order,
   OrderExecutionStatusEnum,
@@ -43,6 +42,7 @@ import ChangeHistoryComponent from './components/ChangeHistory.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
+import CompanyContext from '../../store/CompanyProvider/Company.context';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -84,7 +84,7 @@ const OrderDetailsComponent = () => {
     setSelectedOrderId,
     updateOrderInOverviewList,
     removeOrderInOverviewList,
-  } = useContext(OrdersContext);
+  } = useContext(CompanyContext);
 
   const privileges = usePrivileges();
 
