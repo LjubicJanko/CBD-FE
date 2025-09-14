@@ -12,6 +12,7 @@ export const ChipConfigContainer = styled.div`
       background-color: ${theme.PRIMARY_2};
       color: ${theme.PRIMARY_1};
       align-self: flex-end;
+      border-radius: 25px;
     }
 
     &__items {
