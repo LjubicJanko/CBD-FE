@@ -86,6 +86,7 @@
   "filters-tooltip": "Primeni filtere",
   "pagination-total": "Ukupno: {{TOTAL}}",
   "track-title": "Praćenje porudžbine",
+  "order-extension-title": "Dorada",
   "login-title": "Uloguj se",
   "id-tracking": "ID praćenje",
   "DESIGN-title": "Vaša porudžbina je trenutno u fazi dizajniranja!",
@@ -129,13 +130,27 @@
       "postal-service": "Dostavna služba je obavezno polje.",
       "new-password": "Nova lozinka je obavezno polje.",
       "old-password": "Stara lozinka je obavezno polje.",
-      "full-name": "Ime i prezime je obavezno polje.",
+      "full-name": "Puno ime je obavezno polje.",
       "username": "Korisničko ime je obavezno polje.",
       "password": "Lozinka je obavezno polje.",
       "role": "Rola je obavezno polje.",
-      "payment-date": "Datum plaćanja je obavezno polje.",
-      "payment-method": "Metod plaćanja je obavezno polje."
+      "payment-date": "Datum uplate je obavezno polje.",
+      "payment-method": "Način plaćanja je obavezno polje.",
+      "email": "Imejl je obavezno polje.",
+      "phone": "Broj telefona je obavezno polje.",
+      "address": "Adresa je obavezno polje."
     }
+  },
+  "orderExtension": {
+    "title": "Zatraži doradu",
+    "note": "Napomena"
+  },
+  "contact": {
+    "phone": "Broj telefona",
+    "address": "Adresa",
+    "city": "Grad",
+    "country": "Drzava",
+    "postalCode": "Poštanski broj"
   },
   "d": "D express",
   "city": "City express",

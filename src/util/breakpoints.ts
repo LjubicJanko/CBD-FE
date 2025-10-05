@@ -34,6 +34,14 @@ export const aboveMobile = (content: FlattenSimpleInterpolation): string => {
       `;
 };
 
+export const belowTablet = (content: FlattenSimpleInterpolation): string => {
+  return `
+        @media (max-width: ${xsMax}px) {
+            ${content.join('')}    
+        }
+        `;
+};
+
 export const tablet = (content: FlattenSimpleInterpolation): string => {
   return `
         @media (max-width: ${sMax}px) {

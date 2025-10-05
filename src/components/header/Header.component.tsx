@@ -57,7 +57,7 @@ const HeaderComponent = () => {
   );
 
   const showBackButton = useMemo(
-    () => url && ['login', 'track'].includes(url),
+    () => url && ['login', 'track', 'order-extension'].includes(url),
     [url]
   );
 
@@ -92,33 +92,55 @@ const HeaderComponent = () => {
             {!isOnMobile && logo}
           </div>
         ) : (
-          <Select
-            id="language"
-            value={selectedLanguage}
-            className="public-header__language"
-            onChange={(e) => changeLanguage(e.target.value)}
-          >
-            <MenuItem className="public-header__language__menu-item" value="en">
-              <img
-                className={classNames('public-header__language__button__flag', {
-                  'public-header__language__button__flag--selected':
-                    selectedLanguage === 'en',
-                })}
-                src="/en.png"
-                alt="english"
-              />
-            </MenuItem>
-            <MenuItem className="public-header__language__menu-item" value="rs">
-              <img
-                className={classNames('public-header__language__button__flag', {
-                  'public-header__language__button__flag--selected':
-                    selectedLanguage === 'rs',
-                })}
-                src="/rs.png"
-                alt="serbian"
-              />
-            </MenuItem>
-          </Select>
+          <div className="public-header__home">
+            <Select
+              id="language"
+              value={selectedLanguage}
+              className="public-header__language"
+              onChange={(e) => changeLanguage(e.target.value)}
+            >
+              <MenuItem
+                className="public-header__language__menu-item"
+                value="en"
+              >
+                <img
+                  className={classNames(
+                    'public-header__language__button__flag',
+                    {
+                      'public-header__language__button__flag--selected':
+                        selectedLanguage === 'en',
+                    }
+                  )}
+                  src="/en.png"
+                  alt="english"
+                />
+              </MenuItem>
+              <MenuItem
+                className="public-header__language__menu-item"
+                value="rs"
+              >
+                <img
+                  className={classNames(
+                    'public-header__language__button__flag',
+                    {
+                      'public-header__language__button__flag--selected':
+                        selectedLanguage === 'rs',
+                    }
+                  )}
+                  src="/rs.png"
+                  alt="serbian"
+                />
+              </MenuItem>
+            </Select>
+
+            <Button
+              variant="outlined"
+              className="public-header__home__login-btn"
+              onClick={() => navigate('/login')}
+            >
+              {t('login')}
+            </Button>
+          </div>
         )}
       </Styled.PublicHeaderContainer>
     );

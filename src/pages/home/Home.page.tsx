@@ -1,33 +1,30 @@
-import { Button } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import * as Styled from './Home.styles';
-import theme from '../../styles/theme';
+import Section from '../../components/section/Section.component';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 
 const HomeComponent = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   return (
     <Styled.HomeContainer className="home">
-      <img src={theme.logo} />
-      <span className="home__title">{t('CBD SPORTSWEAR')}</span>
-      <div className="home__actions">
-        <Button
-          variant="outlined"
-          className="home__actions__login-btn"
-          onClick={() => navigate('/login')}
-        >
-          {t('login')}
-        </Button>
-        <Button
-          variant="outlined"
-          className="home__actions__track-btn"
-          onClick={() => navigate('/track')}
-        >
-          {t('id-tracking')}
-        </Button>
-      </div>
+      <Section
+        title={t('Poruči dres')}
+        to="/order-extension"
+        panelClassName="home__order-panel"
+      />
+      <Section
+        title={t('ID Praćenje')}
+        to="/track"
+        panelClassName="home__tracking-panel"
+      />
+      <Button
+        variant="text"
+        className="home__instagram"
+        startIcon={<img src="instagram_icon.png" />}
+      >
+        @cbd_sportswear
+      </Button>
     </Styled.HomeContainer>
   );
 };

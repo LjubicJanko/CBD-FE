@@ -21,6 +21,7 @@ import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import { privileges } from '../../util/util';
+import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
 
 const Layout: React.FC = () => {
   return (
@@ -64,6 +65,11 @@ const CBDRouter: React.FC = (): JSX.Element => {
         <Route
           path="track"
           element={<IdTrackingPage />}
+          loader={async () => await isAuthenticated()}
+        />
+        <Route
+          path="order-extension"
+          element={<OrderExtensionPage />}
           loader={async () => await isAuthenticated()}
         />
         <Route

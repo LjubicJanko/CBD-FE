@@ -1,26 +1,41 @@
 import styled, { css } from 'styled-components';
-import { mobile } from '../../util/breakpoints';
+import { laptop, mobile, tablet } from '../../util/breakpoints';
 import theme from '../../styles/theme';
 
 export const HomeContainer = styled.div`
   width: 100%;
-  height: 100%;
-
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 124px;
-  background-color: ${theme.PRIMARY_1};
+  justify-content: center;
+  gap: 72px;
+  padding: 40px;
+
+  ${laptop(css`
+    gap: 48px;
+    padding: 32px;
+  `)}
+
+  ${tablet(css`
+    flex-direction: row;
+    gap: 8px;
+    height: 80vh;
+    padding: 0;
+  `)}
 
   ${mobile(css`
-    padding: 16px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding-top: 130px;
+    flex-direction: column;
+    max-height: 80vh;
+    padding-top: 16px;
   `)}
 
   .home {
+    &__tracking-panel {
+      background-image: url('id_tracking.png');
+    }
+
+    &__order-panel {
+      background-image: url('order_shirt.jpg');
+    }
+
     &__title {
       font-family: Inter;
       font-size: 14px;
@@ -38,25 +53,18 @@ export const HomeContainer = styled.div`
       `)}
     }
 
-    &__actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    &__instagram {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 32px;
+      width: fit-content;
 
-      &__login-btn,
-      &__track-btn {
-        white-space: nowrap;
-      }
-
-      &__login-btn {
-        background-color: ${theme.PRIMARY_2};
-        color: black;
-      }
-      &__track-btn {
-        color: ${theme.PRIMARY_2};
-        background-color: transparent;
-        border-color: ${theme.PRIMARY_2};
-      }
+      font-weight: 400;
+      font-size: 24px;
+      letter-spacing: 0%;
+      text-align: center;
+      color: ${theme.PRIMARY_2};
     }
   }
 `;

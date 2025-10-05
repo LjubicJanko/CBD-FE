@@ -77,6 +77,18 @@ export const PublicHeaderContainer = styled.header`
       }
     }
 
+    &__home {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      &__login-btn {
+        white-space: nowrap;
+        background-color: ${theme.PRIMARY_2};
+        color: black;
+      }
+    }
+
     &__language {
       align-self: flex-start;
     }
