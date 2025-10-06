@@ -65,6 +65,16 @@ export const HomeContainer = styled.div`
       letter-spacing: 0%;
       text-align: center;
       color: ${theme.PRIMARY_2};
+
+      ${tablet(css`
+        bottom: 8px;
+        font-size: 18px;
+      `)}
+
+      ${mobile(css`
+        bottom: 2px;
+        font-size: 12px;
+      `)}
     }
   }
 `;

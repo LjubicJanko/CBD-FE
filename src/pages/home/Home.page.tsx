@@ -1,7 +1,9 @@
 import * as Styled from './Home.styles';
 import Section from '../../components/section/Section.component';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import {IconButton } from '@mui/material';
+import InstagramIcon from '@mui/icons-material/Instagram';
+
 
 const HomeComponent = () => {
   const { t } = useTranslation();
@@ -18,13 +20,18 @@ const HomeComponent = () => {
         to="/track"
         panelClassName="home__tracking-panel"
       />
-      <Button
-        variant="text"
+      <IconButton
         className="home__instagram"
-        startIcon={<img src="instagram_icon.png" />}
+        onClick={() =>
+          window.open(
+            'https://www.instagram.com/cbd_sportswear',
+            '_blank'
+          )
+        }
       >
-        @cbd_sportswear
-      </Button>
+        <InstagramIcon />
+        <p>{t('@cbd_sportswear')}</p>
+      </IconButton>
     </Styled.HomeContainer>
   );
 };

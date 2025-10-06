@@ -4,14 +4,15 @@ import * as Yup from 'yup';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Styled from './OrderExtension.styles';
-// import { orderService } from '../../api';
+import { orderService } from '../../api';
 import { useSnackbar } from '../../hooks/useSnackbar';
+import { OrderContactInfo, OrderExtensionReqDto } from '../../types/OrderExtension';
 
 type OrderExtensionData = {
   orderName: string;
   orderDescription: string;
   fullName: string;
-  postalCode: string;
+  zipCode: string;
   city: string;
   address: string;
   phoneNumber: string;
@@ -26,7 +27,7 @@ const OrderExtensionPage: React.FC = () => {
       orderName: '',
       orderDescription: '',
       fullName: '',
-      postalCode: '',
+      zipCode: '',
       city: '',
       address: '',
       phoneNumber: '',
@@ -40,9 +41,9 @@ const OrderExtensionPage: React.FC = () => {
       t('validation.required.orderDescription')
     ),
     fullName: Yup.string().required(t('validation.required.fullName')),
-    postalCode: Yup.string()
-      .matches(/^\d{4,6}$/, t('validation.invalid.postalCode'))
-      .required(t('validation.required.postalCode')),
+    zipCode: Yup.string()
+      .matches(/^\d{4,6}$/, t('validation.invalid.zipCode'))
+      .required(t('validation.required.zipCode')),
     city: Yup.string().required(t('validation.required.city')),
     address: Yup.string().required(t('validation.required.address')),
     phoneNumber: Yup.string()
@@ -53,7 +54,13 @@ const OrderExtensionPage: React.FC = () => {
   const onSubmit = useCallback(
     async (values: OrderExtensionData) => {
       try {
-        // await orderService.createOrderExtension(values);
+        const {orderName, orderDescription, ...contact} = values;
+        const orderExtensionReqDto: OrderExtensionReqDto = {
+          name: orderName,
+          description: orderDescription,
+          contact: contact as OrderContactInfo
+        };
+        await orderService.createOrderExtension(orderExtensionReqDto);
         console.log({ values });
         showSnackbar(t('orderExtension.createdSuccess'), 'success');
       } catch (error) {
@@ -125,15 +132,15 @@ const OrderExtensionPage: React.FC = () => {
           <TextField
             fullWidth
             margin="dense"
-            label={t('contact.postalCode')}
-            name="postalCode"
-            value={formik.values.postalCode}
+            label={t('contact.zipCode')}
+            name="zipCode"
+            value={formik.values.zipCode}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={
-              formik.touched.postalCode && Boolean(formik.errors.postalCode)
+              formik.touched.zipCode && Boolean(formik.errors.zipCode)
             }
-            helperText={formik.touched.postalCode && formik.errors.postalCode}
+            helperText={formik.touched.zipCode && formik.errors.zipCode}
           />
           <TextField
             fullWidth
