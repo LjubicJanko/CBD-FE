@@ -252,7 +252,6 @@ const OrderDetailsComponent = () => {
   ]);
 
   const toggleStatusModal = useCallback(() => {
-    console.log('toggle');
     setIsStatusModalOpen((prev) => !prev);
   }, []);
 

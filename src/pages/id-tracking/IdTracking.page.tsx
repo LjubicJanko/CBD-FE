@@ -39,7 +39,6 @@ const IdTrackingPage = () => {
     () => order?.extension && order?.status === 'PENDING',
     [order?.extension, order?.status]
   );
-  console.log({ order });
 
   const formatDate = useCallback(
     (date: string) => dayjs(date).format('DD.MM.YYYY.'),

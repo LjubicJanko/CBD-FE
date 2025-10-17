@@ -12,8 +12,8 @@ i18n
     fallbackLng: 'rs', // Default language if none is detected
     debug: false,
     backend: {
-      loadPath: 'public/locales/{{lng}}/translation.json',
-      // loadPath: 'https://ljubicjanko.github.io/CBD-Locales/locales/{{lng}}/translation.json',
+      // loadPath: 'public/locales/{{lng}}/translation.json',
+      loadPath: 'https://ljubicjanko.github.io/CBD-Locales/locales/{{lng}}/translation.json',
     },
     detection: {
       order: [
