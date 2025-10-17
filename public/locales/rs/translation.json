@@ -7,6 +7,7 @@
   "ON_SHIP": "Pouzećem",
   "PRINTING": "Štampa se",
   "PRINT_READY": "Spremno za štampu",
+  "PENDING": "Odobrenje",
   "SEWING": "Šivenje",
   "SHIP_READY": "Spremno za slanje",
   "SHIPPED": "Poslato",
@@ -59,6 +60,7 @@
   "pausing-comment": "Razlog pauziranja",
   "payment-method": "Metod plaćanja",
   "payments": "Uplate",
+  "contact-info": "Kontakt podaci",
   "payer": "Uplatilac",
   "postal-code": "Kod za praćenje",
   "postal-service": "Dostavna služba",
@@ -90,6 +92,7 @@
   "login-title": "Uloguj se",
   "id-tracking": "ID praćenje",
   "DESIGN-title": "Vaša porudžbina je trenutno u fazi dizajniranja!",
+  "PENDING-title": "Vaša porudžbina trenutno čeka odobrenje!",
   "PRINT_READY-title": "Vaša porudžbina je trenutno u fazi pripreme!",
   "PRINTING-title": "Vaša porudžbina je trenutno u fazi stampanja!",
   "SEWING-title": "Vaša porudžbina je trenutno u fazi šivenja!",
@@ -97,6 +100,7 @@
   "SHIPPED-title": "Vaša porudžbina je upravo poslata!",
   "DONE-title": "Vaša porudžbina je dostavljena!",
   "DESIGN-disclaimer": "Za vašu porudžbinu se trenutno osmišljava unikatan dizajn.\nOvaj proces može da potraje do 3 dana. Status će biti\nautomatski promenjen kada se pređe na sledeći korak.",
+  "PENDING-disclaimer": "Za vašu porudžbinu se trenutno proverava validnost dostavljenih podataka i dodaju neophodne informacije kako bi porudžbina bila kompletna. Nakon odobrenja porudžbine, ona postaje spremna za štampu. Ovaj proces obično traje 1 dan.",
   "PRINT_READY-disclaimer": "Za vašu porudžbinu se trenutno pripremaju fajlovi i šalju\nna štampu. Ovaj proces može da potraje do 2 dana.\nStatus će biti automatski promenjen kada se pređe\nna sledeći korak.",
   "PRINTING-disclaimer": "Korak bliži! Vaša porudžbina je u procesu štampanja.\nOvaj proces može da potraje do 2 dana. Status će biti\nautomatski promenjen kada se pređe na sledeći korak.",
   "SEWING-disclaimer": "Naši vredni krojači rade na tome da vaša oprema bude savršena!\nOvaj proces može da potraje do 3 dana. Status će biti automatski\npromenjen kada se pređe na sledeći korak.",
@@ -138,12 +142,22 @@
       "payment-method": "Način plaćanja je obavezno polje.",
       "email": "Imejl je obavezno polje.",
       "phone": "Broj telefona je obavezno polje.",
-      "address": "Adresa je obavezno polje."
+      "address": "Adresa je obavezno polje.",
+      "teamName": "Ime ekipe je obavezno polje.",
+      "orderDescription": "Opis porudžbine je obavezno polje.",
+      "fullName": "Ime i prezime je obavezno polje.",
+      "city": "Grad je obavezno polje.",
+      "zipCode": "Poštanski broj je obavezno polje."
     }
   },
   "orderExtension": {
+    "teamName": "Ime ekipe",
     "title": "Zatraži doradu",
-    "note": "Napomena"
+    "note": "Napomena",
+    "createdSuccess": "Zahtev za doradu dresova je uspešno kreiran.",
+    "description": "Sta je sve potrebno za doradu?",
+    "disclaimer": "Ovo se odnosi na ekipe koje su već radile opremu kod nas, a potrebno im je nekoliko novih garnitura već napravljene opreme.",
+    "descriptionPlaceholder": "Upišite detalje dorade, npr. brojevi, imena, dodatni kompleti..."
   },
   "contact": {
     "phone": "Broj telefona",
@@ -164,6 +178,7 @@
   "old-password": "Stara lozinka",
   "personal-info": "Moje informacije",
   "postal-code-coppied": "Kod za praćenje je uspešno kopiran",
+  "tracking-id-coppied": "Id za praćenje je uspešno kopiran",
   "enterTrackingNumber": "Unesite identifikacioni broj kako biste mogli da ispratite u kojoj fazi se nalazi vaša porudžbina.",
   "order-not-found": "Porudžbina nije pronadjena. Molimo proverite identifikacioni broj.",
   "status-changed": "Uspešno promenjen status",

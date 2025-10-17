@@ -10,7 +10,7 @@ import {
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { orderService } from '../../api';
 import NoContent from '../../components/no-content/NoContent.component';
@@ -35,6 +35,11 @@ const IdTrackingPage = () => {
   const [error, setError] = useState<string>('');
 
   const { showSnackbar } = useSnackbar();
+  const isPendingExtension = useMemo(
+    () => order?.extension && order?.status === 'PENDING',
+    [order?.extension, order?.status]
+  );
+  console.log({ order });
 
   const formatDate = useCallback(
     (date: string) => dayjs(date).format('DD.MM.YYYY.'),
@@ -83,7 +88,19 @@ const IdTrackingPage = () => {
         {/* Stepper */}
         <div className="id-tracking-details__stepper">
           <p className="id-tracking-details__stepper--title">
-            {t(`ID: ${id}`)}
+            <p>
+              {t(`ID: ${id}`)}
+              <IconButton
+                onClick={() => {
+                  navigator.clipboard.writeText(id);
+                  showSnackbar(t('tracking-id-coppied'), 'success');
+                }}
+                className="id-tracking-details__stepper--title-copy"
+                edge="end"
+              >
+                <ContentCopyIcon />
+              </IconButton>
+            </p>
           </p>
 
           <div className="id-tracking-details__stepper--container">
@@ -92,7 +109,9 @@ const IdTrackingPage = () => {
                 <Step
                   key={status}
                   className={classNames({
-                    active: status === order.status,
+                    active:
+                      status === order.status ||
+                      (status === 'DESIGN' && order.status === 'PENDING'),
                   })}
                 >
                   <div className="step"></div>
@@ -120,22 +139,26 @@ const IdTrackingPage = () => {
               <p>{t('orderDetails.name')}</p>
               <p>{order.name}</p>
             </div>
-            <div className="id-tracking-details__order-info__container--left-to-pay">
-              <p>{t('orderDetails.amountLeftToPay')}</p>
-              <p>
-                {order.legalEntity
-                  ? order.amountLeftToPayWithTax
-                  : order.amountLeftToPay}
-              </p>
-            </div>
-            <div className="id-tracking-details__order-info__container--last-change">
-              <p>{t('orderDetails.lastUpdatedDate')}</p>
-              <p>{formatDate(order.lastUpdatedDate)}</p>
-            </div>
-            <div className="id-tracking-details__order-info__container--expected-due">
-              <p>{t('orderDetails.plannedEndingDate')}</p>
-              <p>{dayjs(order.plannedEndingDate).format('DD.MM.YYYY')}</p>
-            </div>
+            {!isPendingExtension && (
+              <>
+                <div className="id-tracking-details__order-info__container--left-to-pay">
+                  <p>{t('orderDetails.amountLeftToPay')}</p>
+                  <p>
+                    {order.legalEntity
+                      ? order.amountLeftToPayWithTax
+                      : order.amountLeftToPay}
+                  </p>
+                </div>
+                <div className="id-tracking-details__order-info__container--last-change">
+                  <p>{t('orderDetails.lastUpdatedDate')}</p>
+                  <p>{formatDate(order.lastUpdatedDate)}</p>
+                </div>
+                <div className="id-tracking-details__order-info__container--expected-due">
+                  <p>{t('orderDetails.plannedEndingDate')}</p>
+                  <p>{dayjs(order.plannedEndingDate).format('DD.MM.YYYY')}</p>
+                </div>
+              </>
+            )}
             <div className="id-tracking-details__order-info__container--description">
               <p>{t('orderDetails.description')}</p>
               <p>{order.description}</p>
@@ -176,6 +199,37 @@ const IdTrackingPage = () => {
             )}
           </div>
         </div>
+
+        {order?.contactInfo && (
+          <div className="id-tracking-details__contact-info">
+            <p className="id-tracking-details__contact-info--title">
+              {t('contact-info')}
+            </p>
+
+            <div className="id-tracking-details__contact-info__container">
+              <div className="id-tracking-details__contact-info__container__fullName">
+                <p>{t('full-name')}</p>
+                <p>{order.contactInfo?.fullName}</p>
+              </div>
+              <div className="id-tracking-details__contact-info__container__phoneNumber">
+                <p>{t('contact.phone')}</p>
+                <p>{order.contactInfo?.phoneNumber}</p>
+              </div>
+              <div className="id-tracking-details__contact-info__container__address">
+                <p>{t('contact.address')}</p>
+                <p>{order.contactInfo?.address}</p>
+              </div>
+              <div className="id-tracking-details__contact-info__container__city">
+                <p>{t('contact.city')}</p>
+                <p>{order.contactInfo?.city}</p>
+              </div>
+              <div className="id-tracking-details__contact-info__container__zipCode">
+                <p>{t('contact.postalCode')}</p>
+                <p>{order.contactInfo?.zipCode}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </Styled.IdTrackingDetailsContainer>
     );
   }

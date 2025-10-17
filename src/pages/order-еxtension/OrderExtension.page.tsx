@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Alert, Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import React, { useCallback, useMemo } from 'react';
@@ -6,7 +6,12 @@ import { useTranslation } from 'react-i18next';
 import * as Styled from './OrderExtension.styles';
 import { orderService } from '../../api';
 import { useSnackbar } from '../../hooks/useSnackbar';
-import { OrderContactInfo, OrderExtensionReqDto } from '../../types/OrderExtension';
+import {
+  OrderContactInfo,
+  OrderExtensionReqDto,
+} from '../../types/OrderExtension';
+import { useNavigate } from 'react-router-dom';
+import InstagramButton from '../../components/instagram/InstagramButton.component';
 
 type OrderExtensionData = {
   orderName: string;
@@ -21,6 +26,8 @@ type OrderExtensionData = {
 const OrderExtensionPage: React.FC = () => {
   const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
+
+  const navigate = useNavigate();
 
   const initialValues: OrderExtensionData = useMemo(
     () => ({
@@ -54,21 +61,23 @@ const OrderExtensionPage: React.FC = () => {
   const onSubmit = useCallback(
     async (values: OrderExtensionData) => {
       try {
-        const {orderName, orderDescription, ...contact} = values;
+        const { orderName, orderDescription, ...contactInfo } = values;
         const orderExtensionReqDto: OrderExtensionReqDto = {
           name: orderName,
           description: orderDescription,
-          contact: contact as OrderContactInfo
+          contactInfo: contactInfo as OrderContactInfo,
         };
-        await orderService.createOrderExtension(orderExtensionReqDto);
-        console.log({ values });
+        const { trackingId } = await orderService.createOrderExtension(
+          orderExtensionReqDto
+        );
+        navigate(`/track?id=${trackingId}`);
         showSnackbar(t('orderExtension.createdSuccess'), 'success');
       } catch (error) {
         showSnackbar(t('orderExtension.createError'), 'error');
         console.error(error);
       }
     },
-    [showSnackbar, t]
+    [navigate, showSnackbar, t]
   );
 
   const formik = useFormik({
@@ -89,7 +98,7 @@ const OrderExtensionPage: React.FC = () => {
           <TextField
             fullWidth
             margin="dense"
-            label={t('Name')}
+            label={t('orderExtension.teamName')}
             name="orderName"
             value={formik.values.orderName}
             onChange={formik.handleChange}
@@ -102,7 +111,8 @@ const OrderExtensionPage: React.FC = () => {
             margin="dense"
             multiline
             rows={4}
-            label={t('Description')}
+            label={t('orderExtension.description')}
+            placeholder={t('orderExtension.descriptionPlaceholder')}
             name="orderDescription"
             value={formik.values.orderDescription}
             onChange={formik.handleChange}
@@ -132,26 +142,15 @@ const OrderExtensionPage: React.FC = () => {
           <TextField
             fullWidth
             margin="dense"
-            label={t('contact.zipCode')}
-            name="zipCode"
-            value={formik.values.zipCode}
+            label={t('contact.phone')}
+            name="phoneNumber"
+            value={formik.values.phoneNumber}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={
-              formik.touched.zipCode && Boolean(formik.errors.zipCode)
+              formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
             }
-            helperText={formik.touched.zipCode && formik.errors.zipCode}
-          />
-          <TextField
-            fullWidth
-            margin="dense"
-            label={t('contact.city')}
-            name="city"
-            value={formik.values.city}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.city && Boolean(formik.errors.city)}
-            helperText={formik.touched.city && formik.errors.city}
+            helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
           />
           <TextField
             fullWidth
@@ -167,17 +166,29 @@ const OrderExtensionPage: React.FC = () => {
           <TextField
             fullWidth
             margin="dense"
-            label={t('contact.phone')}
-            name="phoneNumber"
-            value={formik.values.phoneNumber}
+            label={t('contact.city')}
+            name="city"
+            value={formik.values.city}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
-            }
-            helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+            error={formik.touched.city && Boolean(formik.errors.city)}
+            helperText={formik.touched.city && formik.errors.city}
+          />
+          <TextField
+            fullWidth
+            margin="dense"
+            label={t('contact.postalCode')}
+            name="zipCode"
+            value={formik.values.zipCode}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.zipCode && Boolean(formik.errors.zipCode)}
+            helperText={formik.touched.zipCode && formik.errors.zipCode}
           />
         </div>
+        <Alert severity="info" className="order-extension__disclaimer">
+          {t('orderExtension.disclaimer')}
+        </Alert>
 
         <Button
           className="order-extension__form__submit"
@@ -189,6 +200,7 @@ const OrderExtensionPage: React.FC = () => {
           {t('create')}
         </Button>
       </form>
+      <InstagramButton className='extension-page-instagram-button'/>
     </Styled.OrderExtensionContainer>
   );
 };

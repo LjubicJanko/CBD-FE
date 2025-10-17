@@ -9,5 +9,5 @@ export type OrderContactInfo = {
 export type OrderExtensionReqDto = {
   name: string;
   description: string;
-  contact: OrderContactInfo;
+  contactInfo: OrderContactInfo;
 };

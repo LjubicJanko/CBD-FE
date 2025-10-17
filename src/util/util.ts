@@ -10,9 +10,20 @@ export const statuses: OrderStatus[] = [
   'DONE',
 ];
 
+export const extensionStatuses: OrderStatus[] = [
+  'PENDING',
+  'PRINT_READY',
+  'PRINTING',
+  'SEWING',
+  'SHIP_READY',
+  'SHIPPED',
+  'DONE',
+];
+
 interface StatusChipProps {
   status:
     | 'DESIGN'
+    | 'PENDING'
     | 'PRINT_READY'
     | 'PRINTING'
     | 'SEWING'
@@ -37,6 +48,7 @@ interface StatusChipProps {
 
 export const statusColors: Record<StatusChipProps['status'], string> = {
   DESIGN: '#4FC3F7',
+  PENDING: '#4FC3F7',
   PRINT_READY: '#81C784',
   PRINTING: '#FFB74D',
   SEWING: '#26A69A',
@@ -45,10 +57,23 @@ export const statusColors: Record<StatusChipProps['status'], string> = {
   DONE: '#388E3C',
 };
 
-export const getNextStatus = (orderStatus: OrderStatus) => {
-  const index = statuses.findIndex((x) => x === orderStatus);
+const nextStatusDictionary = {
+  DESIGN: 'PRINT_READY',
+  PENDING: 'PRINT_READY',
+  PRINT_READY: 'PRINTING',
+  PRINTING: 'SEWING',
+  SEWING: 'SHIP_READY',
+  SHIP_READY: 'SHIPPED',
+  SHIPPED: 'DONE',
+  DONE: 'DONE',
+};
 
-  return [-1, statuses.length - 1].includes(index) ? '' : statuses[index + 1];
+export const getNextStatus = (orderStatus: OrderStatus) => {
+  // const index = statuses.findIndex((x) => x === orderStatus);
+
+  // return [-1, statuses.length - 1].includes(index) ? '' : statuses[index + 1];
+
+  return nextStatusDictionary[orderStatus];
 };
 
 export enum privileges {

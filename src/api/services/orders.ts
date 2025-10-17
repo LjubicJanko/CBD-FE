@@ -35,8 +35,10 @@ export type SearchProps = {
 
 const trackOrder = async (trackingId: string) => {
   try {
-    const response = await client.get(`/orders/track/${trackingId}`);
-    return response.data; // Return the tracking data if successful
+    const data = await client
+      .get(`/orders/track/${trackingId}`)
+      .then((res) => res.data);
+    return data;
   } catch (error) {
     const axiosError = error as AxiosError<ApiError>;
     if (axiosError.response) {
@@ -209,7 +211,7 @@ const getHistory = async (id: number) =>
 
 // order extension
 const createOrderExtension = async (data: OrderExtensionReqDto) =>
-  client.post(`/orders/extension`, data).then((res) => res.data);
+  client.post(`/orderExtend/create`, data).then((res) => res.data);
 
 export default {
   getOrder,
@@ -229,5 +231,5 @@ export default {
   fetchPaginated,
   getPayments,
   getHistory,
-  createOrderExtension
+  createOrderExtension,
 };

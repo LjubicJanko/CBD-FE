@@ -6,6 +6,7 @@
   "INVOICE": "Invoice",
   "ON_SHIP": "Cash on delivery",
   "PRINTING": "Printing",
+  "PENDING": "Pending",
   "PRINT_READY": "Print ready",
   "SEWING": "Sewing",
   "SHIP_READY": "Ready for shipping",
@@ -59,6 +60,7 @@
   "pausing-comment": "Pausing comment",
   "payment-method": "Payment method",
   "payments": "Payments",
+  "contact-info": "Contact info",
   "payer": "Payer",
   "postal-code": "Postal code",
   "postal-service": "Postal service",
@@ -89,6 +91,7 @@
   "track-title": "Order tracking",
   "login-title": "Login",
   "id-tracking": "ID tracking",
+  "PENDING-title": "Your order currently waits for approval!",
   "DESIGN-title": "Your order is currently in the design phase!",
   "PRINT_READY-title": "Your order is currently in the preparation phase!",
   "PRINTING-title": "Your order is currently in the printing phase!",
@@ -97,6 +100,7 @@
   "SHIPPED-title": "Your order has just been shipped!",
   "DONE-title": "Your order has been delivered!",
   "DESIGN-disclaimer": "A unique design is currently being created for your order.\nThis process can take up to 3 days. The status will be\nautomatically updated once the next step begins.",
+  "PENDING-disclaimer": "Za vašu porudžbinu se trenutno proverava validnost dostavljenih podataka i dodaju neophodne informacije kako bi porudžbina bila kompletna. Nakon odobrenja porudžbine, ona postaje spremna za štampu. Ovaj proces obično traje 1 dan.",
   "PRINT_READY-disclaimer": "Files for your order are currently being prepared and sent\nfor printing. This process can take up to 2 days.\nThe status will be automatically updated once the next step begins.",
   "PRINTING-disclaimer": "One step closer! Your order is currently being printed.\nThis process can take up to 2 days. The status will be\nautomatically updated once the next step begins.",
   "SEWING-disclaimer": "Our diligent tailors are working hard to ensure your equipment\nis perfect! This process can take up to 3 days. The status\nwill be automatically updated once the next step begins.",
@@ -138,12 +142,22 @@
       "payment-method": "Payment method is a required field.",
       "email": "Email is a required field.",
       "phone": "Phone number is a required field.",
-      "address": "Address is a required field."
+      "address": "Address is a required field.",
+      "teamName": "Team name is a required field.",
+      "orderDescription": "Order description is a required field.",
+      "fullName": "Full name is a required field.",
+      "city": "City is a required field.",
+      "zipCode": "Zip code is a required field."
     }
   },
   "orderExtension": {
+    "teamName": "Team name",
     "title": "Extend Order",
-    "note": "Note"
+    "note": "Note",
+    "createdSuccess": "Order extension request is successfully created.",
+    "description": "What do you need to extend the order?",
+    "disclaimer": "This relates to teams that already have our gear, and need a couple of new items of the same type.",
+    "descriptionPlaceholder": "Enter extension details, e.g. numbers, names, extra sets..."
   },
   "contact": {
     "phone": "Phone number",
@@ -164,6 +178,7 @@
   "old-password": "Old Password",
   "personal-info": "Personal info",
   "postal-code-coppied": "Postal code is coppied to clipboard",
+  "tracking-id-coppied": "Tracking ID  is coppied to clipboard",
   "enterTrackingNumber": "Enter the tracking number to check the status of your order.",
   "order-not-found": "Order not found. Please check the tracking ID.",
   "status-changed": "Successfuly changed status",

@@ -57,7 +57,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
         { label: t('left-to-pay'), value: selectedOrder?.amountLeftToPay },
         {
           label: t('expected'),
-          value: selectedOrder?.plannedEndingDate.toString(),
+          value: selectedOrder?.plannedEndingDate?.toString(),
         },
         {
           label: t('priority'),
@@ -78,8 +78,10 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
       selectedOrder?.name,
       selectedOrder?.description,
       selectedOrder?.note,
-      selectedOrder?.salePrice,
       selectedOrder?.acquisitionCost,
+      selectedOrder?.salePrice,
+      selectedOrder?.legalEntity,
+      selectedOrder?.salePriceWithTax,
       selectedOrder?.priceDifference,
       selectedOrder?.amountPaid,
       selectedOrder?.amountLeftToPay,

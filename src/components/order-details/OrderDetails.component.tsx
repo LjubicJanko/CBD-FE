@@ -1,10 +1,10 @@
 import CancelIcon from '@mui/icons-material/Cancel';
+import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
-import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Button,
@@ -33,13 +33,14 @@ import {
   OrderStatusEnum,
 } from '../../types/Order';
 import { xxsMax } from '../../util/breakpoints';
-import { statuses } from '../../util/util';
+import { extensionStatuses, statuses } from '../../util/util';
 import ConfirmModal, {
   ConfirmModalProps,
 } from '../modals/confirm-modal/ConfirmModal.component';
 import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import * as Styled from './OrderDetails.styles';
 import ChangeHistoryComponent from './components/ChangeHistory.component';
+import ContactInfo from './components/contact-info/ContactInfo.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
@@ -133,6 +134,12 @@ const OrderDetailsComponent = () => {
     [privileges.canEditData, isPaused, isArchived]
   );
 
+  const statusesToUse = useMemo(() => {
+    if (selectedOrder?.status !== 'PENDING') return statuses;
+
+    return extensionStatuses;
+  }, [selectedOrder?.status]);
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
@@ -141,6 +148,7 @@ const OrderDetailsComponent = () => {
 
   const isMoveButtonDisabled = useMemo(() => {
     const movePermissions = {
+      PENDING: privileges.canMoveToPrintReady,
       DESIGN: privileges.canMoveToPrintReady,
       PRINT_READY: privileges.canMoveToPrinting,
       PRINTING: privileges.canMoveToSewing,
@@ -149,8 +157,11 @@ const OrderDetailsComponent = () => {
       SHIPPED: privileges.canMoveToDone,
       DONE: false,
     };
+
     return (
-      !movePermissions[selectedOrder?.status as OrderStatusEnum] || isPaused
+      !movePermissions[selectedOrder?.status as OrderStatusEnum] ||
+      isPaused ||
+      !selectedOrder?.plannedEndingDate
     );
   }, [
     isPaused,
@@ -160,7 +171,7 @@ const OrderDetailsComponent = () => {
     privileges.canMoveToSewing,
     privileges.canMoveToShipReady,
     privileges.canMoveToShipped,
-    selectedOrder?.status,
+    selectedOrder,
   ]);
 
   const nonActiveBanner = useMemo(
@@ -240,10 +251,10 @@ const OrderDetailsComponent = () => {
     t,
   ]);
 
-  const toggleStatusModal = useCallback(
-    () => setIsStatusModalOpen((prev) => !prev),
-    []
-  );
+  const toggleStatusModal = useCallback(() => {
+    console.log('toggle');
+    setIsStatusModalOpen((prev) => !prev);
+  }, []);
 
   const actionButtons = useMemo(
     () => [
@@ -314,6 +325,83 @@ const OrderDetailsComponent = () => {
     ]
   );
 
+  const stepper = useMemo(() => {
+    if (!selectedOrder) return null;
+
+    return (
+      <div className="order-details__stepper-container">
+        {width >= xxsMax ? (
+          <Stepper
+            className="order-details__stepper-container__stepper"
+            activeStep={statusesToUse.indexOf(selectedOrder?.status)}
+            orientation={width < xxsMax ? 'vertical' : 'horizontal'}
+            alternativeLabel={width >= xxsMax}
+          >
+            {statusesToUse.map((status) => {
+              return (
+                <Step key={status}>
+                  <StepLabel>{t(status)}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        ) : (
+          <>
+            <div className="order-details__stepper-container__status">
+              {`Status: ${t(selectedOrder?.status)}`}
+            </div>
+            <Stepper
+              className="order-details__stepper-container__stepper-mobile"
+              activeStep={statusesToUse.indexOf(selectedOrder?.status)}
+            >
+              {statusesToUse.map((status) => (
+                <Step
+                  key={status}
+                  className={classNames({
+                    active: status === selectedOrder?.status,
+                  })}
+                >
+                  <div className="step"></div>
+                </Step>
+              ))}
+            </Stepper>
+          </>
+        )}
+        <div className="order-details__stepper-container__buttons">
+          {selectedOrder?.status !== OrderStatusEnum.DONE &&
+            !isArchived &&
+            !isMoveButtonDisabled && (
+              <Button
+                key={isStatusModalOpen ? 'openned' : 'closed'}
+                variant="contained"
+                color="primary"
+                fullWidth
+                size="medium"
+                disabled={isMoveButtonDisabled}
+                onClick={toggleStatusModal}
+              >
+                {t('move-to-next-state')}
+                <img
+                  src="/arrow-icon.svg"
+                  alt="icon"
+                  style={{ width: '18px' }}
+                />
+              </Button>
+            )}
+        </div>
+      </div>
+    );
+  }, [
+    isArchived,
+    isMoveButtonDisabled,
+    isStatusModalOpen,
+    selectedOrder,
+    statusesToUse,
+    t,
+    toggleStatusModal,
+    width,
+  ]);
+
   if (!selectedOrder) return null;
 
   return (
@@ -361,67 +449,7 @@ const OrderDetailsComponent = () => {
         </div>
       </div>
       <Divider />
-      <div className="order-details__stepper-container">
-        {width >= xxsMax ? (
-          <Stepper
-            className="order-details__stepper-container__stepper"
-            activeStep={statuses.indexOf(selectedOrder?.status)}
-            orientation={width < xxsMax ? 'vertical' : 'horizontal'}
-            alternativeLabel={width >= xxsMax}
-          >
-            {statuses.map((status) => {
-              return (
-                <Step key={status}>
-                  <StepLabel>{t(status)}</StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-        ) : (
-          <>
-            <div className="order-details__stepper-container__status">
-              {`Status: ${t(selectedOrder.status)}`}
-            </div>
-            <Stepper
-              className="order-details__stepper-container__stepper-mobile"
-              activeStep={statuses.indexOf(selectedOrder.status)}
-            >
-              {statuses.map((status) => (
-                <Step
-                  key={status}
-                  className={classNames({
-                    active: status === selectedOrder.status,
-                  })}
-                >
-                  <div className="step"></div>
-                </Step>
-              ))}
-            </Stepper>
-          </>
-        )}
-        <div className="order-details__stepper-container__buttons">
-          {selectedOrder.status !== OrderStatusEnum.DONE &&
-            !isArchived &&
-            !isMoveButtonDisabled && (
-              <Button
-                key={isStatusModalOpen ? 'openned' : 'closed'}
-                variant="contained"
-                color="primary"
-                fullWidth
-                size="medium"
-                disabled={isMoveButtonDisabled}
-                onClick={toggleStatusModal}
-              >
-                {t('move-to-next-state')}
-                <img
-                  src="/arrow-icon.svg"
-                  alt="icon"
-                  style={{ width: '18px' }}
-                />
-              </Button>
-            )}
-        </div>
-      </div>
+      {stepper}
       <Box
         className="order-details__tabs-box"
         sx={{ borderBottom: 1, borderColor: 'red' }}
@@ -435,7 +463,7 @@ const OrderDetailsComponent = () => {
           <Tab label={t('information')} />
           <Tab label={t('change-history')} />
           {privileges.canAddPayment && <Tab label={t('payments')} />}
-          <Tab label={t('files')} />
+          <Tab label={t('contact-info')} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -459,7 +487,12 @@ const OrderDetailsComponent = () => {
         </CustomTabPanel>
       )}
       <CustomTabPanel value={value} index={3}>
-        TODO
+        {/* {shouldShowForm ? (
+          <ContactInfoForm contactInfo={selectedOrder.contactInfo} />
+        ) : (
+          <ContactInfo contactInfo={selectedOrder.contactInfo} />
+        )} */}
+        <ContactInfo contactInfo={selectedOrder.contactInfo} />
       </CustomTabPanel>
       {isStatusModalOpen && (
         <StatusChangeModal

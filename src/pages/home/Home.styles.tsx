@@ -52,29 +52,5 @@ export const HomeContainer = styled.div`
         font-weight: 200;
       `)}
     }
-
-    &__instagram {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 32px;
-      width: fit-content;
-
-      font-weight: 400;
-      font-size: 24px;
-      letter-spacing: 0%;
-      text-align: center;
-      color: ${theme.PRIMARY_2};
-
-      ${tablet(css`
-        bottom: 8px;
-        font-size: 18px;
-      `)}
-
-      ${mobile(css`
-        bottom: 2px;
-        font-size: 12px;
-      `)}
-    }
   }
 `;
