@@ -11,7 +11,6 @@ import {
   OrderExtensionReqDto,
 } from '../../types/OrderExtension';
 import { useNavigate } from 'react-router-dom';
-import InstagramButton from '../../components/instagram/InstagramButton.component';
 
 type OrderExtensionData = {
   orderName: string;
@@ -200,7 +199,6 @@ const OrderExtensionPage: React.FC = () => {
           {t('create')}
         </Button>
       </form>
-      <InstagramButton className='extension-page-instagram-button'/>
     </Styled.OrderExtensionContainer>
   );
 };

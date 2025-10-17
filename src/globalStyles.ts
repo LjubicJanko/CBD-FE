@@ -49,10 +49,12 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   #root {
-    height: 100%;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
 
     main {
-      height: 100%;
+      flex: 1;
       padding-top: 100px;
 
       ${mobile(css`

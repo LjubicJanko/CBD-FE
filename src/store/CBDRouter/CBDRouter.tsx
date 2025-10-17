@@ -22,8 +22,10 @@ import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import { privileges } from '../../util/util';
 import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
+import PublicFooter from '../../components/public-footer/PublicFooter.component';
+import React from 'react';
 
-const Layout: React.FC = () => {
+const PrivateLayout: React.FC = () => {
   return (
     <>
       <HeaderComponent />
@@ -34,51 +36,67 @@ const Layout: React.FC = () => {
   );
 };
 
-const CBDRouter: React.FC = (): JSX.Element => {
+const PublicLayout: React.FC = () => {
+  return (
+    <>
+      <HeaderComponent />
+      <main>
+        <Outlet />
+      </main>
+      <PublicFooter />
+    </>
+  );
+};
 
+const CBDRouter: React.FC = (): JSX.Element => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Layout />}>
-        <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
+      <>
+        <Route element={<PublicLayout />}>
           <Route
-            path="dashboard"
-            element={
-              <OrdersProvider>
-                <DashboardPage />
-              </OrdersProvider>
-            }
+            index
+            element={<HomePage />}
+            loader={async () => await isAuthenticated()}
           />
           <Route
-            element={
-              <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
-            }
-          >
-            <Route path="createOrder" element={<CreateOrderPage />} />
-          </Route>
-          <Route path="profile" element={<ProfilePage />} />
+            path="track"
+            element={<IdTrackingPage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route
+            path="order-extension"
+            element={<OrderExtensionPage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route
+            path="login"
+            element={<LoginPage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route path="*" element={<Navigate to="/" />} />
         </Route>
-        <Route
-          index
-          element={<HomePage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route
-          path="track"
-          element={<IdTrackingPage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route
-          path="order-extension"
-          element={<OrderExtensionPage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route
-          path="login"
-          element={<LoginPage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Route>
+        <Route path="/" element={<PrivateLayout />}>
+          <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
+            <Route
+              path="dashboard"
+              element={
+                <OrdersProvider>
+                  <DashboardPage />
+                </OrdersProvider>
+              }
+            />
+            <Route
+              element={
+                <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
+              }
+            >
+              <Route path="createOrder" element={<CreateOrderPage />} />
+            </Route>
+            <Route path="profile" element={<ProfilePage />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" />} />
+        </Route>
+      </>
     )
   );
 
