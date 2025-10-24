@@ -6,14 +6,12 @@ export const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   padding-top: 124px;
   align-items: center;
   background-color: ${theme.PRIMARY_1};
 
   ${mobile(css`
-    padding: 8px;
-    padding-top: 32px;
+    padding: 32px 16px 16px 16px;
   `)}
 
   .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
@@ -43,6 +41,10 @@ export const LoginContainer = styled.div`
     font-size: 20px;
     line-height: 25px;
     margin-left: 8px;
+
+    ${mobile(css`
+      font-size: 16px;
+    `)}
   }
 
   .login-container {
@@ -50,6 +52,8 @@ export const LoginContainer = styled.div`
     &__password {
       display: flex;
       flex-direction: column;
+      width: 100%;
+
       .MuiInputBase-root {
         border-radius: 25px;
         background-color: ${theme.PRIMARY_1};
@@ -59,10 +63,13 @@ export const LoginContainer = styled.div`
     &__title {
       font-weight: 400;
       font-size: 32px;
-      line-height: 25px;
+      line-height: 40px;
       text-align: center;
-      vertical-align: middle;
       color: ${theme.PRIMARY_2};
+
+      ${mobile(css`
+        font-size: 24px;
+      `)}
     }
 
     &__loader-wrapper {
@@ -94,34 +101,53 @@ export const LoginContainer = styled.div`
     }
   }
 
+  .login-container__password {
+    .MuiButtonBase-root {
+      color: ${theme.PRIMARY_2};
+    }
+  }
+
   form {
     display: flex;
     flex-direction: column;
-    width: fit-content;
+    width: 100%;
+    max-width: 607px;
     gap: 32px;
     background-color: ${theme.PRIMARY_1};
     border-radius: 20px;
     border: 2px solid ${theme.PRIMARY_2};
-    padding: 48px 100px;
-    width: 607px;
-    height: 424px;
+    padding: 48px 32px;
 
     ${tablet(css`
       padding: 32px;
+    `)}
+
+    ${mobile(css`
+      padding: 24px 16px;
+      gap: 24px;
     `)}
 
     .fields {
       display: flex;
       flex-direction: column;
       gap: 30px;
-      width: 100%;
+
+      ${mobile(css`
+        gap: 16px;
+      `)}
     }
 
     .login-btn {
       background-color: ${theme.PRIMARY_2};
       color: black;
-      width: fit-content;
+      width: 100%;
+      max-width: 200px;
       align-self: center;
+      padding: 12px 24px;
+
+      ${mobile(css`
+        max-width: 100%;
+      `)}
     }
   }
 `;

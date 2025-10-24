@@ -20,8 +20,11 @@ import CompanyProvider from '../CompanyProvider/Company.provider';
 import CompanyInfoPage from '../../pages/company-config/CompanyConfig.page';
 import OrdersPage from '../../pages/orders/Orders.page';
 import { ConfigPage } from '../../pages/config/Config.page';
+import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
+import PublicFooter from '../../components/public-footer/PublicFooter.component';
+import React from 'react';
 
-const Layout: React.FC = () => {
+const PrivateLayout: React.FC = () => {
   return (
     <>
       <HeaderComponent />
@@ -32,12 +35,48 @@ const Layout: React.FC = () => {
   );
 };
 
+const PublicLayout: React.FC = () => {
+  return (
+    <>
+      <HeaderComponent />
+      <main>
+        <Outlet />
+      </main>
+      <PublicFooter />
+    </>
+  );
+};
+
 const CBDRouter: React.FC = (): JSX.Element => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Layout />}>
-        <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
-          <Route path="companies-overview" element={<CompaniesPage />} />
+      <>
+        <Route element={<PublicLayout />}>
+          <Route
+            index
+            element={<HomePage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route
+            path="track"
+            element={<IdTrackingPage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route
+            path="order-extension"
+            element={<OrderExtensionPage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route
+            path="login"
+            element={<LoginPage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Route>
+        <Route path="/" element={<PrivateLayout />}>
+          <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
+            <Route path="companies-overview" element={<CompaniesPage />} />
           <Route
             path="company/:id"
             element={
@@ -65,24 +104,10 @@ const CBDRouter: React.FC = (): JSX.Element => {
             <Route path="config" element={<ConfigPage />} />
           </Route>
           <Route path="profile" element={<ProfilePage />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" />} />
         </Route>
-        <Route
-          index
-          element={<HomePage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route
-          path="track"
-          element={<IdTrackingPage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route
-          path="login"
-          element={<LoginPage />}
-          loader={async () => await isAuthenticated()}
-        />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Route>
+      </>
     )
   );
 

@@ -144,8 +144,11 @@ export const IdTrackingDetailsContainer = styled.div`
       &--title {
         padding-left: 8px;
         color: ${theme.SECONDARY_1};
-        font-size: 12px;
+        font-size: 24px;
         font-weight: 700;
+      }
+      &--title-copy {
+        color: ${theme.SECONDARY_1};
       }
 
       &--container {
@@ -242,7 +245,8 @@ export const IdTrackingDetailsContainer = styled.div`
       }
     }
 
-    &__order-info {
+    &__order-info,
+    &__contact-info {
       width: 70%;
       margin-top: 30px;
       display: flex;
@@ -311,6 +315,14 @@ export const IdTrackingDetailsContainer = styled.div`
           font-size: 14px;
           font-weight: 700;
         }
+      }
+    }
+
+    &__contact-info {   
+      margin-top: 0px;
+      &__container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
       }
     }
   }

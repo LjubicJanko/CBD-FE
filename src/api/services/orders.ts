@@ -14,6 +14,7 @@ import {
   SortCriteriaType,
   SortType,
 } from '../../components/modals/filters/FiltersModal.component';
+import { OrderExtensionReqDto } from '../../types/OrderExtension';
 
 export type FetchPaginatedProps = {
   searchTerm?: string;
@@ -34,8 +35,10 @@ export type SearchProps = {
 
 const trackOrder = async (trackingId: string) => {
   try {
-    const response = await client.get(`/orders/track/${trackingId}`);
-    return response.data; // Return the tracking data if successful
+    const data = await client
+      .get(`/orders/track/${trackingId}`)
+      .then((res) => res.data);
+    return data;
   } catch (error) {
     const axiosError = error as AxiosError<ApiError>;
     if (axiosError.response) {
@@ -203,8 +206,12 @@ const deletePayment = async (id: number, paymentId: number) =>
 const getPayments = async (id: number) =>
   privateClient.get(`/orders/payments/${id}`).then((res) => res.data);
 
-const getHistory = async (id: number) => 
+const getHistory = async (id: number) =>
   privateClient.get(`/orders/history/${id}`).then((res) => res.data);
+
+// order extension
+const createOrderExtension = async (data: OrderExtensionReqDto) =>
+  client.post(`/orderExtend/create`, data).then((res) => res.data);
 
 export default {
   getOrder,
@@ -223,5 +230,6 @@ export default {
   deletePayment,
   fetchPaginated,
   getPayments,
-  getHistory
+  getHistory,
+  createOrderExtension,
 };

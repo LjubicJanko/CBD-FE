@@ -14,6 +14,7 @@ export type OrderExecutionStatusEnum =
   (typeof OrderExecutionStatusEnum)[keyof typeof OrderExecutionStatusEnum];
 
 export enum OrderStatusEnum {
+  PENDING = 'PENDING',
   DESIGN = 'DESIGN',
   PRINT_READY = 'PRINT_READY',
   PRINTING = 'PRINTING',
@@ -34,6 +35,7 @@ export enum OrderPriorityEnum {
 export type OrderPriority = keyof typeof OrderPriorityEnum;
 
 export const orderStatusArray = [
+  'PENDING',
   'DESIGN',
   'PRINT_READY',
   'PRINTING',
@@ -64,6 +66,14 @@ export type CreateOrder = {
   acquisitionCost?: number;
   salePrice?: number;
   priority: OrderPriority;
+};
+
+export type ContactInfoData = {
+  fullName: string;
+  zipCode: string;
+  city: string;
+  address: string;
+  phoneNumber: string;
 };
 
 export type OrderOverview = {
@@ -102,6 +112,8 @@ export type Order = {
   payments: Payment[];
   pausingComment: string;
   priceDifference?: number;
+  extension?: boolean;
+  contactInfo?: ContactInfoData;
 };
 
 export type OrderTracking = {
@@ -118,6 +130,8 @@ export type OrderTracking = {
   legalEntity: boolean;
   amountLeftToPay: number;
   amountLeftToPayWithTax?: number;
+  extension?: boolean;
+  contactInfo?: ContactInfoData;
 };
 
 export type GetAllPaginatedResponse = {

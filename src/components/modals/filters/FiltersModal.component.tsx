@@ -57,6 +57,7 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
 
   const initialVariants: ButtonVariants = useMemo(
     () => ({
+      PENDING: 'PENDING' in params,
       DESIGN: 'DESIGN' in params,
       PRINT_READY: 'PRINT_READY' in params,
       PRINTING: 'PRINTING' in params,
@@ -88,6 +89,13 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
     variant: 'filled' | 'outlined';
   }[] = useMemo(
     () => [
+      {
+        label: t('PENDING'),
+        key: 'PENDING',
+        variant: selectedStatuses[OrderStatusEnum.PENDING]
+          ? 'filled'
+          : 'outlined',
+      },
       {
         label: t('DESIGN'),
         key: 'DESIGN',
