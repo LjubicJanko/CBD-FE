@@ -77,33 +77,35 @@ const CBDRouter: React.FC = (): JSX.Element => {
         <Route path="/" element={<PrivateLayout />}>
           <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
             <Route path="companies-overview" element={<CompaniesPage />} />
-          <Route
-            path="company/:id"
-            element={
-              <CompanyProvider>
-                <CompanyPage />
-              </CompanyProvider>
-            }
-          >
-            <Route index element={<Navigate to="orders" replace />} />
-            <Route path="config" element={<CompanyInfoPage />} />
-            <Route path="orders" element={<OrdersPage />} />
-          </Route>
-          <Route
-            element={
-              <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
-            }
-          >
-            <Route path="createOrder" element={<CreateOrderPage />} />
-          </Route>
-          <Route
-            element={
-              <ProtectedRoute requiredPrivilege={privileges.SUPER_PERMISSION} />
-            }
-          >
-            <Route path="config" element={<ConfigPage />} />
-          </Route>
-          <Route path="profile" element={<ProfilePage />} />
+            <Route
+              path="company/:id"
+              element={
+                <CompanyProvider>
+                  <CompanyPage />
+                </CompanyProvider>
+              }
+            >
+              <Route index element={<Navigate to="orders" replace />} />
+              <Route path="config" element={<CompanyInfoPage />} />
+              <Route path="orders" element={<OrdersPage />} />
+              <Route
+                element={
+                  <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
+                }
+              >
+                <Route path="createOrder" element={<CreateOrderPage />} />
+              </Route>
+            </Route>
+            <Route
+              element={
+                <ProtectedRoute
+                  requiredPrivilege={privileges.SUPER_PERMISSION}
+                />
+              }
+            >
+              <Route path="config" element={<ConfigPage />} />
+            </Route>
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Route>

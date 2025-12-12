@@ -44,6 +44,7 @@ import OrderInfoForm from './components/order-info-form/OrderInfoForm.component'
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
 import CompanyContext from '../../store/CompanyProvider/Company.context';
+import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -97,7 +98,7 @@ const OrderDetailsComponent = () => {
 
   const { roles: userRoles } = authData ?? {};
 
-  const isAdmin = userRoles?.includes('admin');
+  const isAdmin = userRoles?.includes('admin') || userRoles?.includes('super_admin');
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] =
@@ -486,12 +487,12 @@ const OrderDetailsComponent = () => {
         </CustomTabPanel>
       )}
       <CustomTabPanel value={value} index={3}>
-        {/* {shouldShowForm ? (
+        {shouldShowForm ? (
           <ContactInfoForm contactInfo={selectedOrder.contactInfo} />
         ) : (
           <ContactInfo contactInfo={selectedOrder.contactInfo} />
-        )} */}
-        <ContactInfo contactInfo={selectedOrder.contactInfo} />
+        )}
+        {/* <ContactInfo contactInfo={selectedOrder.contactInfo} /> */}
       </CustomTabPanel>
       {isStatusModalOpen && (
         <StatusChangeModal

@@ -15,7 +15,7 @@ const ProfilePage = () => {
   >('personal-info');
   const { roles: userRoles } = authData ?? {};
 
-  const isAdmin = userRoles?.includes('admin');
+  const isAdmin = userRoles?.includes('admin') || userRoles?.includes('super_admin');
 
   const components = useMemo(
     () => ({

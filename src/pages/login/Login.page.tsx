@@ -16,7 +16,6 @@ import AuthContext from '../../store/AuthProvider/Auth.context';
 import { LoginData } from '../../types/Auth';
 import { textInputSX } from '../../util/util';
 import * as Styled from './Login.styles';
-import InstagramIcon from '@mui/icons-material/Instagram';
 
 
 const initialValues: LoginData = {
@@ -121,19 +120,6 @@ const LoginComponent = () => {
           {t('login')}
         </Button>
       </form>
-
-      <IconButton
-        className="login-container__instagram"
-        onClick={() =>
-          window.open(
-            'https://www.instagram.com/cbd_sportswear',
-            '_blank'
-          )
-        }
-      >
-        <InstagramIcon />
-        <p>{t('@cbd_sportswear')}</p>
-      </IconButton>
     </Styled.LoginContainer>
   );
 };

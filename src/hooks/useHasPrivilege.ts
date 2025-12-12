@@ -9,8 +9,13 @@ export const useHasPrivilege = (requiredPrivilege: string) => {
   const { authData } = useContext(AuthContext);
 
   const hasPrivilege = useMemo(
-    () => !!authData?.privileges.includes(requiredPrivilege),
-    [authData?.privileges, requiredPrivilege]
+    () => {
+
+      if(authData?.isSuperAdmin) return true;
+
+      return !!authData?.privileges.includes(requiredPrivilege)
+    },
+    [authData?.isSuperAdmin, authData?.privileges, requiredPrivilege]
   );
 
   return hasPrivilege;
