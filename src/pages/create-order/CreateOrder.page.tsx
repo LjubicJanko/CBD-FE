@@ -8,11 +8,10 @@ import {
 } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { orderService } from '../../api';
 import { BasicDatePicker } from '../../components';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import {
@@ -21,6 +20,8 @@ import {
   OrderPriorityEnum,
 } from '../../types/Order';
 import * as Styled from './CreateOrder.styles';
+import CompanyContext from '../../store/CompanyProvider/Company.context';
+import { companyService } from '../../api';
 
 const emptyOrderData: CreateOrder = {
   name: '',
@@ -40,6 +41,9 @@ const CreateOrderPage = () => {
 
   const { showSnackbar } = useSnackbar();
 
+  const { company } = useContext(CompanyContext);
+  console.log({company})
+
   const initialValues = useMemo(() => emptyOrderData, []);
 
   const validationSchema = Yup.object({
@@ -58,19 +62,22 @@ const CreateOrderPage = () => {
   const onSubmit = useCallback(
     async (values: CreateOrder) => {
       try {
-        await orderService.createOrder({
+        const orderToCreate = {
           ...values,
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
             'YYYY-MM-DD'
           ),
-        });
+        };
+        if(!company?.id) return;
+
+        await companyService.addOrder(company?.id, orderToCreate);
         showSnackbar(t('order-created'), 'success');
         navigate('/');
       } catch (error) {
         console.error(error);
       }
     },
-    [navigate, showSnackbar, t]
+    [company?.id, navigate, showSnackbar, t]
   );
 
   const formik = useFormik<CreateOrder>({

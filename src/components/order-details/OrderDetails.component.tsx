@@ -45,6 +45,7 @@ import OrderInfoOverview from './components/order-info-overview/OrderInfoOvervie
 import OrderPayments from './components/order-payments/OrderPayments.component';
 import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
 import CompanyContext from '../../store/CompanyProvider/Company.context';
+import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -98,7 +99,7 @@ const OrderDetailsComponent = () => {
 
   const { roles: userRoles } = authData ?? {};
 
-  const isAdmin = userRoles?.includes('admin');
+  const isAdmin = userRoles?.includes('admin') || userRoles?.includes('super_admin');
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] =

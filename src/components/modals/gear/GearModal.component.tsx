@@ -96,23 +96,6 @@ export const GearModal = ({
           />
         </div>
 
-        <div className="gear-modal__fields__categories">
-          <InputLabel>{t('Kategorija')}</InputLabel>
-          <FormControl fullWidth margin="normal">
-            <Select
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value as number)}
-              label={t('gearCategory')}
-            >
-              {categories.map((cat) => (
-                <MenuItem key={`gear-category-${cat.id}`} value={cat.id}>
-                  {cat.value}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-
         <div className="gear-modal__fields__types">
           <InputLabel>{t('Tip')}</InputLabel>
           <FormControl fullWidth margin="normal">
@@ -129,14 +112,32 @@ export const GearModal = ({
             </Select>
           </FormControl>
         </div>
+        <div className="gear-modal__fields__categories">
+          <InputLabel>{t('Kategorija')}</InputLabel>
+          <FormControl fullWidth margin="normal">
+            <Select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value as number)}
+              label={t('gearCategory')}
+            >
+              {categories.map((cat) => (
+                <MenuItem key={`gear-category-${cat.id}`} value={cat.id}>
+                  {cat.value}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+      </div>
+      <div className="gear-modal__actions">
         <Button
           variant="contained"
           onClick={handleSubmit}
-          className="gear-modal__fields__confirm"
+          className="gear-modal__actions__confirm"
           disabled={isSubmitDisabled}
           endIcon={<SaveOutlinedIcon />}
         >
-          {t('confirm')}
+          {t('Sačuvaj')}
         </Button>
       </div>
     </Styled.GearModalContainer>

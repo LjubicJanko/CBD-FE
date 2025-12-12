@@ -34,7 +34,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
     () =>
       [
         { label: t('order-name'), value: selectedOrder?.name },
-        authData?.roles?.includes('admin') && {
+        (authData?.roles?.includes('admin') || authData?.roles?.includes('super_admin')) && {
           label: t('description'),
           value: selectedOrder?.description,
         },

@@ -12,8 +12,10 @@ const ProtectedRoute = ({ requiredPrivilege }: ProtectedRouteProps) => {
   // Check if the user has the required privilege
   const hasPrivilege = authData?.privileges?.includes(requiredPrivilege);
 
+  const isSuperAdmin = authData?.isSuperAdmin;
+
   // If the user doesn't have the privilege, redirect them
-  return hasPrivilege ? <Outlet /> : <Navigate to="/companies-overview" />;
+  return hasPrivilege || isSuperAdmin ? <Outlet /> : <Navigate to="/companies-overview" />;
 };
 
 export default ProtectedRoute;

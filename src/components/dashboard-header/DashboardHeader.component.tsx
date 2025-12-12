@@ -83,7 +83,7 @@ const DashboardHeader = () => {
             <Button
               variant="contained"
               className="dashboard-header__create--btn"
-              onClick={() => navigate('/createOrder')}
+              onClick={() => navigate('../createOrder')}
             >
               <p>{t(isOnMobile ? 'create' : 'create-order')}</p>
               <AddIcon />

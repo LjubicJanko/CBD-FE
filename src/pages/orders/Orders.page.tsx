@@ -6,8 +6,9 @@ import * as Styled from './Orders.styles';
 import { CircularProgress } from '@mui/material';
 
 const OrdersPage = () => {
-  const { selectedOrder, isLoading } = useContext(CompanyContext);
+  const { selectedOrder, isLoading, company } = useContext(CompanyContext);
 
+  console.log({company})
   return (
     <Styled.OrdersPageContainer className="orders">
       <DashboardHeader />

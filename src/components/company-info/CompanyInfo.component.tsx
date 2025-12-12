@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import CompanyContext from '../../store/CompanyProvider/Company.context';
 import * as Styled from './CompanyInfo.styles';
 import companyService from '../../api/services/companies';
+import BannerImageUpload from './BannerImageUpload.component';
 
 export type CompanyFormValues = {
   name: string;
@@ -13,6 +14,7 @@ export type CompanyFormValues = {
   vat: string;
   websiteUrl: string;
   colors: [string, string, string, string, string];
+  bannerImage: string;
 };
 
 const CompanyInfo = () => {
@@ -31,6 +33,7 @@ const CompanyInfo = () => {
               company?.colors?.length === 5
                 ? (company.colors as [string, string, string, string, string])
                 : ['#000000', '#000000', '#000000', '#000000', '#000000'],
+            bannerImage: '',
           }
         : {
             name: '',
@@ -38,6 +41,7 @@ const CompanyInfo = () => {
             vat: '',
             websiteUrl: '',
             colors: ['#000000', '#000000', '#000000', '#000000', '#000000'],
+            bannerImage: '',
           },
     [company]
   );
@@ -73,6 +77,12 @@ const CompanyInfo = () => {
     onSubmit,
     enableReinitialize: true,
   });
+
+  console.log(formik);
+
+  const handleBannerImageChange = useCallback((base64: string) => {
+    formik.setFieldValue('bannerImage', base64);
+  }, [formik]);
 
   return (
     <Styled.CompanyInfoContainer>
@@ -160,6 +170,10 @@ const CompanyInfo = () => {
             />
           ))}
         </div>
+        <BannerImageUpload
+          value={formik.values.bannerImage}
+          onChange={handleBannerImageChange}
+        />
         <div className="company-info-form__actions" style={{ marginTop: 20 }}>
           <Button variant="contained" color="primary">
             {t('Podigni fajl')}
