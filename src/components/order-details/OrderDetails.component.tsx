@@ -44,6 +44,7 @@ import ContactInfo from './components/contact-info/ContactInfo.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
+import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -451,7 +452,6 @@ const OrderDetailsComponent = () => {
       {stepper}
       <Box
         className="order-details__tabs-box"
-        sx={{ borderBottom: 1, borderColor: 'red' }}
       >
         <Tabs
           className="order-details__tabs-box__tabs"
@@ -486,12 +486,11 @@ const OrderDetailsComponent = () => {
         </CustomTabPanel>
       )}
       <CustomTabPanel value={value} index={3}>
-        {/* {shouldShowForm ? (
-          <ContactInfoForm contactInfo={selectedOrder.contactInfo} />
+        {shouldShowForm ? (
+          <ContactInfoForm initialContactInfo={selectedOrder.contactInfo} />
         ) : (
           <ContactInfo contactInfo={selectedOrder.contactInfo} />
-        )} */}
-        <ContactInfo contactInfo={selectedOrder.contactInfo} />
+        )}
       </CustomTabPanel>
       {isStatusModalOpen && (
         <StatusChangeModal
