@@ -1,13 +1,13 @@
 import styled, { css } from 'styled-components';
 import CbdModal from '../../cbd-modal/CbdModal.component';
 import theme from '../../../styles/theme';
-import { tablet } from '../../../util/breakpoints';
+import { mobile, tablet } from '../../../util/breakpoints';
 
 export const GearModalContainer = styled(CbdModal)`
   min-width: 250px;
   background-color: ${theme.PRIMARY_1};
   width: 770px;
-  padding: 48px 80px 32px 80px;
+  padding: 0px 80px 32px 80px;
   justify-content: space-between;
 
   ${tablet(css`
@@ -64,22 +64,39 @@ export const GearModalContainer = styled(CbdModal)`
 
   .gear-modal {
     &__fields {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 80px;
+      row-gap: 32px;
+
+      ${mobile(css`
+        display: flex;
+        flex-direction: column;
+      `)}
+
+      &__name {
+        grid-column: 1/3;
+      }
+
+      &__types {
+        grid-column: 1;
+      }
 
       &__categories {
-        max-width: 50%;
-        ${tablet(css`
-          max-width: unset;
-        `)}
+        grid-column: 2;
       }
+    }
+    &__actions {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      
       &__confirm {
         background-color: ${theme.PRIMARY_2};
         color: ${theme.PRIMARY_1};
-        margin-top: 32px;
+        margin-top: 64px;
         margin-right: -50px;
-        align-self: flex-end;
         border-radius: 25px;
         font-family: Afacad;
         font-weight: 400;
