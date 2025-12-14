@@ -206,11 +206,12 @@ const CreateOrderPage = () => {
           max={3}
           value={orderPriorityArray.indexOf(formik.values.priority) + 1}
           onChange={(_, newValue) => {
-            newValue &&
+            if (newValue) {
               formik.setFieldValue(
                 'priority',
                 orderPriorityArray[newValue - 1]
               );
+            }
           }}
         />
 

@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { StatusData } from '../../components/modals/status-change/StatusChangeModal.component';
 import {
+  ContactInfoData,
   CreateOrder,
   GetAllPaginatedResponse,
   Order,
@@ -213,6 +214,9 @@ const getHistory = async (id: number) =>
 const createOrderExtension = async (data: OrderExtensionReqDto) =>
   client.post(`/orderExtend/create`, data).then((res) => res.data);
 
+const editContactInfo = async(id: number, data: ContactInfoData) =>
+  client.put(`/orderExtend/editContactInfo/${id}`, data).then((res) => res.data);
+
 export default {
   getOrder,
   trackOrder,
@@ -232,4 +236,5 @@ export default {
   getPayments,
   getHistory,
   createOrderExtension,
+  editContactInfo
 };
