@@ -4,3 +4,4 @@ export { default as OrderDetailsComponent } from './order-details/OrderDetails.c
 export { default as OrderSearchComponent } from './order-search/OrderSearch.component';
 export { default as OrdersListComponent } from './orders-list/OrdersList.component';
 export { default as BasicDatePicker } from './date-picker/BasicDatePicker.component';
+export { default as BannerCard } from './banner-card/BannerCard.component';

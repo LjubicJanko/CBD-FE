@@ -45,7 +45,9 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       setToken('');
       setAuthData(null);
       localStorageService.clearData();
-      navigate && navigate('/login');
+      if (navigate) {
+        navigate('/login');
+      }
     } catch (error) {
       console.error(error);
     }

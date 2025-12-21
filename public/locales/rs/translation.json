@@ -34,6 +34,7 @@
   "delete": "Obriši",
   "delete-confirm": "Da li si siguran da želiš da obrišeš ovu narudžbinu?",
   "delete-payment-confirm": "Da li si siguran da želiš da obrišeš ovu uplatu?",
+  "delete-banner-confirm": "Da li si siguran da želiš da obrišeš ovaj baner?",
   "description": "Opis",
   "enter-order-id": "Unesi identifikacioni broj",
   "expected": "Očekivan završetak",
