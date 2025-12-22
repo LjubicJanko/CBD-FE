@@ -40,21 +40,21 @@ const PublishBanner = ({
     }[] = useMemo(
         () => [
             {
-                label: t('Order'),
+                label: t('Dopuna narudžbine'),
                 key: BannerLocationEnum.ORDER,
                 variant: selectedLocations[BannerLocationEnum.ORDER]
                     ? 'filled'
                     : 'outlined',
             },
             {
-                label: t('Id tracking'),
+                label: t('Id praćenje'),
                 key: BannerLocationEnum.ID_TRACKING,
                 variant: selectedLocations[BannerLocationEnum.ID_TRACKING]
                     ? 'filled'
                     : 'outlined',
             },
             {
-                label: t('Home'),
+                label: t('Početna stranica'),
                 key: BannerLocationEnum.HOME,
                 variant: selectedLocations[BannerLocationEnum.HOME]
                     ? 'filled'

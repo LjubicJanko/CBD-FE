@@ -52,7 +52,7 @@ const BannerModal = ({
     return (
         <Styled.BannerContainer
             className="banner-modal"
-            title={t(banner ? 'Edit Banner' : 'Create Banner')}
+            title={t(banner ? 'Izmeni baner' : 'Kreiraj baner')}
             isOpen={isOpen}
             onClose={onCancel}
         >
@@ -60,7 +60,7 @@ const BannerModal = ({
                 <div className="banner-modal__form__fields">
                     <TextField
                         className="banner-modal__form__fields__title"
-                        label="Title"
+                        label={t('Naslov')}
                         name="title"
                         type="text"
                         value={formik.values.title}
@@ -70,7 +70,7 @@ const BannerModal = ({
                     />
                     <TextField
                         className="banner-modal__form__fields__text"
-                        label="Text"
+                        label={t('Tekst')}
                         name="text"
                         type="text"
                         multiline

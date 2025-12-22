@@ -59,7 +59,7 @@ const ProfilePage = () => {
                         })}
                         onClick={() => setSelectedCard('banners')}
                     >
-                        {t('banners')}
+                        {t('Baneri')}
                     </Button>
                 )}
             </div>

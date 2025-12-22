@@ -43,7 +43,7 @@ export const BannerPage = () => {
                 setBanners((old) =>
                     old.filter((_banner) => _banner.id !== bannerId)
                 );
-                showSnackbar(t('Banner successfuly deleted'), 'success');
+                showSnackbar(t('Baner uspešno obrisan'), 'success');
             } catch (error) {
                 console.error(error);
             }
@@ -55,7 +55,7 @@ export const BannerPage = () => {
         async (bannerId: number, bannerLocations: BannerLocation[]) => {
             try {
                 await bannerService.publishBanner(bannerId, bannerLocations);
-                showSnackbar(t('Banner successfuly published'), 'success');
+                showSnackbar(t('Baner uspešno objavljen'), 'success');
                 fetchBanners();
             } catch (error) {
                 console.error(error);
@@ -68,7 +68,7 @@ export const BannerPage = () => {
         async (bannerId: number) => {
             try {
                 await bannerService.unpublishBanner(bannerId);
-                showSnackbar(t('Banner successfuly unpublished'), 'success');
+                showSnackbar(t('Baner uspešno uklonjen'), 'success');
                 fetchBanners();
             } catch (error) {
                 console.error(error);
@@ -84,7 +84,7 @@ export const BannerPage = () => {
                     createBannerData
                 );
                 setBanners((old) => [...old, res]);
-                showSnackbar(t('Banner successfuly created'), 'success');
+                showSnackbar(t('Baner uspešno kreiran'), 'success');
             } catch (error) {
                 console.error(error);
             } finally {
@@ -105,7 +105,7 @@ export const BannerPage = () => {
                 setBanners((old) =>
                     old.map((banner) => (banner.id === res.id ? res : banner))
                 );
-                showSnackbar(t('Banner successfuly edited'), 'success');
+                showSnackbar(t('Baner uspešno izmenjen'), 'success');
             } catch (error) {
                 console.error(error);
             } finally {
@@ -129,7 +129,7 @@ export const BannerPage = () => {
                     onClick={() => setBannerModalConfig({ isOpen: true })}
                     className="banners-page__heading__add-button"
                 >
-                    Add banner
+                    {t('Dodaj novi baner')}
                 </Button>
             </div>
             <div className="banners-page__content">

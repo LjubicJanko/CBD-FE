@@ -30,14 +30,14 @@ export const HomeContainer = styled.div`
                 padding: 0;
             `)}
 
-  ${mobile(css`
+            ${mobile(css`
                 flex-direction: column;
                 max-height: 80vh;
                 padding-top: 16px;
             `)}
 
             &__tracking-panel {
-                background-image: url('id_tracking.png');
+                background-image: url('id_tracking.jpg');
             }
 
             &__order-panel {

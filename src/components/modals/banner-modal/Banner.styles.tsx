@@ -55,6 +55,7 @@ export const BannerContainer = styled(CbdModal)`
                 display: flex;
                 width: 100%;
                 justify-content: space-between;
+                margin-top: 32px;
 
                 &__cancel {
                     color: ${theme.SECONDARY_1};
