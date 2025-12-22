@@ -4,16 +4,18 @@ import MobileFriendlyIcon from '@mui/icons-material/MobileFriendly';
 import { Button, Chip } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Banner } from '../../types/Banner';
+import { Banner, BannerLocation } from '../../types/Banner';
 import ConfirmModal from '../modals/confirm-modal/ConfirmModal.component';
 import * as Styled from './BannerCard.styes';
 import MobileOffIcon from '@mui/icons-material/MobileOff';
+import PublishBanner from '../modals/publish-banner-modal';
+import classNames from 'classnames';
 
 export interface BannerCardProps {
     banner: Banner;
     onEdit: () => void;
     onDelete: () => void;
-    onPublish: () => void;
+    onPublish: (bannerLocations: BannerLocation[]) => void;
     onUnpublish: () => void;
 }
 
@@ -34,6 +36,7 @@ const BannerCard = ({
 
     const [confirmModalConfig, setConfirmModalConfig] =
         useState(EMPTY_MODAL_CONFIG);
+    const [publishModalOpen, setPublishModalOpen] = useState(false);
 
     const isPublished = useMemo(
         () => banner.activePages.length > 0,
@@ -41,7 +44,11 @@ const BannerCard = ({
     );
 
     return (
-        <Styled.BannerCardContainer className="banner-card">
+        <Styled.BannerCardContainer className={
+            classNames("banner-card", {
+                "banner-card--unpublished": !isPublished,
+            })
+        }>
             <div className="banner-card__header">
                 {banner.activePages.length > 0 ? (
                     <MobileFriendlyIcon
@@ -84,11 +91,13 @@ const BannerCard = ({
                 <h2>{banner.title}</h2>
                 <p>{banner.text}</p>
             </div>
-            <div className="banner-card__locations">
-                {banner.activePages.map((activePage) => (
-                    <Chip label={activePage} />
-                ))}
-            </div>
+            {banner.activePages.length > 0 && (
+                <div className="banner-card__locations">
+                    {banner.activePages.map((activePage) => (
+                        <Chip label={activePage} />
+                    ))}
+                </div>
+            )}
             <div className="banner-card__actions">
                 {isPublished ? (
                     <Button
@@ -111,24 +120,22 @@ const BannerCard = ({
                     <Button
                         variant="contained"
                         className="banner-card__actions__publish"
-                        onClick={() =>
-                            setConfirmModalConfig({
-                                isOpen: true,
-                                text: t('publish-banner-confirm'),
-                                onConfirm: () => {
-                                    setConfirmModalConfig(EMPTY_MODAL_CONFIG);
-                                    onPublish();
-                                },
-                            })
-                        }
+                        onClick={() => setPublishModalOpen(true)}
                     >
                         {t('Publish')}
                     </Button>
                 )}
             </div>
+            <PublishBanner
+                isOpen={publishModalOpen}
+                onConfirm={(locations) => {
+                    onPublish(locations);
+                    setPublishModalOpen(false);
+                }}
+                onCancel={() => setPublishModalOpen(false)}
+            />
             <ConfirmModal
                 hideNote
-                // key="publish-banner-modal"
                 {...confirmModalConfig}
                 onCancel={() => setConfirmModalConfig(EMPTY_MODAL_CONFIG)}
             />

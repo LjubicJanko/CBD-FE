@@ -1,23 +1,27 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import theme from '../../styles/theme';
+import { mobile } from '../../util/breakpoints';
 
 export const BannerCardContainer = styled.div`
-    padding: 8px;
-    border-radius: 20px;
+    padding: 12px;
+    border-radius: 10px;
     background-color: ${theme.SECONDARY_2};
     max-width: 300px;
-    cursor: pointer;
     position: relative;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
-    /* &:hover {
-        transform: translateY(-2px);
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 6px 8px;
+    ${mobile(css`
+        max-width: 100%;
+    `)}
 
+    &.banner-card--unpublished {
         opacity: 0.7;
-    } */
+    }
 
     .banner-card {
-        display: flex;
         flex-direction: column;
 
         &__header {
@@ -44,23 +48,30 @@ export const BannerCardContainer = styled.div`
 
         &__content {
             color: ${theme.PRIMARY_1};
+            flex: 1;
         }
+
+        &__locations {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         &__actions {
             display: flex;
+            width: 100%;
             align-items: flex-end;
-            &__publish,
-            &__unpublish {
-                margin-top: 16px;
-            }
+            justify-content: flex-end;
 
             &__publish {
                 background-color: ${theme.PRIMARY_2};
                 color: ${theme.PRIMARY_1};
                 border-color: ${theme.PRIMARY_2};
             }
-            
+
             &__unpublish {
-                color: ${theme.SECONDARY_3};
+                color: ${theme.SECONDARY_1};
+                border-color: ${theme.SECONDARY_1};
             }
         }
     }

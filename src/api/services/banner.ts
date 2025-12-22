@@ -11,6 +11,9 @@ const deleteBanner = async (bannerId: number) =>
 const createBanner = async (banner: CreateBannerData) =>
     privateClient.post(`/banners/create`, banner).then((res) => res.data);
 
+const editBanner = async (bannerId: number, editBannerData: CreateBannerData) =>
+    privateClient.put(`/banners/edit/${bannerId}`, editBannerData).then((res) => res.data);
+
 const publishBanner = async (bannerId: number, pages: BannerLocation[]) =>
     privateClient
         .post(`/banners/publish/${bannerId}`, pages)
@@ -21,14 +24,15 @@ const unpublishBanner = async (bannerId: number) =>
         .post(`/banners/unpublish/${bannerId}`)
         .then((res) => res.data);
 
-const getActiveForPage = async (page: BannerLocation) =>
-    client.get(`/banners/active/${page}`).then((res) => res.data);
+const getActive = async () =>
+    client.get(`/banners/active`).then((res) => res.data);
 
 export default {
     getAll,
     deleteBanner,
     createBanner,
+    editBanner,
     publishBanner,
     unpublishBanner,
-    getActiveForPage,
+    getActive,
 };

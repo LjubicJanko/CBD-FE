@@ -6,6 +6,8 @@ import { Button } from '@mui/material';
 import BannerModal from '../../components/modals/banner-modal/Banner.modal';
 import AddIcon from '@mui/icons-material/Add';
 import { bannerService } from '../../api';
+import { useSnackbar } from '../../hooks/useSnackbar';
+import { useTranslation } from 'react-i18next';
 
 type BannerModalConfig = {
     isOpen: boolean;
@@ -17,9 +19,13 @@ const EMPTY_BANNER_MODAL_CONFIG = {
 };
 
 export const BannerPage = () => {
+    const { t } = useTranslation();
+
     const [bannerModalConfig, setBannerModalConfig] =
         useState<BannerModalConfig>(EMPTY_BANNER_MODAL_CONFIG);
     const [banners, setBanners] = useState<Banner[]>([]);
+
+    const { showSnackbar } = useSnackbar();
 
     const fetchBanners = useCallback(async () => {
         try {
@@ -30,41 +36,46 @@ export const BannerPage = () => {
         }
     }, []);
 
-    const deleteBanner = useCallback(async (bannerId: number) => {
-        try {
-            await bannerService.deleteBanner(bannerId);
-            setBanners((old) =>
-                old.filter((_banner) => _banner.id !== bannerId)
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    }, []);
-
-    const publishBanner = useCallback(
+    const deleteBanner = useCallback(
         async (bannerId: number) => {
             try {
-                const locations: BannerLocation[] = ['HOME', 'ORDER'];
-                await bannerService.publishBanner(bannerId, locations);
+                await bannerService.deleteBanner(bannerId);
+                setBanners((old) =>
+                    old.filter((_banner) => _banner.id !== bannerId)
+                );
+                showSnackbar(t('Banner successfuly deleted'), 'success');
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [showSnackbar, t]
+    );
+
+    const publishBanner = useCallback(
+        async (bannerId: number, bannerLocations: BannerLocation[]) => {
+            try {
+                await bannerService.publishBanner(bannerId, bannerLocations);
+                showSnackbar(t('Banner successfuly published'), 'success');
                 fetchBanners();
             } catch (error) {
                 console.error(error);
             }
         },
-        [fetchBanners]
+        [fetchBanners, showSnackbar, t]
     );
 
-	const unpublishBanner = useCallback(	
-		async (bannerId: number) => {
-			try {
-				await bannerService.unpublishBanner(bannerId);
-				fetchBanners();
-			} catch (error) {
-				console.error(error);
-			}
-		},
-		[fetchBanners]
-	);	
+    const unpublishBanner = useCallback(
+        async (bannerId: number) => {
+            try {
+                await bannerService.unpublishBanner(bannerId);
+                showSnackbar(t('Banner successfuly unpublished'), 'success');
+                fetchBanners();
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [fetchBanners, showSnackbar, t]
+    );
 
     const handleCreateBanner = useCallback(
         async (createBannerData: CreateBannerData) => {
@@ -73,13 +84,35 @@ export const BannerPage = () => {
                     createBannerData
                 );
                 setBanners((old) => [...old, res]);
+                showSnackbar(t('Banner successfuly created'), 'success');
             } catch (error) {
                 console.error(error);
             } finally {
                 setBannerModalConfig(EMPTY_BANNER_MODAL_CONFIG);
             }
         },
-        []
+        [showSnackbar, t]
+    );
+
+    const handleEditBanner = useCallback(
+        async (editBannerData: CreateBannerData) => {
+            try {
+                if (!bannerModalConfig.banner) return;
+                const res: Banner = await bannerService.editBanner(
+                    bannerModalConfig.banner.id,
+                    editBannerData
+                );
+                setBanners((old) =>
+                    old.map((banner) => (banner.id === res.id ? res : banner))
+                );
+                showSnackbar(t('Banner successfuly edited'), 'success');
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setBannerModalConfig(EMPTY_BANNER_MODAL_CONFIG);
+            }
+        },
+        [bannerModalConfig.banner, showSnackbar, t]
     );
 
     useEffect(() => {
@@ -110,15 +143,19 @@ export const BannerPage = () => {
                             })
                         }
                         onDelete={() => deleteBanner(banner.id)}
-                        onPublish={() => publishBanner(banner.id)}
-						onUnpublish={() => unpublishBanner(banner.id)}
+                        onPublish={(bannerLocations: BannerLocation[]) =>
+                            publishBanner(banner.id, bannerLocations)
+                        }
+                        onUnpublish={() => unpublishBanner(banner.id)}
                     />
                 ))}
             </div>
             {bannerModalConfig.isOpen && (
                 <BannerModal
                     isOpen={bannerModalConfig.isOpen}
-                    onConfirm={handleCreateBanner}
+                    banner={bannerModalConfig.banner}
+                    onCreate={handleCreateBanner}
+                    onEdit={handleEditBanner}
                     onCancel={() =>
                         setBannerModalConfig(EMPTY_BANNER_MODAL_CONFIG)
                     }

@@ -14,7 +14,7 @@ const InstagramButton = ({ className }: InstagramButtonProps) => {
       }
     >
       <InstagramIcon />
-      <p>@cbd_sportswear</p>
+      <p>cbd_sportswear</p>
     </Styled.InstagramButtonContainer>
   );
 };

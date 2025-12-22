@@ -32,6 +32,23 @@ export const BannerContainer = styled(CbdModal)`
                 &__text {
                     width: 100%;
                 }
+
+                &__chips {
+                    display: flex;
+                    gap: 8px;
+
+                    &__chip {
+                        white-space: nowrap;
+                        width: fit-content;
+                        color: ${theme.SECONDARY_1};
+                        border-color: ${theme.SECONDARY_1};
+
+                        &--selected {
+                            color: ${theme.PRIMARY_1};
+                            border-color: ${theme.PRIMARY_2};
+                        }
+                    }
+                }
             }
 
             &__actions {

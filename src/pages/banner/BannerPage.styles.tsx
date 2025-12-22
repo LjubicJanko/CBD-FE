@@ -8,6 +8,10 @@ export const BannerPageContainer = styled.div`
     gap: 32px;
     padding: 32px;
 
+    ${mobile(css`
+        padding: 0;
+    `)}
+
     .banners-page {
         &__heading {
             display: flex;
@@ -26,9 +30,9 @@ export const BannerPageContainer = styled.div`
         &__content {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            width: 100%;
-            grid-column-gap: 16px;
-            row-gap: 16px;
+            width: fit-content;
+            grid-column-gap: 32px;
+            row-gap: 32px;
 
             ${mobile(css`
                 display: flex;
