@@ -8,6 +8,7 @@ export const CompanyInfoContainer = styled.div`
       'nameInput currencyInput vatInput'
       'link link link'
       'colors colors colors'
+      'bannerImage bannerImage bannerImage'
       'actions actions actions';
 
     grid-column-gap: 100px;
@@ -42,6 +43,10 @@ export const CompanyInfoContainer = styled.div`
       .MuiOutlinedInput-notchedOutline {
         border-width: 0px;
       }
+    }
+
+    &__banner-image {
+      grid-area: bannerImage;
     }
 
     &__actions {
