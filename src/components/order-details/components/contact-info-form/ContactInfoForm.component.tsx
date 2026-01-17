@@ -1,15 +1,10 @@
 import { FormikHelpers, useFormik } from 'formik';
 import { ContactInfoData, Order } from '../../../../types/Order';
-import { Button, TextField } from '@mui/material';
-import { useFormik } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { Button, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next';
-import { ContactInfoData } from '../../../../types/Order';
 import * as Styled from './ContactInfoForm.styles';
 import { useCallback, useContext, useMemo } from 'react';
 import * as Yup from 'yup';
-import { useTranslation } from 'react-i18next';
-import { Button, TextField } from '@mui/material';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
 import { orderService } from '../../../../api';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
