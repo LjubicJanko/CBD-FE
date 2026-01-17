@@ -6,7 +6,6 @@ import { CircularProgress } from '@mui/material';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
 import './dayJsConfig.ts';
-import { Analytics } from "@vercel/analytics/react";
 
 dayjs.extend(customParseFormat);
 const container = document.getElementById('root');
@@ -21,6 +20,5 @@ root.render(
     }
   >
     <App />
-    <Analytics />
   </Suspense>
 );

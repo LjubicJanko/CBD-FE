@@ -1,0 +1,113 @@
+import styled, { css } from 'styled-components';
+import CbdModal from '../../cbd-modal/CbdModal.component';
+import theme from '../../../styles/theme';
+import { mobile, tablet } from '../../../util/breakpoints';
+
+export const GearModalContainer = styled(CbdModal)`
+  min-width: 250px;
+  background-color: ${theme.PRIMARY_1};
+  width: 770px;
+  padding: 0px 80px 32px 80px;
+  justify-content: space-between;
+
+  ${tablet(css`
+    padding: 24px 40px 16px 40px;
+  `)}
+
+  .MuiOutlinedInput-notchedOutline {
+    legend {
+      display: none;
+    }
+  }
+  .MuiFormLabel-root {
+    padding-bottom: 6px;
+  }
+
+  &.gear-modal {
+    h2 {
+      font-weight: 400;
+      color: ${theme.SECONDARY_1};
+      font-size: 32px;
+      line-height: 25px;
+      text-align: center;
+      vertical-align: middle;
+      margin-top: 48px;
+      margin-bottom: 48px;
+    }
+
+    .MuiTextField-root,
+    .MuiFormControl-marginNormal {
+      margin: 0;
+    }
+
+    .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+      color: ${theme.PRIMARY_2};
+      border-color: ${theme.SECONDARY_1} !important;
+      border-width: 2px;
+      border-radius: 8px;
+      -webkit-text-fill-color: ${theme.SECONDARY_1};
+      caret-color: ${theme.SECONDARY_1};
+    }
+
+    .MuiInputBase-input {
+      padding: 8px;
+      caret-color: ${theme.PRIMARY_2};
+      color: ${theme.SECONDARY_1};
+      &:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 1000px ${theme.PRIMARY_1} inset;
+        -webkit-text-fill-color: ${theme.PRIMARY_2};
+        caret-color: ${theme.PRIMARY_2};
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    }
+  }
+
+  .gear-modal {
+    &__fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 80px;
+      row-gap: 32px;
+
+      ${mobile(css`
+        display: flex;
+        flex-direction: column;
+      `)}
+
+      &__name {
+        grid-column: 1/3;
+      }
+
+      &__types {
+        grid-column: 1;
+      }
+
+      &__categories {
+        grid-column: 2;
+      }
+    }
+    &__actions {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      
+      &__confirm {
+        background-color: ${theme.PRIMARY_2};
+        color: ${theme.PRIMARY_1};
+        margin-top: 64px;
+        margin-right: -50px;
+        border-radius: 25px;
+        font-family: Afacad;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 25px;
+        letter-spacing: 0%;
+
+        ${tablet(css`
+          margin-right: unset;
+        `)}
+      }
+    }
+  }
+`;

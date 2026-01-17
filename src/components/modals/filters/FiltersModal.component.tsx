@@ -1,3 +1,4 @@
+import TuneIcon from '@mui/icons-material/Tune';
 import {
   Button,
   Chip,
@@ -13,7 +14,7 @@ import classNames from 'classnames';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useQueryParams from '../../../hooks/useQueryParams';
-import OrdersContext from '../../../store/OrdersProvider/Orders.context';
+import theme from '../../../styles/theme';
 import {
   OrderPriority,
   orderPriorityArray,
@@ -22,10 +23,9 @@ import {
   orderStatusArray,
   OrderStatusEnum,
 } from '../../../types/Order';
-import * as Styled from './FiltersModal.styles';
 import { Q_PARAM } from '../../../util/constants';
-import theme from '../../../styles/theme';
-import TuneIcon from '@mui/icons-material/Tune';
+import * as Styled from './FiltersModal.styles';
+import CompanyContext from '../../../store/CompanyProvider/Company.context';
 
 export type FiltersModalProps = {
   isOpen: boolean;
@@ -42,7 +42,7 @@ export type ExecutionStatusType = 'ACTIVE' | 'ARCHIVED';
 
 const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
   const { t } = useTranslation();
-  const { setSelectedOrderId } = useContext(OrdersContext);
+  const { setSelectedOrderId } = useContext(CompanyContext);
   const { params, setMultipleQParams, setQParam, removeMultipleQParams } =
     useQueryParams();
   const [sortByCriteria, setSortByCriteria] = useState(

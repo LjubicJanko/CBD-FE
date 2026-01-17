@@ -1,10 +1,4 @@
-import {
-  DashboardPage,
-  HomePage,
-  IdTrackingPage,
-  LoginPage,
-  ProfilePage,
-} from '../../pages';
+import { HomePage, IdTrackingPage, LoginPage, ProfilePage } from '../../pages';
 import {
   Navigate,
   Outlet,
@@ -16,11 +10,16 @@ import {
 import PrivateRouteWrapper from './PrivateRouteWrapper';
 import { isAuthenticated } from './helpers';
 import { HeaderComponent } from '../../components';
-import OrdersProvider from '../OrdersProvider/Orders.provider';
 import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import { privileges } from '../../util/util';
+import CompaniesPage from '../../pages/companies/Companies.page';
+import CompanyPage from '../../pages/company/Company.page';
+import CompanyProvider from '../CompanyProvider/Company.provider';
+import CompanyInfoPage from '../../pages/company-config/CompanyConfig.page';
+import OrdersPage from '../../pages/orders/Orders.page';
+import { ConfigPage } from '../../pages/config/Config.page';
 import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
 import PublicFooter from '../../components/public-footer/PublicFooter.component';
 import React from 'react';
@@ -77,20 +76,34 @@ const CBDRouter: React.FC = (): JSX.Element => {
         </Route>
         <Route path="/" element={<PrivateLayout />}>
           <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
+            <Route path="companies-overview" element={<CompaniesPage />} />
             <Route
-              path="dashboard"
+              path="company/:id"
               element={
-                <OrdersProvider>
-                  <DashboardPage />
-                </OrdersProvider>
-              }
-            />
-            <Route
-              element={
-                <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
+                <CompanyProvider>
+                  <CompanyPage />
+                </CompanyProvider>
               }
             >
-              <Route path="createOrder" element={<CreateOrderPage />} />
+              <Route index element={<Navigate to="orders" replace />} />
+              <Route path="config" element={<CompanyInfoPage />} />
+              <Route path="orders" element={<OrdersPage />} />
+              <Route
+                element={
+                  <ProtectedRoute requiredPrivilege={privileges.ORDER_CREATE} />
+                }
+              >
+                <Route path="createOrder" element={<CreateOrderPage />} />
+              </Route>
+            </Route>
+            <Route
+              element={
+                <ProtectedRoute
+                  requiredPrivilege={privileges.SUPER_PERMISSION}
+                />
+              }
+            >
+              <Route path="config" element={<ConfigPage />} />
             </Route>
             <Route path="profile" element={<ProfilePage />} />
           </Route>

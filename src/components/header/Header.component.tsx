@@ -1,22 +1,25 @@
-import { Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
-import { useCallback, useContext, useMemo, useState } from 'react';
-import AuthContext from '../../store/AuthProvider/Auth.context';
-import * as Styled from './Header.styles';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useChangeLanguage } from '../../hooks/useChangeLanguage';
-import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import React from 'react';
-import useResponsiveWidth from '../../hooks/useResponsiveWidth';
-import { xxsMax } from '../../util/breakpoints';
-import theme from '../../styles/theme';
-import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import { Box, Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
+import classNames from 'classnames';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useChangeLanguage } from '../../hooks/useChangeLanguage';
 import useQueryParams from '../../hooks/useQueryParams';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+import AuthContext from '../../store/AuthProvider/Auth.context';
+import theme from '../../styles/theme';
+import { xxsMax } from '../../util/breakpoints';
+import * as Styled from './Header.styles';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import BusinessIcon from '@mui/icons-material/Business';
 
 const HeaderComponent = () => {
-  const { logout, token, authData } = useContext(AuthContext);
+  const { logout, token, authData, isSuperAdmin, companiesInfo } =
+    useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,6 +30,7 @@ const HeaderComponent = () => {
   const {
     params: { id },
   } = useQueryParams<{ id: string | undefined }>();
+  const { id: companyId } = useParams<{ id: string }>();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -46,10 +50,13 @@ const HeaderComponent = () => {
     logout(navigate);
   }, [logout, navigate]);
 
-  const handleGoToProfile = useCallback(() => {
-    setAnchorEl(null);
-    navigate('/profile');
-  }, [navigate]);
+  const handleGoTo = useCallback(
+    (target: string) => {
+      setAnchorEl(null);
+      navigate(target);
+    },
+    [navigate]
+  );
 
   const url = useMemo(
     () => location.pathname.split('/').pop(),
@@ -61,18 +68,76 @@ const HeaderComponent = () => {
     [url]
   );
 
-  const logo = useMemo(
-    () => (
+  const logo = useMemo(() => {
+    const target = companyId ? `/company/${companyId}/orders` : '/';
+
+    return (
       <img
         src={theme.logo}
         width={50}
         alt="Logo"
         className="logo"
-        onClick={() => navigate('/')}
+        onClick={() => navigate(target)}
       />
-    ),
-    [navigate]
-  );
+    );
+  }, [companyId, navigate]);
+
+  const companiesSelect = useMemo(() => {
+    if (!companyId) return <></>;
+
+    if (companiesInfo?.length === 1) {
+      return (
+        // todo check if user has access
+        <Button
+          className="header__company"
+          onClick={() => navigate(`/company/${companyId}/config`)}
+          variant="text"
+          startIcon={<BusinessIcon className="header__company__business" />}
+        >
+          {companiesInfo?.[0].name}
+        </Button>
+      );
+    }
+
+    const selectedCompanyName = companiesInfo?.find(
+      (x) => x.id === +companyId
+    )?.name;
+
+    return (
+      <>
+        <Button
+          className="header__company"
+          onClick={() => navigate(`/company/${companyId}/config`)}
+          variant="text"
+          startIcon={<BusinessIcon className="header__company__business" />}
+        >
+          {selectedCompanyName}
+        </Button>
+        <Select
+          id="companies"
+          className="header__company__menu"
+          value={companyId}
+          renderValue={() => (
+            <ExpandMoreIcon className="header__company__menu__expand" />
+          )}
+          displayEmpty={true}
+          onChange={(e) => {
+            navigate(`/company/${e.target.value}/orders`);
+          }}
+        >
+          {companiesInfo?.map((company) => (
+            <MenuItem
+              className="header__company__menu__item"
+              value={+company.id}
+              key={company.id}
+            >
+              {company.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </>
+    );
+  }, [companiesInfo, companyId, navigate]);
 
   if (!token) {
     return (
@@ -148,45 +213,21 @@ const HeaderComponent = () => {
 
   return (
     <Styled.HeaderContainer className="header">
-      <Select
-        id="language"
-        value={selectedLanguage}
-        className="header__language"
-        onChange={(e) => changeLanguage(e.target.value)}
-      >
-        <MenuItem className="header__language__menu-item" value="en">
-          <img
-            className={classNames('header__language__button__flag', {
-              'header__language__button__flag--selected':
-                selectedLanguage === 'en',
-            })}
-            src="/en.png"
-            alt="english"
-          />
-        </MenuItem>
-        <MenuItem className="header__language__menu-item" value="rs">
-          <img
-            className={classNames('header__language__button__flag', {
-              'header__language__button__flag--selected':
-                selectedLanguage === 'rs',
-            })}
-            src="/rs.png"
-            alt="serbian"
-          />
-        </MenuItem>
-      </Select>
-      {logo}
-      <Button
-        id="user-button"
-        className="user-button"
-        aria-controls={open ? 'user-button' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        variant="contained"
-      >
-        {authData?.name}
-      </Button>
+      <div className="header__section header__left">{companiesSelect}</div>
+      <div className="header__section header__center">{logo}</div>
+      <div className="header__section header__right">
+        <Button
+          id="user-button"
+          className="user-button"
+          aria-controls={open ? 'user-button' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          variant="contained"
+        >
+          {authData?.name}
+        </Button>
+      </div>
       <Menu
         id="user-menu"
         className="user-menu"
@@ -197,7 +238,49 @@ const HeaderComponent = () => {
           'aria-labelledby': 'user-button',
         }}
       >
-        <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', px: 1 }}>
+          <MenuItem
+            className="user-menu__item--language"
+            onClick={() => changeLanguage('en')}
+          >
+            <img
+              className={classNames('header__language__button__flag', {
+                'header__language__button__flag--selected':
+                  selectedLanguage === 'en',
+              })}
+              src="/en.png"
+              alt="english"
+            />
+            <p>ENG</p>
+          </MenuItem>
+          <MenuItem
+            className="user-menu__item--language"
+            onClick={() => changeLanguage('rs')}
+          >
+            <img
+              className={classNames('header__language__button__flag', {
+                'header__language__button__flag--selected':
+                  selectedLanguage === 'rs',
+              })}
+              src="/rs.png"
+              alt="serbian"
+            />
+            <p>SRB</p>
+          </MenuItem>
+        </Box>
+        {isSuperAdmin && (
+          <MenuItem
+            className="user-menu__item"
+            onClick={() => handleGoTo('/config')}
+          >
+            {t('Konfiguracija')}
+            <SettingsIcon />
+          </MenuItem>
+        )}
+        <MenuItem
+          className="user-menu__item"
+          onClick={() => handleGoTo('/profile')}
+        >
           {t('profile')}
           <PersonIcon />
         </MenuItem>

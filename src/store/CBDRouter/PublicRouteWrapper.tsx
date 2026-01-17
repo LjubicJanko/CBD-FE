@@ -6,7 +6,7 @@ const PublicRouteWrapper = ({ children }: PropsWithChildren) => {
   const { token } = useContext(AuthContext);
 
   return token ? (
-    <Redirect to={'/dashboard'} />
+    <Redirect to={'/companies-overview'} />
   ) : (
     <div className="children">{children}</div>
   );

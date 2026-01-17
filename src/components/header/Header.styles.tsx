@@ -9,6 +9,7 @@ export const HeaderContainer = styled.header`
   right: 0;
   z-index: 1000;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   height: 80px;
@@ -26,6 +27,56 @@ export const HeaderContainer = styled.header`
     min-height: 30px;
     height: 80px;
   `)}
+
+  .header__section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .header__left {
+    justify-content: flex-start;
+  }
+
+  .header__center {
+    justify-content: center;
+  }
+
+  .header__right {
+    justify-content: flex-end;
+  }
+
+  .logo {
+    cursor: pointer;
+  }
+
+  .MuiSvgIcon-root {
+    display: none;
+  }
+
+  .header__company__menu__expand,
+  .header__company__business {
+    display: block;
+    color: ${theme.PRIMARY_2};
+  }
+
+  .header__company {
+    color: ${theme.PRIMARY_2};
+    display: flex;
+    align-items: center;
+
+    &__menu {
+      #companies {
+        padding: 0;
+        height: unset;
+      }
+    }
+  }
+
+  .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border: unset;
+    color: ${theme.SECONDARY_1};
+  }
 
   .user-button {
     background-color: ${theme.SECONDARY_3};

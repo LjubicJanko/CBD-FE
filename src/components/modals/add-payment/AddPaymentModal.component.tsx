@@ -1,19 +1,19 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, MenuItem, TextField } from '@mui/material';
+import classNames from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import orders from '../../../api/services/orders';
-import OrdersContext from '../../../store/OrdersProvider/Orders.context';
-import { UpdatePaymentsResponse, Payment } from '../../../types/Payment';
-import DeleteIcon from '@mui/icons-material/Delete';
-import * as Styled from './AddPaymentModal.styles';
 import { BasicDatePicker } from '../..';
+import orders from '../../../api/services/orders';
+import { Payment, UpdatePaymentsResponse } from '../../../types/Payment';
 import ConfirmModal, {
   ConfirmModalProps,
 } from '../confirm-modal/ConfirmModal.component';
-import classNames from 'classnames';
+import * as Styled from './AddPaymentModal.styles';
+import CompanyContext from '../../../store/CompanyProvider/Company.context';
 
 type AddPaymentModalProps = {
   isOpen: boolean;
@@ -48,7 +48,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const { updatePaymentInOverview } = useContext(OrdersContext);
+  const { updatePaymentInOverview } = useContext(CompanyContext);
 
   const isUpdating = Boolean(paymentToUpdate);
   const [confirmModalProps, setConfirmModalProps] =

@@ -27,7 +27,6 @@ export const LoginContainer = styled.div`
     padding: 8px;
     caret-color: ${theme.PRIMARY_2};
     color: ${theme.PRIMARY_2};
-
     &:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 1000px ${theme.PRIMARY_1} inset;
       -webkit-text-fill-color: ${theme.PRIMARY_2};
@@ -84,6 +83,21 @@ export const LoginContainer = styled.div`
       justify-content: center;
       align-items: center;
       z-index: 9999;
+    }
+
+    &__instagram {
+      color: ${theme.PRIMARY_2};
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      right: 50%;
+      gap: 4px;
+    }
+  }
+
+  .login-container__password {
+    .MuiButtonBase-root {
+      color: ${theme.PRIMARY_2};
     }
   }
 
