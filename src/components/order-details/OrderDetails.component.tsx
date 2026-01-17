@@ -26,6 +26,7 @@ import { usePrivileges } from '../../hooks/usePrivileges';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import AuthContext from '../../store/AuthProvider/Auth.context';
+import CompanyContext from '../../store/CompanyProvider/Company.context';
 import {
   Order,
   OrderExecutionStatusEnum,
@@ -39,13 +40,11 @@ import ConfirmModal, {
 import StatusChangeModal from '../modals/status-change/StatusChangeModal.component';
 import * as Styled from './OrderDetails.styles';
 import ChangeHistoryComponent from './components/ChangeHistory.component';
+import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
 import ContactInfo from './components/contact-info/ContactInfo.component';
 import OrderInfoForm from './components/order-info-form/OrderInfoForm.component';
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
-import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
-import CompanyContext from '../../store/CompanyProvider/Company.context';
-import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -99,7 +98,8 @@ const OrderDetailsComponent = () => {
 
   const { roles: userRoles } = authData ?? {};
 
-  const isAdmin = userRoles?.includes('admin') || userRoles?.includes('super_admin');
+  const isAdmin =
+    userRoles?.includes('admin') || userRoles?.includes('super_admin');
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] =
@@ -451,9 +451,7 @@ const OrderDetailsComponent = () => {
       </div>
       <Divider />
       {stepper}
-      <Box
-        className="order-details__tabs-box"
-      >
+      <Box className="order-details__tabs-box">
         <Tabs
           className="order-details__tabs-box__tabs"
           value={value}

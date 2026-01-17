@@ -7,7 +7,7 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import { HeaderComponent } from '../../components';
-import { ProfilePage } from '../../pages';
+import { HomePage, IdTrackingPage, LoginPage, ProfilePage } from '../../pages';
 import CompaniesPage from '../../pages/companies/Companies.page';
 import CompanyInfoPage from '../../pages/company-config/CompanyConfig.page';
 import CompanyPage from '../../pages/company/Company.page';
@@ -19,6 +19,10 @@ import CompanyProvider from '../CompanyProvider/Company.provider';
 import ErrorPage from './error/ErrorPage';
 import PrivateRouteWrapper from './PrivateRouteWrapper';
 import ProtectedRoute from './ProtectedRoute';
+import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
+import { isAuthenticated } from './helpers';
+import PublicFooter from '../../components/public-footer/PublicFooter.component';
+
 
 const PrivateLayout: React.FC = () => {
   return (
@@ -31,10 +35,23 @@ const PrivateLayout: React.FC = () => {
   );
 };
 
+const PublicLayout: React.FC = () => {
+  return (
+    <>
+      <HeaderComponent />
+      <main>
+        <Outlet />
+      </main>
+      <PublicFooter />
+    </>
+  );
+};
+
 const CBDRouter: React.FC = (): JSX.Element => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
+        {/* Public routes */}
         <Route element={<PublicLayout />}>
           <Route
             index
@@ -56,9 +73,10 @@ const CBDRouter: React.FC = (): JSX.Element => {
             element={<LoginPage />}
             loader={async () => await isAuthenticated()}
           />
-          <Route path="*" element={<Navigate to="/" />} />
         </Route>
-        <Route path="/" element={<PrivateLayout />}>
+
+        {/* Private routes */}
+        <Route element={<PrivateLayout />}>
           <Route element={<PrivateRouteWrapper />} errorElement={<ErrorPage />}>
             <Route path="companies-overview" element={<CompaniesPage />} />
             <Route
@@ -91,8 +109,10 @@ const CBDRouter: React.FC = (): JSX.Element => {
             </Route>
             <Route path="profile" element={<ProfilePage />} />
           </Route>
-          <Route path="*" element={<Navigate to="/" />} />
         </Route>
+
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to="/" />} />
       </>
     )
   );
