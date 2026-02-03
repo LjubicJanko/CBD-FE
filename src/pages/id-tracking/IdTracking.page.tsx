@@ -21,6 +21,7 @@ import { ApiError } from '../../types/Response';
 import { statuses, trackingUrl } from '../../util/util';
 import * as Styled from './IdTracking.styles';
 import PageBanner from '../../components/page-banner/PageBanner.component';
+import ShareIcon from '@mui/icons-material/Share';
 
 const IdTrackingPage = () => {
     const { t } = useTranslation();
@@ -103,6 +104,19 @@ const IdTrackingPage = () => {
                                 edge="end"
                             >
                                 <ContentCopyIcon />
+                            </IconButton>
+                            <IconButton
+                                onClick={() => {
+                                    navigator.clipboard.writeText(window.location.href);
+                                    showSnackbar(
+                                        t('Url coppied to clipboard'),
+                                        'success'
+                                    );
+                                }}
+                                className="id-tracking-details__stepper--title-copy"
+                                edge="end"
+                            >
+                                <ShareIcon />
                             </IconButton>
                         </p>
                     </p>
