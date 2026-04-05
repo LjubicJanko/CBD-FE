@@ -12,49 +12,55 @@ export const OrderDetailsContainer = styled.div`
   .order-details {
     display: flex;
 
-
-    &__close-icon {
-      color: ${theme.SECONDARY_1};
-    }
-
     &__header {
       display: flex;
-      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
 
       ${tablet(css`
-        flex-direction: column-reverse;
-        gap: 16px;
+        flex-wrap: wrap;
       `)}
+
+      &__close-btn {
+        color: ${theme.SECONDARY_1};
+        padding: 4px;
+        width: auto !important;
+      }
 
       &__tracking-id {
         display: flex;
         align-items: center;
-        margin-left: 0;
-        width: fit-content;
-        padding: 4px;
-        border-radius: 10px;
-
+        gap: 2px;
         color: ${theme.SECONDARY_1};
         font-weight: bold;
+        font-size: 14px;
+        white-space: nowrap;
 
         button {
           color: ${theme.PRIMARY_2};
+          width: auto !important;
         }
       }
 
       &__actions {
         display: flex;
         align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 8px;
+        gap: 6px;
+        margin-left: auto;
+
+        ${tablet(css`
+          margin-left: 0;
+          width: 100%;
+          justify-content: flex-end;
+        `)}
 
         &--btn {
           border-radius: 50%;
           color: ${theme.PRIMARY_1};
           background-color: ${theme.PRIMARY_2};
           margin: 0;
-          padding: 5px;
+          padding: 4px;
+          width: auto !important;
         }
       }
     }

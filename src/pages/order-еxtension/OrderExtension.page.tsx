@@ -12,7 +12,7 @@ import {
 } from '../../types/OrderExtension';
 import { useNavigate } from 'react-router-dom';
 import PageBanner from '../../components/page-banner/PageBanner.component';
-import ShareButton from '../../components/share-button/ShareButton.component';
+
 
 type OrderExtensionData = {
     orderName: string;
@@ -95,7 +95,6 @@ const OrderExtensionPage: React.FC = () => {
             <PageBanner page="ORDER" />
             <h2 className="order-extension__title">
                 {t('orderExtension.title')}
-                <ShareButton />
             </h2>
 
             <form

@@ -28,7 +28,7 @@ const OrderCardComponent = ({
   const { plannedEndingDate } = order;
 
   const isInPast = useMemo(
-    () => dayjs(plannedEndingDate, 'YYYY.MM.DD').isBefore(dayjs()),
+    () => !!plannedEndingDate && dayjs(plannedEndingDate, 'YYYY.MM.DD').isBefore(dayjs()),
     [plannedEndingDate]
   );
 
@@ -56,7 +56,7 @@ const OrderCardComponent = ({
         {order.status !== OrderStatusEnum.DONE ? (
           <div className="order-card__footer__info">
             <p>{t('orderDetails.plannedEndingDate')}</p>
-            <p>{dayjs(order.plannedEndingDate).format('DD.MM.YYYY')}</p>
+            <p>{order.plannedEndingDate ? dayjs(order.plannedEndingDate).format('DD.MM.YYYY') : t('not-set')}</p>
             {isInPast && (
               <Tooltip title={'Prekoračeno vreme završetka!'}>
                 <ReportProblemIcon style={{ color: '#D4FF00' }} />

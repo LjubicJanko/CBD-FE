@@ -45,7 +45,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [perPage, setPerPage] = useState(5);
 
   const mapOrderToOverview = useCallback((order: Order) => {
-    const shippedHistoryStatus = order.statusHistory.find(
+    const shippedHistoryStatus = order.statusHistory?.find(
       (x) => x.status === 'SHIPPED'
     );
     return {

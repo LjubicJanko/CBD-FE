@@ -7,6 +7,7 @@ import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import dayjs, { Dayjs } from 'dayjs';
 import { statusColors } from '../../util/util';
+import useQueryParams from '../../hooks/useQueryParams';
 import {
     PieChart,
     Pie,
@@ -76,13 +77,22 @@ const CustomTooltip = ({
         >
             <div style={{ fontWeight: 700, marginBottom: 2 }}>{t(status)}</div>
             <div style={{ color: '#D4FF00' }}>
-                {percentage.toFixed(1)}%
+                {clampPercentage(percentage, 1)}%
             </div>
             <div style={{ color: '#979797' }}>
                 Avg: {formatDuration(averageHours)}
             </div>
         </div>
     );
+};
+
+const clampPercentage = (value: number, decimals: number): string => {
+    if (value > 0 && value < 100) {
+        const max = 100 - Math.pow(10, -decimals);
+        const min = Math.pow(10, -decimals);
+        return Math.min(max, Math.max(min, value)).toFixed(decimals);
+    }
+    return value.toFixed(decimals);
 };
 
 const RADIAN = Math.PI / 180;
@@ -109,7 +119,7 @@ const renderCustomLabel = ((props: {
             fontSize={12}
             fontWeight={600}
         >
-            {`${percentage.toFixed(0)}%`}
+            {`${clampPercentage(percentage, 0)}%`}
         </text>
     );
 }) as unknown as (typeof Pie.prototype)['props']['label'];
@@ -117,9 +127,14 @@ const renderCustomLabel = ((props: {
 const ReportsPage = () => {
     const { authData } = useContext(AuthContext);
     const { t } = useTranslation();
+    const { params, setMultipleQParams } = useQueryParams<{ from: string; to: string }>();
 
-    const [from, setFrom] = useState<Dayjs>(dayjs().startOf('month'));
-    const [to, setTo] = useState<Dayjs>(dayjs().endOf('month'));
+    const [from, setFrom] = useState<Dayjs>(
+        params.from ? dayjs(params.from) : dayjs().startOf('month')
+    );
+    const [to, setTo] = useState<Dayjs>(
+        params.to ? dayjs(params.to) : dayjs().endOf('month')
+    );
     const [report, setReport] = useState<OrderReport | null>(null);
     const [durationReport, setDurationReport] =
         useState<StatusDurationReport | null>(null);
@@ -169,7 +184,11 @@ const ReportsPage = () => {
                         <DatePicker
                             label={t('from')}
                             value={from}
-                            onChange={(val) => val && setFrom(val)}
+                            onChange={(val) => {
+                                if (!val) return;
+                                setFrom(val);
+                                setMultipleQParams({ from: val.format('YYYY-MM-DD'), to: to.format('YYYY-MM-DD') });
+                            }}
                             format="DD.MM.YYYY"
                             slotProps={{
                                 textField: { size: 'small' },
@@ -178,7 +197,11 @@ const ReportsPage = () => {
                         <DatePicker
                             label={t('to')}
                             value={to}
-                            onChange={(val) => val && setTo(val)}
+                            onChange={(val) => {
+                                if (!val) return;
+                                setTo(val);
+                                setMultipleQParams({ from: from.format('YYYY-MM-DD'), to: val.format('YYYY-MM-DD') });
+                            }}
                             format="DD.MM.YYYY"
                             slotProps={{
                                 textField: { size: 'small' },

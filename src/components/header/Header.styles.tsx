@@ -82,6 +82,12 @@ export const PublicHeaderContainer = styled.header`
       justify-content: space-between;
       width: 100%;
 
+      &__right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       &__login-btn {
         white-space: nowrap;
         background-color: ${theme.PRIMARY_2};

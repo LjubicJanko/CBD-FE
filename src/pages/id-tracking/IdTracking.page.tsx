@@ -22,7 +22,7 @@ import { statuses, trackingUrl } from '../../util/util';
 import * as Styled from './IdTracking.styles';
 import PageBanner from '../../components/page-banner/PageBanner.component';
 import ShareIcon from '@mui/icons-material/Share';
-import ShareButton from '../../components/share-button/ShareButton.component';
+
 
 const IdTrackingPage = () => {
     const { t } = useTranslation();
@@ -274,7 +274,6 @@ const IdTrackingPage = () => {
         <Styled.IdTrackingContainer className="id-tracking">
             <h2 className="id-tracking__title">
                 {t('enterTrackingNumber')}
-                <ShareButton />
             </h2>
             <div className="id-tracking__search-container">
                 <TextField

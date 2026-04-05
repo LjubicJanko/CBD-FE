@@ -15,7 +15,7 @@ import {
   SortCriteriaType,
   SortType,
 } from '../../components/modals/filters/FiltersModal.component';
-import { OrderExtensionReqDto } from '../../types/OrderExtension';
+import { CombineExtensionsReqDto, OrderExtensionReqDto } from '../../types/OrderExtension';
 
 export type FetchPaginatedProps = {
   searchTerm?: string;
@@ -222,6 +222,11 @@ const editShipmentInfo = async (id: number, postalService: string, postalCode: s
     .put(`/orders/editShipmentInfo/${id}`, { postalService, postalCode })
     .then((res) => res.data);
 
+const combineExtensions = async (data: CombineExtensionsReqDto) =>
+  privateClient
+    .post('/orders/combineExtensions', data)
+    .then((res) => res.data);
+
 export default {
   getOrder,
   trackOrder,
@@ -242,5 +247,6 @@ export default {
   getHistory,
   createOrderExtension,
   editContactInfo,
-  editShipmentInfo
+  editShipmentInfo,
+  combineExtensions,
 };

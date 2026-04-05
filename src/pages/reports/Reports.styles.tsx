@@ -15,9 +15,8 @@ export const ReportsContainer = styled.div`
 
     .reports-page__header {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-start;
         gap: 16px;
     }
 

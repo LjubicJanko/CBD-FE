@@ -11,3 +11,10 @@ export type OrderExtensionReqDto = {
   description: string;
   contactInfo: OrderContactInfo;
 };
+
+export type CombineExtensionsReqDto = {
+  extensionIds: number[];
+  name: string;
+  description: string;
+  contactInfo: OrderContactInfo;
+};

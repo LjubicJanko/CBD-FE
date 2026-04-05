@@ -3,6 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import MergeIcon from '@mui/icons-material/CallMerge';
 import PauseIcon from '@mui/icons-material/Pause';
 import ReplayIcon from '@mui/icons-material/Replay';
 import {
@@ -48,6 +49,7 @@ import OrderInfoForm from './components/order-info-form/OrderInfoForm.component'
 import OrderInfoOverview from './components/order-info-overview/OrderInfoOverview.component';
 import OrderPayments from './components/order-payments/OrderPayments.component';
 import ContactInfoForm from './components/contact-info-form/ContactInfoForm.component';
+import CombineExtensionsModal from '../modals/combine-extensions/CombineExtensionsModal.component';
 
 const EMPTY_CONFIRM_MODAL: ConfirmModalProps = {
   isOpen: false,
@@ -104,6 +106,7 @@ const OrderDetailsComponent = () => {
   const isAdmin = userRoles?.includes('admin');
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isCombineModalOpen, setIsCombineModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] =
     useState(EMPTY_CONFIRM_MODAL);
 
@@ -332,6 +335,14 @@ const OrderDetailsComponent = () => {
             true
           ),
       },
+      {
+        show:
+          !!selectedOrder?.extension &&
+          selectedOrder?.executionStatus === OrderExecutionStatusEnum.ACTIVE,
+        label: t('combine-extensions'),
+        icon: <MergeIcon />,
+        onClick: () => setIsCombineModalOpen(true),
+      },
     ],
     [
       canArchive,
@@ -342,6 +353,7 @@ const OrderDetailsComponent = () => {
       privileges.canCancelOrder,
       privileges.canPauseOrder,
       selectedOrder?.executionStatus,
+      selectedOrder?.extension,
       t,
     ]
   );
@@ -430,26 +442,25 @@ const OrderDetailsComponent = () => {
       className="order-details"
       key={selectedOrder?.id}
     >
-      <IconButton
-        size="large"
-        onClick={() => setSelectedOrderId(0)}
-        className="order-details__close-icon"
-      >
-        <CloseIcon />
-      </IconButton>
-      {(isCanceled || isPaused) && nonActiveBanner}
       <div className="order-details__header">
+        <IconButton
+          size="small"
+          onClick={() => setSelectedOrderId(0)}
+          className="order-details__header__close-btn"
+        >
+          <CloseIcon />
+        </IconButton>
         <div className="order-details__header__tracking-id">
-          <p>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</p>
+          <span>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</span>
           <IconButton
             className="postal-code-copy"
+            size="small"
             onClick={() => {
               navigator.clipboard.writeText(selectedOrder.trackingId);
               showSnackbar(t('postal-code-coppied'), 'success');
             }}
-            edge="end"
           >
-            <ContentCopyIcon />
+            <ContentCopyIcon fontSize="small" />
           </IconButton>
         </div>
         <div className="order-details__header__actions">
@@ -459,8 +470,8 @@ const OrderDetailsComponent = () => {
                 <Tooltip key={index} title={label}>
                   <IconButton
                     className="order-details__header__actions--btn"
+                    size="small"
                     onClick={onClick}
-                    edge="end"
                   >
                     {icon}
                   </IconButton>
@@ -469,6 +480,7 @@ const OrderDetailsComponent = () => {
           )}
         </div>
       </div>
+      {(isCanceled || isPaused) && nonActiveBanner}
       <Divider />
       {stepper}
       {isMobile ? (
@@ -536,6 +548,13 @@ const OrderDetailsComponent = () => {
         />
       )}
       <ConfirmModal {...confirmModalProps} />
+      {isCombineModalOpen && selectedOrder && (
+        <CombineExtensionsModal
+          isOpen={isCombineModalOpen}
+          onClose={() => setIsCombineModalOpen(false)}
+          currentOrder={selectedOrder}
+        />
+      )}
     </Styled.OrderDetailsContainer>
   );
 };

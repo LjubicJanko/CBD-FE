@@ -15,6 +15,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import useQueryParams from '../../hooks/useQueryParams';
+import ShareButton from '../share-button/ShareButton.component';
 
 const HeaderComponent = () => {
   const { logout, token, authData } = useContext(AuthContext);
@@ -95,6 +96,7 @@ const HeaderComponent = () => {
             <h1 className="public-header__with-back-btn--title">
               {t(`${url}-title`)}
             </h1>
+            <ShareButton />
             {!isOnMobile && logo}
           </div>
         ) : (
@@ -139,13 +141,16 @@ const HeaderComponent = () => {
               </MenuItem>
             </Select>
 
-            <Button
-              variant="outlined"
-              className="public-header__home__login-btn"
-              onClick={() => navigate('/login')}
-            >
-              {t('login')}
-            </Button>
+            <div className="public-header__home__right">
+              <ShareButton />
+              <Button
+                variant="outlined"
+                className="public-header__home__login-btn"
+                onClick={() => navigate('/login')}
+              >
+                {t('login')}
+              </Button>
+            </div>
           </div>
         )}
       </Styled.PublicHeaderContainer>

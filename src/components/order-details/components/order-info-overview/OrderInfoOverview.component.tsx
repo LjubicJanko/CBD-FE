@@ -34,7 +34,11 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
                 { label: t('order-name'), value: selectedOrder?.name },
                 {
                     label: t('description'),
-                    value: selectedOrder?.description,
+                    value: selectedOrder?.description ? (
+                        <span style={{ whiteSpace: 'pre-line' }}>
+                            {selectedOrder.description}
+                        </span>
+                    ) : undefined,
                 },
                 { label: t('note'), value: selectedOrder?.note },
                 {
