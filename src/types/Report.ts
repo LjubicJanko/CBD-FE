@@ -1,5 +1,7 @@
 export type OrderReport = {
     orderCount: number;
+    regularOrderCount: number;
+    extensionOrderCount: number;
     totalAcquisitionCost: number;
     averageAcquisitionCost: number;
     totalAmountPaid: number | null;

@@ -151,6 +151,11 @@ export const StatCard = styled.div<{ $accent?: boolean }>`
             font-size: 20px;
         `)}
     }
+
+    .stat-card__breakdown {
+        font-size: 13px;
+        color: ${theme.SECONDARY_2};
+    }
 `;
 
 export const ChartCard = styled.div`

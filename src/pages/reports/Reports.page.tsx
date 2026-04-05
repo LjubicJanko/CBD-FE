@@ -208,6 +208,9 @@ const ReportsPage = () => {
                                         <span className="stat-card__value">
                                             {report.orderCount}
                                         </span>
+                                        <span className="stat-card__breakdown">
+                                            {report.regularOrderCount} {t('regular')} · {report.extensionOrderCount} {t('extensions')}
+                                        </span>
                                     </Styled.StatCard>
                                     <Styled.StatCard>
                                         <span className="stat-card__label">
