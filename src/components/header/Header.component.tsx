@@ -13,6 +13,7 @@ import { xxsMax } from '../../util/breakpoints';
 import theme from '../../styles/theme';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import useQueryParams from '../../hooks/useQueryParams';
 
 const HeaderComponent = () => {
@@ -49,6 +50,11 @@ const HeaderComponent = () => {
   const handleGoToProfile = useCallback(() => {
     setAnchorEl(null);
     navigate('/profile');
+  }, [navigate]);
+
+  const handleGoToReports = useCallback(() => {
+    setAnchorEl(null);
+    navigate('/reports');
   }, [navigate]);
 
   const url = useMemo(
@@ -200,6 +206,10 @@ const HeaderComponent = () => {
         <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
           {t('profile')}
           <PersonIcon />
+        </MenuItem>
+        <MenuItem className="user-menu__item" onClick={handleGoToReports}>
+          {t('reports')}
+          <AssessmentIcon />
         </MenuItem>
         <MenuItem className="user-menu__item" onClick={handleLogout}>
           {t('logout')}

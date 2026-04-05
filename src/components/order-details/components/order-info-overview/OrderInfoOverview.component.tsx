@@ -101,7 +101,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
     const pausingInfoRow = useMemo(() => {
         if (!isPaused) return null;
         return isMobile ? (
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="info-row">
                 <strong className="pause">{t('pausing-comment')}</strong>
                 <span className={classNames('pause', 'pausing-value')}>
                     {selectedOrder?.pausingComment}
@@ -131,13 +131,7 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
             {orderInfoConfig
                 .filter((x) => x.value !== null)
                 .map((info, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}
-                    >
+                    <div key={index} className="info-row">
                         <strong>{info.label}</strong>
                         <span>{info.value}</span>
                     </div>

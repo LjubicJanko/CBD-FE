@@ -5,9 +5,34 @@ import theme from '../../../../styles/theme';
 export const MobileContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 
   color: ${theme.SECONDARY_1};
+
+  .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    strong {
+      font-size: 12px;
+      color: ${theme.PRIMARY_2};
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    span {
+      font-size: 15px;
+      color: ${theme.SECONDARY_1};
+      word-break: break-word;
+    }
+  }
 
   .pause {
     font-weight: 800;
@@ -15,7 +40,7 @@ export const MobileContainer = styled.div`
   }
 
   .pausing-value {
-    text-align: end !important;
+    text-align: start;
   }
 `;
 

@@ -11,6 +11,18 @@ export const HomeContainer = styled.div`
     padding: 40px;
 
     .home {
+        &__share {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 40px;
+            margin-top: -48px;
+
+            ${mobile(css`
+                padding: 0;
+                margin-top: -8px;
+            `)}
+        }
+
         &__sections {
             width: 100%;
             display: flex;

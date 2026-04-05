@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import Section from '../../components/section/Section.component';
 import * as Styled from './Home.styles';
 import PageBanner from '../../components/page-banner/PageBanner.component';
+import ShareButton from '../../components/share-button/ShareButton.component';
 
 const HomeComponent = () => {
     const { t } = useTranslation();
@@ -9,6 +10,9 @@ const HomeComponent = () => {
     return (
         <Styled.HomeContainer className="home">
             <PageBanner page="HOME" />
+            <div className="home__share">
+                <ShareButton />
+            </div>
             <div className="home__sections">
                 <Section
                     title={t('Poruči dres')}

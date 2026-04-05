@@ -16,6 +16,7 @@ import AuthContext from '../../store/AuthProvider/Auth.context';
 import { LoginData } from '../../types/Auth';
 import { textInputSX } from '../../util/util';
 import * as Styled from './Login.styles';
+import ShareButton from '../../components/share-button/ShareButton.component';
 
 
 const initialValues: LoginData = {
@@ -60,7 +61,10 @@ const LoginComponent = () => {
         </div>
       )}
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
-        <h1 className="login-container__title">{t('CBD SPORTSWEAR')}</h1>
+        <h1 className="login-container__title">
+          {t('CBD SPORTSWEAR')}
+          <ShareButton />
+        </h1>
         <div className="fields">
           <div className="login-container__username">
             <label id="username-label">{t('Korisnicko ime')}</label>

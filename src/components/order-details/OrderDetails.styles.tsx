@@ -181,6 +181,21 @@ export const OrderDetailsContainer = styled.div`
         height: 2px;
       }
     }
+
+    &__tab-select {
+      width: 100% !important;
+      border-radius: 10px;
+      color: ${theme.SECONDARY_1} !important;
+      font-weight: 600;
+
+      .MuiOutlinedInput-notchedOutline {
+        border-color: ${theme.PRIMARY_2} !important;
+      }
+
+      .MuiSvgIcon-root {
+        color: ${theme.PRIMARY_2};
+      }
+    }
   }
 
   .execution-chip {

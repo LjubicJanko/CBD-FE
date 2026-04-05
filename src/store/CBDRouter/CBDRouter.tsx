@@ -4,6 +4,7 @@ import {
   IdTrackingPage,
   LoginPage,
   ProfilePage,
+  ReportsPage,
 } from '../../pages';
 import {
   Navigate,
@@ -93,6 +94,7 @@ const CBDRouter: React.FC = (): JSX.Element => {
               <Route path="createOrder" element={<CreateOrderPage />} />
             </Route>
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="reports" element={<ReportsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Route>

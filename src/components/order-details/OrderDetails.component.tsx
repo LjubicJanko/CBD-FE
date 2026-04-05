@@ -11,6 +11,9 @@ import {
   Chip,
   Divider,
   IconButton,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Step,
   StepLabel,
   Stepper,
@@ -73,7 +76,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ py: 3, px: 0 }}>{children}</Box>}
     </div>
   );
 }
@@ -143,8 +146,26 @@ const OrderDetailsComponent = () => {
 
   const [value, setValue] = React.useState(0);
 
+  const isMobile = width < xxsMax;
+
+  const tabOptions = useMemo(() => {
+    const options = [
+      { label: t('information'), index: 0 },
+      { label: t('change-history'), index: 1 },
+      ...(privileges.canAddPayment
+        ? [{ label: t('payments'), index: 2 }]
+        : []),
+      { label: t('contact-info'), index: 3 },
+    ];
+    return options;
+  }, [t, privileges.canAddPayment]);
+
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<number>) => {
+    setValue(event.target.value as number);
   };
 
   const isMoveButtonDisabled = useMemo(() => {
@@ -450,21 +471,35 @@ const OrderDetailsComponent = () => {
       </div>
       <Divider />
       {stepper}
-      <Box
-        className="order-details__tabs-box"
-      >
-        <Tabs
-          className="order-details__tabs-box__tabs"
+      {isMobile ? (
+        <Select
+          className="order-details__tab-select"
           value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
+          onChange={handleSelectChange}
+          size="small"
+          fullWidth
         >
-          <Tab label={t('information')} />
-          <Tab label={t('change-history')} />
-          {privileges.canAddPayment && <Tab label={t('payments')} />}
-          <Tab label={t('contact-info')} />
-        </Tabs>
-      </Box>
+          {tabOptions.map((option) => (
+            <MenuItem key={option.index} value={option.index}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      ) : (
+        <Box className="order-details__tabs-box">
+          <Tabs
+            className="order-details__tabs-box__tabs"
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label={t('information')} />
+            <Tab label={t('change-history')} />
+            {privileges.canAddPayment && <Tab label={t('payments')} />}
+            <Tab label={t('contact-info')} />
+          </Tabs>
+        </Box>
+      )}
       <CustomTabPanel value={value} index={0}>
         {shouldShowForm ? (
           <OrderInfoForm />

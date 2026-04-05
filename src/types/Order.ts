@@ -49,10 +49,11 @@ export const orderPriorityArray = ['LOW', 'MEDIUM', 'HIGH'];
 
 export type OrderStatusHistory = {
   id: number;
-  status: OrderStatus;
-  closingComment: string;
+  status: OrderStatus | null;
+  executionStatus: OrderExecutionStatus | null;
+  closingComment: string | null;
   creationTime: string;
-  user: string;
+  user: string | null;
   postalCode?: string;
   postalService?: string;
 };

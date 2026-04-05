@@ -26,6 +26,14 @@ export const ChangeHistoryContainer = styled.div`
       &:hover {
         background-color: ${theme.SECONDARY_1}1A;
       }
+
+      &--paused {
+        background-color: #ff990015;
+      }
+
+      &--reactivated {
+        background-color: #4caf5015;
+      }
     }
 
     &__cell {
@@ -34,6 +42,10 @@ export const ChangeHistoryContainer = styled.div`
 
       &--status {
         font-weight: bold;
+      }
+
+      &--execution-status {
+        font-style: italic;
       }
 
       &--timestamp {

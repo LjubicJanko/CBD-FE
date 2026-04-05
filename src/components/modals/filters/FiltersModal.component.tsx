@@ -38,7 +38,7 @@ type ButtonVariants = {
 
 export type SortCriteriaType = 'expected-date' | 'creation-date';
 export type SortType = 'asc' | 'desc';
-export type ExecutionStatusType = 'ACTIVE' | 'ARCHIVED';
+export type ExecutionStatusType = 'ACTIVE' | 'ARCHIVED' | 'ALL';
 
 const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
   const { t } = useTranslation();
@@ -343,6 +343,11 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
           value="ARCHIVED"
           control={<Radio />}
           label={t('archive-orders')}
+        />
+        <FormControlLabel
+          value="ALL"
+          control={<Radio />}
+          label={t('all-orders')}
         />
       </RadioGroup>
       <Divider />

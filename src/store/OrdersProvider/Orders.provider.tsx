@@ -128,7 +128,11 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         sortCriteria: params[Q_PARAM.SORT_CRITERIA] as SortCriteriaType,
         sort: params[Q_PARAM.SORT] as SortType,
         executionStatuses:
-          executionStatuses === 'ARCHIVED' ? ['ARCHIVED', 'CANCELED'] : [],
+          executionStatuses === 'ALL'
+            ? ['ACTIVE', 'PAUSED', 'ARCHIVED', 'CANCELED']
+            : executionStatuses === 'ARCHIVED'
+              ? ['ARCHIVED', 'CANCELED']
+              : [],
         page: isPageUnchanged ? 0 : page,
         perPage,
       });
