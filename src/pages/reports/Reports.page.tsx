@@ -47,6 +47,7 @@ const STATUS_COLOR_MAP: Record<string, string> = {
 const CustomTooltip = ({
     active,
     payload,
+    t,
 }: {
     active?: boolean;
     payload?: {
@@ -56,6 +57,7 @@ const CustomTooltip = ({
             averageHours: number;
         };
     }[];
+    t: (key: string) => string;
 }) => {
     if (!active || !payload?.length) return null;
     const { status, percentage, averageHours } = payload[0].payload;
@@ -72,7 +74,7 @@ const CustomTooltip = ({
                 boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
             }}
         >
-            <div style={{ fontWeight: 700, marginBottom: 2 }}>{status}</div>
+            <div style={{ fontWeight: 700, marginBottom: 2 }}>{t(status)}</div>
             <div style={{ color: '#D4FF00' }}>
                 {percentage.toFixed(1)}%
             </div>
@@ -334,7 +336,7 @@ const ReportsPage = () => {
                                                 )}
                                             </Pie>
                                             <Tooltip
-                                                content={<CustomTooltip />}
+                                                content={<CustomTooltip t={t} />}
                                             />
                                             <Legend
                                                 verticalAlign="bottom"
@@ -347,7 +349,7 @@ const ReportsPage = () => {
                                                             fontSize: 13,
                                                         }}
                                                     >
-                                                        {value}
+                                                        {t(value)}
                                                     </span>
                                                 )}
                                             />
