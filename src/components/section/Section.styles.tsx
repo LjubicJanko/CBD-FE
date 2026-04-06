@@ -27,7 +27,7 @@ export const SectionContainer = styled.section`
       height: 623px;
       border-radius: 12px;
       background-size: cover;
-      background-position: center;
+      background-position: top;
       transition: transform 0.3s ease;
       display: flex;
       align-items: center;

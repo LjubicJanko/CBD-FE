@@ -98,15 +98,38 @@ export const GlobalStyle = createGlobalStyle`
 
   .user-menu {
     .MuiPopover-paper {
-      width: 200px;
-
-      ${mobile(css`
-        width: unset;
-      `)};
+      width: 180px;
 
       li {
         display: flex;
         justify-content: space-between;
+      }
+    }
+
+    .user-menu__language {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-bottom: 1px solid ${(props) => props.theme.SECONDARY_3};
+
+      .user-menu__language__btn {
+        padding: 4px;
+        border-radius: 4px;
+        opacity: 0.5;
+
+        &--selected {
+          opacity: 1;
+          outline: 2px solid ${(props) => props.theme.PRIMARY_2};
+        }
+      }
+
+      .user-menu__language__flag {
+        width: 20px;
+        height: 14px;
+        object-fit: cover;
+        border-radius: 2px;
+        image-rendering: pixelated;
       }
     }
   }

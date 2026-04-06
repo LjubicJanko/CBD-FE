@@ -9,10 +9,11 @@ export const HeaderContainer = styled.header`
   right: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 80px;
-  padding: 20px;
+  padding: 0 20px;
   background-color: ${theme.PRIMARY_1};
   box-shadow: 0px 2px 6px 2px #00000040;
   max-width: 1920px;
@@ -20,16 +21,23 @@ export const HeaderContainer = styled.header`
   margin-right: auto;
 
   ${mobile(css`
-    align-items: center;
-    gap: 4px;
-    padding: 16px;
-    min-height: 30px;
-    height: 80px;
+    padding: 0 16px;
   `)}
 
-  .user-button {
-    background-color: ${theme.SECONDARY_3};
+  .header__menu-btn {
+    position: absolute;
+    right: 20px;
+    color: ${theme.PRIMARY_2};
   }
+
+  .logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    filter: brightness(0) saturate(100%) invert(89%) sepia(47%) saturate(587%) hue-rotate(19deg) brightness(104%) contrast(104%);
+  }
+
 `;
 
 export const PublicHeaderContainer = styled.header`
@@ -39,20 +47,15 @@ export const PublicHeaderContainer = styled.header`
   right: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   width: 100%;
   height: 80px;
-  padding: 20px;
+  padding: 0 20px;
   background-color: ${theme.PRIMARY_1};
   box-shadow: 0px 2px 6px 2px #00000040;
 
   ${mobile(css`
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 16px;
-    min-height: 30px;
-    height: 80px;
+    padding: 0 16px;
   `)}
 
   .public-header {
@@ -60,18 +63,17 @@ export const PublicHeaderContainer = styled.header`
       display: flex;
       width: 100%;
       align-items: center;
+      gap: 8px;
 
       &--btn {
-        color: ${theme.SECONDARY_1};
+        color: ${theme.PRIMARY_2};
         width: 24px;
         padding: 0;
       }
       &--title {
-        padding: 0;
-        /* font-family: Satoshi; */
         font-size: 14px;
         font-weight: 700;
-        color: ${theme.SECONDARY_1};
+        color: ${theme.PRIMARY_2};
         margin-left: auto;
         margin-right: auto;
       }
@@ -79,24 +81,18 @@ export const PublicHeaderContainer = styled.header`
 
     &__home {
       display: flex;
-      justify-content: space-between;
+      align-items: center;
       width: 100%;
-
-      &__right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
+      gap: 8px;
 
       &__login-btn {
         white-space: nowrap;
         background-color: ${theme.PRIMARY_2};
         color: black;
+        font-size: 14px;
+        font-weight: 700;
+        margin-left: auto;
       }
-    }
-
-    &__language {
-      align-self: flex-start;
     }
   }
 `;

@@ -14,6 +14,7 @@ import theme from '../../styles/theme';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import MenuIcon from '@mui/icons-material/Menu';
 import useQueryParams from '../../hooks/useQueryParams';
 import ShareButton from '../share-button/ShareButton.component';
 
@@ -96,8 +97,8 @@ const HeaderComponent = () => {
             <h1 className="public-header__with-back-btn--title">
               {t(`${url}-title`)}
             </h1>
-            <ShareButton />
             {!isOnMobile && logo}
+            <ShareButton />
           </div>
         ) : (
           <div className="public-header__home">
@@ -141,16 +142,14 @@ const HeaderComponent = () => {
               </MenuItem>
             </Select>
 
-            <div className="public-header__home__right">
-              <ShareButton />
-              <Button
-                variant="outlined"
-                className="public-header__home__login-btn"
-                onClick={() => navigate('/login')}
-              >
-                {t('login')}
-              </Button>
-            </div>
+            <Button
+              variant="outlined"
+              className="public-header__home__login-btn"
+              onClick={() => navigate('/login')}
+            >
+              {t('login')}
+            </Button>
+            <ShareButton />
           </div>
         )}
       </Styled.PublicHeaderContainer>
@@ -159,45 +158,17 @@ const HeaderComponent = () => {
 
   return (
     <Styled.HeaderContainer className="header">
-      <Select
-        id="language"
-        value={selectedLanguage}
-        className="header__language"
-        onChange={(e) => changeLanguage(e.target.value)}
-      >
-        <MenuItem className="header__language__menu-item" value="en">
-          <img
-            className={classNames('header__language__button__flag', {
-              'header__language__button__flag--selected':
-                selectedLanguage === 'en',
-            })}
-            src="/en.png"
-            alt="english"
-          />
-        </MenuItem>
-        <MenuItem className="header__language__menu-item" value="rs">
-          <img
-            className={classNames('header__language__button__flag', {
-              'header__language__button__flag--selected':
-                selectedLanguage === 'rs',
-            })}
-            src="/rs.png"
-            alt="serbian"
-          />
-        </MenuItem>
-      </Select>
       {logo}
-      <Button
+      <IconButton
         id="user-button"
-        className="user-button"
-        aria-controls={open ? 'user-button' : undefined}
+        className="header__menu-btn"
+        aria-controls={open ? 'user-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        variant="contained"
       >
-        {authData?.name}
-      </Button>
+        <MenuIcon />
+      </IconButton>
       <Menu
         id="user-menu"
         className="user-menu"
@@ -208,6 +179,24 @@ const HeaderComponent = () => {
           'aria-labelledby': 'user-button',
         }}
       >
+        <div className="user-menu__language">
+          <IconButton
+            className={classNames('user-menu__language__btn', {
+              'user-menu__language__btn--selected': selectedLanguage === 'en',
+            })}
+            onClick={() => { changeLanguage('en'); }}
+          >
+            <img src="/en.png" alt="english" className="user-menu__language__flag" />
+          </IconButton>
+          <IconButton
+            className={classNames('user-menu__language__btn', {
+              'user-menu__language__btn--selected': selectedLanguage === 'rs',
+            })}
+            onClick={() => { changeLanguage('rs'); }}
+          >
+            <img src="/rs.png" alt="serbian" className="user-menu__language__flag" />
+          </IconButton>
+        </div>
         <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
           {t('profile')}
           <PersonIcon />
