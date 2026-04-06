@@ -8,8 +8,6 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import React from 'react';
-import useResponsiveWidth from '../../hooks/useResponsiveWidth';
-import { xxsMax } from '../../util/breakpoints';
 import theme from '../../styles/theme';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -25,16 +23,12 @@ const HeaderComponent = () => {
   const location = useLocation();
 
   const { changeLanguage, selectedLanguage } = useChangeLanguage();
-  const width = useResponsiveWidth();
-
   const {
     params: { id },
   } = useQueryParams<{ id: string | undefined }>();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
-  const isOnMobile = width < xxsMax;
 
   const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
