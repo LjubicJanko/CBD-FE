@@ -318,11 +318,116 @@ export const IdTrackingDetailsContainer = styled.div`
       }
     }
 
-    &__contact-info {   
+    &__contact-info {
       margin-top: 0px;
       &__container {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    &__edit-btn {
+      color: ${theme.PRIMARY_2} !important;
+      margin-left: 8px;
+    }
+
+    &__edit-form {
+      width: 70%;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      background-color: rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 50px;
+
+      ${mobile(css`
+        width: 100%;
+        padding: 16px;
+      `)}
+
+      &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &--title {
+          color: ${theme.SECONDARY_1};
+          font-size: 18px;
+          font-weight: 700;
+        }
+      }
+
+      &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        &--title {
+          color: ${theme.SECONDARY_2};
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+      }
+
+      &__fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+
+        ${mobile(css`
+          grid-template-columns: 1fr;
+        `)}
+
+        .MuiOutlinedInput-root {
+          border-radius: 10px;
+          background-color: rgba(255, 255, 255, 0.05);
+
+          .MuiOutlinedInput-notchedOutline {
+            border-color: rgba(255, 255, 255, 0.2) !important;
+          }
+
+          &:hover .MuiOutlinedInput-notchedOutline {
+            border-color: ${theme.PRIMARY_2}80 !important;
+          }
+
+          &.Mui-focused .MuiOutlinedInput-notchedOutline {
+            border-color: ${theme.PRIMARY_2} !important;
+            border-width: 1px !important;
+          }
+        }
+
+        .MuiInputLabel-root {
+          color: ${theme.SECONDARY_2} !important;
+
+          &.Mui-focused {
+            color: ${theme.PRIMARY_2} !important;
+          }
+        }
+      }
+
+      &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+
+        &--cancel {
+          color: ${theme.SECONDARY_1};
+          border-color: ${theme.SECONDARY_2};
+        }
+
+        &--save {
+          background-color: ${theme.PRIMARY_2};
+          color: ${theme.PRIMARY_1};
+          font-weight: 700;
+
+          &:disabled {
+            opacity: 0.5;
+          }
+        }
       }
     }
   }

@@ -217,6 +217,9 @@ const createOrderExtension = async (data: OrderExtensionReqDto) =>
 const editContactInfo = async(id: number, data: ContactInfoData) =>
   client.put(`/orderExtend/editContactInfo/${id}`, data).then((res) => res.data);
 
+const editExtension = async (trackingId: string, data: OrderExtensionReqDto) =>
+  client.put(`/orderExtend/edit/${trackingId}`, data).then((res) => res.data);
+
 const editShipmentInfo = async (id: number, postalService: string, postalCode: string) =>
   privateClient
     .put(`/orders/editShipmentInfo/${id}`, { postalService, postalCode })
@@ -247,6 +250,7 @@ export default {
   getHistory,
   createOrderExtension,
   editContactInfo,
+  editExtension,
   editShipmentInfo,
   combineExtensions,
 };
