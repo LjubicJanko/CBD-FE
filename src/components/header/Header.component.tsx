@@ -19,7 +19,7 @@ import useQueryParams from '../../hooks/useQueryParams';
 import ShareButton from '../share-button/ShareButton.component';
 
 const HeaderComponent = () => {
-  const { logout, token, authData } = useContext(AuthContext);
+  const { logout, token } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -97,7 +97,6 @@ const HeaderComponent = () => {
             <h1 className="public-header__with-back-btn--title">
               {t(`${url}-title`)}
             </h1>
-            {!isOnMobile && logo}
             <ShareButton />
           </div>
         ) : (

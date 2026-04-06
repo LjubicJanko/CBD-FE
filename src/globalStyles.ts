@@ -9,6 +9,10 @@ export const GlobalStyle = createGlobalStyle`
   props.theme.PRIMARY_1};
   }
 
+  .MuiCircularProgress-root {
+    color: ${(props) => props.theme.PRIMARY_2} !important;
+  }
+
   *::-webkit-scrollbar {
     width: 8px;
     height: 8px;

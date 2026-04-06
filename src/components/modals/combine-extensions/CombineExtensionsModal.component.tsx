@@ -264,7 +264,7 @@ const CombineExtensionsModal = ({
         if (isLoading) {
             return (
                 <div className="loading-container">
-                    <CircularProgress sx={{ color: '#D4FF00' }} />
+                    <CircularProgress />
                 </div>
             );
         }

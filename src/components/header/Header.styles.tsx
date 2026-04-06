@@ -58,6 +58,14 @@ export const PublicHeaderContainer = styled.header`
     padding: 0 16px;
   `)}
 
+  .logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    filter: brightness(0) saturate(100%) invert(89%) sepia(47%) saturate(587%) hue-rotate(19deg) brightness(104%) contrast(104%);
+  }
+
   .public-header {
     &__with-back-btn {
       display: flex;

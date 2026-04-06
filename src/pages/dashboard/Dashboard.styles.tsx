@@ -24,7 +24,7 @@ export const DashboardContainer = styled.div`
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(0, 0, 0, 0.6);
       display: flex;
       justify-content: center;
       align-items: center;
