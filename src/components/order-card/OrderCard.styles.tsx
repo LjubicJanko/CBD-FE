@@ -36,6 +36,10 @@ export const OrderCardContainer = styled.div`
     border: 2px solid ${theme.PRIMARY_2};
     box-shadow: inset rgba(0, 0, 0, 0.1) 0px 4px 6px;
   }
+
+  &.order-card--extension {
+    border-left: 3px solid ${theme.PRIMARY_2};
+  }
 `;
 
 export const Header = styled.div`

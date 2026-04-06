@@ -89,6 +89,7 @@ export type OrderOverview = {
   amountLeftToPay?: number;
   postalCode?: string;
   postalService?: string;
+  extension?: boolean;
 };
 
 export type Order = {

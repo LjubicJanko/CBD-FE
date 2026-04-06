@@ -17,6 +17,18 @@ export const GlobalStyle = createGlobalStyle`
     color: ${(props) => props.theme.PRIMARY_2} !important;
   }
 
+  .MuiRating-root .MuiRating-iconFilled,
+  .MuiRating-root .MuiRating-iconFilled .MuiSvgIcon-root,
+  .MuiRating-root .MuiRating-iconHover,
+  .MuiRating-root .MuiRating-iconHover .MuiSvgIcon-root,
+  .MuiRating-root label .MuiSvgIcon-root {
+    color: ${(props) => props.theme.SECONDARY_1} !important;
+  }
+
+  .MuiRating-root .MuiRating-iconEmpty .MuiSvgIcon-root {
+    color: rgba(255, 255, 255, 0.2) !important;
+  }
+
   *::-webkit-scrollbar {
     width: 8px;
     height: 8px;

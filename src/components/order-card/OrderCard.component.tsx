@@ -10,6 +10,7 @@ import * as Styled from './OrderCard.styles';
 import { statusColors } from '../../util/util';
 import { useMemo } from 'react';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import CallMergeIcon from '@mui/icons-material/CallMerge';
 import dayjs from 'dayjs';
 import { Rating, Tooltip } from '@mui/material';
 
@@ -38,11 +39,19 @@ const OrderCardComponent = ({
         'order-card--selected': isSelected,
         'order-card--paused':
           order.executionStatus === OrderExecutionStatusEnum.PAUSED,
+        'order-card--extension': order.extension,
       })}
       onClick={onClick}
     >
       <Styled.Header className="order-card__header">
-        <Styled.Title className="title">{order.name}</Styled.Title>
+        <Styled.Title className="title">
+          {order.extension && (
+            <Tooltip title={t('extension')}>
+              <CallMergeIcon sx={{ color: '#D4FF00', fontSize: 20, marginRight: '4px', verticalAlign: 'text-bottom' }} />
+            </Tooltip>
+          )}
+          {order.name}
+        </Styled.Title>
         <Styled.StatusChip
           className="status-chip"
           label={t(order.status)}
