@@ -102,6 +102,17 @@ export const PublicHeaderContainer = styled.header`
         font-size: 14px;
         font-weight: 700;
         margin-left: auto;
+
+        ${mobile(css`
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          margin-left: 0;
+        `)}
+      }
+
+      > :last-child {
+        margin-left: auto;
       }
     }
   }

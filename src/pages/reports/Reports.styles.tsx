@@ -87,8 +87,8 @@ export const Section = styled.div`
 
 export const SectionHeader = styled.div`
     display: flex;
-    align-items: baseline;
-    gap: 12px;
+    flex-direction: column;
+    gap: 4px;
 
     .section__title {
         margin: 0;
@@ -173,6 +173,10 @@ export const ChartCard = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 16px;
+
+    * {
+        outline: none !important;
+    }
 
     ${mobile(css`
         padding: 16px;

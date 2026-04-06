@@ -81,7 +81,6 @@ const IdTrackingPage = () => {
         enableReinitialize: true,
         onSubmit: async (values) => {
             if (!order) return;
-            console.log({order});
             try {
                 const updated = await orderService.editExtension(id!, {
                     name: values.orderName,
