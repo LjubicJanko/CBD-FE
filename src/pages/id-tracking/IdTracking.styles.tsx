@@ -33,7 +33,7 @@ export const IdTrackingContainer = styled.div`
 
   .id-tracking {
     &__title {
-      font-family: Satoshi;
+      font-family: 'Afacad', serif;
       font-size: 16px;
       font-weight: 400;
       text-align: center;
@@ -117,7 +117,7 @@ export const IdTrackingDetailsContainer = styled.div`
       width: 300px;
       border-radius: 20px;
       background-color: ${theme.PRIMARY_2};
-      font-family: Satoshi;
+      font-family: 'Afacad', serif;
       font-size: 18px;
       font-weight: 900;
       text-align: center;
@@ -233,7 +233,7 @@ export const IdTrackingDetailsContainer = styled.div`
         `)}
 
         .title {
-          font-family: Satoshi;
+          font-family: 'Afacad', serif;
           font-size: 22px;
           font-weight: 900;
           text-align: left;

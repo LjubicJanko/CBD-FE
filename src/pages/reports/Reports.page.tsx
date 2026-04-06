@@ -180,6 +180,9 @@ const ReportsPage = () => {
             <Styled.ReportsContainer className="reports-page">
                 <div className="reports-page__header">
                     <h1 className="reports-page__title">{t('reports')}</h1>
+                    <p className="reports-page__description">
+                        {t('reports-description')}
+                    </p>
                     <div className="reports-page__date-range">
                         <DatePicker
                             label={t('from')}
@@ -212,7 +215,7 @@ const ReportsPage = () => {
 
                 {isLoading ? (
                     <CircularProgress
-                        sx={{ alignSelf: 'center', color: '#D4FF00', mt: 4 }}
+                        sx={{ alignSelf: 'center', mt: 4 }}
                     />
                 ) : (
                     <>
@@ -222,6 +225,9 @@ const ReportsPage = () => {
                                     <h2 className="section__title">
                                         {t('overview')}
                                     </h2>
+                                    <span className="section__subtitle">
+                                        {t('overview-description')}
+                                    </span>
                                 </Styled.SectionHeader>
                                 <Styled.StatsGrid>
                                     <Styled.StatCard $accent>
@@ -310,13 +316,12 @@ const ReportsPage = () => {
                                 <h2 className="section__title">
                                     {t('status-duration')}
                                 </h2>
-                                {durationReport &&
-                                    durationReport.totalOrdersAnalyzed > 0 && (
-                                        <span className="section__subtitle">
-                                            {t('total-orders-analyzed')}:{' '}
-                                            {durationReport.totalOrdersAnalyzed}
-                                        </span>
-                                    )}
+                                <span className="section__subtitle">
+                                    {t('status-duration-description')}
+                                    {durationReport &&
+                                        durationReport.totalOrdersAnalyzed > 0 &&
+                                        ` · ${t('total-orders-analyzed')}: ${durationReport.totalOrdersAnalyzed}`}
+                                </span>
                             </Styled.SectionHeader>
 
                             {!durationReport ||

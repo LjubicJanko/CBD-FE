@@ -10,7 +10,7 @@ export const ChangeHistoryContainer = styled.div`
   `)}
 
   .change-history {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Afacad', serif;
     color: ${theme.SECONDARY_1};
 
     &__table {
@@ -49,12 +49,17 @@ export const ChangeHistoryContainer = styled.div`
       }
 
       &--timestamp {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        white-space: nowrap;
+
+        p {
+          display: inline;
+          margin: 0;
+        }
 
         svg {
           color: ${theme.PRIMARY_2};
+          vertical-align: middle;
+          margin-left: 8px;
         }
       }
     }

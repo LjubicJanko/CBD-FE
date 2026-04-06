@@ -28,6 +28,13 @@ export const ReportsContainer = styled.div`
         letter-spacing: -0.5px;
     }
 
+    .reports-page__description {
+        margin: 0;
+        font-size: 14px;
+        color: ${theme.SECONDARY_2};
+        line-height: 1.5;
+    }
+
     .reports-page__date-range {
         display: flex;
         align-items: center;

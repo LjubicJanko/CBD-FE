@@ -1,6 +1,6 @@
 import { Button, IconButton } from '@mui/material';
 import * as Styled from './ShippedTooltip.styles';
-import { Order, OrderStatusHistory, PostServices } from '../../../../types/Order';
+import { Order, OrderStatusEnum, OrderStatusHistory, PostServices } from '../../../../types/Order';
 import { useTranslation } from 'react-i18next';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -31,8 +31,10 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
     const { t } = useTranslation();
     const { showSnackbar } = useSnackbar();
     const { canEditData } = usePrivileges();
-    const { setSelectedOrder, updateOrderInOverviewList, updateStatusHistory } =
+    const { selectedOrder, setSelectedOrder, updateOrderInOverviewList, updateStatusHistory } =
         useContext(OrdersContext);
+
+    const isDone = selectedOrder?.status === OrderStatusEnum.DONE;
 
     const [isOpen, setIsOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -114,7 +116,7 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
                                 </IconButton>
                             </span>
                         </div>
-                        {canEditData && (
+                        {canEditData && !isDone && (
                             <div className="shipment-info__actions">
                                 <Button
                                     variant="contained"

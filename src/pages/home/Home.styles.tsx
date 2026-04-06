@@ -45,7 +45,7 @@ export const HomeContainer = styled.div`
             }
 
             &__title {
-                font-family: Inter;
+                font-family: 'Afacad', serif;
                 font-size: 14px;
                 font-weight: 300;
                 text-align: left;

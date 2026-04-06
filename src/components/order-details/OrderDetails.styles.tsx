@@ -74,7 +74,7 @@ export const OrderDetailsContainer = styled.div`
         width: 300px;
         border-radius: 20px;
         background-color: ${theme.PRIMARY_2};
-        font-family: Satoshi;
+        font-family: 'Afacad', serif;
         font-size: 18px;
         font-weight: 900;
         text-align: center;

@@ -12,6 +12,7 @@ export const HeaderContainer = styled.header`
   align-items: center;
   justify-content: center;
   width: 100%;
+  font-family: 'Afacad', serif;
   height: 80px;
   padding: 0 20px;
   background-color: ${theme.PRIMARY_1};
@@ -53,6 +54,7 @@ export const PublicHeaderContainer = styled.header`
   padding: 0 20px;
   background-color: ${theme.PRIMARY_1};
   box-shadow: 0px 2px 6px 2px #00000040;
+  font-family: 'Afacad', serif;
 
   ${mobile(css`
     padding: 0 16px;

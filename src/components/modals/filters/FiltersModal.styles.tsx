@@ -30,8 +30,7 @@ export const FiltersModalContainer = styled(CbdModal)`
   h2 {
     color: ${theme.SECONDARY_1};
     span {
-      font-family: 'Satoshi';
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Afacad', serif;
     }
     padding-bottom: 18px;
     border-bottom: 1px solid ${theme.SECONDARY_2};
