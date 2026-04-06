@@ -12,11 +12,6 @@ export const OrderPaymentsContainer = styled.div`
 
     &__data {
       flex: 1;
-      overflow-x: auto;
-
-      ${tablet(css`
-        overflow-x: auto;
-      `)}
     }
 
     &__table {
@@ -47,15 +42,15 @@ export const OrderPaymentsContainer = styled.div`
         font-size: 14px;
       }
 
-      &--edit,
-      &--delete {
+      &--actions-cell {
         text-align: center;
         padding: 0;
+        white-space: nowrap;
 
         button {
           color: ${theme.PRIMARY_2};
           padding: 0;
-          width: fit-content;
+          min-width: unset;
         }
       }
     }
@@ -90,4 +85,43 @@ export const OrderPaymentsContainer = styled.div`
       }
     }
   }
+
+  ${tablet(css`
+    .order-payments__table-header {
+      display: none;
+    }
+
+    .order-payments__row {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 16px;
+        border: none;
+        color: ${theme.SECONDARY_1} !important;
+
+        &::before {
+          content: attr(data-label);
+          font-weight: 500;
+          color: ${theme.PRIMARY_2} !important;
+          font-size: 13px;
+          margin-right: 12px;
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    .order-payments__cell--actions-cell {
+      justify-content: flex-end !important;
+
+      &::before {
+        display: none;
+      }
+    }
+  `)}
 `;

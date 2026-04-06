@@ -18,7 +18,6 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { profileService } from '../../../../api';
 import { RegisterData, User } from '../../../../types/Auth';
-import { textInputSX } from '../../../../util/util';
 import UsersTable from '../UsersTable.component';
 import * as Styled from './AddUser.styles';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
@@ -161,7 +160,7 @@ const AddUser = () => {
           placeholder={t('password')}
           value={signUpFormik.values.password}
           onChange={signUpFormik.handleChange}
-          sx={textInputSX}
+
           endAdornment={
             <InputAdornment position="end">
               <IconButton

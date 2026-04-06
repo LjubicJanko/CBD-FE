@@ -142,7 +142,6 @@ const HeaderComponent = () => {
             >
               {t('login')}
             </Button>
-            <ShareButton />
           </div>
         )}
       </Styled.PublicHeaderContainer>

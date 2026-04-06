@@ -17,12 +17,13 @@ export const ModalOverlay = styled.div`
 
 // Styled component for modal content
 export const ModalContent = styled.div`
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
+  background-color: ${theme.PRIMARY_1};
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 24px;
+  border-radius: 12px;
   width: 400px;
   max-width: 100%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   position: relative;
 `;
 
@@ -32,8 +33,8 @@ export const CloseButton = styled.button`
   border: none;
   font-size: 1.5rem;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   cursor: pointer;
   color: ${theme.SECONDARY_1};
 `;
@@ -43,5 +44,5 @@ export const ModalTitle = styled.h2`
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 1.5rem;
-  color: #333;
+  color: ${theme.SECONDARY_1};
 `;

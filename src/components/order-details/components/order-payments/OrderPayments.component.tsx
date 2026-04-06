@@ -119,10 +119,7 @@ const OrderPayments = ({
                   {t('note')}
                 </TableCell>
                 {!isAddingDisabled && (
-                  <>
-                    <TableCell className="order-payments__header-cell"></TableCell>
-                    <TableCell className="order-payments__header-cell"></TableCell>
-                  </>
+                  <TableCell className="order-payments__header-cell"></TableCell>
                 )}
               </TableRow>
             </TableHead>
@@ -137,41 +134,38 @@ const OrderPayments = ({
                     className="order-payments__cell order-payments__cell--payer"
                     component="th"
                     scope="row"
+                    data-label={t('payer')}
                   >
                     {payment.payer}
                   </TableCell>
-                  <TableCell className="order-payments__cell order-payments__cell--amount">
+                  <TableCell data-label={t('amount')} className="order-payments__cell order-payments__cell--amount">
                     {payment.amount.toFixed(2)}
                   </TableCell>
-                  <TableCell className="order-payments__cell order-payments__cell--method">
+                  <TableCell data-label={t('payment-method')} className="order-payments__cell order-payments__cell--method">
                     {t(payment.paymentMethod)}
                   </TableCell>
-                  <TableCell className="order-payments__cell order-payments__cell--date">
+                  <TableCell data-label={t('transaction-date')} className="order-payments__cell order-payments__cell--date">
                     {payment.paymentDate.toString()}
                   </TableCell>
-                  <TableCell className="order-payments__cell order-payments__cell--note">
+                  <TableCell data-label={t('note')} className="order-payments__cell order-payments__cell--note">
                     {payment.note || '-'}
                   </TableCell>
                   {!isAddingDisabled && (
-                    <>
-                      <TableCell className="order-payments__cell order-payments__cell--edit">
-                        <Button onClick={() => handleOpenModal(payment)}>
-                          <EditIcon />
-                        </Button>
-                      </TableCell>
-                      <TableCell className="order-payments__cell order-payments__cell--delete">
-                        <Button
-                          onClick={() =>
-                            setConfirmModalConfig({
-                              isOpen: true,
-                              paymentToUpdate: payment,
-                            })
-                          }
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </TableCell>
-                    </>
+                    <TableCell className="order-payments__cell order-payments__cell--actions-cell">
+                      <Button onClick={() => handleOpenModal(payment)}>
+                        <EditIcon />
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          setConfirmModalConfig({
+                            isOpen: true,
+                            paymentToUpdate: payment,
+                          })
+                        }
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
                   )}
                 </TableRow>
               ))}

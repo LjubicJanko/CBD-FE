@@ -451,7 +451,8 @@ const OrderDetailsComponent = () => {
           <CloseIcon />
         </IconButton>
         <div className="order-details__header__tracking-id">
-          <span>{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</span>
+          <span className="order-details__header__tracking-id--full">{t('tracking-id', { TRACKING_ID: selectedOrder.trackingId })}</span>
+          <span className="order-details__header__tracking-id--short">ID: {selectedOrder.trackingId}</span>
           <IconButton
             className="postal-code-copy"
             size="small"

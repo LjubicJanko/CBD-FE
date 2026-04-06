@@ -22,10 +22,27 @@ const UsersTable = ({ users }: UsersTableProps) => {
 
   if (!users || !users.length) return <NoContent />;
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+        backgroundImage: 'none',
+      }}
+    >
       <Table aria-label="payments table">
         <TableHead>
-          <TableRow sx={{ backgroundColor: theme.SECONDARY_3 }}>
+          <TableRow
+            sx={{
+              backgroundColor: 'rgba(255,255,255,0.08)',
+              '& th, & td': {
+                color: theme.PRIMARY_2,
+                fontWeight: 700,
+                fontSize: 13,
+                borderBottom: `1px solid rgba(255,255,255,0.1)`,
+              },
+            }}
+          >
             <TableCell>{t('full-name')}</TableCell>
             <TableCell>{t('username')}</TableCell>
             <TableCell>{t('role')}</TableCell>
@@ -36,7 +53,14 @@ const UsersTable = ({ users }: UsersTableProps) => {
           {users.map((user, index) => (
             <TableRow
               key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' },
+                '& td, & th': {
+                  color: theme.SECONDARY_1,
+                  borderBottom: `1px solid rgba(255,255,255,0.06)`,
+                },
+                '&:last-child td, &:last-child th': { border: 0 },
+              }}
             >
               <TableCell component="th" scope="row">
                 {user.fullName}
@@ -44,7 +68,9 @@ const UsersTable = ({ users }: UsersTableProps) => {
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.roles?.[0]?.name}</TableCell>
               <TableCell>
-                {dayjs(user.createdAt).format('DD.MM.YYYY')}
+                {user.createdAt && dayjs(user.createdAt).isValid()
+                  ? dayjs(user.createdAt).format('DD.MM.YYYY')
+                  : '-'}
               </TableCell>
             </TableRow>
           ))}

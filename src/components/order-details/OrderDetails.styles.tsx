@@ -36,6 +36,19 @@ export const OrderDetailsContainer = styled.div`
         font-size: 14px;
         white-space: nowrap;
 
+        &--short {
+          display: none;
+        }
+
+        ${tablet(css`
+          &--full {
+            display: none;
+          }
+          &--short {
+            display: inline;
+          }
+        `)}
+
         button {
           color: ${theme.PRIMARY_2};
           width: auto !important;

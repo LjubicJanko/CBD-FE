@@ -53,7 +53,6 @@ const ChangeHistoryComponent = ({ orderId }: ChangeHistoryProps) => {
   return (
     <Styled.ChangeHistoryContainer className="change-history">
       <Table
-        sx={{ minWidth: 650 }}
         aria-label="simple table"
         className="change-history__table"
       >
@@ -86,6 +85,7 @@ const ChangeHistoryComponent = ({ orderId }: ChangeHistoryProps) => {
               <TableCell
                 component="th"
                 scope="row"
+                data-label={t('status')}
                 className={classNames(
                   'change-history__cell',
                   'change-history__cell--status',
@@ -96,13 +96,13 @@ const ChangeHistoryComponent = ({ orderId }: ChangeHistoryProps) => {
               >
                 <div>{getStatusLabel(row, t)}</div>
               </TableCell>
-              <TableCell className="change-history__cell change-history__cell--user">
+              <TableCell data-label={t('user')} className="change-history__cell change-history__cell--user">
                 {row.user}
               </TableCell>
-              <TableCell className="change-history__cell change-history__cell--comment">
+              <TableCell data-label={t('comment')} className="change-history__cell change-history__cell--comment">
                 {row.closingComment}
               </TableCell>
-              <TableCell className="change-history__cell change-history__cell--timestamp">
+              <TableCell data-label={t('timestamp')} className="change-history__cell change-history__cell--timestamp">
                 <p>{dayjs(row.creationTime).format('DD.MM.YYYY HH:mm')}</p>
                 {row.status === OrderStatusEnum.SHIPPED && (
                   <ShippedInfoTooltip row={row} orderId={orderId} />

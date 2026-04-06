@@ -9,6 +9,10 @@ export const GlobalStyle = createGlobalStyle`
   props.theme.PRIMARY_1};
   }
 
+  body {
+    font-family: 'Afacad', serif;
+  }
+
   .MuiCircularProgress-root {
     color: ${(props) => props.theme.PRIMARY_2} !important;
   }
@@ -65,7 +69,6 @@ export const GlobalStyle = createGlobalStyle`
         padding-top: 80px;
       `)};
 
-      font-family: "Afacad", serif;
       font-optical-sizing: auto;
       text-decoration-skip-ink: none;
     }
@@ -140,7 +143,133 @@ export const GlobalStyle = createGlobalStyle`
 
   .MuiButtonBase-root {
     &.role-item {
-      color: ${(props) => props.theme.SECONDARY_1}; 
+      color: ${(props) => props.theme.SECONDARY_1};
+    }
+  }
+
+  .MuiPickersPopper-root {
+    .MuiPaper-root {
+      background-color: ${(props) => props.theme.PRIMARY_1};
+      color: ${(props) => props.theme.SECONDARY_1};
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+    }
+
+    .MuiPickersCalendarHeader-label {
+      color: ${(props) => props.theme.SECONDARY_1};
+    }
+
+    .MuiPickersArrowSwitcher-button {
+      color: ${(props) => props.theme.SECONDARY_1};
+    }
+
+    .MuiDayCalendar-weekDayLabel {
+      color: ${(props) => props.theme.SECONDARY_2};
+    }
+
+    .MuiPickersDay-root {
+      color: ${(props) => props.theme.SECONDARY_1};
+
+      &:hover {
+        background-color: rgba(212, 255, 0, 0.15);
+      }
+
+      &.Mui-selected {
+        background-color: ${(props) => props.theme.PRIMARY_2} !important;
+        color: ${(props) => props.theme.PRIMARY_1} !important;
+        font-weight: 700;
+      }
+
+      &.MuiPickersDay-today {
+        border-color: ${(props) => props.theme.PRIMARY_2} !important;
+      }
+    }
+
+    .MuiPickersYear-yearButton,
+    .MuiPickersMonth-monthButton {
+      color: ${(props) => props.theme.SECONDARY_1};
+
+      &:hover {
+        background-color: rgba(212, 255, 0, 0.15);
+      }
+
+      &.Mui-selected {
+        background-color: ${(props) => props.theme.PRIMARY_2} !important;
+        color: ${(props) => props.theme.PRIMARY_1} !important;
+      }
+    }
+
+    .MuiIconButton-root {
+      color: ${(props) => props.theme.SECONDARY_1};
+    }
+  }
+
+  .MuiDialog-root .MuiPaper-root:has(.MuiDateCalendar-root) {
+    background-color: ${(props) => props.theme.PRIMARY_1};
+    color: ${(props) => props.theme.SECONDARY_1};
+
+    .MuiPickersToolbar-root {
+      background-color: rgba(212, 255, 0, 0.1);
+
+      .MuiTypography-root {
+        color: ${(props) => props.theme.SECONDARY_1};
+      }
+
+      .MuiTypography-overline {
+        color: ${(props) => props.theme.SECONDARY_2};
+      }
+    }
+
+    .MuiPickersCalendarHeader-label {
+      color: ${(props) => props.theme.SECONDARY_1};
+    }
+
+    .MuiPickersArrowSwitcher-button {
+      color: ${(props) => props.theme.SECONDARY_1};
+    }
+
+    .MuiDayCalendar-weekDayLabel {
+      color: ${(props) => props.theme.SECONDARY_2};
+    }
+
+    .MuiPickersDay-root {
+      color: ${(props) => props.theme.SECONDARY_1};
+
+      &:hover {
+        background-color: rgba(212, 255, 0, 0.15);
+      }
+
+      &.Mui-selected {
+        background-color: ${(props) => props.theme.PRIMARY_2} !important;
+        color: ${(props) => props.theme.PRIMARY_1} !important;
+        font-weight: 700;
+      }
+
+      &.MuiPickersDay-today {
+        border-color: ${(props) => props.theme.PRIMARY_2} !important;
+      }
+    }
+
+    .MuiPickersYear-yearButton,
+    .MuiPickersMonth-monthButton {
+      color: ${(props) => props.theme.SECONDARY_1};
+
+      &:hover {
+        background-color: rgba(212, 255, 0, 0.15);
+      }
+
+      &.Mui-selected {
+        background-color: ${(props) => props.theme.PRIMARY_2} !important;
+        color: ${(props) => props.theme.PRIMARY_1} !important;
+      }
+    }
+
+    .MuiDialogActions-root .MuiButton-root {
+      color: ${(props) => props.theme.PRIMARY_2};
+    }
+
+    .MuiIconButton-root {
+      color: ${(props) => props.theme.SECONDARY_1};
     }
   }
 `;

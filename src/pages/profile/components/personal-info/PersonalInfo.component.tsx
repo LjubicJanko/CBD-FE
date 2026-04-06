@@ -14,7 +14,6 @@ import { profileService } from '../../../../api';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
 import AuthContext from '../../../../store/AuthProvider/Auth.context';
 import { ChangePasswordData } from '../../../../types/Auth';
-import { textInputSX } from '../../../../util/util';
 import * as Styled from './PersonalInfo.styles';
 import classNames from 'classnames';
 
@@ -97,7 +96,7 @@ const PersonalInfo = () => {
         onSubmit={changePasswordFormik.handleSubmit}
       >
         <h3>{t('change-password')}</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="change-password__form__fields">
           <div className="change-password__form__input">
             {t('old-password')}
             <OutlinedInput
@@ -108,7 +107,7 @@ const PersonalInfo = () => {
               placeholder={t('password')}
               value={changePasswordFormik.values.oldPassword}
               onChange={changePasswordFormik.handleChange}
-              sx={textInputSX}
+
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -134,7 +133,7 @@ const PersonalInfo = () => {
               placeholder={t('password')}
               value={changePasswordFormik.values.newPassword}
               onChange={changePasswordFormik.handleChange}
-              sx={textInputSX}
+
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

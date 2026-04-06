@@ -3,9 +3,10 @@ import theme from '../../styles/theme';
 import { mobile } from '../../util/breakpoints';
 
 export const BannerCardContainer = styled.div`
-    padding: 12px;
-    border-radius: 10px;
-    background-color: ${theme.SECONDARY_2};
+    padding: 16px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     max-width: 300px;
     position: relative;
     text-decoration: none;
@@ -18,7 +19,7 @@ export const BannerCardContainer = styled.div`
     `)}
 
     &.banner-card--unpublished {
-        opacity: 0.7;
+        opacity: 0.5;
     }
 
     .banner-card {
@@ -41,14 +42,29 @@ export const BannerCardContainer = styled.div`
                 &--delete {
                     min-width: unset;
                     padding: 0;
-                    color: ${theme.PRIMARY_1};
+                    color: ${theme.SECONDARY_2};
+
+                    &:hover {
+                        color: ${theme.SECONDARY_1};
+                    }
                 }
             }
         }
 
         &__content {
-            color: ${theme.PRIMARY_1};
+            color: ${theme.SECONDARY_1};
             flex: 1;
+
+            h3 {
+                color: ${theme.SECONDARY_1};
+                margin: 0 0 4px 0;
+            }
+
+            p {
+                color: ${theme.SECONDARY_2};
+                font-size: 14px;
+                margin: 0;
+            }
         }
 
         &__locations {
@@ -67,11 +83,12 @@ export const BannerCardContainer = styled.div`
                 background-color: ${theme.PRIMARY_2};
                 color: ${theme.PRIMARY_1};
                 border-color: ${theme.PRIMARY_2};
+                font-weight: 700;
             }
 
             &__unpublish {
                 color: ${theme.SECONDARY_1};
-                border-color: ${theme.SECONDARY_1};
+                border-color: ${theme.SECONDARY_2};
             }
         }
     }
