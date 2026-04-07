@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
@@ -145,7 +146,7 @@ const OrderPayments = ({
                     {t(payment.paymentMethod)}
                   </TableCell>
                   <TableCell data-label={t('transaction-date')} className="order-payments__cell order-payments__cell--date">
-                    {payment.paymentDate.toString()}
+                    {dayjs(payment.paymentDate).format('DD.MM.YYYY')}
                   </TableCell>
                   <TableCell data-label={t('note')} className="order-payments__cell order-payments__cell--note">
                     {payment.note || '-'}

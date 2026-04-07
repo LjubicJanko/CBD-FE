@@ -23,6 +23,12 @@ const getStatusLabel = (row: OrderStatusHistory, t: (key: string) => string): st
   if (row.executionStatus === OrderExecutionStatusEnum.PAUSED) {
     return t('paused');
   }
+  if (row.executionStatus === OrderExecutionStatusEnum.CANCELED) {
+    return t('canceled');
+  }
+  if (row.executionStatus === OrderExecutionStatusEnum.ARCHIVED) {
+    return t('archived');
+  }
   if (row.executionStatus === OrderExecutionStatusEnum.ACTIVE) {
     return t('reactivated');
   }

@@ -59,7 +59,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
       payer: paymentToUpdate?.payer ?? '',
       amount: paymentToUpdate?.amount.toString() ?? '',
       paymentDate: paymentToUpdate
-        ? dayjs(paymentToUpdate?.paymentDate, 'DD.MM.YYYY')
+        ? dayjs(paymentToUpdate?.paymentDate)
         : dayjs(),
       paymentMethod: paymentToUpdate?.paymentMethod ?? 'ACCOUNT',
       note: paymentToUpdate?.note ?? '',
@@ -85,7 +85,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         id: paymentToUpdate?.id ?? Date.now(),
         payer: values.payer,
         amount: parseFloat(values.amount),
-        paymentDate: values.paymentDate.format('DD.MM.YYYY'),
+        paymentDate: values.paymentDate.format('YYYY-MM-DD'),
         paymentMethod: values.paymentMethod,
         note: values.note,
       };
