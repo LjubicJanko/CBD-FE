@@ -5,3 +5,4 @@ export { default as LoginPage } from './login/Login.page';
 export { default as IdTrackingPage } from './id-tracking/IdTracking.page';
 export { default as ProfilePage } from './profile/Profile.page';
 export { default as ReportsPage } from './reports/Reports.page';
+export { default as SelectTenantPage } from './select-tenant/SelectTenant.page';

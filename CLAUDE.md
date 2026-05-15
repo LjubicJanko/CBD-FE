@@ -80,7 +80,8 @@ Five Context providers wrap the app in `App.tsx`:
 
 ### Environment
 - `VITE_API_URL` — backend API base URL (accessed via `import.meta.env.VITE_API_URL`)
-- Translations loaded from external GitHub Pages: `ljubicjanko.github.io/CBD-Locales`
+- `VITE_TENANT_SLUG` — default tenant slug for the public home page link and the legacy `/track?id=` redirect. When unset, the home page hides the order-extension entry point.
+- Translations served locally from `public/locales/{en,rs}/translation.json` (Vite exposes them at `/locales/...`). A remote mirror at `ljubicjanko.github.io/CBD-Locales` exists for reference but is no longer the runtime source — keep the local files in sync if you ever switch back.
 
 ## Code Style
 - **Prettier**: single quotes, 4-space tabs, trailing commas (es5), semicolons

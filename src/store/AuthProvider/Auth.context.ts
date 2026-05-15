@@ -9,7 +9,7 @@ interface AuthContext {
     data: LoginData,
     navigate: (path: string) => void
   ) => Promise<boolean>;
-  logout: (navigate: (path: string) => void) => void;
+  logout: () => void;
 }
 
 export default createContext<AuthContext>({

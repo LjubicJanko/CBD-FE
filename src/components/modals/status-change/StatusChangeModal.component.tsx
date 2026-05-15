@@ -14,6 +14,7 @@ import { getNextStatus } from '../../../util/util';
 import { orderService } from '../../../api';
 import { useTranslation } from 'react-i18next';
 import OrdersContext from '../../../store/OrdersProvider/Orders.context';
+import { useSnackbar } from '../../../hooks/useSnackbar';
 import * as Yup from 'yup';
 
 export type StatusChangeModalProps = {
@@ -40,6 +41,7 @@ const StatusChangeModal = ({
   const { t } = useTranslation();
   const { setSelectedOrder, updateOrderInOverviewList, updateStatusHistory } =
     useContext(OrdersContext);
+  const { showSnackbar } = useSnackbar();
   const initialValues: StatusData = {
     closingComment: '',
     postalCode: '',
@@ -60,10 +62,10 @@ const StatusChangeModal = ({
         setSelectedOrder(response);
         updateOrderInOverviewList(response);
         updateStatusHistory(response?.statusHistory);
+        onClose();
       } catch (error) {
         console.error(error);
-      } finally {
-        onClose();
+        showSnackbar(t('status-change-failed'), 'error');
       }
     },
     [
@@ -72,6 +74,8 @@ const StatusChangeModal = ({
       setSelectedOrder,
       updateOrderInOverviewList,
       updateStatusHistory,
+      showSnackbar,
+      t,
     ]
   );
 

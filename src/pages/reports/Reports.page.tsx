@@ -1,6 +1,6 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import * as Styled from './Reports.styles';
-import AuthContext from '../../store/AuthProvider/Auth.context';
+import { useIsCompanyAdmin } from '../../hooks/useRole';
 import reportsService from '../../api/services/reports';
 import { OrderReport, StatusDurationReport } from '../../types/Report';
 import { CircularProgress } from '@mui/material';
@@ -125,7 +125,6 @@ const renderCustomLabel = ((props: {
 }) as unknown as (typeof Pie.prototype)['props']['label'];
 
 const ReportsPage = () => {
-    const { authData } = useContext(AuthContext);
     const { t } = useTranslation();
     const { params, setMultipleQParams } = useQueryParams<{ from: string; to: string }>();
 
@@ -140,10 +139,7 @@ const ReportsPage = () => {
         useState<StatusDurationReport | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const isAdmin = useMemo(
-        () => authData?.roles?.includes('admin') ?? false,
-        [authData?.roles]
-    );
+    const isAdmin = useIsCompanyAdmin();
 
     const fromStr = useMemo(() => from.format('YYYY-MM-DD'), [from]);
     const toStr = useMemo(() => to.format('YYYY-MM-DD'), [to]);

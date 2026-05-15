@@ -4,7 +4,6 @@ import { GlobalStyle } from './globalStyles';
 import { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import SnackbarProvider from './store/SnackbarProvider';
-import BannerProvider from './store/BannerProvider';
 
 const App = (): JSX.Element => {
     return (
@@ -12,9 +11,7 @@ const App = (): JSX.Element => {
             <GlobalStyle />
             <SnackbarProvider>
                 <AuthProvider>
-                    <BannerProvider>
-                        <CBDRouter />
-                    </BannerProvider>
+                    <CBDRouter />
                 </AuthProvider>
             </SnackbarProvider>
         </ThemeProvider>

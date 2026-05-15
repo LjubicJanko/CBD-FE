@@ -60,6 +60,13 @@ const OrderInfoForm = () => {
       .positive(t('validation.invalid.acquisition-cost'))
       .required(t('validation.required.acquisition-cost'))
       .min(0),
+    plannedEndingDate: Yup.mixed()
+      .required(t('validation.required.plannedEndingDate'))
+      .test(
+        'valid-date',
+        t('validation.required.plannedEndingDate'),
+        (value) => Boolean(value) && dayjs(value as Dayjs | string).isValid()
+      ),
   });
   const onSubmit = useCallback(
     async (values: Order, { resetForm }: FormikHelpers<Order>) => {
@@ -159,6 +166,11 @@ const OrderInfoForm = () => {
           value={formik.values.plannedEndingDate}
           disablePast
           onChange={handleDateChange}
+          errorMessage={
+            typeof formik.errors.plannedEndingDate === 'string'
+              ? formik.errors.plannedEndingDate
+              : undefined
+          }
         />
       </div>
       <div className="order-info__right">

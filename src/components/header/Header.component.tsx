@@ -1,8 +1,8 @@
-import { Button, IconButton, Menu, MenuItem, Select } from '@mui/material';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { Button, FormControl, IconButton, Menu, MenuItem, Select } from '@mui/material';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import AuthContext from '../../store/AuthProvider/Auth.context';
 import * as Styled from './Header.styles';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useChangeLanguage } from '../../hooks/useChangeLanguage';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -12,23 +12,80 @@ import theme from '../../styles/theme';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import MenuIcon from '@mui/icons-material/Menu';
-import useQueryParams from '../../hooks/useQueryParams';
 import ShareButton from '../share-button/ShareButton.component';
+import { platformService, publicTenantService } from '../../api';
+import { getLogoAbsoluteUrl, Tenant } from '../../api/services/platform';
+import { PublicTenant } from '../../api/services/publicTenant';
+import localStorageService from '../../services/localStorage.service';
 
 const HeaderComponent = () => {
-  const { logout, token } = useContext(AuthContext);
+  const { logout, token, authData } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
   const { changeLanguage, selectedLanguage } = useChangeLanguage();
-  const {
-    params: { id },
-  } = useQueryParams<{ id: string | undefined }>();
+  const { tenantSlug } = useParams<{ tenantSlug?: string }>();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [ownTenant, setOwnTenant] = useState<PublicTenant | null>(null);
+  // Reads localStorage synchronously rather than reactively. That's fine here:
+  // tenant switches in this app always trigger a hard navigation
+  // (window.location.href = '/dashboard'), so this component remounts on the
+  // next page and re-reads the storage. If a future change introduces
+  // SPA-style tenant switching, lift selectedTenantId/Slug into a context
+  // first — otherwise the dropdown will desync.
+  // Same constraint applies in BannerProvider and TenantContextRequired.
+  const [selectedTenantId, setSelectedTenantId] = useState<number | ''>(
+    localStorageService.selectedTenantId ?? ''
+  );
+
+  useEffect(() => {
+    if (authData?.superadmin) {
+      platformService.getTenants().then(setTenants).catch(console.error);
+    } else if (authData?.tenantSlug) {
+      publicTenantService
+        .getTenantBySlug(authData.tenantSlug)
+        .then(setOwnTenant)
+        .catch(console.error);
+    }
+  }, [authData?.superadmin, authData?.tenantSlug]);
+
+  // Self-heal when the currently-selected tenant disappears from the list
+  // (deactivated, deleted, or never existed). Catches both "superadmin
+  // deactivated the tenant they're impersonating" and the stale-localStorage
+  // case. Runs whenever the fetched tenants list changes.
+  useEffect(() => {
+    if (!authData?.superadmin) return;
+    if (tenants.length === 0) return;
+    if (selectedTenantId === '') return;
+    const current = tenants.find((tenant) => tenant.id === selectedTenantId);
+    if (!current || !current.active) {
+      localStorageService.clearSelectedTenant();
+      window.location.href = '/select-tenant';
+    }
+  }, [tenants, selectedTenantId, authData?.superadmin]);
+
+  const handleTenantSwitch = useCallback(
+    (tenantId: number) => {
+      const switchedTo = tenants.find((tenant) => tenant.id === tenantId);
+      setSelectedTenantId(tenantId);
+      localStorageService.setSelectedTenant(
+        tenantId,
+        switchedTo?.slug ?? null
+      );
+      // Hard navigation: drops in-memory caches (OrdersProvider, fetched lists)
+      // that are scoped to the previous tenant. Landing on /dashboard keeps the
+      // post-switch destination consistent with the /select-tenant flow.
+      window.location.href = '/dashboard';
+    },
+    [tenants]
+  );
 
   const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -40,8 +97,8 @@ const HeaderComponent = () => {
 
   const handleLogout = useCallback(() => {
     setAnchorEl(null);
-    logout(navigate);
-  }, [logout, navigate]);
+    logout();
+  }, [logout]);
 
   const handleGoToProfile = useCallback(() => {
     setAnchorEl(null);
@@ -53,27 +110,68 @@ const HeaderComponent = () => {
     navigate('/reports');
   }, [navigate]);
 
+  const handleGoToPlatform = useCallback(() => {
+    setAnchorEl(null);
+    navigate('/platform');
+  }, [navigate]);
+
   const url = useMemo(
     () => location.pathname.split('/').pop(),
     [location.pathname]
   );
 
   const showBackButton = useMemo(
-    () => url && ['login', 'track', 'order-extension'].includes(url),
-    [url]
+    () =>
+      location.pathname.startsWith('/login') ||
+      location.pathname.startsWith('/track') ||
+      location.pathname.startsWith('/order-extension'),
+    [location.pathname]
   );
+
+  const titleKey = useMemo(() => {
+    if (location.pathname.startsWith('/order-extension')) {
+      return 'order-extension';
+    }
+    if (location.pathname.startsWith('/track')) {
+      return 'track';
+    }
+    return url;
+  }, [location.pathname, url]);
+
+  const activeTenantLogoPath = useMemo(() => {
+    if (authData?.superadmin) {
+      const activeTenant = tenants.find((t) => t.id === selectedTenantId);
+      return activeTenant?.logoUrl ?? null;
+    }
+    return authData?.tenantLogoUrl ?? null;
+  }, [authData?.superadmin, authData?.tenantLogoUrl, tenants, selectedTenantId]);
+
+  const [logoLoadFailed, setLogoLoadFailed] = useState(false);
+
+  const tenantLogoUrl = useMemo(
+    () => getLogoAbsoluteUrl(activeTenantLogoPath),
+    [activeTenantLogoPath]
+  );
+
+  useEffect(() => {
+    setLogoLoadFailed(false);
+  }, [tenantLogoUrl]);
+
+  const useTenantLogo = Boolean(tenantLogoUrl) && !logoLoadFailed;
+  const logoSrc = useTenantLogo ? (tenantLogoUrl as string) : theme.logo;
 
   const logo = useMemo(
     () => (
       <img
-        src={theme.logo}
+        src={logoSrc}
         width={50}
         alt="Logo"
-        className="logo"
+        className={classNames('logo', { 'logo--tenant': useTenantLogo })}
         onClick={() => navigate('/')}
+        onError={() => setLogoLoadFailed(true)}
       />
     ),
-    [navigate]
+    [navigate, logoSrc, useTenantLogo]
   );
 
   if (!token) {
@@ -83,13 +181,13 @@ const HeaderComponent = () => {
           <div className="public-header__with-back-btn">
             <IconButton
               className="public-header__with-back-btn--btn"
-              onClick={() => navigate(id ? '/track' : '/')}
+              onClick={() => navigate(tenantSlug ? `/${tenantSlug}` : '/')}
               edge="end"
             >
               <ChevronLeftIcon />
             </IconButton>
             <h1 className="public-header__with-back-btn--title">
-              {t(`${url}-title`)}
+              {t(`${titleKey}-title`)}
             </h1>
             <ShareButton />
           </div>
@@ -148,8 +246,42 @@ const HeaderComponent = () => {
     );
   }
 
+  const renderTenantSlot = () => {
+    if (authData?.superadmin) {
+      const activeTenants = tenants.filter((tenant) => tenant.active);
+      if (activeTenants.length === 0 || selectedTenantId === '') return null;
+      return (
+        <FormControl size="small">
+          <Select<number | ''>
+            className="header__tenant__select"
+            value={selectedTenantId}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (typeof value === 'number') handleTenantSwitch(value);
+            }}
+          >
+            {activeTenants.map((tenant) => (
+              <MenuItem key={tenant.id} value={tenant.id}>
+                {tenant.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      );
+    }
+    if (!authData?.tenantSlug) return null;
+    return (
+      <span className="header__tenant__name">
+        {ownTenant?.name ?? authData.tenantSlug}
+      </span>
+    );
+  };
+
+  const tenantSlot = renderTenantSlot();
+
   return (
     <Styled.HeaderContainer className="header">
+      {tenantSlot && <div className="header__tenant">{tenantSlot}</div>}
       {logo}
       <IconButton
         id="user-button"
@@ -190,13 +322,19 @@ const HeaderComponent = () => {
           </IconButton>
         </div>
         <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
-          {t('profile')}
+          {t('settings')}
           <PersonIcon />
         </MenuItem>
         <MenuItem className="user-menu__item" onClick={handleGoToReports}>
           {t('reports')}
           <AssessmentIcon />
         </MenuItem>
+        {authData?.superadmin && (
+          <MenuItem className="user-menu__item" onClick={handleGoToPlatform}>
+            {t('platform.title')}
+            <AdminPanelSettingsIcon />
+          </MenuItem>
+        )}
         <MenuItem className="user-menu__item" onClick={handleLogout}>
           {t('logout')}
           <LogoutIcon />

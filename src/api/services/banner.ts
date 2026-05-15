@@ -24,8 +24,8 @@ const unpublishBanner = async (bannerId: number) =>
         .post(`/banners/unpublish/${bannerId}`)
         .then((res) => res.data);
 
-const getActive = async () =>
-    client.get(`/banners/active`).then((res) => res.data);
+const getActive = async (tenantSlug: string) =>
+    client.get(`/banners/active/${tenantSlug}`).then((res) => res.data);
 
 export default {
     getAll,

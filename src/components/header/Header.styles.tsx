@@ -37,8 +37,68 @@ export const HeaderContainer = styled.header`
     transform: translateX(-50%);
     cursor: pointer;
     filter: brightness(0) saturate(100%) invert(89%) sepia(47%) saturate(587%) hue-rotate(19deg) brightness(104%) contrast(104%);
+    object-fit: contain;
+    max-height: 50px;
   }
 
+  .logo--tenant {
+    filter: none;
+  }
+
+  .header__tenant {
+    position: absolute;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 280px;
+
+    ${mobile(css`
+      max-width: 140px;
+      left: 16px;
+    `)}
+
+    &__name {
+      font-size: 14px;
+      font-weight: 700;
+      color: ${theme.PRIMARY_2};
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__select {
+      min-width: 160px;
+
+      ${mobile(css`
+        min-width: 120px;
+      `)}
+
+      .MuiSelect-select {
+        color: ${theme.PRIMARY_2};
+        font-weight: 700;
+        font-size: 14px;
+        padding: 6px 32px 6px 12px;
+      }
+
+      .MuiOutlinedInput-notchedOutline {
+        border-color: ${theme.PRIMARY_2}40 !important;
+      }
+
+      &:hover .MuiOutlinedInput-notchedOutline {
+        border-color: ${theme.PRIMARY_2}80 !important;
+      }
+
+      &.Mui-focused .MuiOutlinedInput-notchedOutline {
+        border-color: ${theme.PRIMARY_2} !important;
+        border-width: 1px !important;
+      }
+
+      .MuiSelect-icon {
+        color: ${theme.PRIMARY_2};
+      }
+    }
+  }
 `;
 
 export const PublicHeaderContainer = styled.header`

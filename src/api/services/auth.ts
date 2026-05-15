@@ -8,6 +8,10 @@ export interface LoginResponse {
   token: string;
   roles: Role[];
   privileges: string[];
+  tenantId: number | null;
+  tenantSlug: string | null;
+  tenantLogoUrl: string | null;
+  superadmin: boolean;
 }
 
 export const login = async (data: LoginData): Promise<LoginResponse> =>

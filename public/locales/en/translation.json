@@ -38,7 +38,7 @@
     "description": "Description",
     "enter-order-id": "Please enter your order ID",
     "expected": "Expected",
-    "home": "Home",
+    "home": { "tenantNotFound": "Company not found. Check the link you used." },
     "is-legal-entity": "Is legal entity",
     "last-update": "Last updated",
     "update": "update",
@@ -108,6 +108,7 @@
     "SHIP_READY-disclaimer": "Almost there! Your order is currently being prepared for shipping.\nThis process can take up to 1 day. The status will be\nautomatically updated once the next step begins.",
     "SHIPPED-disclaimer": "Finally! Your order has been shipped, and you can expect\ncontact from the courier soon. This process can take up to\n1 day. The status will be automatically updated once the next step begins.",
     "DONE-disclaimer": "Finally in your hands! We made every effort to deliver\nyour order as quickly as possible. We hope you are satisfied\nand look forward to hearing your feedback!",
+    "status-change-failed": "Could not change status. Please pick a different transition or try again.",
     "orderDetails": {
         "title": "Order Details",
         "name": "Name:",
@@ -148,7 +149,8 @@
             "orderDescription": "Order description is a required field.",
             "fullName": "Full name is a required field.",
             "city": "City is a required field.",
-            "zipCode": "Zip code is a required field."
+            "zipCode": "Zip code is a required field.",
+            "plannedEndingDate": "Planned ending date is a required field."
         }
     },
     "orderExtension": {
@@ -158,7 +160,8 @@
         "createdSuccess": "Order extension request is successfully created.",
         "description": "What do you need to extend the order?",
         "disclaimer": "This relates to teams that already have our gear, and need a couple of new items of the same type.",
-        "descriptionPlaceholder": "Enter extension details, e.g. numbers, names, extra sets..."
+        "descriptionPlaceholder": "Enter extension details, e.g. numbers, names, extra sets...",
+        "tenantNotFound": "We couldn't find this company. Please double-check the link."
     },
     "contact": {
         "phone": "Phone number",
@@ -190,5 +193,63 @@
     "reports-description": "Date range filters apply to all sections below. Select a period to see order stats and status durations for that time frame.",
     "overview-description": "Order counts and financials for the selected period",
     "status-duration-description": "Average time orders spend in each status",
-    "reactivated": "Reactivated"
+    "reactivated": "Reactivated",
+    "tenant": "Tenant",
+    "settings": "Settings",
+    "switchTenant": "Switch tenant",
+    "selectTenant": {
+        "title": "Select a tenant",
+        "subtitle": "Choose which tenant you'd like to manage, or go straight to platform settings.",
+        "managePlatform": "Manage platform"
+    },
+    "reports": "Reports",
+    "platform": {
+        "title": "Platform",
+        "createTenant": "Create tenant",
+        "tenantList": "All tenants",
+        "tenantName": "Tenant name",
+        "tenantSlug": "Slug",
+        "slugFormat": "Slug must contain only lowercase letters, numbers, and hyphens.",
+        "slugReserved": "This slug is reserved. Please choose another.",
+        "selectTenant": "Select tenant",
+        "selectTenantFirst": "Please select a tenant first.",
+        "createUser": "Create user",
+        "actions": "Actions",
+        "deactivate": "Deactivate",
+        "deactivateTitle": "Deactivate tenant",
+        "inactiveLabel": "Inactive",
+        "logo": "Logo",
+        "uploadLogo": "Upload logo",
+        "replaceLogo": "Replace logo",
+        "removeLogo": "Remove logo",
+        "chooseLogo": "Choose logo",
+        "clearLogo": "Clear",
+        "logoHint": "PNG, max 1 MB. Transparent background recommended.",
+        "logoMustBePng": "Logo must be a PNG image.",
+        "logoTooLarge": "Logo exceeds the 1 MB limit.",
+        "logoUpdated": "Logo updated successfully.",
+        "logoRemoved": "Logo removed successfully.",
+        "logoUploadError": "Failed to upload logo.",
+        "logoRemoveError": "Failed to remove logo.",
+        "tenantCreated": "Tenant created successfully.",
+        "tenantCreateError": "Failed to create tenant.",
+        "tenantCreatedLogoFailed": "Tenant created, but logo upload failed. Try uploading again from the list.",
+        "tenantDeactivated": "Tenant deactivated.",
+        "tenantDeleteError": "Failed to deactivate tenant.",
+        "userCreated": "User created successfully.",
+        "userCreateError": "Failed to create user.",
+        "fetchError": "Failed to load tenants.",
+        "creatingUserFor": "Creating user for:",
+        "noActiveTenant": "No tenant selected — choose one in the header."
+    },
+    "share": {
+        "tab": "Share link",
+        "title": "Share order-extension link",
+        "description": "Share this link or QR with {{tenant}} customers so they can request order extensions.",
+        "copyUrl": "Copy URL",
+        "copied": "Link copied to clipboard.",
+        "copyFailed": "Failed to copy link.",
+        "downloadQR": "Download QR",
+        "noTenant": "No active tenant — select one in the header first."
+    }
 }

@@ -7,6 +7,7 @@ export const BannerCardContainer = styled.div`
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    min-width: 280px;
     max-width: 300px;
     position: relative;
     text-decoration: none;
@@ -15,6 +16,7 @@ export const BannerCardContainer = styled.div`
     gap: 16px;
 
     ${mobile(css`
+        min-width: 0;
         max-width: 100%;
     `)}
 

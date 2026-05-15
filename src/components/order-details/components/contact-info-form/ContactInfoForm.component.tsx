@@ -8,6 +8,8 @@ import { Button, TextField } from '@mui/material';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
 import { orderService } from '../../../../api';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
+import AuthContext from '../../../../store/AuthProvider/Auth.context';
+import localStorageService from '../../../../services/localStorage.service';
 
 export type ContactInfoFormProps = {
   initialContactInfo?: ContactInfoData;
@@ -25,22 +27,32 @@ const ContactInfoForm = ({ initialContactInfo }: ContactInfoFormProps) => {
   const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
   const { selectedOrder, setSelectedOrder } = useContext(OrdersContext);
+  const { authData } = useContext(AuthContext);
 
   const initialValues = useMemo(
     () => initialContactInfo ?? emptyContactInfoData,
     [initialContactInfo]
   );
 
+  // For superadmin, the active tenant is whichever one was picked in the
+  // header switcher (kept in localStorage). For a regular user, it's the
+  // tenant baked into their token. The X-Tenant-Id header and the path slug
+  // must agree, so we always use the active-tenant slug here.
+  const activeTenantSlug = authData?.superadmin
+    ? localStorageService.selectedTenantSlug
+    : authData?.tenantSlug ?? null;
+
   const onSubmit = useCallback(
     async (
       formData: ContactInfoData,
       { resetForm }: FormikHelpers<ContactInfoData>
     ) => {
-      if (!selectedOrder) return;
+      if (!selectedOrder || !activeTenantSlug) return;
 
       try {
         const { contactInfo }: Order = await orderService.editContactInfo(
-          selectedOrder.id,
+          activeTenantSlug,
+          selectedOrder.trackingId,
           formData
         );
         setSelectedOrder({
@@ -55,7 +67,7 @@ const ContactInfoForm = ({ initialContactInfo }: ContactInfoFormProps) => {
         console.error(error);
       }
     },
-    [selectedOrder, setSelectedOrder, showSnackbar, t]
+    [selectedOrder, setSelectedOrder, showSnackbar, t, activeTenantSlug]
   );
 
   const validationSchema = Yup.object({

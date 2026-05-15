@@ -14,9 +14,16 @@ export type BasicDatePickerProps = {
 const BasicDatePickerComponent = ({
   label,
   value,
+  errorMessage,
   disablePast = false,
   onChange,
 }: BasicDatePickerProps) => {
+  // dayjs('Invalid Date') and dayjs(null/'') all produce invalid Dayjs objects
+  // that MUI renders as the literal "Invalid Date" string. Pass undefined
+  // instead so the picker shows its empty state and lets validation drive the
+  // user to pick a real date.
+  const parsed = value ? dayjs(value) : null;
+  const safeValue = parsed && parsed.isValid() ? parsed : null;
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -26,7 +33,13 @@ const BasicDatePickerComponent = ({
         label={label}
         onChange={onChange}
         disablePast={disablePast}
-        value={dayjs(value)}
+        value={safeValue}
+        slotProps={{
+          textField: {
+            error: Boolean(errorMessage),
+            helperText: errorMessage,
+          },
+        }}
       />
     </LocalizationProvider>
   );

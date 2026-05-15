@@ -300,33 +300,42 @@ const FiltersModal = ({ isOpen, onClose }: FiltersModalProps) => {
         ))}
       </div>
       <Divider color={theme.SECONDARY_2} />
-      <label id="sort-by-label">{t('sort-by')}</label>
-      <Select
-        labelId="sort-by-label"
-        id="sort-by-criteria"
-        value={sortByCriteria}
-        onChange={(event: SelectChangeEvent) =>
-          setSortByCriteria(event.target.value as SortCriteriaType)
-        }
-        className="custom-select"
-      >
-        <MenuItem value="expected-date">{t('sort-by-expected-date')}</MenuItem>
-        <MenuItem value="creation-date">{t('sort-by-creation-date')}</MenuItem>
-      </Select>
-
-      <label id="sort-order-label">{t('sort-order')}</label>
-      <Select
-        labelId="sort-order-label"
-        id="sort-by-select"
-        value={sort}
-        onChange={(event: SelectChangeEvent) =>
-          setSort(event.target.value as SortType)
-        }
-        className="custom-select"
-      >
-        <MenuItem value="desc">{t('newest-to-oldest')}</MenuItem>
-        <MenuItem value="asc">{t('oldest-to-newest')}</MenuItem>
-      </Select>
+      <div className="sort-row">
+        <div className="sort-field">
+          <label id="sort-by-label">{t('sort-by')}</label>
+          <Select
+            labelId="sort-by-label"
+            id="sort-by-criteria"
+            value={sortByCriteria}
+            onChange={(event: SelectChangeEvent) =>
+              setSortByCriteria(event.target.value as SortCriteriaType)
+            }
+            className="custom-select"
+          >
+            <MenuItem value="expected-date">
+              {t('sort-by-expected-date')}
+            </MenuItem>
+            <MenuItem value="creation-date">
+              {t('sort-by-creation-date')}
+            </MenuItem>
+          </Select>
+        </div>
+        <div className="sort-field">
+          <label id="sort-order-label">{t('sort-order')}</label>
+          <Select
+            labelId="sort-order-label"
+            id="sort-by-select"
+            value={sort}
+            onChange={(event: SelectChangeEvent) =>
+              setSort(event.target.value as SortType)
+            }
+            className="custom-select"
+          >
+            <MenuItem value="desc">{t('newest-to-oldest')}</MenuItem>
+            <MenuItem value="asc">{t('oldest-to-newest')}</MenuItem>
+          </Select>
+        </div>
+      </div>
       <Divider />
       <RadioGroup
         value={executionStatus}
