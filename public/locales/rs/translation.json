@@ -38,7 +38,9 @@
     "description": "Opis",
     "enter-order-id": "Unesi identifikacioni broj",
     "expected": "Očekivan završetak",
-    "home": "Naslovna",
+    "home": {
+        "tenantNotFound": "Kompanija nije pronađena. Proverite link koji ste koristili."
+    },
     "is-legal-entity": "Da li je pravno lice",
     "last-update": "Poslednje ažurirano",
     "update": "Izmeni",
@@ -108,6 +110,7 @@
     "SHIP_READY-disclaimer": "Još malo! Vaša porudžbina se upravo priprema za slanje.\nOvaj proces može da potraje do 1 dan. Status će biti\nautomatski promenjen kada se pređe na sledeći korak.",
     "SHIPPED-disclaimer": "Konačno! Vaša porudžbina je upravo poslata i uskoro možete\nočekivati kurira da Vas kontaktira. Ovaj proces može da potraje\ndo 1 dan. Status će biti automatski promenjen kada se pređe\nna sledeći korak.",
     "DONE-disclaimer": "Konačno u Vašim rukama! Potrudili smo se da porudžbinu\ndostavimo u što kraćem roku. Nadamo se da ste zadovoljni,\nradujemo se da čujemo utiske!",
+    "status-change-failed": "Promena statusa nije uspela. Pokušajte sa drugim prelazom ili ponovo.",
     "orderDetails": {
         "title": "Detalji porudžbine",
         "name": "Naziv:",
@@ -148,7 +151,8 @@
             "orderDescription": "Opis porudžbine je obavezno polje.",
             "fullName": "Ime i prezime je obavezno polje.",
             "city": "Grad je obavezno polje.",
-            "zipCode": "Poštanski broj je obavezno polje."
+            "zipCode": "Poštanski broj je obavezno polje.",
+            "plannedEndingDate": "Planirani datum završetka je obavezno polje."
         }
     },
     "orderExtension": {
@@ -158,7 +162,8 @@
         "createdSuccess": "Zahtev za doradu dresova je uspešno kreiran.",
         "description": "Sta je sve potrebno za doradu?",
         "disclaimer": "Ovo se odnosi na ekipe koje su već radile opremu kod nas, a potrebno im je nekoliko novih garnitura već napravljene opreme.",
-        "descriptionPlaceholder": "Upišite detalje dorade, npr. brojevi, imena, dodatni kompleti..."
+        "descriptionPlaceholder": "Upišite detalje dorade, npr. brojevi, imena, dodatni kompleti...",
+        "tenantNotFound": "Nismo pronašli ovu kompaniju. Proverite link."
     },
     "contact": {
         "phone": "Broj telefona",
@@ -190,5 +195,63 @@
     "reports-description": "Filteri za datumski opseg se primenjuju na sve sekcije ispod. Izaberite period da vidite statistiku porudžbina i trajanje statusa za taj vremenski okvir.",
     "overview-description": "Broj porudžbina i finansije za izabrani period",
     "status-duration-description": "Prosečno vreme koje porudžbine provedu u svakom statusu",
-    "reactivated": "Reaktivirano"
+    "reactivated": "Reaktivirano",
+    "tenant": "Klijent",
+    "settings": "Podešavanja",
+    "switchTenant": "Promeni klijenta",
+    "selectTenant": {
+        "title": "Izaberi klijenta",
+        "subtitle": "Izaberite klijenta sa kojim želite da radite ili idite direktno na platformska podešavanja.",
+        "managePlatform": "Upravljaj platformom"
+    },
+    "reports": "Izveštaji",
+    "platform": {
+        "title": "Platforma",
+        "createTenant": "Kreiraj klijenta",
+        "tenantList": "Svi klijenti",
+        "tenantName": "Naziv klijenta",
+        "tenantSlug": "Slug",
+        "slugFormat": "Slug može sadržati samo mala slova, brojeve i crtice.",
+        "slugReserved": "Ovaj slug je rezervisan. Izaberite drugi.",
+        "selectTenant": "Izaberi klijenta",
+        "selectTenantFirst": "Najpre izaberite klijenta.",
+        "createUser": "Kreiraj korisnika",
+        "actions": "Akcije",
+        "deactivate": "Deaktiviraj",
+        "deactivateTitle": "Deaktiviraj klijenta",
+        "inactiveLabel": "Neaktivan",
+        "logo": "Logo",
+        "uploadLogo": "Otpremi logo",
+        "replaceLogo": "Zameni logo",
+        "removeLogo": "Ukloni logo",
+        "chooseLogo": "Izaberi logo",
+        "clearLogo": "Poništi",
+        "logoHint": "PNG, najviše 1 MB. Preporučuje se providna pozadina.",
+        "logoMustBePng": "Logo mora biti PNG slika.",
+        "logoTooLarge": "Logo prelazi ograničenje od 1 MB.",
+        "logoUpdated": "Logo je uspešno ažuriran.",
+        "logoRemoved": "Logo je uspešno uklonjen.",
+        "logoUploadError": "Otpremanje logoa nije uspelo.",
+        "logoRemoveError": "Uklanjanje logoa nije uspelo.",
+        "tenantCreated": "Klijent je uspešno kreiran.",
+        "tenantCreateError": "Kreiranje klijenta nije uspelo.",
+        "tenantCreatedLogoFailed": "Klijent je kreiran, ali otpremanje logoa nije uspelo. Pokušajte ponovo iz liste.",
+        "tenantDeactivated": "Klijent je deaktiviran.",
+        "tenantDeleteError": "Deaktivacija klijenta nije uspela.",
+        "userCreated": "Korisnik je uspešno kreiran.",
+        "userCreateError": "Kreiranje korisnika nije uspelo.",
+        "fetchError": "Učitavanje klijenata nije uspelo.",
+        "creatingUserFor": "Kreiranje korisnika za:",
+        "noActiveTenant": "Nijedan klijent nije izabran — izaberite ga u zaglavlju."
+    },
+    "share": {
+        "tab": "Deli link",
+        "title": "Podeli link za doradu porudžbine",
+        "description": "Podelite ovaj link ili QR sa klijentima firme {{tenant}} kako bi mogli da zatraže doradu.",
+        "copyUrl": "Kopiraj URL",
+        "copied": "Link je kopiran u clipboard.",
+        "copyFailed": "Kopiranje linka nije uspelo.",
+        "downloadQR": "Preuzmi QR",
+        "noTenant": "Nije izabran klijent — izaberite ga u zaglavlju."
+    }
 }

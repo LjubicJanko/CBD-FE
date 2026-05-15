@@ -10,6 +10,46 @@ export const LoaderContainer = styled.div`
   align-items: center;
 `;
 
+const tenantBrand = css`
+  .tenant-brand {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid ${theme.PRIMARY_2}33;
+
+    ${tablet(css`
+      gap: 14px;
+      padding-bottom: 16px;
+    `)};
+
+    &__logo {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+
+      ${tablet(css`
+        width: 56px;
+        height: 56px;
+      `)};
+    }
+
+    &__name {
+      margin: 0;
+      color: ${theme.PRIMARY_2};
+      font-family: 'Afacad', serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+
+      ${tablet(css`
+        font-size: 28px;
+      `)};
+    }
+  }
+`;
+
 export const IdTrackingContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -30,6 +70,8 @@ export const IdTrackingContainer = styled.div`
     align-items: center;
     padding-top: 200px;
   `)}
+
+  ${tenantBrand}
 
   .id-tracking {
     &__title {
@@ -109,6 +151,12 @@ export const IdTrackingDetailsContainer = styled.div`
     padding: 16px;
     padding-top: 36px;
   `)}
+
+  ${tenantBrand}
+
+  .tenant-brand {
+    margin-bottom: 24px;
+  }
 
   .id-tracking-details {
     background-color: ${theme.PRIMARY_1};

@@ -15,14 +15,18 @@ import dayjs from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import { orderService } from '../../api';
+import { orderService, publicTenantService } from '../../api';
+import { getLogoAbsoluteUrl } from '../../api/services/platform';
+import { PublicTenant } from '../../api/services/publicTenant';
 import NoContent from '../../components/no-content/NoContent.component';
 import useQueryParams from '../../hooks/useQueryParams';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { OrderTracking, PostServices } from '../../types/Order';
 import { ApiError } from '../../types/Response';
 import { statuses, trackingUrl } from '../../util/util';
+import { isReservedSlug } from '../../util/reservedSlugs';
 import * as Styled from './IdTracking.styles';
 import PageBanner from '../../components/page-banner/PageBanner.component';
 import ShareIcon from '@mui/icons-material/Share';
@@ -31,15 +35,75 @@ import ShareIcon from '@mui/icons-material/Share';
 const IdTrackingPage = () => {
     const { t } = useTranslation();
 
+    const navigate = useNavigate();
+    const { tenantSlug, trackingId } = useParams<{
+        tenantSlug?: string;
+        trackingId?: string;
+    }>();
     const {
-        setQParam,
-        params: { id },
+        params: { id: legacyId },
     } = useQueryParams<{ id: string | undefined }>();
+    const defaultTenantSlug = import.meta.env.VITE_TENANT_SLUG as
+        | string
+        | undefined;
+
+    useEffect(() => {
+        if (legacyId && !trackingId && defaultTenantSlug) {
+            navigate(`/track/${defaultTenantSlug}/${legacyId}`, {
+                replace: true,
+            });
+        }
+    }, [legacyId, trackingId, defaultTenantSlug, navigate]);
+
     const [trackingOrderId, setTrackingOrderId] = useState<string | undefined>(
-        id
+        trackingId
     );
     const [order, setOrder] = useState<OrderTracking>();
     const [error, setError] = useState<string>('');
+
+    const [tenant, setTenant] = useState<PublicTenant | null>(null);
+    const [tenantLoading, setTenantLoading] = useState<boolean>(
+        Boolean(tenantSlug)
+    );
+    const [tenantError, setTenantError] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!tenantSlug) {
+            setTenant(null);
+            setTenantLoading(false);
+            setTenantError(false);
+            return;
+        }
+        // Defensive: don't fire a doomed lookup for a slug that collides
+        // with an FE route — go straight to the not-found state.
+        if (isReservedSlug(tenantSlug)) {
+            setTenant(null);
+            setTenantLoading(false);
+            setTenantError(true);
+            return;
+        }
+        setTenantLoading(true);
+        setTenantError(false);
+        publicTenantService
+            .getTenantBySlug(tenantSlug)
+            .then(setTenant)
+            .catch(() => setTenantError(true))
+            .finally(() => setTenantLoading(false));
+    }, [tenantSlug]);
+
+    const tenantLogo = tenant ? getLogoAbsoluteUrl(tenant.logoUrl) : null;
+    const tenantBrand = tenant && (
+        <header className="tenant-brand">
+            {tenantLogo && (
+                <img
+                    src={tenantLogo}
+                    alt={tenant.name}
+                    className="tenant-brand__logo"
+                />
+            )}
+            <h1 className="tenant-brand__name">{tenant.name}</h1>
+        </header>
+    );
 
     const { showSnackbar } = useSnackbar();
     const isPendingExtension = useMemo(
@@ -80,19 +144,26 @@ const IdTrackingPage = () => {
         validationSchema,
         enableReinitialize: true,
         onSubmit: async (values) => {
-            if (!order) return;
+            if (!order || !tenantSlug || !trackingId) {
+                showSnackbar(t('extension-update-error'), 'error');
+                return;
+            }
             try {
-                const updated = await orderService.editExtension(id!, {
-                    name: values.orderName,
-                    description: values.orderDescription,
-                    contactInfo: {
-                        fullName: values.fullName,
-                        phoneNumber: values.phoneNumber,
-                        address: values.address,
-                        city: values.city,
-                        zipCode: values.zipCode,
-                    },
-                });
+                const updated = await orderService.editExtension(
+                    tenantSlug,
+                    trackingId,
+                    {
+                        name: values.orderName,
+                        description: values.orderDescription,
+                        contactInfo: {
+                            fullName: values.fullName,
+                            phoneNumber: values.phoneNumber,
+                            address: values.address,
+                            city: values.city,
+                            zipCode: values.zipCode,
+                        },
+                    }
+                );
                 setOrder(updated);
                 setIsEditing(false);
                 showSnackbar(t('extension-updated'), 'success');
@@ -108,12 +179,12 @@ const IdTrackingPage = () => {
     );
 
     const trackOrder = useCallback(
-        async (trackingId: string) => {
-            if (trackingId === order?.trackingId) return;
+        async (slug: string, tid: string) => {
+            if (tid === order?.trackingId) return;
             setError('');
 
             try {
-                const response = await orderService.trackOrder(trackingId);
+                const response = await orderService.trackOrder(slug, tid);
                 setOrder(response);
             } catch (error) {
                 setError((error as AxiosError<ApiError>).message);
@@ -123,15 +194,29 @@ const IdTrackingPage = () => {
     );
 
     useEffect(() => {
-        if (!id) {
+        if (!trackingId || !tenantSlug) {
             setOrder(undefined);
             return;
         }
 
-        trackOrder(id);
-    }, [id, trackOrder]);
+        trackOrder(tenantSlug, trackingId);
+    }, [tenantSlug, trackingId, trackOrder]);
 
-    if (id && !order && !error)
+    if (tenantLoading)
+        return (
+            <Styled.LoaderContainer>
+                <CircularProgress />
+            </Styled.LoaderContainer>
+        );
+
+    if (tenantSlug && tenantError)
+        return (
+            <Styled.IdTrackingContainer className="id-tracking">
+                <NoContent message={t('home.tenantNotFound')} />
+            </Styled.IdTrackingContainer>
+        );
+
+    if (trackingId && !order && !error)
         return (
             <Styled.LoaderContainer>
                 <CircularProgress />
@@ -141,6 +226,7 @@ const IdTrackingPage = () => {
     if (order !== undefined) {
         return (
             <Styled.IdTrackingDetailsContainer className="id-tracking-details">
+                {tenantBrand}
                 <PageBanner page="ID_TRACKING" />
                 {/* Order Status */}
                 <div className="id-tracking-details__status">
@@ -149,12 +235,14 @@ const IdTrackingPage = () => {
 
                 {/* Stepper */}
                 <div className="id-tracking-details__stepper">
-                    <p className="id-tracking-details__stepper--title">
-                        <p>
-                            {t(`ID: ${id}`)}
+                    <div className="id-tracking-details__stepper--title">
+                        <span>
+                            {`ID: ${order.trackingId}`}
                             <IconButton
                                 onClick={() => {
-                                    navigator.clipboard.writeText(id);
+                                    navigator.clipboard.writeText(
+                                        order.trackingId
+                                    );
                                     showSnackbar(
                                         t('tracking-id-coppied'),
                                         'success'
@@ -178,8 +266,8 @@ const IdTrackingPage = () => {
                             >
                                 <ShareIcon />
                             </IconButton>
-                        </p>
-                    </p>
+                        </span>
+                    </div>
 
                     <div className="id-tracking-details__stepper--container">
                         <Stepper activeStep={statuses.indexOf(order.status)}>
@@ -460,6 +548,7 @@ const IdTrackingPage = () => {
 
     return (
         <Styled.IdTrackingContainer className="id-tracking">
+            {tenantBrand}
             <h2 className="id-tracking__title">
                 {t('enterTrackingNumber')}
             </h2>
@@ -477,10 +566,15 @@ const IdTrackingPage = () => {
                 <Button
                     className="order-id-search-btn"
                     variant="outlined"
-                    disabled={!trackingOrderId}
-                    onClick={() =>
-                        trackingOrderId && setQParam('id', trackingOrderId)
+                    disabled={
+                        !trackingOrderId ||
+                        !(tenantSlug || defaultTenantSlug)
                     }
+                    onClick={() => {
+                        const searchSlug = tenantSlug || defaultTenantSlug;
+                        if (!trackingOrderId || !searchSlug) return;
+                        navigate(`/track/${searchSlug}/${trackingOrderId}`);
+                    }}
                 >
                     {t('search')}
                 </Button>

@@ -1,4 +1,4 @@
-export type Role = 'admin' | 'manager' | 'manufacturer' | 'consumer';
+export type Role = 'company_admin' | 'manager' | 'manufacturer' | 'consumer';
 
 export type AuthData = {
   id: number;
@@ -7,6 +7,10 @@ export type AuthData = {
   token: string;
   roles: Role[];
   privileges: string[];
+  tenantId: number | null;
+  tenantSlug: string | null;
+  tenantLogoUrl: string | null;
+  superadmin: boolean;
 };
 
 export type LoginData = {

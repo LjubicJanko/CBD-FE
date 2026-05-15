@@ -1,17 +1,21 @@
-import { Alert, Button, TextField } from '@mui/material';
+import { Alert, Button, CircularProgress, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Styled from './OrderExtension.styles';
-import { orderService } from '../../api';
+import { orderService, publicTenantService } from '../../api';
+import { getLogoAbsoluteUrl } from '../../api/services/platform';
+import { PublicTenant } from '../../api/services/publicTenant';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import {
     OrderContactInfo,
     OrderExtensionReqDto,
 } from '../../types/OrderExtension';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PageBanner from '../../components/page-banner/PageBanner.component';
+import NoContent from '../../components/no-content/NoContent.component';
+import { isReservedSlug } from '../../util/reservedSlugs';
 
 
 type OrderExtensionData = {
@@ -29,6 +33,46 @@ const OrderExtensionPage: React.FC = () => {
     const { showSnackbar } = useSnackbar();
 
     const navigate = useNavigate();
+    const { tenantSlug } = useParams<{ tenantSlug?: string }>();
+    const envSlug = import.meta.env.VITE_TENANT_SLUG as string | undefined;
+
+    const [tenant, setTenant] = useState<PublicTenant | null>(null);
+    const [tenantLoading, setTenantLoading] = useState<boolean>(true);
+    const [tenantError, setTenantError] = useState<boolean>(false);
+
+    // Bare /order-extension (no slug): redirect to env default if configured,
+    // otherwise fall through to the not-found state.
+    useEffect(() => {
+        if (!tenantSlug && envSlug) {
+            navigate(`/order-extension/${envSlug}`, { replace: true });
+        }
+    }, [tenantSlug, envSlug, navigate]);
+
+    useEffect(() => {
+        if (!tenantSlug) {
+            if (!envSlug) {
+                // No slug AND no env fallback: show the not-found state.
+                setTenantError(true);
+                setTenantLoading(false);
+            }
+            // With an env fallback, stay in loading so the redirect-effect
+            // above can fire without flashing the not-found UI for a tick.
+            return;
+        }
+        // Defensive: don't fire a doomed lookup for a slug that collides with
+        // an FE route — go straight to the not-found state.
+        if (isReservedSlug(tenantSlug)) {
+            setTenantError(true);
+            setTenantLoading(false);
+            return;
+        }
+        setTenantLoading(true);
+        publicTenantService
+            .getTenantBySlug(tenantSlug)
+            .then((data) => setTenant(data))
+            .catch(() => setTenantError(true))
+            .finally(() => setTenantLoading(false));
+    }, [tenantSlug, envSlug]);
 
     const initialValues: OrderExtensionData = useMemo(
         () => ({
@@ -61,6 +105,7 @@ const OrderExtensionPage: React.FC = () => {
 
     const onSubmit = useCallback(
         async (values: OrderExtensionData) => {
+            if (!tenantSlug) return;
             try {
                 const { orderName, orderDescription, ...contactInfo } = values;
                 const orderExtensionReqDto: OrderExtensionReqDto = {
@@ -69,16 +114,17 @@ const OrderExtensionPage: React.FC = () => {
                     contactInfo: contactInfo as OrderContactInfo,
                 };
                 const { trackingId } = await orderService.createOrderExtension(
+                    tenantSlug,
                     orderExtensionReqDto
                 );
-                navigate(`/track?id=${trackingId}`);
+                navigate(`/track/${tenantSlug}/${trackingId}`);
                 showSnackbar(t('orderExtension.createdSuccess'), 'success');
             } catch (error) {
                 showSnackbar(t('orderExtension.createError'), 'error');
                 console.error(error);
             }
         },
-        [navigate, showSnackbar, t]
+        [tenantSlug, navigate, showSnackbar, t]
     );
 
     const formik = useFormik({
@@ -90,9 +136,39 @@ const OrderExtensionPage: React.FC = () => {
 
     const isSubmitDisabled = !formik.isValid || !formik.dirty;
 
+    if (tenantLoading) {
+        return (
+            <Styled.OrderExtensionContainer className="order-extension">
+                <div className="order-extension__loader">
+                    <CircularProgress />
+                </div>
+            </Styled.OrderExtensionContainer>
+        );
+    }
+
+    if (tenantError || !tenant) {
+        return (
+            <Styled.OrderExtensionContainer className="order-extension">
+                <NoContent message={t('orderExtension.tenantNotFound')} />
+            </Styled.OrderExtensionContainer>
+        );
+    }
+
+    const tenantLogo = getLogoAbsoluteUrl(tenant.logoUrl);
+
     return (
         <Styled.OrderExtensionContainer className="order-extension">
             <PageBanner page="ORDER" />
+            <header className="order-extension__brand">
+                {tenantLogo && (
+                    <img
+                        src={tenantLogo}
+                        alt={tenant.name}
+                        className="order-extension__brand__logo"
+                    />
+                )}
+                <h1 className="order-extension__brand__name">{tenant.name}</h1>
+            </header>
             <h2 className="order-extension__title">
                 {t('orderExtension.title')}
             </h2>

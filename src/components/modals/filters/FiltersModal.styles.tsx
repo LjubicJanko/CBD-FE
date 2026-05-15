@@ -8,9 +8,9 @@ export const FiltersModalContainer = styled(CbdModal)`
   display: flex;
   flex-direction: column;
 
-  gap: 16px;
+  gap: 10px;
 
-  padding: 48px 72px;
+  padding: 24px 48px;
 
   background-color: ${theme.PRIMARY_1};
 
@@ -32,9 +32,9 @@ export const FiltersModalContainer = styled(CbdModal)`
     span {
       font-family: 'Afacad', serif;
     }
-    padding-bottom: 18px;
+    padding-bottom: 12px;
     border-bottom: 1px solid ${theme.SECONDARY_2};
-    margin-bottom: 40px;
+    margin-bottom: 16px;
 
     ${tablet(css`
       margin-bottom: 20px;
@@ -49,8 +49,8 @@ export const FiltersModalContainer = styled(CbdModal)`
 
   .modal-close-button {
     color: ${theme.SECONDARY_1};
-    top: 48px;
-    right: 72px;
+    top: 24px;
+    right: 48px;
     ${tablet(css`
       top: 24px;
       right: 36px;
@@ -60,9 +60,9 @@ export const FiltersModalContainer = styled(CbdModal)`
   .statuses,
   .priorities {
     display: flex;
-    gap: 20px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 40px;
+    margin-bottom: 12px;
 
     ${tablet(css`
       margin-bottom: 20px;
@@ -74,12 +74,31 @@ export const FiltersModalContainer = styled(CbdModal)`
       width: fit-content;
       color: ${theme.SECONDARY_1};
       border-color: ${theme.SECONDARY_1};
-      padding: 10px 30px;
+      padding: 6px 24px;
 
       ${tablet(css`
-        width: 100%;
+        flex: 1 1 calc(50% - 5px);
+        width: auto;
       `)}
     }
+  }
+
+  .sort-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+
+    .sort-field {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    ${tablet(css`
+      flex-direction: column;
+      gap: 10px;
+    `)}
   }
 
   .archive-radio .MuiFormControlLabel-label {

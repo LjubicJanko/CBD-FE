@@ -29,7 +29,7 @@ import { orderService } from '../../api';
 import { usePrivileges } from '../../hooks/usePrivileges';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { useSnackbar } from '../../hooks/useSnackbar';
-import AuthContext from '../../store/AuthProvider/Auth.context';
+import { useIsCompanyAdmin } from '../../hooks/useRole';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import {
   Order,
@@ -97,13 +97,9 @@ const OrderDetailsComponent = () => {
 
   const width = useResponsiveWidth();
 
-  const { authData } = useContext(AuthContext);
-
   const { showSnackbar } = useSnackbar();
 
-  const { roles: userRoles } = authData ?? {};
-
-  const isAdmin = userRoles?.includes('admin');
+  const isAdmin = useIsCompanyAdmin();
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isCombineModalOpen, setIsCombineModalOpen] = useState(false);

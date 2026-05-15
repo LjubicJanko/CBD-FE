@@ -7,8 +7,15 @@ export const HomeContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 72px;
     padding: 40px;
+
+    &.home--loading {
+        align-items: center;
+        justify-content: center;
+        min-height: 50vh;
+    }
 
     .home {
         &__sections {
@@ -37,11 +44,11 @@ export const HomeContainer = styled.div`
             `)}
 
             &__tracking-panel {
-                background-image: url('id_tracking.jpg');
+                background-image: url('/id_tracking.jpg');
             }
 
             &__order-panel {
-                background-image: url('order_shirt.jpg');
+                background-image: url('/order_shirt.jpg');
             }
 
             &__title {

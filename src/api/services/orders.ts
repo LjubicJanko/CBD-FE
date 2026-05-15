@@ -34,10 +34,10 @@ export type SearchProps = {
   perPage?: number;
 };
 
-const trackOrder = async (trackingId: string) => {
+const trackOrder = async (tenantSlug: string, trackingId: string) => {
   try {
     const data = await client
-      .get(`/orders/track/${trackingId}`)
+      .get(`/orders/track/${tenantSlug}/${trackingId}`)
       .then((res) => res.data);
     return data;
   } catch (error) {
@@ -211,14 +211,14 @@ const getHistory = async (id: number) =>
   privateClient.get(`/orders/history/${id}`).then((res) => res.data);
 
 // order extension
-const createOrderExtension = async (data: OrderExtensionReqDto) =>
-  client.post(`/orderExtend/create`, data).then((res) => res.data);
+const createOrderExtension = async (tenantSlug: string, data: OrderExtensionReqDto) =>
+  client.post(`/orderExtend/${tenantSlug}/create`, data).then((res) => res.data);
 
-const editContactInfo = async(id: number, data: ContactInfoData) =>
-  client.put(`/orderExtend/editContactInfo/${id}`, data).then((res) => res.data);
+const editContactInfo = async(tenantSlug: string, trackingId: string, data: ContactInfoData) =>
+  client.put(`/orderExtend/${tenantSlug}/editContactInfo/${trackingId}`, data).then((res) => res.data);
 
-const editExtension = async (trackingId: string, data: OrderExtensionReqDto) =>
-  client.put(`/orderExtend/edit/${trackingId}`, data).then((res) => res.data);
+const editExtension = async (tenantSlug: string, trackingId: string, data: OrderExtensionReqDto) =>
+  client.put(`/orderExtend/${tenantSlug}/edit/${trackingId}`, data).then((res) => res.data);
 
 const editShipmentInfo = async (id: number, postalService: string, postalCode: string) =>
   privateClient

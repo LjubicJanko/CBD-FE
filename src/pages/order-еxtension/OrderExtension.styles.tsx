@@ -41,6 +41,53 @@ export const OrderExtensionContainer = styled.div`
   }
 
   .order-extension {
+    &__loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+    }
+
+    &__brand {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 8px 0 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid ${theme.PRIMARY_2}33;
+
+      ${tablet(css`
+        gap: 14px;
+        padding-bottom: 16px;
+        margin-bottom: 20px;
+      `)};
+
+      &__logo {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+
+        ${tablet(css`
+          width: 56px;
+          height: 56px;
+        `)};
+      }
+
+      &__name {
+        margin: 0;
+        color: ${theme.PRIMARY_2};
+        font-family: 'Afacad', serif;
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        line-height: 1.1;
+
+        ${tablet(css`
+          font-size: 28px;
+        `)};
+      }
+    }
+
     &__disclaimer {
       border-radius: 8px;
       padding: 8px;

@@ -30,7 +30,7 @@ const signUpInitialValues = {
   role: '',
 } as RegisterData;
 
-const roles = ['admin', 'manager', 'manufacturer'];
+const roles = ['company_admin', 'manager', 'manufacturer'];
 const AddUser = () => {
   const { t } = useTranslation();
 
@@ -119,7 +119,7 @@ const AddUser = () => {
 
   return (
     <Styled.AddUserContainer className="signup-container">
-      <form onSubmit={signUpFormik.handleSubmit}>
+      <form onSubmit={signUpFormik.handleSubmit} autoComplete="off">
         <h3>{t('add-user')}</h3>
         <TextField
           className="fullname-input"
@@ -142,6 +142,7 @@ const AddUser = () => {
           label={t('username')}
           name="username"
           type="text"
+          autoComplete="off"
           value={signUpFormik.values.username}
           onChange={signUpFormik.handleChange}
           onBlur={signUpFormik.handleBlur}
@@ -157,6 +158,7 @@ const AddUser = () => {
           id="outlined-adornment-password"
           type={showPassword ? 'text' : 'password'}
           name="password"
+          autoComplete="new-password"
           placeholder={t('password')}
           value={signUpFormik.values.password}
           onChange={signUpFormik.handleChange}

@@ -1,28 +1,28 @@
 import { Button } from '@mui/material';
 import classNames from 'classnames';
-import { useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Styled from './Profile.styles';
 import PersonalInfo from './components/personal-info/PersonalInfo.component';
-import AuthContext from '../../store/AuthProvider/Auth.context';
 import AddUser from './components/add-user/AddUser.component';
+import ShareLink from './components/share-link/ShareLink.component';
 import { BannerPage } from '../banner/Banner.page';
+import { useIsCompanyAdmin } from '../../hooks/useRole';
 
 const ProfilePage = () => {
     const { t } = useTranslation();
-    const { authData } = useContext(AuthContext);
     const [selectedCard, setSelectedCard] = useState<
-        'personal-info' | 'add-user' | 'banners'
+        'personal-info' | 'add-user' | 'banners' | 'share'
     >('personal-info');
-    const { roles: userRoles } = authData ?? {};
 
-    const isAdmin = userRoles?.includes('admin');
+    const isAdmin = useIsCompanyAdmin();
 
     const components = useMemo(
         () => ({
             'personal-info': <PersonalInfo />,
             ...(isAdmin ? { 'add-user': <AddUser /> } : {}),
             ...(isAdmin ? { banners: <BannerPage /> } : {}),
+            ...(isAdmin ? { share: <ShareLink /> } : {}),
         }),
         [isAdmin]
     );
@@ -30,7 +30,7 @@ const ProfilePage = () => {
     return (
         <Styled.ProfilePageContainer className="profile">
             <div className="profile__cards">
-                <h3>{t('profile')}</h3>
+                <h3>{t('settings')}</h3>
                 <Button
                     id="personal-info"
                     className={classNames({
@@ -60,6 +60,17 @@ const ProfilePage = () => {
                         onClick={() => setSelectedCard('banners')}
                     >
                         {t('Baneri')}
+                    </Button>
+                )}
+                {isAdmin && (
+                    <Button
+                        id="share"
+                        className={classNames({
+                            selected: selectedCard === 'share',
+                        })}
+                        onClick={() => setSelectedCard('share')}
+                    >
+                        {t('share.tab')}
                     </Button>
                 )}
             </div>
