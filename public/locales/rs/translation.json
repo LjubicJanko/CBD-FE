@@ -253,5 +253,29 @@
         "copyFailed": "Kopiranje linka nije uspelo.",
         "downloadQR": "Preuzmi QR",
         "noTenant": "Nije izabran klijent — izaberite ga u zaglavlju."
-    }
+    },
+    "app-name": "CBD SPORTSWEAR",
+    "order-jersey-cta": "Poruči dres",
+    "banners": "Baneri",
+    "bannerLocation": {
+        "order": "Dopuna narudžbine",
+        "idTracking": "Id praćenje",
+        "home": "Početna stranica"
+    },
+    "edit-banner": "Izmeni baner",
+    "create-banner": "Kreiraj baner",
+    "banner-title": "Naslov",
+    "banner-text": "Tekst",
+    "unpublish-banner-confirm": "Da li si siguran da želiš da ukloniš ovaj baner?",
+    "unpublish": "Ukloni",
+    "publish": "Objavi",
+    "banner-deleted": "Baner je uspešno obrisan",
+    "banner-published": "Baner je uspešno objavljen",
+    "banner-unpublished": "Baner je uspešno uklonjen",
+    "banner-created": "Baner je uspešno kreiran",
+    "banner-updated": "Baner je uspešno izmenjen",
+    "add-new-banner": "Dodaj novi baner",
+    "contact-info-updated": "Kontakt podaci su uspešno izmenjeni",
+    "contact-info-update-failed": "Greška pri izmeni kontakt podataka",
+    "url-copied": "Link je kopiran u privremenu memoriju"
 }

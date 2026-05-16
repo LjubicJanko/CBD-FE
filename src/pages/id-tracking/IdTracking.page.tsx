@@ -257,7 +257,7 @@ const IdTrackingPage = () => {
                                 onClick={() => {
                                     navigator.clipboard.writeText(window.location.href);
                                     showSnackbar(
-                                        t('Url coppied to clipboard'),
+                                        t('url-copied'),
                                         'success'
                                     );
                                 }}

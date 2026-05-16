@@ -61,11 +61,11 @@ const LoginComponent = () => {
       )}
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
         <h1 className="login-container__title">
-          {t('CBD SPORTSWEAR')}
+          {t('app-name')}
         </h1>
         <div className="fields">
           <div className="login-container__username">
-            <label id="username-label">{t('Korisnicko ime')}</label>
+            <label id="username-label">{t('username')}</label>
             <TextField
               aria-labelledby="username-label"
               variant="outlined"
@@ -83,7 +83,7 @@ const LoginComponent = () => {
             />
           </div>
           <div className="login-container__password">
-            <label id="password-label">{t('Lozinka')}</label>
+            <label id="password-label">{t('password')}</label>
             <OutlinedInput
               aria-labelledby="password-label"
               id="outlined-adornment-password"

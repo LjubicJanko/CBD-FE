@@ -59,7 +59,7 @@ const ProfilePage = () => {
                         })}
                         onClick={() => setSelectedCard('banners')}
                     >
-                        {t('Baneri')}
+                        {t('banners')}
                     </Button>
                 )}
                 {isAdmin && (

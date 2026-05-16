@@ -74,7 +74,7 @@ const BannerCard = ({
                         onClick={() =>
                             setConfirmModalConfig({
                                 isOpen: true,
-                                text: t('Da li si siguran da želiš da obrišeš baner?'),
+                                text: t('delete-banner-confirm'),
                                 onConfirm: () => {
                                     setConfirmModalConfig(EMPTY_MODAL_CONFIG);
                                     onDelete();
@@ -106,7 +106,7 @@ const BannerCard = ({
                         onClick={() =>
                             setConfirmModalConfig({
                                 isOpen: true,
-                                text: t('Da li si siguran da želiš da ukloniš baner?'),
+                                text: t('unpublish-banner-confirm'),
                                 onConfirm: () => {
                                     setConfirmModalConfig(EMPTY_MODAL_CONFIG);
                                     onUnpublish();
@@ -114,7 +114,7 @@ const BannerCard = ({
                             })
                         }
                     >
-                        {t('Ukloni')}
+                        {t('unpublish')}
                     </Button>
                 ) : (
                     <Button
@@ -122,7 +122,7 @@ const BannerCard = ({
                         className="banner-card__actions__publish"
                         onClick={() => setPublishModalOpen(true)}
                     >
-                        {t('Objavi')}
+                        {t('publish')}
                     </Button>
                 )}
             </div>

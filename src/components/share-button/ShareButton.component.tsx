@@ -13,7 +13,7 @@ const ShareButton = () => {
 
     const handleShare = useCallback(() => {
         navigator.clipboard.writeText(window.location.href);
-        showSnackbar(t('Url coppied to clipboard'), 'success');
+        showSnackbar(t('url-copied'), 'success');
     }, [showSnackbar, t]);
 
     if (width > sMax) return null;

@@ -61,9 +61,9 @@ const ContactInfoForm = ({ initialContactInfo }: ContactInfoFormProps) => {
         });
         resetForm({ values: formData });
 
-        showSnackbar(t('Kontakt podaci su uspešno izmenjeni'), 'success');
+        showSnackbar(t('contact-info-updated'), 'success');
       } catch (error) {
-        showSnackbar(t('Kontakt podaci nisu izmenjeni'), 'error');
+        showSnackbar(t('contact-info-update-failed'), 'error');
         console.error(error);
       }
     },

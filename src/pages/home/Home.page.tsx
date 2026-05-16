@@ -64,13 +64,13 @@ const HomeComponent = () => {
             <div className="home__sections">
                 {tenantSlug && (
                     <Section
-                        title={t('Poruči dres')}
+                        title={t('order-jersey-cta')}
                         to={`/order-extension/${tenantSlug}`}
                         panelClassName="home__sections__order-panel"
                     />
                 )}
                 <Section
-                    title={t('ID Praćenje')}
+                    title={t('id-tracking')}
                     to={tenantSlug ? `/track/${tenantSlug}` : '/track'}
                     panelClassName="home__sections__tracking-panel"
                 />

@@ -251,5 +251,29 @@
         "copyFailed": "Failed to copy link.",
         "downloadQR": "Download QR",
         "noTenant": "No active tenant — select one in the header first."
-    }
+    },
+    "app-name": "CBD SPORTSWEAR",
+    "order-jersey-cta": "Order a jersey",
+    "banners": "Banners",
+    "bannerLocation": {
+        "order": "Order extension",
+        "idTracking": "ID tracking",
+        "home": "Home page"
+    },
+    "edit-banner": "Edit banner",
+    "create-banner": "Create banner",
+    "banner-title": "Title",
+    "banner-text": "Text",
+    "unpublish-banner-confirm": "Are you sure you want to unpublish this banner?",
+    "unpublish": "Unpublish",
+    "publish": "Publish",
+    "banner-deleted": "Banner deleted",
+    "banner-published": "Banner published",
+    "banner-unpublished": "Banner unpublished",
+    "banner-created": "Banner created",
+    "banner-updated": "Banner updated",
+    "add-new-banner": "Add new banner",
+    "contact-info-updated": "Contact info updated",
+    "contact-info-update-failed": "Failed to update contact info",
+    "url-copied": "URL copied to clipboard"
 }
