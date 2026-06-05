@@ -149,6 +149,7 @@ export const PlatformContainer = styled.div`
             th:last-child,
             td:last-child {
                 width: 100%;
+                text-align: right;
             }
 
             th {
@@ -225,9 +226,9 @@ export const PlatformContainer = styled.div`
             gap: 8px;
             flex-wrap: wrap;
             align-items: center;
+            justify-content: flex-end;
 
             ${mobile(css`
-                justify-content: flex-end;
                 flex: 1;
             `)}
 

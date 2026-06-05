@@ -88,6 +88,10 @@ export enum privileges {
   MOVE_TO_SHIPPED = 'move-to-shipped',
   MOVE_TO_DONE = 'move-to-done',
   PAYMENT_ADD = 'payment-add',
+  ATTENDANCE_CHECK_IN = 'attendance-check-in',
+  ATTENDANCE_VIEW_ALL = 'attendance-view-all',
+  ATTENDANCE_EDIT = 'attendance-edit',
+  LOCATION_MANAGE = 'location-manage',
 }
 
 export const textInputSX = {

@@ -5,3 +5,5 @@ export { default as OrderSearchComponent } from './order-search/OrderSearch.comp
 export { default as OrdersListComponent } from './orders-list/OrdersList.component';
 export { default as BasicDatePicker } from './date-picker/BasicDatePicker.component';
 export { default as BannerCard } from './banner-card/BannerCard.component';
+export { default as AttendanceButton } from './attendance-button/AttendanceButton.component';
+export { default as TenantDetailsForm } from './tenant-details-form/TenantDetailsForm.component';

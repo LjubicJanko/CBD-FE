@@ -9,19 +9,23 @@ import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import React from 'react';
 import theme from '../../styles/theme';
-import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShareButton from '../share-button/ShareButton.component';
+import AttendanceButton from '../attendance-button/AttendanceButton.component';
 import { platformService, publicTenantService } from '../../api';
 import { getLogoAbsoluteUrl, Tenant } from '../../api/services/platform';
 import { PublicTenant } from '../../api/services/publicTenant';
 import localStorageService from '../../services/localStorage.service';
+import { usePrivileges } from '../../hooks/usePrivileges';
 
 const HeaderComponent = () => {
   const { logout, token, authData } = useContext(AuthContext);
+  const { canCheckIn, canViewAttendance, canManageLocations } = usePrivileges();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -113,6 +117,11 @@ const HeaderComponent = () => {
   const handleGoToPlatform = useCallback(() => {
     setAnchorEl(null);
     navigate('/platform');
+  }, [navigate]);
+
+  const handleGoToAttendance = useCallback(() => {
+    setAnchorEl(null);
+    navigate('/attendance');
   }, [navigate]);
 
   const url = useMemo(
@@ -283,16 +292,19 @@ const HeaderComponent = () => {
     <Styled.HeaderContainer className="header">
       {tenantSlot && <div className="header__tenant">{tenantSlot}</div>}
       {logo}
-      <IconButton
-        id="user-button"
-        className="header__menu-btn"
-        aria-controls={open ? 'user-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        <MenuIcon />
-      </IconButton>
+      <div className="header__right">
+        <AttendanceButton />
+        <IconButton
+          id="user-button"
+          className="header__menu-btn"
+          aria-controls={open ? 'user-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
+          <MenuIcon />
+        </IconButton>
+      </div>
       <Menu
         id="user-menu"
         className="user-menu"
@@ -323,12 +335,21 @@ const HeaderComponent = () => {
         </div>
         <MenuItem className="user-menu__item" onClick={handleGoToProfile}>
           {t('settings')}
-          <PersonIcon />
+          <SettingsIcon />
         </MenuItem>
         <MenuItem className="user-menu__item" onClick={handleGoToReports}>
           {t('reports')}
           <AssessmentIcon />
         </MenuItem>
+        {(canCheckIn || canViewAttendance || canManageLocations) && (
+          <MenuItem
+            className="user-menu__item"
+            onClick={handleGoToAttendance}
+          >
+            {t('attendance.menu')}
+            <HowToRegIcon />
+          </MenuItem>
+        )}
         {authData?.superadmin && (
           <MenuItem className="user-menu__item" onClick={handleGoToPlatform}>
             {t('platform.title')}

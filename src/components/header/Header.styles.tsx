@@ -25,9 +25,20 @@ export const HeaderContainer = styled.header`
     padding: 0 16px;
   `)}
 
-  .header__menu-btn {
+  .header__right {
     position: absolute;
     right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    ${mobile(css`
+      right: 16px;
+      gap: 2px;
+    `)}
+  }
+
+  .header__menu-btn {
     color: ${theme.PRIMARY_2};
   }
 

@@ -1,6 +1,9 @@
 import { CircularProgress } from '@mui/material';
 import { useContext } from 'react';
-import { OrderDetailsComponent, OrdersListComponent } from '../../components';
+import {
+  OrderDetailsComponent,
+  OrdersListComponent,
+} from '../../components';
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import * as Styled from './Dashboard.styles';
 import DashboardHeader from '../../components/dashboard-header/DashboardHeader.component';

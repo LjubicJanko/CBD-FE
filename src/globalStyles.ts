@@ -81,6 +81,15 @@ export const GlobalStyle = createGlobalStyle`
         padding-top: 80px;
       `)};
 
+      /* Cap the readable content width and center it so pages don't sprawl
+         edge-to-edge on large (27"+) displays. Pages keep their own
+         horizontal padding, which now breathes inside this container. The
+         full-bleed header is intentionally left edge-anchored. */
+      width: 100%;
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
+
       font-optical-sizing: auto;
       text-decoration-skip-ink: none;
     }
@@ -213,6 +222,60 @@ export const GlobalStyle = createGlobalStyle`
 
     .MuiIconButton-root {
       color: ${(props) => props.theme.SECONDARY_1};
+    }
+  }
+
+  /* Theme MUI Dialog (used by attendance / locations pages) to match the
+     dark theme. The custom CbdModal handles its own bg; this targets the
+     stock MUI Dialog only. The date-picker dialog rule below is more
+     specific (:has) and continues to take precedence where it applies. */
+  .MuiDialog-paper {
+    background-color: ${(props) => props.theme.PRIMARY_1} !important;
+    background-image: none !important;
+    color: ${(props) => props.theme.SECONDARY_1} !important;
+  }
+
+  .MuiDialog-paper .MuiDialogTitle-root {
+    color: ${(props) => props.theme.SECONDARY_1};
+  }
+
+  .MuiDialog-paper .MuiDialogContentText-root {
+    color: ${(props) => props.theme.SECONDARY_1};
+  }
+
+  .MuiDialog-paper .MuiFormControlLabel-label {
+    color: ${(props) => props.theme.SECONDARY_1};
+  }
+
+  .MuiDialog-paper .MuiTypography-root {
+    color: inherit;
+  }
+
+  .MuiDialog-paper .MuiDialogActions-root .MuiButton-text {
+    color: ${(props) => props.theme.PRIMARY_2};
+  }
+
+  .MuiDialog-paper .MuiDialogActions-root .MuiButton-root {
+    border-radius: 8px;
+    text-transform: none;
+    font-weight: 600;
+    box-shadow: none;
+  }
+
+  .MuiDialog-paper .MuiDialogActions-root .MuiButton-contained {
+    background-color: ${(props) => props.theme.PRIMARY_2};
+    color: ${(props) => props.theme.PRIMARY_1};
+
+    &:hover {
+      background-color: ${(props) => props.theme.PRIMARY_2};
+      opacity: 0.9;
+      box-shadow: none;
+    }
+
+    &.Mui-disabled {
+      background-color: ${(props) => props.theme.PRIMARY_2};
+      color: ${(props) => props.theme.PRIMARY_1};
+      opacity: 0.4;
     }
   }
 

@@ -1,4 +1,5 @@
 import {
+  AttendanceHubPage,
   DashboardPage,
   HomePage,
   IdTrackingPage,
@@ -28,16 +29,20 @@ import { privileges } from '../../util/util';
 import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
 import PublicFooter from '../../components/public-footer/PublicFooter.component';
 import PlatformPage from '../../pages/platform/Platform.page';
+import TenantDetailsPage from '../../pages/tenant-details/TenantDetails.page';
 import BannerProvider from '../BannerProvider';
+import AttendanceProvider from '../AttendanceProvider';
 import React from 'react';
 
 const PrivateLayout: React.FC = () => {
   return (
     <BannerProvider>
-      <HeaderComponent />
-      <main>
-        <Outlet />
-      </main>
+      <AttendanceProvider>
+        <HeaderComponent />
+        <main>
+          <Outlet />
+        </main>
+      </AttendanceProvider>
     </BannerProvider>
   );
 };
@@ -106,6 +111,10 @@ const CBDRouter: React.FC = (): JSX.Element => {
             <Route element={<SuperadminRoute />}>
               <Route path="select-tenant" element={<SelectTenantPage />} />
               <Route path="platform" element={<PlatformPage />} />
+              <Route
+                path="platform/tenants/:id"
+                element={<TenantDetailsPage />}
+              />
             </Route>
             <Route element={<TenantContextRequired />}>
               <Route
@@ -127,6 +136,17 @@ const CBDRouter: React.FC = (): JSX.Element => {
               </Route>
               <Route path="profile" element={<ProfilePage />} />
               <Route path="reports" element={<ReportsPage />} />
+              {/* Attendance, attendance overview and locations are now tabs of
+                  a single page; the hub self-gates each tab by privilege. */}
+              <Route path="attendance" element={<AttendanceHubPage />} />
+              <Route
+                path="attendance-admin"
+                element={<Navigate to="/attendance" replace />}
+              />
+              <Route
+                path="locations"
+                element={<Navigate to="/attendance" replace />}
+              />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" />} />

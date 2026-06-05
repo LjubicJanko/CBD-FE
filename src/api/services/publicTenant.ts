@@ -1,9 +1,11 @@
 import client from '../client';
+import { SocialLink } from './platform';
 
 export type PublicTenant = {
     name: string;
     slug: string;
     logoUrl: string | null;
+    socialLink: SocialLink | null;
 };
 
 const getTenantBySlug = async (slug: string): Promise<PublicTenant> =>

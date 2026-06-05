@@ -22,10 +22,11 @@ export const ProfilePageContainer = styled.div`
       grid-area: cards;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 16px;
 
       ${tablet(css`
         flex-direction: row;
+        align-items: center;
         overflow-x: auto;
         gap: 8px;
       `)}
@@ -34,44 +35,96 @@ export const ProfilePageContainer = styled.div`
         font-size: 24px;
         font-weight: 700;
         color: ${theme.SECONDARY_1};
-        padding-bottom: 16px;
+        padding-bottom: 8px;
         margin: 0;
 
         ${tablet(css`
           display: none;
         `)}
       }
+    }
 
-      button {
+    &__group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      ${tablet(css`
+        flex-direction: row;
+        gap: 8px;
+      `)}
+    }
+
+    &__group-label {
+      color: ${theme.SECONDARY_2};
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 0 16px 4px;
+
+      ${tablet(css`
+        display: none;
+      `)}
+    }
+
+    &__tab {
+      color: ${theme.SECONDARY_2};
+      text-transform: none;
+      font-size: 14px;
+      font-weight: 500;
+      justify-content: flex-start;
+      padding: 10px 16px;
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+
+      .MuiButton-startIcon {
+        color: inherit;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: ${theme.SECONDARY_1};
+      }
+
+      &.selected {
+        background-color: rgba(212, 255, 0, 0.1);
+        color: ${theme.PRIMARY_2};
+        font-weight: 700;
+        border: none;
+        border-left: 3px solid ${theme.PRIMARY_2};
+        border-radius: 0 8px 8px 0;
+
+        ${tablet(css`
+          border-left: none;
+          border-bottom: 2px solid ${theme.PRIMARY_2};
+          border-radius: 8px 8px 0 0;
+        `)}
+      }
+    }
+
+    &__tab-select {
+      width: 100%;
+
+      .MuiSelect-select {
+        color: ${theme.SECONDARY_1};
+      }
+
+      .MuiSelect-icon {
         color: ${theme.SECONDARY_2};
-        text-transform: none;
-        font-size: 14px;
-        font-weight: 500;
-        justify-content: flex-start;
-        padding: 10px 16px;
-        border-radius: 8px;
-        white-space: nowrap;
-        transition: all 0.2s ease;
+      }
 
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.05);
-          color: ${theme.SECONDARY_1};
-        }
+      .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(255, 255, 255, 0.2);
+      }
 
-        &.selected {
-          background-color: rgba(212, 255, 0, 0.1);
-          color: ${theme.PRIMARY_2};
-          font-weight: 700;
-          border: none;
-          border-left: 3px solid ${theme.PRIMARY_2};
-          border-radius: 0 8px 8px 0;
+      &:hover .MuiOutlinedInput-notchedOutline {
+        border-color: ${theme.PRIMARY_2}80;
+      }
 
-          ${tablet(css`
-            border-left: none;
-            border-bottom: 2px solid ${theme.PRIMARY_2};
-            border-radius: 8px 8px 0 0;
-          `)}
-        }
+      &.Mui-focused .MuiOutlinedInput-notchedOutline {
+        border-color: ${theme.PRIMARY_2};
       }
     }
 

@@ -3,7 +3,7 @@ import theme from '../../styles/theme';
 import { tablet, mobile } from '../../util/breakpoints';
 import { css } from 'styled-components';
 
-export const InstagramButtonContainer = styled(IconButton)`
+export const SocialLinkButtonContainer = styled(IconButton)`
   width: fit-content;
 
   font-weight: 400;

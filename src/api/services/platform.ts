@@ -1,16 +1,28 @@
 import privateClient from '../privateClient';
 
+export type SocialLinkType = 'INSTAGRAM' | 'FACEBOOK';
+
+export type SocialLink = {
+    type: SocialLinkType;
+    url: string;
+    displayText: string;
+};
+
 export type Tenant = {
     id: number;
     name: string;
     slug: string;
     logoUrl: string | null;
     active: boolean;
+    socialLink: SocialLink | null;
 };
 
 export type CreateTenantData = {
     name: string;
     slug: string;
+    // Optional in the payload: omit to leave unchanged, `null` to clear,
+    // an object to set/replace (BE null-vs-omitted semantics).
+    socialLink?: SocialLink | null;
 };
 
 const getTenants = async (): Promise<Tenant[]> =>

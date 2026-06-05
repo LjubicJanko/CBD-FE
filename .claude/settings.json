@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"console.log\\('yup', require\\('yup/package.json'\\).version\\); JSON.parse\\(require\\('fs'\\).readFileSync\\('public/locales/en/translation.json'\\)\\); JSON.parse\\(require\\('fs'\\).readFileSync\\('public/locales/rs/translation.json'\\)\\); console.log\\('JSON OK'\\);\")",
+      "Bash(echo \"TSC EXIT: $?\")"
+    ]
+  }
+}
