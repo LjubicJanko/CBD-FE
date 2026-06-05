@@ -73,7 +73,12 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                 .matches(/^[a-z0-9-]+$/, t('platform.slugFormat'))
                 .notOneOf(RESERVED_SLUGS, t('platform.slugReserved'))
                 .required(t('validation.required.slug')),
-            socialType: Yup.string().oneOf(['', 'INSTAGRAM', 'FACEBOOK']),
+            socialType: Yup.string().oneOf([
+                '',
+                'INSTAGRAM',
+                'FACEBOOK',
+                'WEBSITE',
+            ]),
             socialUrl: Yup.string().when('socialType', {
                 is: (v: string) => Boolean(v),
                 then: (s) =>
@@ -227,6 +232,9 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                         </MenuItem>
                         <MenuItem value="INSTAGRAM">Instagram</MenuItem>
                         <MenuItem value="FACEBOOK">Facebook</MenuItem>
+                        <MenuItem value="WEBSITE">
+                            {t('tenantDetails.socialWebsite')}
+                        </MenuItem>
                     </TextField>
                     {formik.values.socialType && (
                         <>

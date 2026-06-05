@@ -1,5 +1,6 @@
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import LanguageIcon from '@mui/icons-material/Language';
 import { SocialLink } from '../../api/services/platform';
 import * as Styled from './SocialLinkButton.styles';
 
@@ -11,6 +12,7 @@ export type SocialLinkButtonProps = {
 const ICONS = {
     INSTAGRAM: InstagramIcon,
     FACEBOOK: FacebookIcon,
+    WEBSITE: LanguageIcon,
 } as const;
 
 /**

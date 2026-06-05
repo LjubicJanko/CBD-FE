@@ -1,6 +1,6 @@
 import privateClient from '../privateClient';
 
-export type SocialLinkType = 'INSTAGRAM' | 'FACEBOOK';
+export type SocialLinkType = 'INSTAGRAM' | 'FACEBOOK' | 'WEBSITE';
 
 export type SocialLink = {
     type: SocialLinkType;

@@ -19,7 +19,7 @@ import AddUser from './components/add-user/AddUser.component';
 import ShareLink from './components/share-link/ShareLink.component';
 import TenantDetails from './components/tenant-details/TenantDetails.component';
 import { BannerPage } from '../banner/Banner.page';
-import { useIsCompanyAdmin } from '../../hooks/useRole';
+import { useIsCompanyAdmin, useIsSuperadmin } from '../../hooks/useRole';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { xxsMax } from '../../util/breakpoints';
 
@@ -51,24 +51,31 @@ const ProfilePage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const isAdmin = useIsCompanyAdmin();
+    const isSuperadmin = useIsSuperadmin();
 
     // Single source of truth for the sidebar, the mobile dropdown and the
     // panel content. Tabs are organised into groups: everything except
     // "Personal info" is tenant-scoped, so it lives under "Company".
+    // The account group only holds password change, which a superadmin
+    // cannot do in-app, so it is hidden for superadmins.
     const groups = useMemo<TabGroup[]>(
         () => [
-            {
-                id: 'account',
-                label: t('profile-group-account'),
-                tabs: [
-                    {
-                        id: 'personal-info',
-                        label: t('personal-info'),
-                        icon: <PersonIcon fontSize="small" />,
-                        panel: <PersonalInfo />,
-                    },
-                ],
-            },
+            ...(isSuperadmin
+                ? []
+                : [
+                      {
+                          id: 'account',
+                          label: t('profile-group-account'),
+                          tabs: [
+                              {
+                                  id: 'personal-info' as const,
+                                  label: t('personal-info'),
+                                  icon: <PersonIcon fontSize="small" />,
+                                  panel: <PersonalInfo />,
+                              },
+                          ],
+                      },
+                  ]),
             ...(isAdmin
                 ? [
                       {
@@ -104,7 +111,7 @@ const ProfilePage = () => {
                   ]
                 : []),
         ],
-        [isAdmin, t]
+        [isAdmin, isSuperadmin, t]
     );
 
     const allTabs = useMemo(
