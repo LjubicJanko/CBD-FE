@@ -4,16 +4,25 @@ import localStorageService from '../../services/localStorage.service';
 import { authService } from '../../api';
 import { AuthData, LoginData } from '../../types/Auth';
 import authBus from '../../services/bus';
+import { firstEnabledModuleRoute } from '../../util/features';
 
 // TODO remove after 2.2 — one-time migration to clear cached auth payloads
 // from before the multi-tenant rename (missing `superadmin` field or carrying
-// the old `'admin'` role). Once the install base has rolled forward this can
-// be deleted along with its usage in the useState initializer below.
+// the old `'admin'` role) and from before the premium-features rollout (missing
+// `features`). Without the `features` check, an already-logged-in user keeps a
+// cached payload with no features, so every module gates off and FeatureRoute
+// strands them on /profile — with a still-valid token, nothing prompts a
+// re-login. Forcing re-login refreshes the payload. Once the install base has
+// rolled forward this can be deleted along with its usage in the useState
+// initializer below.
 const isStaleAuthShape = (
   cached: Omit<AuthData, 'token'> | null
 ): boolean => {
   if (!cached) return false;
   if (typeof (cached as { superadmin?: unknown }).superadmin === 'undefined') {
+    return true;
+  }
+  if (!Array.isArray(cached.features)) {
     return true;
   }
   if (Array.isArray(cached.roles) && (cached.roles as string[]).includes('admin')) {
@@ -47,15 +56,25 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       try {
         const response = await authService.login(data);
         const { token, id, roles, privileges, name, username, tenantId, tenantSlug, tenantLogoUrl, superadmin } = response;
+        // Defensively normalize features to an array: a superadmin has no tenant
+        // so the BE may legitimately send no features. Storing a guaranteed array
+        // keeps the cached payload shape valid (isStaleAuthShape would otherwise
+        // flag a missing `features` and force a re-login loop).
+        const features = response.features ?? [];
         setToken(token);
-        setAuthData({ id, roles, privileges, name, username, tenantId, tenantSlug, tenantLogoUrl, superadmin });
-        localStorageService.saveData(response);
+        setAuthData({ id, roles, privileges, features, name, username, tenantId, tenantSlug, tenantLogoUrl, superadmin });
+        localStorageService.saveData({ ...response, features });
         // Always reset the selected-tenant keys on login: a previous superadmin
         // session in this browser may have left selectedTenantId / Slug behind,
         // which would otherwise leak into a subsequent non-superadmin session.
         localStorageService.clearSelectedTenant();
         status = true;
-        navigate(superadmin ? '/select-tenant' : '/dashboard');
+        // Superadmin picks a tenant first; a regular user lands on their first
+        // enabled module (usually /dashboard, but e.g. /attendance if `orders`
+        // is disabled for their tenant).
+        navigate(
+          superadmin ? '/select-tenant' : firstEnabledModuleRoute(features)
+        );
       } catch (error) {
         console.error(error);
         status = false;

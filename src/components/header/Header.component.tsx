@@ -22,10 +22,14 @@ import { getLogoAbsoluteUrl, Tenant } from '../../api/services/platform';
 import { PublicTenant } from '../../api/services/publicTenant';
 import localStorageService from '../../services/localStorage.service';
 import { usePrivileges } from '../../hooks/usePrivileges';
+import { useHasFeature } from '../../hooks/useFeatures';
+import { Feature, firstEnabledModuleRoute } from '../../util/features';
+import { isReservedSlug } from '../../util/reservedSlugs';
 
 const HeaderComponent = () => {
   const { logout, token, authData } = useContext(AuthContext);
   const { canCheckIn, canViewAttendance, canManageLocations } = usePrivileges();
+  const hasReports = useHasFeature(Feature.REPORTS);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,6 +42,13 @@ const HeaderComponent = () => {
 
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [ownTenant, setOwnTenant] = useState<PublicTenant | null>(null);
+  // Features of the public tenant whose home page we're on (null until known).
+  // Drives whether the header shows its Login button: a tenant with no public
+  // module renders the branded login prompt in the home BODY, so the header
+  // button would be a redundant second login affordance.
+  const [publicHomeFeatures, setPublicHomeFeatures] = useState<string[] | null>(
+    null
+  );
   // Reads localStorage synchronously rather than reactively. That's fine here:
   // tenant switches in this app always trigger a hard navigation
   // (window.location.href = '/dashboard'), so this component remounts on the
@@ -78,15 +89,17 @@ const HeaderComponent = () => {
   const handleTenantSwitch = useCallback(
     (tenantId: number) => {
       const switchedTo = tenants.find((tenant) => tenant.id === tenantId);
+      const features = switchedTo?.features ?? [];
       setSelectedTenantId(tenantId);
       localStorageService.setSelectedTenant(
         tenantId,
-        switchedTo?.slug ?? null
+        switchedTo?.slug ?? null,
+        features
       );
       // Hard navigation: drops in-memory caches (OrdersProvider, fetched lists)
-      // that are scoped to the previous tenant. Landing on /dashboard keeps the
-      // post-switch destination consistent with the /select-tenant flow.
-      window.location.href = '/dashboard';
+      // that are scoped to the previous tenant. Land on the tenant's first
+      // enabled module (usually /dashboard), consistent with /select-tenant.
+      window.location.href = firstEnabledModuleRoute(features);
     },
     [tenants]
   );
@@ -136,6 +149,37 @@ const HeaderComponent = () => {
       location.pathname.startsWith('/order-extension'),
     [location.pathname]
   );
+
+  // Only the public home route shows the header Login button (no back button).
+  // There, resolve the tenant's features so we can hide the button when the home
+  // body already shows its own login prompt (tenant with no public module).
+  useEffect(() => {
+    if (token || showBackButton || !tenantSlug || isReservedSlug(tenantSlug)) {
+      setPublicHomeFeatures(null);
+      return;
+    }
+    let cancelled = false;
+    publicTenantService
+      .getTenantBySlug(tenantSlug)
+      .then((tn) => {
+        if (!cancelled) setPublicHomeFeatures(tn.features);
+      })
+      .catch(() => {
+        if (!cancelled) setPublicHomeFeatures(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [token, showBackButton, tenantSlug]);
+
+  // Show the header Login on the home route EXCEPT when we know the tenant has
+  // no public module (then the body owns the login prompt). Default to showing
+  // it while unknown/loading and on the slugless legacy home.
+  const showHeaderLogin =
+    !tenantSlug ||
+    publicHomeFeatures === null ||
+    publicHomeFeatures.includes(Feature.ORDERS) ||
+    publicHomeFeatures.includes(Feature.ORDER_EXTENSION);
 
   const titleKey = useMemo(() => {
     if (location.pathname.startsWith('/order-extension')) {
@@ -242,13 +286,15 @@ const HeaderComponent = () => {
               </MenuItem>
             </Select>
 
-            <Button
-              variant="outlined"
-              className="public-header__home__login-btn"
-              onClick={() => navigate('/login')}
-            >
-              {t('login')}
-            </Button>
+            {showHeaderLogin && (
+              <Button
+                variant="outlined"
+                className="public-header__home__login-btn"
+                onClick={() => navigate('/login')}
+              >
+                {t('login')}
+              </Button>
+            )}
           </div>
         )}
       </Styled.PublicHeaderContainer>
@@ -337,10 +383,12 @@ const HeaderComponent = () => {
           {t('settings')}
           <SettingsIcon />
         </MenuItem>
-        <MenuItem className="user-menu__item" onClick={handleGoToReports}>
-          {t('reports')}
-          <AssessmentIcon />
-        </MenuItem>
+        {hasReports && (
+          <MenuItem className="user-menu__item" onClick={handleGoToReports}>
+            {t('reports')}
+            <AssessmentIcon />
+          </MenuItem>
+        )}
         {(canCheckIn || canViewAttendance || canManageLocations) && (
           <MenuItem
             className="user-menu__item"

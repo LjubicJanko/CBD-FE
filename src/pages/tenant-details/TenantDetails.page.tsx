@@ -1,6 +1,6 @@
 import { Button, CircularProgress } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Styled from './TenantDetails.styles';
@@ -9,6 +9,7 @@ import { Tenant } from '../../api/services/platform';
 import { TenantDetailsForm } from '../../components';
 import { platformTenantFormService } from '../../components/tenant-details-form/tenantFormService';
 import { useSnackbar } from '../../hooks/useSnackbar';
+import localStorageService from '../../services/localStorage.service';
 
 /**
  * Superadmin per-tenant detail/edit screen, reached from the platform table at
@@ -28,6 +29,15 @@ const TenantDetailsPage: React.FC = () => {
         () => (tenant ? platformTenantFormService(tenant.id) : null),
         [tenant]
     );
+
+    // Keep the local tenant in sync after a save, and — if the superadmin just
+    // edited the tenant they are currently impersonating — refresh the cached
+    // selection so slug/feature changes take effect immediately without a
+    // re-select.
+    const handleSaved = useCallback((updated: Tenant) => {
+        setTenant(updated);
+        localStorageService.recacheSelectedTenant(updated);
+    }, []);
 
     useEffect(() => {
         const tenantId = Number(id);
@@ -81,8 +91,9 @@ const TenantDetailsPage: React.FC = () => {
                     <TenantDetailsForm
                         tenant={tenant}
                         allowSlugEdit
+                        allowFeatureEdit
                         service={service}
-                        onSaved={setTenant}
+                        onSaved={handleSaved}
                     />
                 </section>
             ) : (

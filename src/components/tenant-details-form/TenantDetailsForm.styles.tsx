@@ -81,6 +81,13 @@ export const TenantDetailsForm = styled.div`
             letter-spacing: 0.5px;
         }
 
+        &__features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 480px;
+        }
+
         &__logo {
             display: flex;
             flex-direction: column;

@@ -9,6 +9,7 @@ import BusinessIcon from '@mui/icons-material/Business';
 import GroupIcon from '@mui/icons-material/Group';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import classNames from 'classnames';
 import { ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,14 +19,18 @@ import PersonalInfo from './components/personal-info/PersonalInfo.component';
 import AddUser from './components/add-user/AddUser.component';
 import ShareLink from './components/share-link/ShareLink.component';
 import TenantDetails from './components/tenant-details/TenantDetails.component';
+import PremiumFeatures from './components/premium-features/PremiumFeatures.component';
 import { BannerPage } from '../banner/Banner.page';
 import { useIsCompanyAdmin, useIsSuperadmin } from '../../hooks/useRole';
+import { useHasFeature } from '../../hooks/useFeatures';
+import { Feature } from '../../util/features';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { xxsMax } from '../../util/breakpoints';
 
 type ProfileCard =
     | 'personal-info'
     | 'tenant-details'
+    | 'premium-features'
     | 'add-user'
     | 'banners'
     | 'share';
@@ -52,6 +57,8 @@ const ProfilePage = () => {
 
     const isAdmin = useIsCompanyAdmin();
     const isSuperadmin = useIsSuperadmin();
+    const hasBanners = useHasFeature(Feature.BANNERS);
+    const hasOrderExtension = useHasFeature(Feature.ORDER_EXTENSION);
 
     // Single source of truth for the sidebar, the mobile dropdown and the
     // panel content. Tabs are organised into groups: everything except
@@ -88,30 +95,60 @@ const ProfilePage = () => {
                                   icon: <BusinessIcon fontSize="small" />,
                                   panel: <TenantDetails />,
                               },
+                              // Superadmin-only: manage the selected tenant's
+                              // premium modules. Hidden for client admins, who
+                              // cannot grant themselves premium features.
+                              ...(isSuperadmin
+                                  ? [
+                                        {
+                                            id: 'premium-features' as const,
+                                            label: t('premiumFeatures.tab'),
+                                            icon: (
+                                                <WorkspacePremiumIcon fontSize="small" />
+                                            ),
+                                            panel: <PremiumFeatures />,
+                                        },
+                                    ]
+                                  : []),
                               {
                                   id: 'add-user' as const,
                                   label: t('users-tab'),
                                   icon: <GroupIcon fontSize="small" />,
                                   panel: <AddUser />,
                               },
-                              {
-                                  id: 'banners' as const,
-                                  label: t('banners'),
-                                  icon: <CampaignIcon fontSize="small" />,
-                                  panel: <BannerPage />,
-                              },
-                              {
-                                  id: 'share' as const,
-                                  label: t('share.tab'),
-                                  icon: <QrCode2Icon fontSize="small" />,
-                                  panel: <ShareLink />,
-                              },
+                              // Banners and the customer share-link belong to
+                              // the `banners` / `order-extension` modules; hide
+                              // each tab when its feature is disabled.
+                              ...(hasBanners
+                                  ? [
+                                        {
+                                            id: 'banners' as const,
+                                            label: t('banners'),
+                                            icon: (
+                                                <CampaignIcon fontSize="small" />
+                                            ),
+                                            panel: <BannerPage />,
+                                        },
+                                    ]
+                                  : []),
+                              ...(hasOrderExtension
+                                  ? [
+                                        {
+                                            id: 'share' as const,
+                                            label: t('share.tab'),
+                                            icon: (
+                                                <QrCode2Icon fontSize="small" />
+                                            ),
+                                            panel: <ShareLink />,
+                                        },
+                                    ]
+                                  : []),
                           ],
                       },
                   ]
                 : []),
         ],
-        [isAdmin, isSuperadmin, t]
+        [isAdmin, isSuperadmin, hasBanners, hasOrderExtension, t]
     );
 
     const allTabs = useMemo(

@@ -6,6 +6,9 @@ export type PublicTenant = {
     slug: string;
     logoUrl: string | null;
     socialLink: SocialLink | null;
+    // Enabled feature keys (see src/util/features.ts); used to gate the public
+    // order-extension page.
+    features: string[];
 };
 
 const getTenantBySlug = async (slug: string): Promise<PublicTenant> =>

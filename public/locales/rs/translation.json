@@ -39,7 +39,8 @@
     "enter-order-id": "Unesi identifikacioni broj",
     "expected": "Očekivan završetak",
     "home": {
-        "tenantNotFound": "Kompanija nije pronađena. Proverite link koji ste koristili."
+        "tenantNotFound": "Kompanija nije pronađena. Proverite link koji ste koristili.",
+        "loginPrompt": "Prijavite se da nastavite."
     },
     "is-legal-entity": "Da li je pravno lice",
     "last-update": "Poslednje ažurirano",
@@ -274,8 +275,25 @@
         "socialUrlRequired": "URL linka je obavezan.",
         "socialUrlInvalid": "Unesite ispravan http(s) URL.",
         "socialDisplayRequired": "Prikazani tekst je obavezan.",
-        "socialDisplayTooLong": "Prikazani tekst može imati najviše 100 karaktera."
+        "socialDisplayTooLong": "Prikazani tekst može imati najviše 100 karaktera.",
+        "featuresSection": "Premium funkcionalnosti"
     },
+    "premiumFeatures": {
+        "tab": "Premium",
+        "title": "Premium funkcionalnosti",
+        "hint": "Uključite ili isključite premium module za {{tenant}}. Promene se primenjuju na sve korisnike ovog tenanta."
+    },
+    "feature-orders-label": "Upravljanje porudžbinama",
+    "feature-orders-description": "Pregled porudžbina, kreiranje, tok statusa i plaćanja.",
+    "feature-order-extension-label": "Javne porudžbine",
+    "feature-order-extension-description": "Javna stranica na kojoj kupci šalju zahteve za porudžbinu.",
+    "feature-banners-label": "Obaveštenja",
+    "feature-banners-description": "Baneri prikazani na javnim stranicama.",
+    "feature-attendance-label": "Evidencija i lokacije",
+    "feature-attendance-description": "Prijava/odjava, pregled evidencije i radne lokacije.",
+    "feature-reports-label": "Izveštaji i analitika",
+    "feature-reports-description": "Poslovni pokazatelji, profit i analiza trajanja statusa.",
+    "feature-requires": "Zahteva: {{features}}",
     "share": {
         "tab": "Link za klijente",
         "title": "Podeli link za doradu porudžbine",

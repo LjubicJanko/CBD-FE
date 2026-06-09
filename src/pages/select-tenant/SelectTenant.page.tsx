@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { platformService } from '../../api';
 import { getLogoAbsoluteUrl, Tenant } from '../../api/services/platform';
 import localStorageService from '../../services/localStorage.service';
+import { firstEnabledModuleRoute } from '../../util/features';
 import * as Styled from './SelectTenant.styles';
 
 const SelectTenantPage: React.FC = () => {
@@ -26,14 +27,17 @@ const SelectTenantPage: React.FC = () => {
     const handleTenantSelect = useCallback(
         (tenantId: number) => {
             const picked = tenants.find((tenant) => tenant.id === tenantId);
+            const features = picked?.features ?? [];
             localStorageService.setSelectedTenant(
                 tenantId,
-                picked?.slug ?? null
+                picked?.slug ?? null,
+                features
             );
             // Hard navigation: drops in-memory caches (OrdersProvider, fetched
             // lists) that may be scoped to a previous tenant context. Matches
-            // the header tenant-switch behavior for symmetry.
-            window.location.href = '/dashboard';
+            // the header tenant-switch behavior for symmetry. Land on the
+            // tenant's first enabled module (usually /dashboard).
+            window.location.href = firstEnabledModuleRoute(features);
         },
         [tenants]
     );

@@ -39,7 +39,8 @@
     "enter-order-id": "Please enter your order ID",
     "expected": "Expected",
     "home": {
-        "tenantNotFound": "Company not found. Check the link you used."
+        "tenantNotFound": "Company not found. Check the link you used.",
+        "loginPrompt": "Sign in to continue."
     },
     "is-legal-entity": "Is legal entity",
     "last-update": "Last updated",
@@ -274,8 +275,25 @@
         "socialUrlRequired": "Link URL is required.",
         "socialUrlInvalid": "Enter a valid http(s) URL.",
         "socialDisplayRequired": "Display text is required.",
-        "socialDisplayTooLong": "Display text must be at most 100 characters."
+        "socialDisplayTooLong": "Display text must be at most 100 characters.",
+        "featuresSection": "Premium features"
     },
+    "premiumFeatures": {
+        "tab": "Premium",
+        "title": "Premium features",
+        "hint": "Enable or disable premium modules for {{tenant}}. Changes apply to every user of this tenant."
+    },
+    "feature-orders-label": "Order management",
+    "feature-orders-description": "Order dashboard, creation, status workflow and payments.",
+    "feature-order-extension-label": "Public order requests",
+    "feature-order-extension-description": "Public page where customers submit order extension requests.",
+    "feature-banners-label": "Announcements",
+    "feature-banners-description": "Banners shown on the public pages.",
+    "feature-attendance-label": "Attendance & locations",
+    "feature-attendance-description": "Check-in/out, attendance overview and work locations.",
+    "feature-reports-label": "Reports & analytics",
+    "feature-reports-description": "Business metrics, profit and status-duration analytics.",
+    "feature-requires": "Requires: {{features}}",
     "share": {
         "tab": "Customer link",
         "title": "Share order-extension link",

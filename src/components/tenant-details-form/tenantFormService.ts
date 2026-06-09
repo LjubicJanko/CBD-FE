@@ -14,6 +14,9 @@ export type TenantFormService = {
         name: string;
         slug?: string;
         socialLink: SocialLink | null;
+        // Enabled feature keys. Superadmin-only; the self-service endpoint
+        // ignores it (a tenant cannot grant itself premium modules).
+        features?: string[];
     }) => Promise<Tenant>;
     uploadLogo: (file: File) => Promise<Tenant>;
     removeLogo: () => Promise<void>;
@@ -21,14 +24,19 @@ export type TenantFormService = {
 
 export const platformTenantFormService = (id: number): TenantFormService => ({
     // Superadmin always edits the slug, so it is always present here.
-    update: ({ name, slug, socialLink }) =>
-        platformService.updateTenant(id, { name, slug: slug ?? '', socialLink }),
+    update: ({ name, slug, socialLink, features }) =>
+        platformService.updateTenant(id, {
+            name,
+            slug: slug ?? '',
+            socialLink,
+            features,
+        }),
     uploadLogo: (file) => platformService.uploadTenantLogo(id, file),
     removeLogo: () => platformService.deleteTenantLogo(id),
 });
 
 export const selfTenantFormService: TenantFormService = {
-    // Self-service ignores slug; only name + socialLink are sent.
+    // Self-service ignores slug and features; only name + socialLink are sent.
     update: ({ name, socialLink }) =>
         tenantSelfService.updateMyTenant({ name, socialLink }),
     uploadLogo: (file) => tenantSelfService.uploadMyLogo(file),

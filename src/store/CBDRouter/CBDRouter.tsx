@@ -23,9 +23,11 @@ import OrdersProvider from '../OrdersProvider/Orders.provider';
 import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
+import FeatureRoute from './FeatureRoute';
 import SuperadminRoute from './SuperadminRoute';
 import TenantContextRequired from './TenantContextRequired';
 import { privileges } from '../../util/util';
+import { Feature } from '../../util/features';
 import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
 import PublicFooter from '../../components/public-footer/PublicFooter.component';
 import PlatformPage from '../../pages/platform/Platform.page';
@@ -117,36 +119,53 @@ const CBDRouter: React.FC = (): JSX.Element => {
               />
             </Route>
             <Route element={<TenantContextRequired />}>
+              {/* `orders` module: dashboard + order creation + payments. */}
               <Route
-                path="dashboard"
-                element={
-                  <OrdersProvider>
-                    <DashboardPage />
-                  </OrdersProvider>
-                }
-              />
-              <Route
-                element={
-                  <ProtectedRoute
-                    requiredPrivilege={privileges.ORDER_CREATE}
-                  />
-                }
+                element={<FeatureRoute requiredFeature={Feature.ORDERS} />}
               >
-                <Route path="createOrder" element={<CreateOrderPage />} />
+                <Route
+                  path="dashboard"
+                  element={
+                    <OrdersProvider>
+                      <DashboardPage />
+                    </OrdersProvider>
+                  }
+                />
+                <Route
+                  element={
+                    <ProtectedRoute
+                      requiredPrivilege={privileges.ORDER_CREATE}
+                    />
+                  }
+                >
+                  <Route path="createOrder" element={<CreateOrderPage />} />
+                </Route>
               </Route>
+              {/* Profile is always reachable — it is the landing fallback when a
+                  tenant has no other module enabled. */}
               <Route path="profile" element={<ProfilePage />} />
-              <Route path="reports" element={<ReportsPage />} />
-              {/* Attendance, attendance overview and locations are now tabs of
-                  a single page; the hub self-gates each tab by privilege. */}
-              <Route path="attendance" element={<AttendanceHubPage />} />
+              {/* `reports` is feature-gated only (no per-user privilege today). */}
               <Route
-                path="attendance-admin"
-                element={<Navigate to="/attendance" replace />}
-              />
+                element={<FeatureRoute requiredFeature={Feature.REPORTS} />}
+              >
+                <Route path="reports" element={<ReportsPage />} />
+              </Route>
+              {/* `attendance` module: attendance, attendance overview and
+                  locations are tabs of a single page; the hub self-gates each
+                  tab by privilege. */}
               <Route
-                path="locations"
-                element={<Navigate to="/attendance" replace />}
-              />
+                element={<FeatureRoute requiredFeature={Feature.ATTENDANCE} />}
+              >
+                <Route path="attendance" element={<AttendanceHubPage />} />
+                <Route
+                  path="attendance-admin"
+                  element={<Navigate to="/attendance" replace />}
+                />
+                <Route
+                  path="locations"
+                  element={<Navigate to="/attendance" replace />}
+                />
+              </Route>
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" />} />

@@ -12,6 +12,8 @@ import {
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { RESERVED_SLUGS } from '../../util/reservedSlugs';
 import { extractFieldErrors, validateLogoFile } from '../../util/tenantForm';
+import FeatureToggles from '../feature-toggles/FeatureToggles.component';
+import { applyFeatureToggle, Feature } from '../../util/features';
 import { TenantFormService } from './tenantFormService';
 import * as Styled from './TenantDetailsForm.styles';
 
@@ -22,6 +24,12 @@ type TenantDetailsFormProps = {
      * so client admins get a read-only field while superadmins can edit it.
      */
     allowSlugEdit: boolean;
+    /**
+     * Superadmin-only. Renders the premium feature/module toggles and includes
+     * them in the save payload. A client admin must never be able to grant their
+     * own tenant premium modules, so this is false in the self-service tab.
+     */
+    allowFeatureEdit?: boolean;
     /**
      * The write operations to perform — platform endpoints for a superadmin,
      * JWT-scoped self-service endpoints for a client admin. See
@@ -46,6 +54,7 @@ type TenantDetailsFormProps = {
 const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
     tenant,
     allowSlugEdit,
+    allowFeatureEdit = false,
     service,
     onSaved,
 }) => {
@@ -66,6 +75,9 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
             socialType: tenant.socialLink?.type ?? ('' as SocialLinkType | ''),
             socialUrl: tenant.socialLink?.url ?? '',
             socialDisplayText: tenant.socialLink?.displayText ?? '',
+            // The self-service /profile/tenant endpoint may not include features
+            // (only superadmin edits them); default so this never blows up.
+            features: tenant.features ?? [],
         },
         validationSchema: Yup.object({
             name: Yup.string().required(t('validation.required.name')),
@@ -113,6 +125,9 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                     name: values.name,
                     slug: allowSlugEdit ? values.slug : undefined,
                     socialLink,
+                    // Only superadmin sends features; the self-service service
+                    // ignores them regardless.
+                    features: allowFeatureEdit ? values.features : undefined,
                 });
                 showSnackbar(t('tenantDetails.saved'), 'success');
                 onSaved?.(updated);
@@ -136,6 +151,17 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
             }
         },
     });
+
+    // Not memoized: it reads formik.values.features, a fresh array each render,
+    // so useCallback would buy nothing here. applyFeatureToggle enforces the
+    // dependency rules (rejects enabling without prerequisites; cascades off
+    // dependents when a prerequisite is disabled).
+    const toggleFeature = (key: string, enabled: boolean) => {
+        formik.setFieldValue(
+            'features',
+            applyFeatureToggle(formik.values.features, key as Feature, enabled)
+        );
+    };
 
     const handleLogoSelected = useCallback(
         async (file: File | undefined) => {
@@ -274,6 +300,18 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                         </>
                     )}
                 </div>
+
+                {allowFeatureEdit && (
+                    <div className="tenant-form__features">
+                        <span className="tenant-form__section-label">
+                            {t('tenantDetails.featuresSection')}
+                        </span>
+                        <FeatureToggles
+                            features={formik.values.features}
+                            onToggle={toggleFeature}
+                        />
+                    </div>
+                )}
 
                 <div className="tenant-form__logo">
                     <span className="tenant-form__logo-label">

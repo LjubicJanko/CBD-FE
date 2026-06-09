@@ -27,6 +27,7 @@ import { OrderTracking, PostServices } from '../../types/Order';
 import { ApiError } from '../../types/Response';
 import { statuses, trackingUrl } from '../../util/util';
 import { isReservedSlug } from '../../util/reservedSlugs';
+import { Feature } from '../../util/features';
 import * as Styled from './IdTracking.styles';
 import PageBanner from '../../components/page-banner/PageBanner.component';
 import ShareIcon from '@mui/icons-material/Share';
@@ -210,6 +211,23 @@ const IdTrackingPage = () => {
         );
 
     if (tenantSlug && tenantError)
+        return (
+            <Styled.IdTrackingContainer className="id-tracking">
+                <NoContent message={t('home.tenantNotFound')} />
+            </Styled.IdTrackingContainer>
+        );
+
+    // Premium gating: tracking is meaningful only when the tenant has a module
+    // that produces trackable ids — `orders` or `order-extension`. A tenant with
+    // neither (e.g. attendance-only) shows the not-found state so the feature
+    // leaves no trace, even via a direct /track link. The backend enforces this
+    // too. The legacy no-slug /track has no tenant context, so it's left alone.
+    if (
+        tenantSlug &&
+        tenant &&
+        !tenant.features?.includes(Feature.ORDERS) &&
+        !tenant.features?.includes(Feature.ORDER_EXTENSION)
+    )
         return (
             <Styled.IdTrackingContainer className="id-tracking">
                 <NoContent message={t('home.tenantNotFound')} />

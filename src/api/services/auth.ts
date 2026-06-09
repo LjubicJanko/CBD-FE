@@ -8,6 +8,7 @@ export interface LoginResponse {
   token: string;
   roles: Role[];
   privileges: string[];
+  features: string[];
   tenantId: number | null;
   tenantSlug: string | null;
   tenantLogoUrl: string | null;

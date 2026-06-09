@@ -15,6 +15,8 @@ export type Tenant = {
     logoUrl: string | null;
     active: boolean;
     socialLink: SocialLink | null;
+    // Enabled premium feature/module keys (see src/util/features.ts).
+    features: string[];
 };
 
 export type CreateTenantData = {
@@ -23,6 +25,9 @@ export type CreateTenantData = {
     // Optional in the payload: omit to leave unchanged, `null` to clear,
     // an object to set/replace (BE null-vs-omitted semantics).
     socialLink?: SocialLink | null;
+    // Enabled feature keys. Omit to leave unchanged; send the full desired set
+    // to replace. Only superadmin may edit these.
+    features?: string[];
 };
 
 const getTenants = async (): Promise<Tenant[]> =>

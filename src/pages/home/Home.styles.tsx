@@ -18,6 +18,49 @@ export const HomeContainer = styled.div`
     }
 
     .home {
+        &__landing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+            padding: 40px 24px;
+
+            &__logo {
+                width: 120px;
+                height: 120px;
+                object-fit: contain;
+            }
+
+            &__name {
+                margin: 0;
+                color: ${theme.SECONDARY_1};
+                font-size: 28px;
+                font-weight: 700;
+            }
+
+            &__subtitle {
+                margin: 0;
+                color: ${theme.SECONDARY_2};
+                font-size: 15px;
+            }
+
+            &__login {
+                margin-top: 8px;
+                padding: 12px 40px;
+                border-radius: 10px;
+                background-color: ${theme.PRIMARY_2};
+                color: ${theme.PRIMARY_1};
+                font-weight: 700;
+                font-size: 14px;
+                text-transform: none;
+
+                &:hover {
+                    background-color: ${theme.PRIMARY_2}D9;
+                }
+            }
+        }
+
         &__sections {
             width: 100%;
             display: flex;

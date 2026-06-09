@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import PageBanner from '../../components/page-banner/PageBanner.component';
 import NoContent from '../../components/no-content/NoContent.component';
 import { isReservedSlug } from '../../util/reservedSlugs';
+import { Feature } from '../../util/features';
 
 
 type OrderExtensionData = {
@@ -146,7 +147,13 @@ const OrderExtensionPage: React.FC = () => {
         );
     }
 
-    if (tenantError || !tenant) {
+    // Premium gating: the public order-extension flow is hidden unless the
+    // tenant has the `order-extension` feature enabled. Treated like not-found
+    // so a disabled module leaves no trace. The backend is the real boundary
+    // and rejects createOrderExtension for tenants without the feature.
+    const featureEnabled = tenant?.features?.includes(Feature.ORDER_EXTENSION);
+
+    if (tenantError || !tenant || !featureEnabled) {
         return (
             <Styled.OrderExtensionContainer className="order-extension">
                 <NoContent message={t('orderExtension.tenantNotFound')} />
