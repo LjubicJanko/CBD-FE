@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import { tablet } from '../../util/breakpoints';
 
 export const OrderExtensionContainer = styled.div`
@@ -8,7 +8,7 @@ export const OrderExtensionContainer = styled.div`
   padding: 32px;
   background: ${theme.SECONDARY_3};
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px ${theme.SHADOW};
 
   .order-extension__title {
     text-align: center;
@@ -54,7 +54,7 @@ export const OrderExtensionContainer = styled.div`
       gap: 20px;
       padding: 8px 0 20px;
       margin-bottom: 24px;
-      border-bottom: 1px solid ${theme.PRIMARY_2}33;
+      border-bottom: 1px solid ${withAlpha(theme.PRIMARY_2, 0.2)};
 
       ${tablet(css`
         gap: 14px;

@@ -25,7 +25,7 @@ export const ShipmentModalContainer = styled(CbdModal)`
             justify-content: space-between;
             gap: 12px;
             padding: 12px 16px;
-            background-color: rgba(255, 255, 255, 0.08);
+            background-color: ${theme.SURFACE_3};
             border-radius: 8px;
 
             ${mobile(css`
@@ -84,7 +84,7 @@ export const ShipmentModalContainer = styled(CbdModal)`
         }
 
         p.error {
-            color: red;
+            color: ${theme.ERROR};
             padding-left: 16px;
             font-size: 14px;
             margin: 0;

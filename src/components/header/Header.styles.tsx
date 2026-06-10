@@ -16,7 +16,7 @@ export const HeaderContainer = styled.header`
   height: 80px;
   padding: 0 20px;
   background-color: ${theme.PRIMARY_1};
-  box-shadow: 0px 2px 6px 2px #00000040;
+  box-shadow: 0px 2px 6px 2px ${theme.SHADOW};
   max-width: 1920px;
   margin-left: auto;
   margin-right: auto;
@@ -124,7 +124,7 @@ export const PublicHeaderContainer = styled.header`
   height: 80px;
   padding: 0 20px;
   background-color: ${theme.PRIMARY_1};
-  box-shadow: 0px 2px 6px 2px #00000040;
+  box-shadow: 0px 2px 6px 2px ${theme.SHADOW};
   font-family: 'Afacad', serif;
 
   ${mobile(css`
@@ -169,7 +169,7 @@ export const PublicHeaderContainer = styled.header`
       &__login-btn {
         white-space: nowrap;
         background-color: ${theme.PRIMARY_2};
-        color: black;
+        color: ${theme.PRIMARY_1};
         font-size: 14px;
         font-weight: 700;
         margin-left: auto;

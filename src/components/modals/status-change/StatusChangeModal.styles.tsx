@@ -40,7 +40,7 @@ export const StatusChangeModalContainer = styled(CbdModal)`
     }
 
     p {
-      color: red;
+      color: ${theme.ERROR};
       padding-left: 16px;
       font-size: 14px;
       margin: 0;

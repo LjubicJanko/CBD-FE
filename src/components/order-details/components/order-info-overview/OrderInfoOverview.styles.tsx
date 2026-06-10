@@ -14,7 +14,7 @@ export const MobileContainer = styled.div`
     flex-direction: column;
     gap: 2px;
     padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid ${theme.BORDER};
 
     &:last-child {
       border-bottom: none;

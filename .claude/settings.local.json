@@ -3,7 +3,10 @@
     "allow": [
       "Bash(npm run *)",
       "Bash(git rm *)",
-      "Bash(gh pr *)"
+      "Bash(gh pr *)",
+      "Bash(grep -vE \"src/styles/theme.ts|white-space|^\\\\s*//|/\\\\*\")",
+      "Bash(Out-String)",
+      "PowerShell(npm run build)"
     ]
   }
 }

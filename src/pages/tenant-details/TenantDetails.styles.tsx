@@ -38,7 +38,7 @@ export const TenantDetailsContainer = styled.div`
 
             &:hover {
                 color: ${theme.SECONDARY_1};
-                background-color: rgba(255, 255, 255, 0.04);
+                background-color: ${theme.SURFACE_1};
             }
         }
 
@@ -47,8 +47,8 @@ export const TenantDetailsContainer = styled.div`
             flex-direction: column;
             gap: 16px;
             padding: 24px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: ${theme.SURFACE_2};
+            border: 1px solid ${theme.BORDER};
             border-radius: 12px;
             max-width: 560px;
         }

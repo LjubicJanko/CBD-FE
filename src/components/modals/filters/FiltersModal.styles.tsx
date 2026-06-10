@@ -152,6 +152,6 @@ export const FiltersModalContainer = styled(CbdModal)`
   }
 
   .MuiMenuItem-root:hover {
-    background-color: #3a3a3a;
+    background-color: ${theme.SURFACE_SOLID};
   }
 `;

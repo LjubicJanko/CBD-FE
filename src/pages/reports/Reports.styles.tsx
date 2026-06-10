@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import { mobile, belowTablet, tablet } from '../../util/breakpoints';
 
 export const ReportsContainer = styled.div`
@@ -42,15 +42,15 @@ export const ReportsContainer = styled.div`
 
         .MuiOutlinedInput-root {
             font-size: 14px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: ${theme.SURFACE_2};
             border-radius: 10px;
 
             .MuiOutlinedInput-notchedOutline {
-                border-color: rgba(255, 255, 255, 0.12) !important;
+                border-color: ${theme.BORDER} !important;
             }
 
             &:hover .MuiOutlinedInput-notchedOutline {
-                border-color: ${theme.PRIMARY_2}80 !important;
+                border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
             }
 
             &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -119,9 +119,9 @@ export const StatsGrid = styled.div`
 `;
 
 export const StatCard = styled.div<{ $accent?: boolean }>`
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: ${theme.SURFACE_2};
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid ${theme.BORDER};
     padding: 20px 24px;
     display: flex;
     flex-direction: column;
@@ -129,15 +129,15 @@ export const StatCard = styled.div<{ $accent?: boolean }>`
     transition: border-color 0.2s, background-color 0.2s;
 
     &:hover {
-        border-color: ${theme.PRIMARY_2}40;
-        background-color: rgba(255, 255, 255, 0.07);
+        border-color: ${withAlpha(theme.PRIMARY_2, 0.25)};
+        background-color: ${theme.SURFACE_2};
     }
 
     ${({ $accent }) =>
         $accent &&
         css`
-            border-color: ${theme.PRIMARY_2}60;
-            background-color: rgba(212, 255, 0, 0.04);
+            border-color: ${withAlpha(theme.PRIMARY_2, 0.38)};
+            background-color: ${theme.ACCENT_SUBTLE};
         `}
 
     .stat-card__label {
@@ -165,9 +165,9 @@ export const StatCard = styled.div<{ $accent?: boolean }>`
 `;
 
 export const ChartCard = styled.div`
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: ${theme.SURFACE_2};
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid ${theme.BORDER};
     padding: 24px;
     display: flex;
     flex-direction: column;

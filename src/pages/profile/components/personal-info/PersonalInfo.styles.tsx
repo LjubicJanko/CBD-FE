@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../../../styles/theme';
+import theme, { withAlpha } from '../../../../styles/theme';
 import { mobile, tablet } from '../../../../util/breakpoints';
 
 export const PersonalInfoContainer = styled.div`
@@ -7,8 +7,8 @@ export const PersonalInfoContainer = styled.div`
   max-width: 500px;
   padding: 32px;
   border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: ${theme.SURFACE_2};
+  border: 1px solid ${theme.BORDER};
 
   ${tablet(css`
     max-width: 100%;
@@ -45,14 +45,14 @@ export const PersonalInfoContainer = styled.div`
         &--newPassword {
           margin-left: 0;
           border-radius: 10px;
-          background-color: rgba(255, 255, 255, 0.05);
+          background-color: ${theme.SURFACE_2};
 
           .MuiOutlinedInput-notchedOutline {
-            border-color: rgba(255, 255, 255, 0.2) !important;
+            border-color: ${theme.BORDER_STRONG} !important;
           }
 
           &:hover .MuiOutlinedInput-notchedOutline {
-            border-color: ${theme.PRIMARY_2}80 !important;
+            border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
           }
 
           &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -81,7 +81,7 @@ export const PersonalInfoContainer = styled.div`
         font-size: 14px;
 
         &:hover {
-          background-color: ${theme.PRIMARY_2}D9;
+          background-color: ${withAlpha(theme.PRIMARY_2, 0.85)};
         }
 
         &--disabled {

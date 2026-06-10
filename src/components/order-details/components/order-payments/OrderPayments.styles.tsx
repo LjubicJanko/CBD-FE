@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../../../styles/theme';
+import theme, { withAlpha } from '../../../../styles/theme';
 import { mobile, tablet } from '../../../../util/breakpoints';
 
 export const OrderPaymentsContainer = styled.div`
@@ -26,7 +26,7 @@ export const OrderPaymentsContainer = styled.div`
 
     &__row {
       &:hover {
-        background-color: ${theme.SECONDARY_1}1A;
+        background-color: ${withAlpha(theme.SECONDARY_1, 0.1)};
       }
     }
 
@@ -95,7 +95,7 @@ export const OrderPaymentsContainer = styled.div`
       display: flex;
       flex-direction: column;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid ${theme.BORDER};
 
       td {
         display: flex;

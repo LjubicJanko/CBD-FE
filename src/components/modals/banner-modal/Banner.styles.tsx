@@ -34,10 +34,10 @@ export const BannerContainer = styled(CbdModal)`
 
                 .MuiOutlinedInput-root {
                     border-radius: 10px;
-                    background-color: rgba(255, 255, 255, 0.05);
+                    background-color: ${theme.SURFACE_2};
 
                     .MuiOutlinedInput-notchedOutline {
-                        border-color: rgba(255, 255, 255, 0.2) !important;
+                        border-color: ${theme.BORDER_STRONG} !important;
                     }
 
                     &:hover .MuiOutlinedInput-notchedOutline {

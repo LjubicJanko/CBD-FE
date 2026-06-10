@@ -127,7 +127,7 @@ export const CombineModalContainer = styled(CbdModal)`
                 justify-content: space-between;
                 align-items: center;
                 padding: 6px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                border-bottom: 1px solid ${theme.BORDER};
 
                 &:last-child {
                     border-bottom: none;

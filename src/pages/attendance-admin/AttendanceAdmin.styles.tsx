@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import { mobile } from '../../util/breakpoints';
 
 export const Container = styled.div`
@@ -37,8 +37,8 @@ export const Container = styled.div`
 
   /* ---- Filter panel ---------------------------------------------------- */
   .attendance-admin__panel {
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: ${theme.SURFACE_1};
+    border: 1px solid ${theme.BORDER};
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 24px;
@@ -46,15 +46,15 @@ export const Container = styled.div`
     /* Inputs (day picker + selects) styled to match the reports page. */
     .MuiOutlinedInput-root {
       font-size: 14px;
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: ${theme.SURFACE_2};
       border-radius: 10px;
 
       .MuiOutlinedInput-notchedOutline {
-        border-color: rgba(255, 255, 255, 0.12) !important;
+        border-color: ${theme.BORDER} !important;
       }
 
       &:hover .MuiOutlinedInput-notchedOutline {
-        border-color: ${(props) => props.theme.PRIMARY_2}80 !important;
+        border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
       }
 
       &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -99,13 +99,13 @@ export const Container = styled.div`
 
   .attendance-admin__day-step {
     color: ${(props) => props.theme.SECONDARY_1};
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid ${theme.BORDER};
     border-radius: 8px;
 
     &:hover {
       color: ${(props) => props.theme.PRIMARY_2};
       border-color: ${(props) => props.theme.PRIMARY_2};
-      background-color: rgba(212, 255, 0, 0.08);
+      background-color: ${theme.ACCENT_SOFT};
     }
 
     &.Mui-disabled {
@@ -152,7 +152,7 @@ export const Container = styled.div`
     align-items: center;
     margin-top: 20px;
     padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid ${theme.BORDER};
   }
 
   .attendance-admin__filters-actions-spacer {
@@ -190,19 +190,19 @@ export const Container = styled.div`
 
     &:hover {
       border-color: ${(props) => props.theme.PRIMARY_2};
-      background-color: rgba(212, 255, 0, 0.1);
+      background-color: ${theme.ACCENT_SOFT};
     }
   }
 
   .attendance-admin__refresh {
     color: ${(props) => props.theme.SECONDARY_1};
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid ${theme.BORDER};
     border-radius: 8px;
 
     &:hover {
       color: ${(props) => props.theme.PRIMARY_2};
       border-color: ${(props) => props.theme.PRIMARY_2};
-      background-color: rgba(212, 255, 0, 0.08);
+      background-color: ${theme.ACCENT_SOFT};
     }
 
     &.Mui-disabled {
@@ -224,8 +224,8 @@ export const Container = styled.div`
 
   /* ---- Table ---------------------------------------------------------- */
   .attendance-admin__table-wrapper {
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: ${theme.SURFACE_1};
+    border: 1px solid ${theme.BORDER};
     border-radius: 16px;
     overflow: hidden;
 
@@ -242,7 +242,7 @@ export const Container = styled.div`
 
     .MuiTableCell-root {
       color: ${(props) => props.theme.SECONDARY_1};
-      border-color: rgba(255, 255, 255, 0.08);
+      border-color: ${theme.BORDER};
       font-size: 14px;
       padding: 14px 20px;
     }
@@ -253,15 +253,15 @@ export const Container = styled.div`
       font-size: 12px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      background-color: rgba(255, 255, 255, 0.03);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background-color: ${theme.SURFACE_1};
+      border-bottom: 1px solid ${theme.BORDER};
     }
 
     .MuiTableBody-root .MuiTableRow-root {
       transition: background-color 0.15s ease-in-out;
 
       &:hover {
-        background-color: rgba(212, 255, 0, 0.04);
+        background-color: ${theme.ACCENT_SUBTLE};
       }
 
       &:last-child .MuiTableCell-root {
@@ -286,14 +286,14 @@ export const Container = styled.div`
       }
 
       .MuiTableBody-root .MuiTableRow-root {
-        background-color: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background-color: ${theme.SURFACE_1};
+        border: 1px solid ${theme.BORDER};
         border-radius: 10px;
         padding: 8px 16px;
         margin-bottom: 12px;
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.04);
+          background-color: ${theme.SURFACE_1};
         }
       }
 
@@ -304,7 +304,7 @@ export const Container = styled.div`
         gap: 12px;
         padding: 10px 0;
         text-align: right;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom: 1px solid ${theme.SURFACE_2};
 
         &:last-child {
           border-bottom: none;
@@ -356,7 +356,7 @@ export const Container = styled.div`
 
     &:hover {
       color: ${(props) => props.theme.PRIMARY_2};
-      background-color: rgba(212, 255, 0, 0.08);
+      background-color: ${theme.ACCENT_SOFT};
     }
   }
 
@@ -377,19 +377,19 @@ export const Container = styled.div`
     white-space: nowrap;
 
     &--open {
-      background-color: rgba(212, 255, 0, 0.18);
+      background-color: ${theme.ACCENT_SOFT};
       color: ${(props) => props.theme.PRIMARY_2};
       border: 1px solid ${(props) => props.theme.PRIMARY_2};
     }
 
     &--auto {
-      background-color: rgba(255, 165, 0, 0.18);
-      color: #ffa500;
-      border: 1px solid #ffa500;
+      background-color: ${theme.WARNING_SOFT};
+      color: ${theme.WARNING};
+      border: 1px solid ${theme.WARNING};
     }
 
     &--closed {
-      background-color: rgba(255, 255, 255, 0.06);
+      background-color: ${theme.SURFACE_2};
       color: ${(props) => props.theme.SECONDARY_2};
       border: 1px solid ${(props) => props.theme.SECONDARY_3};
     }

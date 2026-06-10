@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import { tablet } from '../../util/breakpoints';
 
 export const AttendanceHubContainer = styled.div`
@@ -17,7 +17,7 @@ export const AttendanceHubContainer = styled.div`
         }
 
         &__tabs-box {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid ${theme.BORDER};
 
             .MuiTabs-indicator {
                 background-color: ${theme.PRIMARY_2};
@@ -47,11 +47,11 @@ export const AttendanceHubContainer = styled.div`
             }
 
             .MuiOutlinedInput-notchedOutline {
-                border-color: rgba(255, 255, 255, 0.2);
+                border-color: ${theme.BORDER_STRONG};
             }
 
             &:hover .MuiOutlinedInput-notchedOutline {
-                border-color: ${theme.PRIMARY_2}80;
+                border-color: ${withAlpha(theme.PRIMARY_2, 0.5)};
             }
 
             &.Mui-focused .MuiOutlinedInput-notchedOutline {

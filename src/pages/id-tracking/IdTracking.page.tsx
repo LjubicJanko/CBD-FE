@@ -29,6 +29,7 @@ import { statuses, trackingUrl } from '../../util/util';
 import { isReservedSlug } from '../../util/reservedSlugs';
 import { Feature } from '../../util/features';
 import * as Styled from './IdTracking.styles';
+import theme from '../../styles/theme';
 import PageBanner from '../../components/page-banner/PageBanner.component';
 import ShareIcon from '@mui/icons-material/Share';
 
@@ -325,7 +326,7 @@ const IdTrackingPage = () => {
                                 {t('edit-extension')}
                             </p>
                             <IconButton onClick={() => { formik.resetForm(); setIsEditing(false); }}>
-                                <CloseIcon sx={{ color: '#fff' }} />
+                                <CloseIcon sx={{ color: theme.SECONDARY_1 }} />
                             </IconButton>
                         </div>
 

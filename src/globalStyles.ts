@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components';
 import { mobile } from './util/breakpoints';
+import { withAlpha } from './styles/theme';
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -26,7 +27,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .MuiRating-root .MuiRating-iconEmpty .MuiSvgIcon-root {
-    color: rgba(255, 255, 255, 0.2) !important;
+    color: ${(props) => withAlpha(props.theme.SECONDARY_1, 0.2)} !important;
   }
 
   *::-webkit-scrollbar {
@@ -172,7 +173,7 @@ export const GlobalStyle = createGlobalStyle`
     .MuiPaper-root {
       background-color: ${(props) => props.theme.PRIMARY_1};
       color: ${(props) => props.theme.SECONDARY_1};
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid ${(props) => props.theme.BORDER};
       border-radius: 12px;
     }
 
@@ -192,7 +193,7 @@ export const GlobalStyle = createGlobalStyle`
       color: ${(props) => props.theme.SECONDARY_1};
 
       &:hover {
-        background-color: rgba(212, 255, 0, 0.15);
+        background-color: ${(props) => props.theme.ACCENT_SOFT};
       }
 
       &.Mui-selected {
@@ -211,7 +212,7 @@ export const GlobalStyle = createGlobalStyle`
       color: ${(props) => props.theme.SECONDARY_1};
 
       &:hover {
-        background-color: rgba(212, 255, 0, 0.15);
+        background-color: ${(props) => props.theme.ACCENT_SOFT};
       }
 
       &.Mui-selected {
@@ -284,7 +285,7 @@ export const GlobalStyle = createGlobalStyle`
     color: ${(props) => props.theme.SECONDARY_1};
 
     .MuiPickersToolbar-root {
-      background-color: rgba(212, 255, 0, 0.1);
+      background-color: ${(props) => props.theme.ACCENT_SOFT};
 
       .MuiTypography-root {
         color: ${(props) => props.theme.SECONDARY_1};
@@ -311,7 +312,7 @@ export const GlobalStyle = createGlobalStyle`
       color: ${(props) => props.theme.SECONDARY_1};
 
       &:hover {
-        background-color: rgba(212, 255, 0, 0.15);
+        background-color: ${(props) => props.theme.ACCENT_SOFT};
       }
 
       &.Mui-selected {
@@ -330,7 +331,7 @@ export const GlobalStyle = createGlobalStyle`
       color: ${(props) => props.theme.SECONDARY_1};
 
       &:hover {
-        background-color: rgba(212, 255, 0, 0.15);
+        background-color: ${(props) => props.theme.ACCENT_SOFT};
       }
 
       &.Mui-selected {

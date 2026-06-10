@@ -8,7 +8,7 @@ export const PageBannerContainer = styled.div`
     position: relative;
     margin-bottom: 16px;
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px ${theme.SHADOW};
 
     h2 {
         margin: 0 0 8px 0;

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../../../styles/theme';
+import theme, { withAlpha } from '../../../../styles/theme';
 import { mobile, tablet } from '../../../../util/breakpoints';
 
 export const ShareLinkContainer = styled.div`
@@ -8,8 +8,8 @@ export const ShareLinkContainer = styled.div`
     gap: 24px;
     padding: 32px;
     border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: ${theme.SURFACE_2};
+    border: 1px solid ${theme.BORDER};
     max-width: 640px;
 
     ${tablet(css`
@@ -46,10 +46,10 @@ export const ShareLinkContainer = styled.div`
 
             .MuiOutlinedInput-root {
                 border-radius: 10px;
-                background-color: rgba(255, 255, 255, 0.05);
+                background-color: ${theme.SURFACE_2};
 
                 .MuiOutlinedInput-notchedOutline {
-                    border-color: rgba(255, 255, 255, 0.2) !important;
+                    border-color: ${theme.BORDER_STRONG} !important;
                 }
 
                 input {
@@ -62,14 +62,14 @@ export const ShareLinkContainer = styled.div`
 
             .MuiIconButton-root {
                 border-radius: 10px;
-                border: 1px solid ${theme.PRIMARY_2}66;
-                background-color: rgba(212, 255, 0, 0.04);
+                border: 1px solid ${withAlpha(theme.PRIMARY_2, 0.4)};
+                background-color: ${theme.ACCENT_SUBTLE};
                 color: ${theme.PRIMARY_2};
                 padding: 0 16px;
 
                 &:hover {
                     border-color: ${theme.PRIMARY_2};
-                    background-color: rgba(212, 255, 0, 0.12);
+                    background-color: ${theme.ACCENT_SOFT};
                 }
             }
         }
@@ -78,7 +78,7 @@ export const ShareLinkContainer = styled.div`
             display: flex;
             justify-content: center;
             padding: 16px;
-            background-color: #ffffff;
+            background-color: ${theme.SECONDARY_1};
             border-radius: 12px;
             width: fit-content;
             align-self: center;
@@ -88,15 +88,15 @@ export const ShareLinkContainer = styled.div`
             align-self: center;
             padding: 10px 24px;
             border-radius: 10px;
-            border-color: ${theme.PRIMARY_2}66;
+            border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
             color: ${theme.PRIMARY_2};
-            background-color: rgba(212, 255, 0, 0.04);
+            background-color: ${theme.ACCENT_SUBTLE};
             text-transform: none;
             font-weight: 600;
 
             &:hover {
                 border-color: ${theme.PRIMARY_2};
-                background-color: rgba(212, 255, 0, 0.12);
+                background-color: ${theme.ACCENT_SOFT};
             }
         }
     }

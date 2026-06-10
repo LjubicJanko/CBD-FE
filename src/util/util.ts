@@ -1,4 +1,5 @@
 import { OrderStatus, PostServices } from '../types/Order';
+import theme from '../styles/theme';
 
 export const statuses: OrderStatus[] = [
   'DESIGN',
@@ -97,20 +98,20 @@ export enum privileges {
 export const textInputSX = {
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: 'white', // Default border color
+      borderColor: theme.SECONDARY_1, // Default border color
     },
     '&:hover fieldset': {
-      borderColor: 'white', // Border color on hover
+      borderColor: theme.SECONDARY_1, // Border color on hover
     },
     '&.Mui-focused fieldset': {
-      borderColor: 'white', // Border color when focused
+      borderColor: theme.SECONDARY_1, // Border color when focused
     },
   },
   '& .MuiInputLabel-root': {
-    color: 'white', // Optional: Make the label white
+    color: theme.SECONDARY_1, // Optional: Make the label white
   },
   '& .MuiInputLabel-root.Mui-focused': {
-    color: 'white', // Label color when focused
+    color: theme.SECONDARY_1, // Label color when focused
   },
 };
 

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import CbdModal from '../../components/cbd-modal/CbdModal.component';
 import { mobile, tablet } from '../../util/breakpoints';
 
@@ -71,7 +71,7 @@ export const Container = styled.div`
             td {
                 padding: 12px 16px;
                 text-align: left;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                border-bottom: 1px solid ${theme.BORDER};
                 vertical-align: middle;
             }
 
@@ -96,7 +96,7 @@ export const Container = styled.div`
             }
 
             tr:hover td {
-                background-color: rgba(255, 255, 255, 0.03);
+                background-color: ${theme.SURFACE_1};
             }
 
             ${mobile(css`
@@ -114,8 +114,8 @@ export const Container = styled.div`
                 }
 
                 tr {
-                    background-color: rgba(255, 255, 255, 0.04);
-                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    background-color: ${theme.SURFACE_1};
+                    border: 1px solid ${theme.BORDER};
                     border-radius: 10px;
                     padding: 12px 16px;
                     margin-bottom: 12px;
@@ -131,7 +131,7 @@ export const Container = styled.div`
                     align-items: center;
                     gap: 12px;
                     padding: 8px 0;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                    border-bottom: 1px solid ${theme.SURFACE_2};
 
                     &:last-child {
                         border-bottom: none;
@@ -163,13 +163,13 @@ export const Container = styled.div`
             letter-spacing: 0.5px;
 
             &--active {
-                background-color: rgba(212, 255, 0, 0.15);
+                background-color: ${theme.ACCENT_SOFT};
                 color: ${theme.PRIMARY_2};
-                border: 1px solid ${theme.PRIMARY_2}66;
+                border: 1px solid ${withAlpha(theme.PRIMARY_2, 0.4)};
             }
 
             &--inactive {
-                background-color: rgba(255, 255, 255, 0.08);
+                background-color: ${theme.SURFACE_3};
                 color: ${theme.SECONDARY_2};
                 border: 1px solid ${theme.SECONDARY_3};
             }
@@ -185,13 +185,13 @@ export const Container = styled.div`
 
                 &:hover {
                     color: ${theme.PRIMARY_2};
-                    background-color: rgba(212, 255, 0, 0.08);
+                    background-color: ${theme.ACCENT_SOFT};
                 }
             }
 
             .locations-page__delete:hover {
-                color: #ff8a8a;
-                background-color: rgba(255, 107, 107, 0.08);
+                color: ${theme.ERROR_TEXT};
+                background-color: ${theme.ERROR_SOFT};
             }
         }
     }
@@ -216,14 +216,14 @@ export const LocationsModal = styled(CbdModal)`
 
             .MuiOutlinedInput-root {
                 border-radius: 10px;
-                background-color: rgba(255, 255, 255, 0.05);
+                background-color: ${theme.SURFACE_2};
 
                 .MuiOutlinedInput-notchedOutline {
-                    border-color: rgba(255, 255, 255, 0.2) !important;
+                    border-color: ${theme.BORDER_STRONG} !important;
                 }
 
                 &:hover .MuiOutlinedInput-notchedOutline {
-                    border-color: ${theme.PRIMARY_2}80 !important;
+                    border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
                 }
 
                 &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -297,13 +297,13 @@ export const LocationsModal = styled(CbdModal)`
             }
 
             .MuiButton-outlined {
-                border-color: ${theme.PRIMARY_2}66;
+                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
                 color: ${theme.PRIMARY_2};
-                background-color: rgba(212, 255, 0, 0.04);
+                background-color: ${theme.ACCENT_SUBTLE};
 
                 &:hover {
                     border-color: ${theme.PRIMARY_2};
-                    background-color: rgba(212, 255, 0, 0.12);
+                    background-color: ${theme.ACCENT_SOFT};
                 }
             }
 
@@ -312,7 +312,7 @@ export const LocationsModal = styled(CbdModal)`
                 color: ${theme.PRIMARY_1};
 
                 &:hover {
-                    background-color: ${theme.PRIMARY_2}D9;
+                    background-color: ${withAlpha(theme.PRIMARY_2, 0.85)};
                 }
 
                 &:disabled {

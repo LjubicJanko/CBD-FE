@@ -13,10 +13,10 @@ export const TenantDetailsForm = styled.div`
 
             .MuiOutlinedInput-root {
                 border-radius: 10px;
-                background-color: rgba(255, 255, 255, 0.05);
+                background-color: ${theme.SURFACE_2};
 
                 .MuiOutlinedInput-notchedOutline {
-                    border-color: rgba(255, 255, 255, 0.2) !important;
+                    border-color: ${theme.BORDER_STRONG} !important;
                 }
 
                 &:hover .MuiOutlinedInput-notchedOutline {
@@ -33,14 +33,14 @@ export const TenantDetailsForm = styled.div`
                 }
 
                 &.Mui-disabled {
-                    background-color: rgba(255, 255, 255, 0.02);
+                    background-color: ${theme.SURFACE_1};
 
                     input {
                         -webkit-text-fill-color: ${theme.SECONDARY_2};
                     }
 
                     .MuiOutlinedInput-notchedOutline {
-                        border-color: rgba(255, 255, 255, 0.12) !important;
+                        border-color: ${theme.BORDER} !important;
                     }
                 }
             }
@@ -121,11 +121,11 @@ export const TenantDetailsForm = styled.div`
             .MuiButton-outlined {
                 border-color: ${theme.PRIMARY_2}66;
                 color: ${theme.PRIMARY_2};
-                background-color: rgba(212, 255, 0, 0.04);
+                background-color: ${theme.ACCENT_SUBTLE};
 
                 &:hover {
                     border-color: ${theme.PRIMARY_2};
-                    background-color: rgba(212, 255, 0, 0.12);
+                    background-color: ${theme.ACCENT_SOFT};
                 }
             }
         }
@@ -135,7 +135,7 @@ export const TenantDetailsForm = styled.div`
             height: 48px;
             object-fit: contain;
             border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.08);
+            background-color: ${theme.SURFACE_3};
             padding: 4px;
             display: block;
         }
@@ -147,7 +147,7 @@ export const TenantDetailsForm = styled.div`
             width: 48px;
             height: 48px;
             color: ${theme.SECONDARY_2};
-            background-color: rgba(255, 255, 255, 0.04);
+            background-color: ${theme.SURFACE_1};
             border-radius: 6px;
             font-size: 16px;
         }

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import { sMax } from '../../util/breakpoints';
+import theme from '../../styles/theme';
 
 const ShareButton = () => {
     const { t } = useTranslation();
@@ -20,7 +21,7 @@ const ShareButton = () => {
 
     return (
         <IconButton onClick={handleShare} edge="end" size="small">
-            <ShareIcon sx={{ color: '#D4FF00', fontSize: 20 }} />
+            <ShareIcon sx={{ color: theme.PRIMARY_2, fontSize: 20 }} />
         </IconButton>
     );
 };

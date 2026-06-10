@@ -24,7 +24,7 @@ export const DashboardContainer = styled.div`
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: ${theme.OVERLAY};
       display: flex;
       justify-content: center;
       align-items: center;
@@ -70,7 +70,7 @@ export const DashboardContainer = styled.div`
       border: 2px solid ${theme.PRIMARY_2};
       width: 100%;
 
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 8px 0 ${theme.SHADOW};
       padding: 16px;
       padding-bottom: 16px;
       height: fit-content;

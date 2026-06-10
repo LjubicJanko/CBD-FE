@@ -1,5 +1,6 @@
 import { Button, IconButton } from '@mui/material';
 import * as Styled from './ShippedTooltip.styles';
+import theme from '../../../../styles/theme';
 import { Order, OrderStatusEnum, OrderStatusHistory, PostServices } from '../../../../types/Order';
 import { useTranslation } from 'react-i18next';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -85,7 +86,7 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
     return (
         <>
             <IconButton onClick={() => setIsOpen(true)} size="small">
-                <LocalShippingIcon sx={{ color: '#D4FF00', fontSize: 20 }} />
+                <LocalShippingIcon sx={{ color: theme.PRIMARY_2, fontSize: 20 }} />
             </IconButton>
 
             <Styled.ShipmentModalContainer
@@ -111,7 +112,7 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
                                 {row.postalCode}
                                 <IconButton onClick={copyCode} size="small">
                                     <ContentCopyIcon
-                                        sx={{ fontSize: 16, color: '#fff' }}
+                                        sx={{ fontSize: 16, color: theme.SECONDARY_1 }}
                                     />
                                 </IconButton>
                             </span>
@@ -124,10 +125,10 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
                                     startIcon={<EditIcon />}
                                     onClick={() => setIsEditing(true)}
                                     sx={{
-                                        backgroundColor: '#D4FF00',
-                                        color: '#2F2F2F',
+                                        backgroundColor: theme.PRIMARY_2,
+                                        color: theme.PRIMARY_1,
                                         '&:hover': {
-                                            backgroundColor: '#c2eb00',
+                                            backgroundColor: theme.PRIMARY_2_HOVER,
                                         },
                                     }}
                                 >

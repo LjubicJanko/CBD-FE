@@ -8,7 +8,7 @@ export const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background: ${theme.OVERLAY}; /* Semi-transparent background */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,12 +18,12 @@ export const ModalOverlay = styled.div`
 // Styled component for modal content
 export const ModalContent = styled.div`
   background-color: ${theme.PRIMARY_1};
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid ${theme.BORDER};
   padding: 24px;
   border-radius: 12px;
   width: 400px;
   max-width: 100%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px ${theme.SHADOW_STRONG};
   position: relative;
 `;
 

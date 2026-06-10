@@ -18,7 +18,6 @@ export const CreateOrderPageContainer = styled.div`
 
   .title {
     font-size: 32px;
-    /* color: ${theme.PRIMARY_1}; */
     font-weight: 400;
   }
 
@@ -27,9 +26,8 @@ export const CreateOrderPageContainer = styled.div`
     flex-direction: column;
     gap: 16px;
     padding: 48px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px ${theme.SHADOW};
     width: 50%;
-    /* background-color:  */
     border: 2px solid ${theme.SECONDARY_2};
     color: ${theme.SECONDARY_1};
     text-align: center;

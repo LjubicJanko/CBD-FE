@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 export const NoContentContainer = styled.div`
   display: flex;
@@ -16,6 +17,6 @@ export const NoContentContainer = styled.div`
 export const ErrorMessage = styled.div`
   margin-top: 10px;
   font-size: 18px;
-  color: #f44336;
+  color: ${theme.ERROR};
   font-weight: bold;
 `;

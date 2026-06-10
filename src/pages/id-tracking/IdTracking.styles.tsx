@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { mobile, tablet } from '../../util/breakpoints';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 
 export const LoaderContainer = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const tenantBrand = css`
     align-items: center;
     gap: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid ${theme.PRIMARY_2}33;
+    border-bottom: 1px solid ${withAlpha(theme.PRIMARY_2, 0.2)};
 
     ${tablet(css`
       gap: 14px;
@@ -108,19 +108,19 @@ export const IdTrackingContainer = styled.div`
 
       .MuiInputBase-root {
         color: ${theme.SECONDARY_1};
-        border-color: white;
+        border-color: ${theme.SECONDARY_1};
         height: 41px;
       }
 
       .order-id-input {
-        color: white;
+        color: ${theme.SECONDARY_1};
         width: 100%;
       }
 
       .order-id-search-btn {
         width: 400px;
         background-color: ${theme.PRIMARY_2};
-        color: #2d2d2d;
+        color: ${theme.PRIMARY_1};
         font-size: 14px;
         ${mobile(css`
           width: 100%;
@@ -129,7 +129,7 @@ export const IdTrackingContainer = styled.div`
       }
       .order-id-search-btn:disabled {
         background-color: ${theme.SECONDARY_2};
-        color: rgb(100, 100, 100);
+        color: ${theme.SECONDARY_3};
         opacity: 0.6;
       }
     }
@@ -200,7 +200,7 @@ export const IdTrackingDetailsContainer = styled.div`
       }
 
       &--container {
-        background-color: rgba(255, 255, 255, 0.12);
+        background-color: ${theme.SURFACE_4};
         padding: 12px;
         border-radius: 8px;
 
@@ -215,7 +215,7 @@ export const IdTrackingDetailsContainer = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #d4ff004d; //30% of #D4FF00
+            background: ${withAlpha(theme.PRIMARY_2, 0.3)};
             height: 40px;
             width: 40px;
 
@@ -232,7 +232,7 @@ export const IdTrackingDetailsContainer = styled.div`
 
     &__status-info {
       width: 70%;
-      background-color: rgba(255, 255, 255, 0.12);
+      background-color: ${theme.SURFACE_4};
       margin-top: 10px;
       border-radius: 8px;
 
@@ -314,7 +314,7 @@ export const IdTrackingDetailsContainer = styled.div`
 
       &__container {
         border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.12);
+        background-color: ${theme.SURFACE_4};
         padding: 70px;
 
         display: grid;
@@ -385,7 +385,7 @@ export const IdTrackingDetailsContainer = styled.div`
       display: flex;
       flex-direction: column;
       gap: 24px;
-      background-color: rgba(255, 255, 255, 0.12);
+      background-color: ${theme.SURFACE_4};
       border-radius: 8px;
       padding: 32px;
       margin-bottom: 50px;
@@ -432,14 +432,14 @@ export const IdTrackingDetailsContainer = styled.div`
 
         .MuiOutlinedInput-root {
           border-radius: 10px;
-          background-color: rgba(255, 255, 255, 0.05);
+          background-color: ${theme.SURFACE_2};
 
           .MuiOutlinedInput-notchedOutline {
-            border-color: rgba(255, 255, 255, 0.2) !important;
+            border-color: ${theme.BORDER_STRONG} !important;
           }
 
           &:hover .MuiOutlinedInput-notchedOutline {
-            border-color: ${theme.PRIMARY_2}80 !important;
+            border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
           }
 
           &.Mui-focused .MuiOutlinedInput-notchedOutline {

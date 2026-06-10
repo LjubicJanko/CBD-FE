@@ -80,7 +80,7 @@ export const SectionContainer = styled.section`
         content: '';
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.65);
+        background: ${theme.OVERLAY};
         transition: opacity 0.3s ease;
         z-index: 1;
       }

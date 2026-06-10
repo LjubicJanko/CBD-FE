@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import { tablet } from '../../util/breakpoints';
 
 export const ProfilePageContainer = styled.div`
@@ -84,12 +84,12 @@ export const ProfilePageContainer = styled.div`
       }
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: ${theme.SURFACE_2};
         color: ${theme.SECONDARY_1};
       }
 
       &.selected {
-        background-color: rgba(212, 255, 0, 0.1);
+        background-color: ${theme.ACCENT_SOFT};
         color: ${theme.PRIMARY_2};
         font-weight: 700;
         border: none;
@@ -116,11 +116,11 @@ export const ProfilePageContainer = styled.div`
       }
 
       .MuiOutlinedInput-notchedOutline {
-        border-color: rgba(255, 255, 255, 0.2);
+        border-color: ${theme.BORDER_STRONG};
       }
 
       &:hover .MuiOutlinedInput-notchedOutline {
-        border-color: ${theme.PRIMARY_2}80;
+        border-color: ${withAlpha(theme.PRIMARY_2, 0.5)};
       }
 
       &.Mui-focused .MuiOutlinedInput-notchedOutline {

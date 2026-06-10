@@ -7,6 +7,7 @@ import {
   OrderStatusEnum,
 } from '../../types/Order';
 import * as Styled from './OrderCard.styles';
+import theme from '../../styles/theme';
 import { statusColors } from '../../util/util';
 import { useMemo } from 'react';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
@@ -47,7 +48,7 @@ const OrderCardComponent = ({
         <Styled.Title className="title">
           {order.extension && (
             <Tooltip title={t('extension')}>
-              <CallMergeIcon sx={{ color: '#D4FF00', fontSize: 20, marginRight: '4px', verticalAlign: 'text-bottom' }} />
+              <CallMergeIcon sx={{ color: theme.PRIMARY_2, fontSize: 20, marginRight: '4px', verticalAlign: 'text-bottom' }} />
             </Tooltip>
           )}
           {order.name}
@@ -68,7 +69,7 @@ const OrderCardComponent = ({
             <p>{order.plannedEndingDate ? dayjs(order.plannedEndingDate).format('DD.MM.YYYY') : t('not-set')}</p>
             {isInPast && (
               <Tooltip title={'Prekoračeno vreme završetka!'}>
-                <ReportProblemIcon style={{ color: '#D4FF00' }} />
+                <ReportProblemIcon style={{ color: theme.PRIMARY_2 }} />
               </Tooltip>
             )}
           </div>

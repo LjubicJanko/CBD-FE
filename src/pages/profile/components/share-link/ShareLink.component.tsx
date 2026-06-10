@@ -13,6 +13,7 @@ import AuthContext from '../../../../store/AuthProvider/Auth.context';
 import { platformService, publicTenantService } from '../../../../api';
 import localStorageService from '../../../../services/localStorage.service';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
+import theme from '../../../../styles/theme';
 import * as Styled from './ShareLink.styles';
 
 const ShareLink = () => {
@@ -126,8 +127,8 @@ const ShareLink = () => {
                     ref={qrCanvasRef}
                     value={url}
                     size={220}
-                    bgColor="#FFFFFF"
-                    fgColor="#000000"
+                    bgColor={theme.SECONDARY_1}
+                    fgColor={theme.PRIMARY_1}
                     level="M"
                     marginSize={2}
                 />

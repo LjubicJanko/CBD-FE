@@ -15,7 +15,7 @@ export const SearchBar = styled(Paper)`
   width: 100%;
 
   &:hover {
-    box-shadow: 0px 0px 10px #d0ff00;
+    box-shadow: 0px 0px 10px ${theme.PRIMARY_2};
   }
 `;
 

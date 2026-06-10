@@ -32,7 +32,7 @@ export const AttendanceContainer = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 12px ${(props) => props.theme.SHADOW};
   }
 
   .attendance-page__status-label {

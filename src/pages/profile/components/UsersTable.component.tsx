@@ -34,12 +34,12 @@ const UsersTable = ({ users }: UsersTableProps) => {
         <TableHead>
           <TableRow
             sx={{
-              backgroundColor: 'rgba(255,255,255,0.08)',
+              backgroundColor: theme.SURFACE_3,
               '& th, & td': {
                 color: theme.PRIMARY_2,
                 fontWeight: 700,
                 fontSize: 13,
-                borderBottom: `1px solid rgba(255,255,255,0.1)`,
+                borderBottom: `1px solid ${theme.BORDER}`,
               },
             }}
           >
@@ -54,10 +54,10 @@ const UsersTable = ({ users }: UsersTableProps) => {
             <TableRow
               key={index}
               sx={{
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' },
+                '&:hover': { backgroundColor: theme.SURFACE_2 },
                 '& td, & th': {
                   color: theme.SECONDARY_1,
-                  borderBottom: `1px solid rgba(255,255,255,0.06)`,
+                  borderBottom: `1px solid ${theme.SURFACE_2}`,
                 },
                 '&:last-child td, &:last-child th': { border: 0 },
               }}

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { mobile, tablet } from '../../util/breakpoints';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 
 export const OrderDetailsContainer = styled.div`
   position: relative;
@@ -127,7 +127,7 @@ export const OrderDetailsContainer = styled.div`
           display: flex;
           justify-content: center;
           align-items: center;
-          background: #d4ff004d; //30% of #D4FF00
+          background: ${withAlpha(theme.PRIMARY_2, 0.3)};
           height: 40px;
           width: 40px;
 
@@ -152,7 +152,7 @@ export const OrderDetailsContainer = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #d4ff004d; //30% of #D4FF00
+            background: ${withAlpha(theme.PRIMARY_2, 0.3)};
             height: 40px;
             width: 40px;
 
@@ -219,11 +219,11 @@ export const OrderDetailsContainer = styled.div`
 
   .execution-chip {
     width: fit-content;
-    background-color: #ffeb3b;
+    background-color: ${theme.WARNING};
 
     &--canceled {
-      background-color: #b71c1c;
-      color: white;
+      background-color: ${theme.ERROR};
+      color: ${theme.SECONDARY_1};
     }
 
     ${mobile(css`

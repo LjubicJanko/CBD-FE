@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../../styles/theme';
 
 // Styled components
 export const Container = styled.div`
@@ -7,12 +8,12 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh; /* Full viewport height */
-  background-color: #f8d7da; /* Light red background */
-  color: #721c24; /* Dark red text */
+  background-color: ${theme.PRIMARY_1};
+  color: ${theme.ERROR_TEXT};
   padding: 20px;
-  border: 1px solid #f5c6cb; /* Light red border */
+  border: 1px solid ${theme.ERROR};
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px ${theme.SHADOW};
 `;
 
 export const Heading = styled.h1`

@@ -11,7 +11,7 @@ export const OrderCardContainer = styled.div`
   gap: 8px;
   border-radius: 8px;
   background-color: ${theme.SECONDARY_3};
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  box-shadow: ${theme.SHADOW} 0px 4px 6px;
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
 
@@ -25,16 +25,16 @@ export const OrderCardContainer = styled.div`
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 6px 8px;
+    box-shadow: ${theme.SHADOW_STRONG} 0px 6px 8px;
   }
 
   &.order-card--paused {
-    background-color: rgba(255, 223, 0, 0.1);
+    background-color: ${theme.WARNING_SOFT};
   }
 
   &.order-card--selected {
     border: 2px solid ${theme.PRIMARY_2};
-    box-shadow: inset rgba(0, 0, 0, 0.1) 0px 4px 6px;
+    box-shadow: inset ${theme.SHADOW} 0px 4px 6px;
   }
 
   &.order-card--extension {
@@ -51,7 +51,7 @@ export const Header = styled.div`
 export const StatusChip = styled(Chip)<{ $backgroundColor: string }>`
   && {
     background-color: ${({ $backgroundColor }) => $backgroundColor};
-    color: white;
+    color: ${theme.SECONDARY_1};
     font-size: 0.85rem;
     font-weight: bold;
   }
@@ -113,8 +113,8 @@ export const PlannedDate = styled.p`
   border-radius: 4px;
 
   &.order-card__footer__info__planned-ending-date--in-past {
-    background-color: #e57373;
-    color: white;
+    background-color: ${theme.ERROR};
+    color: ${theme.SECONDARY_1};
   }
 
   &.order-card__footer__info__planned-ending-date--today {

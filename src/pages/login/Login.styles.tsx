@@ -79,7 +79,7 @@ export const LoginContainer = styled.div`
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: ${theme.OVERLAY};
       display: flex;
       justify-content: center;
       align-items: center;
@@ -125,7 +125,7 @@ export const LoginContainer = styled.div`
 
     .login-btn {
       background-color: ${theme.PRIMARY_2};
-      color: black;
+      color: ${theme.PRIMARY_1};
       width: 100%;
       max-width: 200px;
       align-self: center;

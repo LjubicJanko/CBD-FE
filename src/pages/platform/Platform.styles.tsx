@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import { mobile, tablet } from '../../util/breakpoints';
 
 export const PlatformContainer = styled.div`
@@ -44,8 +44,8 @@ export const PlatformContainer = styled.div`
             flex-direction: column;
             gap: 16px;
             padding: 24px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: ${theme.SURFACE_2};
+            border: 1px solid ${theme.BORDER};
             border-radius: 12px;
             min-width: 0;
 
@@ -72,14 +72,14 @@ export const PlatformContainer = styled.div`
 
             .MuiOutlinedInput-root {
                 border-radius: 10px;
-                background-color: rgba(255, 255, 255, 0.05);
+                background-color: ${theme.SURFACE_2};
 
                 .MuiOutlinedInput-notchedOutline {
-                    border-color: rgba(255, 255, 255, 0.2) !important;
+                    border-color: ${theme.BORDER_STRONG} !important;
                 }
 
                 &:hover .MuiOutlinedInput-notchedOutline {
-                    border-color: ${theme.PRIMARY_2}80 !important;
+                    border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
                 }
 
                 &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -122,7 +122,7 @@ export const PlatformContainer = styled.div`
             font-size: 14px;
 
             &:hover {
-                background-color: ${theme.PRIMARY_2}D9;
+                background-color: ${withAlpha(theme.PRIMARY_2, 0.85)};
             }
 
             &:disabled {
@@ -142,7 +142,7 @@ export const PlatformContainer = styled.div`
             td {
                 padding: 12px 16px;
                 text-align: left;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                border-bottom: 1px solid ${theme.BORDER};
                 vertical-align: middle;
             }
 
@@ -166,7 +166,7 @@ export const PlatformContainer = styled.div`
             }
 
             tr:hover td {
-                background-color: rgba(255, 255, 255, 0.03);
+                background-color: ${theme.SURFACE_1};
             }
 
             ${mobile(css`
@@ -184,8 +184,8 @@ export const PlatformContainer = styled.div`
                 }
 
                 tr {
-                    background-color: rgba(255, 255, 255, 0.04);
-                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    background-color: ${theme.SURFACE_1};
+                    border: 1px solid ${theme.BORDER};
                     border-radius: 10px;
                     padding: 12px 16px;
                     margin-bottom: 12px;
@@ -201,7 +201,7 @@ export const PlatformContainer = styled.div`
                     align-items: center;
                     gap: 12px;
                     padding: 8px 0;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                    border-bottom: 1px solid ${theme.SURFACE_2};
 
                     &:last-child {
                         border-bottom: none;
@@ -245,24 +245,24 @@ export const PlatformContainer = styled.div`
             }
 
             .MuiButton-outlined {
-                border-color: ${theme.PRIMARY_2}66;
+                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
                 color: ${theme.PRIMARY_2};
-                background-color: rgba(212, 255, 0, 0.04);
+                background-color: ${theme.ACCENT_SUBTLE};
 
                 &:hover {
                     border-color: ${theme.PRIMARY_2};
-                    background-color: rgba(212, 255, 0, 0.12);
+                    background-color: ${theme.ACCENT_SOFT};
                 }
             }
 
             .MuiButton-outlinedError {
-                border-color: #ff6b6b66;
-                color: #ff8a8a;
-                background-color: rgba(255, 107, 107, 0.04);
+                border-color: ${withAlpha(theme.ERROR, 0.4)};
+                color: ${theme.ERROR_TEXT};
+                background-color: ${withAlpha(theme.ERROR, 0.04)};
 
                 &:hover {
-                    border-color: #ff6b6b;
-                    background-color: rgba(255, 107, 107, 0.12);
+                    border-color: ${theme.ERROR};
+                    background-color: ${theme.ERROR_SOFT};
                 }
             }
         }
@@ -285,13 +285,13 @@ export const PlatformContainer = styled.div`
             }
 
             .MuiButton-outlined {
-                border-color: ${theme.PRIMARY_2}66;
+                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
                 color: ${theme.PRIMARY_2};
-                background-color: rgba(212, 255, 0, 0.04);
+                background-color: ${theme.ACCENT_SUBTLE};
 
                 &:hover {
                     border-color: ${theme.PRIMARY_2};
-                    background-color: rgba(212, 255, 0, 0.12);
+                    background-color: ${theme.ACCENT_SOFT};
                 }
             }
 
@@ -300,7 +300,7 @@ export const PlatformContainer = styled.div`
 
                 &:hover {
                     color: ${theme.SECONDARY_1};
-                    background-color: rgba(255, 255, 255, 0.04);
+                    background-color: ${theme.SURFACE_1};
                 }
             }
         }
@@ -315,7 +315,7 @@ export const PlatformContainer = styled.div`
             height: 40px;
             object-fit: contain;
             border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.08);
+            background-color: ${theme.SURFACE_3};
             padding: 4px;
             display: block;
         }
@@ -327,7 +327,7 @@ export const PlatformContainer = styled.div`
             width: 40px;
             height: 40px;
             color: ${theme.SECONDARY_2};
-            background-color: rgba(255, 255, 255, 0.04);
+            background-color: ${theme.SURFACE_1};
             border-radius: 6px;
             font-size: 16px;
         }
@@ -362,8 +362,8 @@ export const PlatformContainer = styled.div`
             margin-left: 8px;
             padding: 2px 8px;
             border-radius: 999px;
-            background-color: rgba(255, 107, 107, 0.15);
-            color: #ff8a8a;
+            background-color: ${theme.ERROR_SOFT};
+            color: ${theme.ERROR_TEXT};
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;

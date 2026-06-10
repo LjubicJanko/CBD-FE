@@ -5,8 +5,8 @@ import { mobile } from '../../util/breakpoints';
 export const BannerCardContainer = styled.div`
     padding: 16px;
     border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: ${theme.SURFACE_2};
+    border: 1px solid ${theme.BORDER};
     min-width: 280px;
     max-width: 300px;
     position: relative;

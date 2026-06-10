@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import * as Styled from './Reports.styles';
+import theme from '../../styles/theme';
 import { useIsCompanyAdmin } from '../../hooks/useRole';
 import reportsService from '../../api/services/reports';
 import { OrderReport, StatusDurationReport } from '../../types/Report';
@@ -65,21 +66,21 @@ const CustomTooltip = ({
     return (
         <div
             style={{
-                background: '#3a3a3a',
-                border: '1px solid #D4FF00',
+                background: theme.SURFACE_SOLID,
+                border: `1px solid ${theme.PRIMARY_2}`,
                 borderRadius: 10,
                 padding: '10px 14px',
-                color: '#fff',
+                color: theme.SECONDARY_1,
                 fontSize: 13,
                 lineHeight: 1.6,
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+                boxShadow: `0 8px 24px ${theme.SHADOW_STRONG}`,
             }}
         >
             <div style={{ fontWeight: 700, marginBottom: 2 }}>{t(status)}</div>
-            <div style={{ color: '#D4FF00' }}>
+            <div style={{ color: theme.PRIMARY_2 }}>
                 {clampPercentage(percentage, 1)}%
             </div>
-            <div style={{ color: '#979797' }}>
+            <div style={{ color: theme.SECONDARY_2 }}>
                 Avg: {formatDuration(averageHours)}
             </div>
         </div>
@@ -113,7 +114,7 @@ const renderCustomLabel = ((props: {
         <text
             x={x}
             y={y}
-            fill="#fff"
+            fill={theme.SECONDARY_1}
             textAnchor="middle"
             dominantBaseline="central"
             fontSize={12}
@@ -356,7 +357,7 @@ const ReportsPage = () => {
                                                             fill={
                                                                 STATUS_COLOR_MAP[
                                                                     entry.status
-                                                                ] || '#888'
+                                                                ] || theme.SECONDARY_2
                                                             }
                                                         />
                                                     )
@@ -372,7 +373,7 @@ const ReportsPage = () => {
                                                 formatter={(value: string) => (
                                                     <span
                                                         style={{
-                                                            color: '#fff',
+                                                            color: theme.SECONDARY_1,
                                                             fontSize: 13,
                                                         }}
                                                     >

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { withAlpha } from '../../styles/theme';
 import { mobile, tablet } from '../../util/breakpoints';
 
 export const SelectTenantContainer = styled.div`
@@ -49,8 +49,8 @@ export const SelectTenantContainer = styled.div`
             gap: 16px;
             padding: 32px 16px;
             border-radius: 14px;
-            background-color: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: ${theme.SURFACE_1};
+            border: 1px solid ${theme.BORDER};
             cursor: pointer;
             transition: transform 0.15s ease, background-color 0.15s ease,
                 border-color 0.15s ease;
@@ -59,16 +59,16 @@ export const SelectTenantContainer = styled.div`
 
             &:hover {
                 transform: translateY(-2px);
-                background-color: rgba(255, 255, 255, 0.06);
-                border-color: ${theme.PRIMARY_2}66;
+                background-color: ${theme.SURFACE_2};
+                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
             }
 
             &--platform {
-                background-color: rgba(212, 255, 0, 0.05);
-                border: 1px dashed ${theme.PRIMARY_2}55;
+                background-color: ${theme.ACCENT_SUBTLE};
+                border: 1px dashed ${withAlpha(theme.PRIMARY_2, 0.33)};
 
                 &:hover {
-                    background-color: rgba(212, 255, 0, 0.1);
+                    background-color: ${theme.ACCENT_SOFT};
                     border-color: ${theme.PRIMARY_2};
                 }
             }
@@ -79,7 +79,7 @@ export const SelectTenantContainer = styled.div`
             height: 72px;
             object-fit: contain;
             border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.04);
+            background-color: ${theme.SURFACE_1};
             padding: 8px;
         }
 
@@ -90,7 +90,7 @@ export const SelectTenantContainer = styled.div`
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: ${theme.SURFACE_2};
             color: ${theme.SECONDARY_2};
             font-size: 28px;
             font-weight: 700;
