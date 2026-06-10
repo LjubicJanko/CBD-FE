@@ -276,7 +276,14 @@
         "socialUrlInvalid": "Enter a valid http(s) URL.",
         "socialDisplayRequired": "Display text is required.",
         "socialDisplayTooLong": "Display text must be at most 100 characters.",
-        "featuresSection": "Premium features"
+        "featuresSection": "Premium features",
+        "colorsSection": "Brand colors",
+        "accentColor": "Accent color",
+        "backgroundColor": "Background color",
+        "colorInvalid": "Enter a valid hex color (e.g. #1A2B3C).",
+        "colorReset": "Reset",
+        "colorsHint": "Applied across this tenant's app when the Brand colors feature is on. Leave empty to use the default palette.",
+        "colorsThemingOff": "The \"Brand colors\" feature is off for this tenant, so these colors are not applied anywhere. Enable it on the Premium tab to use them."
     },
     "premiumFeatures": {
         "tab": "Premium",
@@ -293,6 +300,8 @@
     "feature-attendance-description": "Check-in/out, attendance overview and work locations.",
     "feature-reports-label": "Reports & analytics",
     "feature-reports-description": "Business metrics, profit and status-duration analytics.",
+    "feature-theming-label": "Brand colors",
+    "feature-theming-description": "Custom accent and background colors for this tenant's app.",
     "feature-requires": "Requires: {{features}}",
     "share": {
         "tab": "Customer link",

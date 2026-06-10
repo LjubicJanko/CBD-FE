@@ -31,7 +31,6 @@ import { Feature } from '../../util/features';
 import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
 import PublicFooter from '../../components/public-footer/PublicFooter.component';
 import PlatformPage from '../../pages/platform/Platform.page';
-import TenantDetailsPage from '../../pages/tenant-details/TenantDetails.page';
 import BannerProvider from '../BannerProvider';
 import AttendanceProvider from '../AttendanceProvider';
 import React from 'react';
@@ -102,6 +101,11 @@ const CBDRouter: React.FC = (): JSX.Element => {
             loader={async () => await isAuthenticated()}
           />
           <Route
+            path="login/:tenantSlug"
+            element={<LoginPage />}
+            loader={async () => await isAuthenticated()}
+          />
+          <Route
             path=":tenantSlug"
             element={<HomePage />}
             loader={async () => await isAuthenticated()}
@@ -113,10 +117,6 @@ const CBDRouter: React.FC = (): JSX.Element => {
             <Route element={<SuperadminRoute />}>
               <Route path="select-tenant" element={<SelectTenantPage />} />
               <Route path="platform" element={<PlatformPage />} />
-              <Route
-                path="platform/tenants/:id"
-                element={<TenantDetailsPage />}
-              />
             </Route>
             <Route element={<TenantContextRequired />}>
               {/* `orders` module: dashboard + order creation + payments. */}

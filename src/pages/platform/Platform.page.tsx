@@ -20,8 +20,8 @@ const PlatformPage: React.FC = () => {
         null
     );
     const [isDeactivating, setIsDeactivating] = useState(false);
-    // Stable per-mount value: navigating to a tenant's detail page and back
-    // remounts this page, busting the browser cache for any updated logo.
+    // Stable per-mount value: busts the browser cache for tenant logos so an
+    // updated logo shows on the next visit to this page.
     const [logoCacheBust] = useState<number>(Date.now());
 
     const markBusy = useCallback((id: number, busy: boolean) => {

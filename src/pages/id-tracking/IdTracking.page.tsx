@@ -28,6 +28,7 @@ import { ApiError } from '../../types/Response';
 import { statuses, trackingUrl } from '../../util/util';
 import { isReservedSlug } from '../../util/reservedSlugs';
 import { Feature } from '../../util/features';
+import { useApplyTenantTheme } from '../../hooks/useApplyTenantTheme';
 import * as Styled from './IdTracking.styles';
 import theme from '../../styles/theme';
 import PageBanner from '../../components/page-banner/PageBanner.component';
@@ -92,6 +93,12 @@ const IdTrackingPage = () => {
             .catch(() => setTenantError(true))
             .finally(() => setTenantLoading(false));
     }, [tenantSlug]);
+
+    useApplyTenantTheme(
+        tenant?.accentColor,
+        tenant?.backgroundColor,
+        Boolean(tenant?.features?.includes(Feature.THEMING))
+    );
 
     const tenantLogo = tenant ? getLogoAbsoluteUrl(tenant.logoUrl) : null;
     const tenantBrand = tenant && (

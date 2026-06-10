@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { mobile, tablet } from '../../util/breakpoints';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 
 export const LoaderContainer = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const tenantBrand = css`
     align-items: center;
     gap: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid ${withAlpha(theme.PRIMARY_2, 0.2)};
+    border-bottom: 1px solid ${accentAlpha(0.2)};
 
     ${tablet(css`
       gap: 14px;
@@ -215,7 +215,7 @@ export const IdTrackingDetailsContainer = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
-            background: ${withAlpha(theme.PRIMARY_2, 0.3)};
+            background: ${accentAlpha(0.3)};
             height: 40px;
             width: 40px;
 
@@ -439,7 +439,7 @@ export const IdTrackingDetailsContainer = styled.div`
           }
 
           &:hover .MuiOutlinedInput-notchedOutline {
-            border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
+            border-color: ${accentAlpha(0.5)} !important;
           }
 
           &.Mui-focused .MuiOutlinedInput-notchedOutline {

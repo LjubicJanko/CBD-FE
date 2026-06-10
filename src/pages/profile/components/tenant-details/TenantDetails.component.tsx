@@ -94,8 +94,16 @@ const TenantDetails = () => {
             <TenantDetailsForm
                 tenant={tenant}
                 allowSlugEdit={isSuperadmin}
+                allowColorEdit={isSuperadmin}
                 service={service}
-                onSaved={setTenant}
+                onSaved={(updated) => {
+                    setTenant(updated);
+                    // Superadmin edits the impersonated tenant here — refresh
+                    // the cached selection so the new colors/features re-theme
+                    // the session immediately (no-op for a client admin, whose
+                    // selectedTenantId is null).
+                    localStorageService.recacheSelectedTenant(updated);
+                }}
             />
         </Styled.TenantDetailsTab>
     );

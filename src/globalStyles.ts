@@ -3,6 +3,16 @@ import { mobile } from './util/breakpoints';
 import { withAlpha } from './styles/theme';
 
 export const GlobalStyle = createGlobalStyle`
+  /* Default values for the tenant-overridable brand hues. applyTenantTheme()
+     overrides these on document.documentElement at runtime for themed tenants;
+     keep in sync with DEFAULT_COLORS in src/styles/theme.ts. */
+  :root {
+    --c-bg: #2F2F2F;
+    --c-accent: #D4FF00;
+    --c-accent-rgb: 212, 255, 0;
+    --c-accent-hover: #C2EB00;
+  }
+
   * {
     box-sizing: border-box;
     scrollbar-width: thin;

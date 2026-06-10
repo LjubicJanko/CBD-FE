@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 import { tablet } from '../../util/breakpoints';
 
 export const ProfilePageContainer = styled.div`
@@ -120,7 +120,7 @@ export const ProfilePageContainer = styled.div`
       }
 
       &:hover .MuiOutlinedInput-notchedOutline {
-        border-color: ${withAlpha(theme.PRIMARY_2, 0.5)};
+        border-color: ${accentAlpha(0.5)};
       }
 
       &.Mui-focused .MuiOutlinedInput-notchedOutline {

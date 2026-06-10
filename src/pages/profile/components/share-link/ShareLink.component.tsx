@@ -13,7 +13,7 @@ import AuthContext from '../../../../store/AuthProvider/Auth.context';
 import { platformService, publicTenantService } from '../../../../api';
 import localStorageService from '../../../../services/localStorage.service';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
-import theme from '../../../../styles/theme';
+import theme, { DEFAULT_COLORS } from '../../../../styles/theme';
 import * as Styled from './ShareLink.styles';
 
 const ShareLink = () => {
@@ -128,7 +128,7 @@ const ShareLink = () => {
                     value={url}
                     size={220}
                     bgColor={theme.SECONDARY_1}
-                    fgColor={theme.PRIMARY_1}
+                    fgColor={DEFAULT_COLORS.background}
                     level="M"
                     marginSize={2}
                 />

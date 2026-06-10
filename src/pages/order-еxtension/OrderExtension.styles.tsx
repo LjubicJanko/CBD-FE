@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 import { tablet } from '../../util/breakpoints';
 
 export const OrderExtensionContainer = styled.div`
@@ -54,7 +54,7 @@ export const OrderExtensionContainer = styled.div`
       gap: 20px;
       padding: 8px 0 20px;
       margin-bottom: 24px;
-      border-bottom: 1px solid ${withAlpha(theme.PRIMARY_2, 0.2)};
+      border-bottom: 1px solid ${accentAlpha(0.2)};
 
       ${tablet(css`
         gap: 14px;

@@ -55,14 +55,14 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       setIsLoading(true);
       try {
         const response = await authService.login(data);
-        const { token, id, roles, privileges, name, username, tenantId, tenantSlug, tenantLogoUrl, superadmin } = response;
+        const { token, id, roles, privileges, name, username, tenantId, tenantSlug, tenantLogoUrl, tenantAccentColor, tenantBackgroundColor, superadmin } = response;
         // Defensively normalize features to an array: a superadmin has no tenant
         // so the BE may legitimately send no features. Storing a guaranteed array
         // keeps the cached payload shape valid (isStaleAuthShape would otherwise
         // flag a missing `features` and force a re-login loop).
         const features = response.features ?? [];
         setToken(token);
-        setAuthData({ id, roles, privileges, features, name, username, tenantId, tenantSlug, tenantLogoUrl, superadmin });
+        setAuthData({ id, roles, privileges, features, name, username, tenantId, tenantSlug, tenantLogoUrl, tenantAccentColor, tenantBackgroundColor, superadmin });
         localStorageService.saveData({ ...response, features });
         // Always reset the selected-tenant keys on login: a previous superadmin
         // session in this browser may have left selectedTenantId / Slug behind,

@@ -5,29 +5,28 @@ import { DefaultTheme } from 'styled-components';
  * =====================
  * Single source of truth for every color in the app. Nothing should hardcode a
  * hex / rgb / rgba / named color outside this file — components reference these
- * tokens (or derive an opacity variant with `withAlpha`) so the palette stays
- * consistent and tweakable from one place.
+ * tokens (or derive an opacity variant with `withAlpha` / `accentAlpha`).
  *
  * The app is a committed DARK UI: a near-black base with a single lime brand
  * accent and neutral grays for text. On top of that sit a small, rational scale
  * of translucent surfaces / borders / overlays, and a semantic set (error /
- * success / warning) for conveying meaning. Per accessibility guidance, color
- * is only ever a SUPPORT for meaning — icons/labels carry it too.
+ * success / warning) for conveying meaning. Color is only ever a SUPPORT for
+ * meaning — icons/labels carry it too.
  *
- * Token groups:
- *  - Brand:     PRIMARY_1 (base bg), PRIMARY_2 (accent) + accent hover
- *  - Neutrals:  SECONDARY_1..3 (text from primary -> subtle)
- *  - Surfaces:  SURFACE_1..4 (translucent elevation) + SURFACE_SOLID (opaque)
- *  - Lines:     BORDER, BORDER_STRONG
- *  - Depth:     OVERLAY (scrims), SHADOW / SHADOW_STRONG (elevation)
- *  - Accent FX: ACCENT_SUBTLE, ACCENT_SOFT (lime tints)
- *  - Semantic:  ERROR(/_TEXT/_SOFT), SUCCESS(/_SOFT), WARNING(/_SOFT)
- *
- * For a one-off opacity not covered by a token, use `withAlpha(theme.TOKEN, a)`
- * rather than writing a raw rgba — it still derives from a defined base color.
+ * PER-TENANT THEMING
+ * ------------------
+ * The two brand hues — background (`PRIMARY_1`) and accent (`PRIMARY_2`, plus
+ * its hover + tints) — resolve to CSS custom properties (`var(--c-*)`) rather
+ * than literal hex. Defaults for those vars live in `globalStyles` `:root`.
+ * `applyTenantTheme()` overrides them on `document.documentElement` at runtime
+ * when a tenant has the `theming` feature and a color set. Because the tokens
+ * are `var()` strings, every consumer — including the many files that import
+ * this static `theme` object — re-themes instantly via the CSS cascade, with no
+ * per-component change. Tokens that are NOT tenant-overridable (text, surfaces,
+ * borders, depth, semantic) stay literal so they remain stable on any base.
  *
  * NOTE: the per-status / chart categorical palette lives in `src/util/util.ts`
- * (`statusColors`) — 8 distinct hues keyed by order status. It is intentionally
+ * (`statusColors`) — 8 distinct hues keyed by order status, intentionally
  * separate from this semantic theme.
  */
 
@@ -40,11 +39,38 @@ export const withAlpha = (hex: string, alpha: number): string => {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-// Base hues — the only literal colors in the codebase.
+/**
+ * CSS custom-property names carrying the tenant-overridable hues. The accent is
+ * also stored as comma-separated RGB channels (`--c-accent-rgb`) so opacity
+ * variants can be expressed as `rgba(var(--c-accent-rgb), a)`.
+ */
+export const THEME_VARS = {
+    background: '--c-bg',
+    accent: '--c-accent',
+    accentRgb: '--c-accent-rgb',
+    accentHover: '--c-accent-hover',
+} as const;
+
+/**
+ * Canonical CBD brand hues — the defaults baked into `:root` and the fallback
+ * whenever a tenant has no theme (or the `theming` feature is off). Also used
+ * wherever a real hex is required instead of a CSS var (canvas/SVG that can't
+ * read CSS variables — e.g. the QR code, the map geofence stroke).
+ */
+export const DEFAULT_COLORS = {
+    background: '#2F2F2F',
+    accent: '#D4FF00',
+    accentHover: '#C2EB00',
+    /** RGB channels of `accent`, for the `:root` default of `--c-accent-rgb`. */
+    accentRgb: '212, 255, 0',
+} as const;
+
+/** rgba() built from the accent CSS-var channels — for accent opacity variants. */
+export const accentAlpha = (alpha: number): string =>
+    `rgba(var(${THEME_VARS.accentRgb}), ${alpha})`;
+
+// Literal base hues for the NON-themeable tokens.
 const BASE = {
-    NEAR_BLACK: '#2F2F2F', // app background
-    ACCENT: '#D4FF00', // lime brand
-    ACCENT_DARK: '#C2EB00', // lime brand, pressed/hover
     WHITE: '#FFFFFF',
     GRAY: '#979797',
     GRAY_DARK: '#717171',
@@ -59,10 +85,10 @@ const BASE = {
 const theme: DefaultTheme = {
     logo: '/cbd-logo.png',
 
-    // ===== Brand =====
-    PRIMARY_1: BASE.NEAR_BLACK,
-    PRIMARY_2: BASE.ACCENT,
-    PRIMARY_2_HOVER: BASE.ACCENT_DARK,
+    // ===== Brand (tenant-overridable via CSS vars) =====
+    PRIMARY_1: `var(${THEME_VARS.background})`,
+    PRIMARY_2: `var(${THEME_VARS.accent})`,
+    PRIMARY_2_HOVER: `var(${THEME_VARS.accentHover})`,
 
     // ===== Neutrals / text =====
     SECONDARY_1: BASE.WHITE, // primary text
@@ -85,9 +111,9 @@ const theme: DefaultTheme = {
     SHADOW: withAlpha(BASE.BLACK, 0.2), // default elevation shadow
     SHADOW_STRONG: withAlpha(BASE.BLACK, 0.4), // modal / strong elevation shadow
 
-    // ===== Accent tints (lime) =====
-    ACCENT_SUBTLE: withAlpha(BASE.ACCENT, 0.04), // faint accent fill
-    ACCENT_SOFT: withAlpha(BASE.ACCENT, 0.1), // selected / hover accent fill
+    // ===== Accent tints (lime — track the accent var) =====
+    ACCENT_SUBTLE: accentAlpha(0.04), // faint accent fill
+    ACCENT_SOFT: accentAlpha(0.1), // selected / hover accent fill
 
     // ===== Semantic =====
     ERROR: BASE.RED, // danger: icons, solid chips, borders

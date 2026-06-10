@@ -1,7 +1,7 @@
 import { Button, CircularProgress, MenuItem, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     getLogoAbsoluteUrl,
@@ -14,6 +14,11 @@ import { RESERVED_SLUGS } from '../../util/reservedSlugs';
 import { extractFieldErrors, validateLogoFile } from '../../util/tenantForm';
 import FeatureToggles from '../feature-toggles/FeatureToggles.component';
 import { applyFeatureToggle, Feature } from '../../util/features';
+import { DEFAULT_COLORS } from '../../styles/theme';
+import {
+    applyTenantTheme,
+    restoreBaselineTheme,
+} from '../../styles/applyTenantTheme';
 import { TenantFormService } from './tenantFormService';
 import * as Styled from './TenantDetailsForm.styles';
 
@@ -30,6 +35,14 @@ type TenantDetailsFormProps = {
      * own tenant premium modules, so this is false in the self-service tab.
      */
     allowFeatureEdit?: boolean;
+    /**
+     * Superadmin-only. Renders the brand-color picker (accent + background) and
+     * includes the colors in the save payload, with a live whole-UI preview.
+     * Colors are superadmin-only writes (the self-service endpoint ignores
+     * them), so this is only enabled where the form writes through the platform
+     * service — the "Tenant details" tab in /profile for a superadmin.
+     */
+    allowColorEdit?: boolean;
     /**
      * The write operations to perform — platform endpoints for a superadmin,
      * JWT-scoped self-service endpoints for a client admin. See
@@ -55,6 +68,7 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
     tenant,
     allowSlugEdit,
     allowFeatureEdit = false,
+    allowColorEdit = false,
     service,
     onSaved,
 }) => {
@@ -78,6 +92,10 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
             // The self-service /profile/tenant endpoint may not include features
             // (only superadmin edits them); default so this never blows up.
             features: tenant.features ?? [],
+            // Brand colors — superadmin-only. Empty string means "no override"
+            // (sent as null on submit -> default palette).
+            accentColor: tenant.accentColor ?? '',
+            backgroundColor: tenant.backgroundColor ?? '',
         },
         validationSchema: Yup.object({
             name: Yup.string().required(t('validation.required.name')),
@@ -108,6 +126,14 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                         .max(100, t('tenantDetails.socialDisplayTooLong')),
                 otherwise: (s) => s.optional(),
             }),
+            accentColor: Yup.string().matches(/^#[0-9A-Fa-f]{6}$/, {
+                message: t('tenantDetails.colorInvalid'),
+                excludeEmptyString: true,
+            }),
+            backgroundColor: Yup.string().matches(/^#[0-9A-Fa-f]{6}$/, {
+                message: t('tenantDetails.colorInvalid'),
+                excludeEmptyString: true,
+            }),
         }),
         onSubmit: async (values, { setErrors }) => {
             try {
@@ -128,6 +154,14 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                     // Only superadmin sends features; the self-service service
                     // ignores them regardless.
                     features: allowFeatureEdit ? values.features : undefined,
+                    // Colors are superadmin-only too. Empty string -> null
+                    // (clear). Omitted unless the color picker is enabled.
+                    accentColor: allowColorEdit
+                        ? values.accentColor || null
+                        : undefined,
+                    backgroundColor: allowColorEdit
+                        ? values.backgroundColor || null
+                        : undefined,
                 });
                 showSnackbar(t('tenantDetails.saved'), 'success');
                 onSaved?.(updated);
@@ -162,6 +196,28 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
             applyFeatureToggle(formik.values.features, key as Feature, enabled)
         );
     };
+
+    // Colors only take effect for a tenant that has the `theming` feature. Read
+    // it reactively from formik so the preview/warning track a toggle made in
+    // the same session.
+    const tenantHasTheming = formik.values.features.includes(Feature.THEMING);
+
+    // Live whole-UI preview for the superadmin while editing: push the in-progress
+    // colors onto the document so the platform chrome shows exactly what the
+    // tenant will get — but ONLY when theming is enabled, so the preview matches
+    // what the tenant's users actually see. On unmount (or when theming is off /
+    // self-service form) the baseline is restored. applyTenantTheme ignores
+    // invalid/partial hex, so typing is safe.
+    const { accentColor: accentValue, backgroundColor: backgroundValue } =
+        formik.values;
+    useEffect(() => {
+        if (!allowColorEdit || !tenantHasTheming) return;
+        applyTenantTheme({
+            accentColor: accentValue || null,
+            backgroundColor: backgroundValue || null,
+        });
+        return () => restoreBaselineTheme();
+    }, [allowColorEdit, tenantHasTheming, accentValue, backgroundValue]);
 
     const handleLogoSelected = useCallback(
         async (file: File | undefined) => {
@@ -205,6 +261,64 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
     }, [service, tenant, onSaved, showSnackbar, t]);
 
     const absoluteLogoUrl = getLogoAbsoluteUrl(logoUrl, logoCacheBust);
+
+    // Not memoized for the same reason as toggleFeature: it reads fresh formik
+    // state each render. Renders a swatch + hex field + clear for one color.
+    const renderColorField = (
+        name: 'accentColor' | 'backgroundColor',
+        labelKey: string
+    ) => {
+        const value = formik.values[name];
+        const fallback =
+            name === 'accentColor'
+                ? DEFAULT_COLORS.accent
+                : DEFAULT_COLORS.background;
+        const hasError =
+            formik.touched[name] && Boolean(formik.errors[name]);
+        return (
+            <div className="tenant-form__color">
+                <span className="tenant-form__color-label">{t(labelKey)}</span>
+                <div className="tenant-form__color-row">
+                    <input
+                        type="color"
+                        aria-label={t(labelKey)}
+                        className="tenant-form__color-swatch"
+                        value={value || fallback}
+                        onChange={(e) =>
+                            formik.setFieldValue(
+                                name,
+                                e.target.value.toUpperCase()
+                            )
+                        }
+                    />
+                    <TextField
+                        name={name}
+                        value={value}
+                        placeholder={fallback}
+                        onChange={(e) =>
+                            formik.setFieldValue(
+                                name,
+                                e.target.value.toUpperCase()
+                            )
+                        }
+                        onBlur={formik.handleBlur}
+                        error={hasError}
+                        helperText={hasError ? formik.errors[name] : undefined}
+                        size="small"
+                    />
+                    {value && (
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={() => formik.setFieldValue(name, '')}
+                        >
+                            {t('tenantDetails.colorReset')}
+                        </Button>
+                    )}
+                </div>
+            </div>
+        );
+    };
 
     return (
         <Styled.TenantDetailsForm className="tenant-form">
@@ -310,6 +424,30 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                             features={formik.values.features}
                             onToggle={toggleFeature}
                         />
+                    </div>
+                )}
+
+                {allowColorEdit && (
+                    <div className="tenant-form__colors">
+                        <span className="tenant-form__section-label">
+                            {t('tenantDetails.colorsSection')}
+                        </span>
+                        {!tenantHasTheming && (
+                            <span className="tenant-form__colors-warning">
+                                {t('tenantDetails.colorsThemingOff')}
+                            </span>
+                        )}
+                        {renderColorField(
+                            'accentColor',
+                            'tenantDetails.accentColor'
+                        )}
+                        {renderColorField(
+                            'backgroundColor',
+                            'tenantDetails.backgroundColor'
+                        )}
+                        <span className="tenant-form__colors-hint">
+                            {t('tenantDetails.colorsHint')}
+                        </span>
                     </div>
                 )}
 

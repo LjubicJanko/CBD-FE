@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import CbdModal from '../../cbd-modal/CbdModal.component';
-import theme from '../../../styles/theme';
+import theme, { accentAlpha } from '../../../styles/theme';
 
 export const BannerContainer = styled(CbdModal)`
     min-width: 250px;
@@ -41,7 +41,7 @@ export const BannerContainer = styled(CbdModal)`
                     }
 
                     &:hover .MuiOutlinedInput-notchedOutline {
-                        border-color: ${theme.PRIMARY_2}80 !important;
+                        border-color: ${accentAlpha(0.5)} !important;
                     }
 
                     &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -94,7 +94,7 @@ export const BannerContainer = styled(CbdModal)`
                     font-weight: 700;
 
                     &:hover {
-                        background-color: ${theme.PRIMARY_2}D9;
+                        background-color: ${accentAlpha(0.85)};
                     }
                 }
             }

@@ -113,6 +113,18 @@ export const LoginContainer = styled.div`
       gap: 24px;
     `)}
 
+    .login-container__logo {
+      align-self: center;
+      max-width: 160px;
+      max-height: 96px;
+      object-fit: contain;
+
+      ${mobile(css`
+        max-width: 120px;
+        max-height: 72px;
+      `)}
+    }
+
     .fields {
       display: flex;
       flex-direction: column;

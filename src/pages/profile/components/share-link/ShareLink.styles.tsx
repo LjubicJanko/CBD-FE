@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../../../styles/theme';
+import theme, { accentAlpha } from '../../../../styles/theme';
 import { mobile, tablet } from '../../../../util/breakpoints';
 
 export const ShareLinkContainer = styled.div`
@@ -62,7 +62,7 @@ export const ShareLinkContainer = styled.div`
 
             .MuiIconButton-root {
                 border-radius: 10px;
-                border: 1px solid ${withAlpha(theme.PRIMARY_2, 0.4)};
+                border: 1px solid ${accentAlpha(0.4)};
                 background-color: ${theme.ACCENT_SUBTLE};
                 color: ${theme.PRIMARY_2};
                 padding: 0 16px;
@@ -88,7 +88,7 @@ export const ShareLinkContainer = styled.div`
             align-self: center;
             padding: 10px 24px;
             border-radius: 10px;
-            border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
+            border-color: ${accentAlpha(0.4)};
             color: ${theme.PRIMARY_2};
             background-color: ${theme.ACCENT_SUBTLE};
             text-transform: none;

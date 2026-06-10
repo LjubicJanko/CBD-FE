@@ -17,6 +17,10 @@ export type Tenant = {
     socialLink: SocialLink | null;
     // Enabled premium feature/module keys (see src/util/features.ts).
     features: string[];
+    // Per-tenant brand colors (6-digit hex, e.g. "#D4FF00"), null when unset.
+    // Applied at runtime only when the `theming` feature is enabled.
+    accentColor: string | null;
+    backgroundColor: string | null;
 };
 
 export type CreateTenantData = {
@@ -28,6 +32,11 @@ export type CreateTenantData = {
     // Enabled feature keys. Omit to leave unchanged; send the full desired set
     // to replace. Only superadmin may edit these.
     features?: string[];
+    // Brand colors with the same null-vs-omitted semantics as socialLink: omit
+    // to leave unchanged, `null` to clear, a "#RRGGBB" string to set.
+    // Superadmin-only (the self-service endpoint ignores them).
+    accentColor?: string | null;
+    backgroundColor?: string | null;
 };
 
 const getTenants = async (): Promise<Tenant[]> =>

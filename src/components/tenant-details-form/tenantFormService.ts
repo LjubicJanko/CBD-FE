@@ -17,6 +17,10 @@ export type TenantFormService = {
         // Enabled feature keys. Superadmin-only; the self-service endpoint
         // ignores it (a tenant cannot grant itself premium modules).
         features?: string[];
+        // Brand colors (null-vs-omitted semantics). Superadmin-only; the
+        // self-service endpoint ignores them (a tenant cannot theme itself).
+        accentColor?: string | null;
+        backgroundColor?: string | null;
     }) => Promise<Tenant>;
     uploadLogo: (file: File) => Promise<Tenant>;
     removeLogo: () => Promise<void>;
@@ -24,12 +28,14 @@ export type TenantFormService = {
 
 export const platformTenantFormService = (id: number): TenantFormService => ({
     // Superadmin always edits the slug, so it is always present here.
-    update: ({ name, slug, socialLink, features }) =>
+    update: ({ name, slug, socialLink, features, accentColor, backgroundColor }) =>
         platformService.updateTenant(id, {
             name,
             slug: slug ?? '',
             socialLink,
             features,
+            accentColor,
+            backgroundColor,
         }),
     uploadLogo: (file) => platformService.uploadTenantLogo(id, file),
     removeLogo: () => platformService.deleteTenantLogo(id),

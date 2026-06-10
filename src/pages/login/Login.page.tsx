@@ -9,12 +9,18 @@ import {
   TextField,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import AuthContext from '../../store/AuthProvider/Auth.context';
 import { LoginData } from '../../types/Auth';
 import { textInputSX } from '../../util/util';
+import { publicTenantService } from '../../api';
+import { getLogoAbsoluteUrl } from '../../api/services/platform';
+import { PublicTenant } from '../../api/services/publicTenant';
+import { isReservedSlug } from '../../util/reservedSlugs';
+import { Feature } from '../../util/features';
+import { useApplyTenantTheme } from '../../hooks/useApplyTenantTheme';
 import * as Styled from './Login.styles';
 
 
@@ -27,6 +33,38 @@ const LoginComponent = () => {
   const { login, isLoading } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { tenantSlug } = useParams<{ tenantSlug?: string }>();
+  const envSlug = import.meta.env.VITE_TENANT_SLUG as string | undefined;
+
+  // Brand the login page by slug (logo + name + theme), mirroring the public
+  // home/track pages. Login must always work, so an unknown/reserved slug just
+  // falls back to the default palette instead of blocking the form.
+  const [tenant, setTenant] = useState<PublicTenant | null>(null);
+
+  useEffect(() => {
+    if (!tenantSlug || isReservedSlug(tenantSlug)) {
+      setTenant(null);
+      return;
+    }
+    let cancelled = false;
+    publicTenantService
+      .getTenantBySlug(tenantSlug)
+      .then((data) => {
+        if (!cancelled) setTenant(data);
+      })
+      .catch(() => {
+        if (!cancelled) setTenant(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [tenantSlug]);
+
+  useApplyTenantTheme(
+    tenant?.accentColor,
+    tenant?.backgroundColor,
+    Boolean(tenant?.features?.includes(Feature.THEMING))
+  );
 
   const onSubmit = (values: LoginData) => {
     login(values, navigate);
@@ -37,6 +75,8 @@ const LoginComponent = () => {
     onSubmit,
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  const tenantLogo = getLogoAbsoluteUrl(tenant?.logoUrl);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -52,6 +92,12 @@ const LoginComponent = () => {
     event.preventDefault();
   };
 
+  // Default the slugless /login to the configured tenant (e.g. /login/cbd) so
+  // the page is always branded. Navigating from a tenant's pages keeps its slug.
+  if (!tenantSlug && envSlug) {
+    return <Navigate to={`/login/${envSlug}`} replace />;
+  }
+
   return (
     <Styled.LoginContainer className="login-container">
       {isLoading && (
@@ -60,9 +106,17 @@ const LoginComponent = () => {
         </div>
       )}
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
-        <h1 className="login-container__title">
-          {t('app-name')}
-        </h1>
+        {tenantLogo ? (
+          <img
+            className="login-container__logo"
+            src={tenantLogo}
+            alt={tenant?.name ?? ''}
+          />
+        ) : (
+          <h1 className="login-container__title">
+            {tenant?.name ?? t('app-name')}
+          </h1>
+        )}
         <div className="fields">
           <div className="login-container__username">
             <label id="username-label">{t('username')}</label>

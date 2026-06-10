@@ -1,6 +1,7 @@
 import { AuthData } from '../types/Auth';
 import { BannerLocation } from '../types/Banner';
 import { selectedTenantFeaturesStore } from './selectedTenantFeatures.store';
+import { selectedTenantThemeStore } from './selectedTenantTheme.store';
 
 export default {
     saveData(data: AuthData): void {
@@ -15,7 +16,10 @@ export default {
         localStorage.removeItem('selectedTenantId');
         localStorage.removeItem('selectedTenantSlug');
         localStorage.removeItem('selectedTenantFeatures');
+        localStorage.removeItem(selectedTenantThemeStore.ACCENT_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
         selectedTenantFeaturesStore.notify();
+        selectedTenantThemeStore.notify();
     },
     get token(): string | null {
         return localStorage.getItem('token');
@@ -32,13 +36,20 @@ export default {
         // of their own, so the impersonated tenant's features are cached here
         // and exposed reactively via selectedTenantFeaturesStore (so a feature
         // toggle in /profile re-renders the menu/guards without a refresh).
-        features: string[] | null = null
+        features: string[] | null = null,
+        // The impersonated tenant's brand colors, cached + exposed reactively
+        // via selectedTenantThemeStore so a superadmin's session is themed to
+        // the selected tenant (and re-themes on save without a reload).
+        colors: { accentColor: string | null; backgroundColor: string | null } | null = null
     ): void {
         if (tenantId === null) {
             localStorage.removeItem('selectedTenantId');
             localStorage.removeItem('selectedTenantSlug');
             localStorage.removeItem('selectedTenantFeatures');
+            localStorage.removeItem(selectedTenantThemeStore.ACCENT_KEY);
+            localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
             selectedTenantFeaturesStore.notify();
+            selectedTenantThemeStore.notify();
             return;
         }
         localStorage.setItem('selectedTenantId', String(tenantId));
@@ -55,13 +66,33 @@ export default {
         } else {
             localStorage.removeItem('selectedTenantFeatures');
         }
+        if (colors?.accentColor) {
+            localStorage.setItem(
+                selectedTenantThemeStore.ACCENT_KEY,
+                colors.accentColor
+            );
+        } else {
+            localStorage.removeItem(selectedTenantThemeStore.ACCENT_KEY);
+        }
+        if (colors?.backgroundColor) {
+            localStorage.setItem(
+                selectedTenantThemeStore.BACKGROUND_KEY,
+                colors.backgroundColor
+            );
+        } else {
+            localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
+        }
         selectedTenantFeaturesStore.notify();
+        selectedTenantThemeStore.notify();
     },
     clearSelectedTenant(): void {
         localStorage.removeItem('selectedTenantId');
         localStorage.removeItem('selectedTenantSlug');
         localStorage.removeItem('selectedTenantFeatures');
+        localStorage.removeItem(selectedTenantThemeStore.ACCENT_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
         selectedTenantFeaturesStore.notify();
+        selectedTenantThemeStore.notify();
     },
     /**
      * After a superadmin edits a tenant, refresh the cached selection IF that
@@ -74,9 +105,14 @@ export default {
         id: number;
         slug: string;
         features: string[];
+        accentColor?: string | null;
+        backgroundColor?: string | null;
     }): void {
         if (this.selectedTenantId !== tenant.id) return;
-        this.setSelectedTenant(tenant.id, tenant.slug, tenant.features);
+        this.setSelectedTenant(tenant.id, tenant.slug, tenant.features, {
+            accentColor: tenant.accentColor ?? null,
+            backgroundColor: tenant.backgroundColor ?? null,
+        });
     },
     get selectedTenantId(): number | null {
         const val = localStorage.getItem('selectedTenantId');

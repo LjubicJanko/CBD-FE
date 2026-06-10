@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 import { mobile, belowTablet, tablet } from '../../util/breakpoints';
 
 export const ReportsContainer = styled.div`
@@ -50,7 +50,7 @@ export const ReportsContainer = styled.div`
             }
 
             &:hover .MuiOutlinedInput-notchedOutline {
-                border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
+                border-color: ${accentAlpha(0.5)} !important;
             }
 
             &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -129,14 +129,14 @@ export const StatCard = styled.div<{ $accent?: boolean }>`
     transition: border-color 0.2s, background-color 0.2s;
 
     &:hover {
-        border-color: ${withAlpha(theme.PRIMARY_2, 0.25)};
+        border-color: ${accentAlpha(0.25)};
         background-color: ${theme.SURFACE_2};
     }
 
     ${({ $accent }) =>
         $accent &&
         css`
-            border-color: ${withAlpha(theme.PRIMARY_2, 0.38)};
+            border-color: ${accentAlpha(0.38)};
             background-color: ${theme.ACCENT_SUBTLE};
         `}
 

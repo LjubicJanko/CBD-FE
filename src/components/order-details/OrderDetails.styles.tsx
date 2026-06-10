@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { mobile, tablet } from '../../util/breakpoints';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 
 export const OrderDetailsContainer = styled.div`
   position: relative;
@@ -127,7 +127,7 @@ export const OrderDetailsContainer = styled.div`
           display: flex;
           justify-content: center;
           align-items: center;
-          background: ${withAlpha(theme.PRIMARY_2, 0.3)};
+          background: ${accentAlpha(0.3)};
           height: 40px;
           width: 40px;
 
@@ -152,7 +152,7 @@ export const OrderDetailsContainer = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
-            background: ${withAlpha(theme.PRIMARY_2, 0.3)};
+            background: ${accentAlpha(0.3)};
             height: 40px;
             width: 40px;
 

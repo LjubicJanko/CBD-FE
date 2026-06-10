@@ -11,6 +11,10 @@ export type AuthData = {
   tenantId: number | null;
   tenantSlug: string | null;
   tenantLogoUrl: string | null;
+  // Active tenant's brand colors (null when unset or for a superadmin, who has
+  // no tenant). Applied at runtime only when `features` includes 'theming'.
+  tenantAccentColor: string | null;
+  tenantBackgroundColor: string | null;
   superadmin: boolean;
 };
 

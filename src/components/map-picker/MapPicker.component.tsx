@@ -13,7 +13,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useEffect, useRef } from 'react';
 import * as Styled from './MapPicker.styles';
-import theme from '../../styles/theme';
+import { DEFAULT_COLORS } from '../../styles/theme';
 
 // Vite bundlers strip Leaflet's default icon URLs. Re-bind them once at module
 // load so every marker renders with the standard pin instead of a broken image.
@@ -91,7 +91,7 @@ const MapPicker: React.FC<MapPickerProps> = ({
         <Circle
           center={[lat, lng]}
           radius={radiusM}
-          pathOptions={{ color: theme.PRIMARY_2, fillOpacity: 0.15 }}
+          pathOptions={{ color: DEFAULT_COLORS.accent, fillOpacity: 0.15 }}
         />
       </MapContainer>
     </Styled.MapWrapper>

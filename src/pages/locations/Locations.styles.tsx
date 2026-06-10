@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 import CbdModal from '../../components/cbd-modal/CbdModal.component';
 import { mobile, tablet } from '../../util/breakpoints';
 
@@ -165,7 +165,7 @@ export const Container = styled.div`
             &--active {
                 background-color: ${theme.ACCENT_SOFT};
                 color: ${theme.PRIMARY_2};
-                border: 1px solid ${withAlpha(theme.PRIMARY_2, 0.4)};
+                border: 1px solid ${accentAlpha(0.4)};
             }
 
             &--inactive {
@@ -223,7 +223,7 @@ export const LocationsModal = styled(CbdModal)`
                 }
 
                 &:hover .MuiOutlinedInput-notchedOutline {
-                    border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
+                    border-color: ${accentAlpha(0.5)} !important;
                 }
 
                 &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -297,7 +297,7 @@ export const LocationsModal = styled(CbdModal)`
             }
 
             .MuiButton-outlined {
-                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
+                border-color: ${accentAlpha(0.4)};
                 color: ${theme.PRIMARY_2};
                 background-color: ${theme.ACCENT_SUBTLE};
 
@@ -312,7 +312,7 @@ export const LocationsModal = styled(CbdModal)`
                 color: ${theme.PRIMARY_1};
 
                 &:hover {
-                    background-color: ${withAlpha(theme.PRIMARY_2, 0.85)};
+                    background-color: ${accentAlpha(0.85)};
                 }
 
                 &:disabled {

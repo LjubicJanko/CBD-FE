@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { withAlpha, accentAlpha } from '../../styles/theme';
 import { mobile, tablet } from '../../util/breakpoints';
 
 export const PlatformContainer = styled.div`
@@ -79,7 +79,7 @@ export const PlatformContainer = styled.div`
                 }
 
                 &:hover .MuiOutlinedInput-notchedOutline {
-                    border-color: ${withAlpha(theme.PRIMARY_2, 0.5)} !important;
+                    border-color: ${accentAlpha(0.5)} !important;
                 }
 
                 &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -122,7 +122,7 @@ export const PlatformContainer = styled.div`
             font-size: 14px;
 
             &:hover {
-                background-color: ${withAlpha(theme.PRIMARY_2, 0.85)};
+                background-color: ${accentAlpha(0.85)};
             }
 
             &:disabled {
@@ -245,7 +245,7 @@ export const PlatformContainer = styled.div`
             }
 
             .MuiButton-outlined {
-                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
+                border-color: ${accentAlpha(0.4)};
                 color: ${theme.PRIMARY_2};
                 background-color: ${theme.ACCENT_SUBTLE};
 
@@ -285,7 +285,7 @@ export const PlatformContainer = styled.div`
             }
 
             .MuiButton-outlined {
-                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
+                border-color: ${accentAlpha(0.4)};
                 color: ${theme.PRIMARY_2};
                 background-color: ${theme.ACCENT_SUBTLE};
 

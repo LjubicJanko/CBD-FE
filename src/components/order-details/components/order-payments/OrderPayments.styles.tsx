@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../../../styles/theme';
+import theme, { withAlpha, accentAlpha } from '../../../../styles/theme';
 import { mobile, tablet } from '../../../../util/breakpoints';
 
 export const OrderPaymentsContainer = styled.div`
@@ -80,7 +80,7 @@ export const OrderPaymentsContainer = styled.div`
         gap: 8px;
 
         &:hover {
-          background-color: ${theme.PRIMARY_2}D9;
+          background-color: ${accentAlpha(0.85)};
         }
       }
     }

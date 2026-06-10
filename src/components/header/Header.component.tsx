@@ -94,7 +94,11 @@ const HeaderComponent = () => {
       localStorageService.setSelectedTenant(
         tenantId,
         switchedTo?.slug ?? null,
-        features
+        features,
+        {
+          accentColor: switchedTo?.accentColor ?? null,
+          backgroundColor: switchedTo?.backgroundColor ?? null,
+        }
       );
       // Hard navigation: drops in-memory caches (OrdersProvider, fetched lists)
       // that are scoped to the previous tenant. Land on the tenant's first
@@ -187,6 +191,9 @@ const HeaderComponent = () => {
     }
     if (location.pathname.startsWith('/track')) {
       return 'track';
+    }
+    if (location.pathname.startsWith('/login')) {
+      return 'login';
     }
     return url;
   }, [location.pathname, url]);
@@ -290,7 +297,9 @@ const HeaderComponent = () => {
               <Button
                 variant="outlined"
                 className="public-header__home__login-btn"
-                onClick={() => navigate('/login')}
+                onClick={() =>
+                  navigate(tenantSlug ? `/login/${tenantSlug}` : '/login')
+                }
               >
                 {t('login')}
               </Button>

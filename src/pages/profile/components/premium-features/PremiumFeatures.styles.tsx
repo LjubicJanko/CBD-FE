@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from '../../../../styles/theme';
+import theme, { accentAlpha } from '../../../../styles/theme';
 
 export const PremiumFeaturesTab = styled.div`
     display: flex;
@@ -40,7 +40,7 @@ export const PremiumFeaturesTab = styled.div`
         text-transform: none;
 
         &:hover {
-            background-color: ${theme.PRIMARY_2}D9;
+            background-color: ${accentAlpha(0.85)};
         }
 
         &:disabled {

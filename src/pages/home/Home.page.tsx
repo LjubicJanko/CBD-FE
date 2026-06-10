@@ -11,6 +11,7 @@ import { getLogoAbsoluteUrl } from '../../api/services/platform';
 import { PublicTenant } from '../../api/services/publicTenant';
 import { isReservedSlug } from '../../util/reservedSlugs';
 import { Feature } from '../../util/features';
+import { useApplyTenantTheme } from '../../hooks/useApplyTenantTheme';
 
 const HomeComponent = () => {
     const { t } = useTranslation();
@@ -43,6 +44,14 @@ const HomeComponent = () => {
             .catch(() => setNotFound(true))
             .finally(() => setLoading(false));
     }, [tenantSlug]);
+
+    // Brand the public page in the tenant's colors when they have the `theming`
+    // feature; otherwise the default palette is used.
+    useApplyTenantTheme(
+        tenant?.accentColor,
+        tenant?.backgroundColor,
+        Boolean(tenant?.features?.includes(Feature.THEMING))
+    );
 
     // Only surface the order-extension entry point when the tenant has the
     // `order-extension` feature enabled (matches the page-level guard).
@@ -126,7 +135,11 @@ const HomeComponent = () => {
                     <Button
                         variant="contained"
                         className="home__landing__login"
-                        onClick={() => navigate('/login')}
+                        onClick={() =>
+                            navigate(
+                                tenantSlug ? `/login/${tenantSlug}` : '/login'
+                            )
+                        }
                     >
                         {t('login')}
                     </Button>

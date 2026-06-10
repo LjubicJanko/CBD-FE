@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { laptop, mobile, tablet } from '../../util/breakpoints';
-import theme from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 
 export const HomeContainer = styled.div`
     width: 100%;
@@ -56,7 +56,7 @@ export const HomeContainer = styled.div`
                 text-transform: none;
 
                 &:hover {
-                    background-color: ${theme.PRIMARY_2}D9;
+                    background-color: ${accentAlpha(0.85)};
                 }
             }
         }

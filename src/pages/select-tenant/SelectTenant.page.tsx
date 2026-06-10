@@ -31,7 +31,11 @@ const SelectTenantPage: React.FC = () => {
             localStorageService.setSelectedTenant(
                 tenantId,
                 picked?.slug ?? null,
-                features
+                features,
+                {
+                    accentColor: picked?.accentColor ?? null,
+                    backgroundColor: picked?.backgroundColor ?? null,
+                }
             );
             // Hard navigation: drops in-memory caches (OrdersProvider, fetched
             // lists) that may be scoped to a previous tenant context. Matches

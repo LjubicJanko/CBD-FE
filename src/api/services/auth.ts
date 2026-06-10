@@ -12,6 +12,8 @@ export interface LoginResponse {
   tenantId: number | null;
   tenantSlug: string | null;
   tenantLogoUrl: string | null;
+  tenantAccentColor: string | null;
+  tenantBackgroundColor: string | null;
   superadmin: boolean;
 }
 

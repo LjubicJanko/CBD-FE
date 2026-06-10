@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 
 export const TenantDetailsForm = styled.div`
     width: 100%;
@@ -20,7 +20,7 @@ export const TenantDetailsForm = styled.div`
                 }
 
                 &:hover .MuiOutlinedInput-notchedOutline {
-                    border-color: ${theme.PRIMARY_2}80 !important;
+                    border-color: ${accentAlpha(0.5)} !important;
                 }
 
                 &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -119,7 +119,7 @@ export const TenantDetailsForm = styled.div`
             }
 
             .MuiButton-outlined {
-                border-color: ${theme.PRIMARY_2}66;
+                border-color: ${accentAlpha(0.4)};
                 color: ${theme.PRIMARY_2};
                 background-color: ${theme.ACCENT_SUBTLE};
 
@@ -168,7 +168,7 @@ export const TenantDetailsForm = styled.div`
             text-transform: none;
 
             &:hover {
-                background-color: ${theme.PRIMARY_2}D9;
+                background-color: ${accentAlpha(0.85)};
             }
 
             &:disabled {
@@ -176,6 +176,86 @@ export const TenantDetailsForm = styled.div`
                 color: ${theme.PRIMARY_1};
                 opacity: 0.5;
             }
+        }
+
+        &__colors {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 480px;
+        }
+
+        &__color {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        &__color-label {
+            color: ${theme.SECONDARY_1};
+            font-size: 14px;
+        }
+
+        &__color-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .MuiButton-outlined {
+                min-width: auto;
+                padding: 6px 14px;
+                font-size: 12px;
+                font-weight: 600;
+                border-radius: 6px;
+                text-transform: none;
+                border-color: ${accentAlpha(0.4)};
+                color: ${theme.PRIMARY_2};
+                background-color: ${theme.ACCENT_SUBTLE};
+
+                &:hover {
+                    border-color: ${theme.PRIMARY_2};
+                    background-color: ${theme.ACCENT_SOFT};
+                }
+            }
+        }
+
+        &__color-swatch {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 44px;
+            height: 36px;
+            padding: 0;
+            border: 1px solid ${theme.BORDER_STRONG};
+            border-radius: 8px;
+            background: none;
+            cursor: pointer;
+            flex-shrink: 0;
+
+            &::-webkit-color-swatch-wrapper {
+                padding: 4px;
+            }
+            &::-webkit-color-swatch {
+                border: none;
+                border-radius: 5px;
+            }
+            &::-moz-color-swatch {
+                border: none;
+                border-radius: 5px;
+            }
+        }
+
+        &__colors-hint {
+            color: ${theme.SECONDARY_2};
+            font-size: 12px;
+        }
+
+        &__colors-warning {
+            color: ${theme.WARNING};
+            background-color: ${theme.WARNING_SOFT};
+            border: 1px solid ${theme.WARNING};
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
         }
     }
 `;

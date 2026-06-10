@@ -276,7 +276,14 @@
         "socialUrlInvalid": "Unesite ispravan http(s) URL.",
         "socialDisplayRequired": "Prikazani tekst je obavezan.",
         "socialDisplayTooLong": "Prikazani tekst može imati najviše 100 karaktera.",
-        "featuresSection": "Premium funkcionalnosti"
+        "featuresSection": "Premium funkcionalnosti",
+        "colorsSection": "Boje brenda",
+        "accentColor": "Akcentna boja",
+        "backgroundColor": "Boja pozadine",
+        "colorInvalid": "Unesite ispravnu hex boju (npr. #1A2B3C).",
+        "colorReset": "Poništi",
+        "colorsHint": "Primenjuje se u aplikaciji ovog klijenta kada je uključena funkcija Boje brenda. Ostavite prazno za podrazumevanu paletu.",
+        "colorsThemingOff": "Funkcija „Boje brenda“ je isključena za ovog klijenta, pa se ove boje nigde ne primenjuju. Uključite je na kartici Premium da biste ih koristili."
     },
     "premiumFeatures": {
         "tab": "Premium",
@@ -293,6 +300,8 @@
     "feature-attendance-description": "Prijava/odjava, pregled evidencije i radne lokacije.",
     "feature-reports-label": "Izveštaji i analitika",
     "feature-reports-description": "Poslovni pokazatelji, profit i analiza trajanja statusa.",
+    "feature-theming-label": "Boje brenda",
+    "feature-theming-description": "Prilagođene akcentne boje i boja pozadine za aplikaciju ovog klijenta.",
     "feature-requires": "Zahteva: {{features}}",
     "share": {
         "tab": "Link za klijente",

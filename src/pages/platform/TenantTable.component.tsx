@@ -1,8 +1,9 @@
 import { Button } from '@mui/material';
+import LaunchIcon from '@mui/icons-material/Launch';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { getLogoAbsoluteUrl, Tenant } from '../../api/services/platform';
+import localStorageService from '../../services/localStorage.service';
 
 type TenantRowProps = {
     tenant: Tenant;
@@ -18,9 +19,24 @@ const TenantRow: React.FC<TenantRowProps> = ({
     onDeactivate,
 }) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const absoluteLogoUrl = getLogoAbsoluteUrl(tenant.logoUrl, logoCacheBust);
     const isInactive = !tenant.active;
+
+    // Impersonate this tenant, then jump to its settings. Hard navigation (like
+    // the header tenant switch) drops tenant-scoped in-memory caches and forces
+    // providers/guards to re-read the freshly-selected tenant from localStorage.
+    const handleManage = () => {
+        localStorageService.setSelectedTenant(
+            tenant.id,
+            tenant.slug,
+            tenant.features,
+            {
+                accentColor: tenant.accentColor,
+                backgroundColor: tenant.backgroundColor,
+            }
+        );
+        window.location.href = '/profile';
+    };
 
     return (
         <tr className={isInactive ? 'inactive' : undefined}>
@@ -51,11 +67,10 @@ const TenantRow: React.FC<TenantRowProps> = ({
                         <Button
                             size="small"
                             variant="outlined"
-                            onClick={() =>
-                                navigate(`/platform/tenants/${tenant.id}`)
-                            }
+                            endIcon={<LaunchIcon />}
+                            onClick={handleManage}
                         >
-                            {t('tenantDetails.details')}
+                            {t('settings')}
                         </Button>
                         <Button
                             size="small"

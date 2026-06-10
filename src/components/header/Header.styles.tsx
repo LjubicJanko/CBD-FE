@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { mobile } from '../../util/breakpoints';
-import theme from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 
 export const HeaderContainer = styled.header`
   position: fixed;
@@ -93,11 +93,11 @@ export const HeaderContainer = styled.header`
       }
 
       .MuiOutlinedInput-notchedOutline {
-        border-color: ${theme.PRIMARY_2}40 !important;
+        border-color: ${accentAlpha(0.25)} !important;
       }
 
       &:hover .MuiOutlinedInput-notchedOutline {
-        border-color: ${theme.PRIMARY_2}80 !important;
+        border-color: ${accentAlpha(0.5)} !important;
       }
 
       &.Mui-focused .MuiOutlinedInput-notchedOutline {

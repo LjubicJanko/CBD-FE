@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import theme, { withAlpha } from '../../styles/theme';
+import theme, { accentAlpha } from '../../styles/theme';
 import { mobile, tablet } from '../../util/breakpoints';
 
 export const SelectTenantContainer = styled.div`
@@ -60,12 +60,12 @@ export const SelectTenantContainer = styled.div`
             &:hover {
                 transform: translateY(-2px);
                 background-color: ${theme.SURFACE_2};
-                border-color: ${withAlpha(theme.PRIMARY_2, 0.4)};
+                border-color: ${accentAlpha(0.4)};
             }
 
             &--platform {
                 background-color: ${theme.ACCENT_SUBTLE};
-                border: 1px dashed ${withAlpha(theme.PRIMARY_2, 0.33)};
+                border: 1px dashed ${accentAlpha(0.33)};
 
                 &:hover {
                     background-color: ${theme.ACCENT_SOFT};

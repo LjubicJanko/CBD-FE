@@ -17,6 +17,7 @@ import PageBanner from '../../components/page-banner/PageBanner.component';
 import NoContent from '../../components/no-content/NoContent.component';
 import { isReservedSlug } from '../../util/reservedSlugs';
 import { Feature } from '../../util/features';
+import { useApplyTenantTheme } from '../../hooks/useApplyTenantTheme';
 
 
 type OrderExtensionData = {
@@ -74,6 +75,12 @@ const OrderExtensionPage: React.FC = () => {
             .catch(() => setTenantError(true))
             .finally(() => setTenantLoading(false));
     }, [tenantSlug, envSlug]);
+
+    useApplyTenantTheme(
+        tenant?.accentColor,
+        tenant?.backgroundColor,
+        Boolean(tenant?.features?.includes(Feature.THEMING))
+    );
 
     const initialValues: OrderExtensionData = useMemo(
         () => ({

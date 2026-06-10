@@ -6,7 +6,9 @@
       "Bash(gh pr *)",
       "Bash(grep -vE \"src/styles/theme.ts|white-space|^\\\\s*//|/\\\\*\")",
       "Bash(Out-String)",
-      "PowerShell(npm run build)"
+      "PowerShell(npm run build)",
+      "PowerShell(npx tsc -b)",
+      "PowerShell(npx tsc -b 2>&1)"
     ]
   }
 }

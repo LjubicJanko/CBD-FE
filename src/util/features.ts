@@ -18,6 +18,7 @@ export enum Feature {
   BANNERS = 'banners',
   ATTENDANCE = 'attendance', // check-in/out + attendance overview + locations
   REPORTS = 'reports',
+  THEMING = 'theming', // per-tenant brand colors (accent + background)
 }
 
 export type FeatureCatalogEntry = {
@@ -56,6 +57,11 @@ export const FEATURE_CATALOG: FeatureCatalogEntry[] = [
     key: Feature.REPORTS,
     labelKey: 'feature-reports-label',
     descriptionKey: 'feature-reports-description',
+  },
+  {
+    key: Feature.THEMING,
+    labelKey: 'feature-theming-label',
+    descriptionKey: 'feature-theming-description',
   },
 ];
 

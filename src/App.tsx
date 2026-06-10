@@ -1,4 +1,5 @@
 import AuthProvider from './store/AuthProvider';
+import TenantThemeSync from './store/AuthProvider/TenantThemeSync';
 import CBDRouter from './store/CBDRouter/CBDRouter';
 import { GlobalStyle } from './globalStyles';
 import { ThemeProvider } from 'styled-components';
@@ -11,6 +12,7 @@ const App = (): JSX.Element => {
             <GlobalStyle />
             <SnackbarProvider>
                 <AuthProvider>
+                    <TenantThemeSync />
                     <CBDRouter />
                 </AuthProvider>
             </SnackbarProvider>
