@@ -32,7 +32,7 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
     const { t } = useTranslation();
     const { showSnackbar } = useSnackbar();
     const { canEditData } = usePrivileges();
-    const { selectedOrder, setSelectedOrder, updateOrderInOverviewList, updateStatusHistory } =
+    const { selectedOrder, setSelectedOrder, updateOrderInOverviewList } =
         useContext(OrdersContext);
 
     const isDone = selectedOrder?.status === OrderStatusEnum.DONE;
@@ -73,7 +73,6 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
                 );
                 setSelectedOrder(response);
                 updateOrderInOverviewList(response);
-                updateStatusHistory(response?.statusHistory);
                 showSnackbar(t('shipment-info-updated'), 'success');
                 handleClose();
             } catch (error) {

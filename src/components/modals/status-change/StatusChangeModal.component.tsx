@@ -39,7 +39,7 @@ const StatusChangeModal = ({
   onClose,
 }: StatusChangeModalProps) => {
   const { t } = useTranslation();
-  const { setSelectedOrder, updateOrderInOverviewList, updateStatusHistory } =
+  const { setSelectedOrder, updateOrderInOverviewList } =
     useContext(OrdersContext);
   const { showSnackbar } = useSnackbar();
   const initialValues: StatusData = {
@@ -61,7 +61,6 @@ const StatusChangeModal = ({
         );
         setSelectedOrder(response);
         updateOrderInOverviewList(response);
-        updateStatusHistory(response?.statusHistory);
         onClose();
       } catch (error) {
         console.error(error);
@@ -73,7 +72,6 @@ const StatusChangeModal = ({
       orderId,
       setSelectedOrder,
       updateOrderInOverviewList,
-      updateStatusHistory,
       showSnackbar,
       t,
     ]

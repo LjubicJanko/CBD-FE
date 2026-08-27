@@ -1,5 +1,4 @@
 import {
-  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -8,15 +7,14 @@ import {
 } from '@mui/material';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import OrdersContext from '../../../store/OrdersProvider/Orders.context';
 import { OrderExecutionStatusEnum, OrderStatusEnum, OrderStatusHistory } from '../../../types/Order';
 import * as Styled from './ChangeHistory.styles';
 import { ShippedInfoTooltip } from './shipped-tooltip/ShippedTooltip.component';
 
 export type ChangeHistoryProps = {
   orderId: number;
+  statusHistory: OrderStatusHistory[];
 };
 
 const getStatusLabel = (row: OrderStatusHistory, t: (key: string) => string): string => {
@@ -39,22 +37,8 @@ const isExecutionStatusEntry = (row: OrderStatusHistory): boolean => {
   return row.executionStatus !== null && row.executionStatus !== undefined;
 };
 
-const ChangeHistoryComponent = ({ orderId }: ChangeHistoryProps) => {
+const ChangeHistoryComponent = ({ orderId, statusHistory }: ChangeHistoryProps) => {
   const { t } = useTranslation();
-  const { statusHistory, isHistoryLoading, fetchStatusHistory } =
-    useContext(OrdersContext);
-
-  useEffect(() => {
-    fetchStatusHistory(orderId);
-  }, [fetchStatusHistory, orderId]);
-
-  if (isHistoryLoading) {
-    return (
-      <div className="loader-wrapper">
-        <CircularProgress />
-      </div>
-    );
-  }
 
   return (
     <Styled.ChangeHistoryContainer className="change-history">

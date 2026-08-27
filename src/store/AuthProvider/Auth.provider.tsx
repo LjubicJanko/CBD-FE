@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 import AuthContext from './Auth.context';
 import localStorageService from '../../services/localStorage.service';
 import { authService } from '../../api';
@@ -111,10 +111,13 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
     return () => authBus.off('token-expired', logout);
   }, [logout]);
 
+  const value = useMemo(
+    () => ({ token, authData, isLoading, login, logout }),
+    [token, authData, isLoading, login, logout]
+  );
+
   return (
-    <AuthContext.Provider value={{ token, authData, isLoading, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
   );
 };
 

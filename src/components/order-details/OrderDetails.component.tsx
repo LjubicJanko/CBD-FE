@@ -517,12 +517,16 @@ const OrderDetailsComponent = () => {
         )}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <ChangeHistoryComponent orderId={selectedOrder.id} />
+        <ChangeHistoryComponent
+          orderId={selectedOrder.id}
+          statusHistory={selectedOrder.statusHistory}
+        />
       </CustomTabPanel>
       {privileges.canAddPayment && (
         <CustomTabPanel value={value} index={2}>
           <OrderPayments
             orderId={selectedOrder.id}
+            payments={selectedOrder.payments}
             isAddingDisabled={
               selectedOrder.executionStatus !== OrderExecutionStatusEnum.ACTIVE
             }

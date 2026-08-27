@@ -73,6 +73,8 @@ const OrderInfoForm = () => {
       try {
         const res: Order = await orderService.updateOrder({
           ...values,
+          acquisitionCost: Number(values.acquisitionCost),
+          salePrice: Number(values.salePrice),
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
             'YYYY-MM-DD'
           ),
@@ -179,10 +181,15 @@ const OrderInfoForm = () => {
           label={t('acquisition-cost')}
           type="number"
           name="acquisitionCost"
-          value={formik.values.acquisitionCost}
+          value={formik.values.acquisitionCost ?? ''}
           error={!!formik.errors.acquisitionCost}
           helperText={formik.errors.acquisitionCost ?? ''}
-          onChange={formik.handleChange}
+          onChange={(e) =>
+            formik.setFieldValue(
+              'acquisitionCost',
+              e.target.value === '' ? undefined : e.target.value
+            )
+          }
           onBlur={formik.handleBlur}
         />
         <TextField
@@ -190,10 +197,15 @@ const OrderInfoForm = () => {
           label={t('sale-price')}
           type="number"
           name="salePrice"
-          value={formik.values.salePrice}
+          value={formik.values.salePrice ?? ''}
           error={!!formik.errors.salePrice}
           helperText={formik.errors.salePrice ?? ''}
-          onChange={formik.handleChange}
+          onChange={(e) =>
+            formik.setFieldValue(
+              'salePrice',
+              e.target.value === '' ? undefined : e.target.value
+            )
+          }
           onBlur={formik.handleBlur}
         />
         <dl className="order-info__calculations">

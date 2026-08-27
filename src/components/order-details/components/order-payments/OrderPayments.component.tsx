@@ -4,14 +4,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import {
   Button,
-  CircularProgress,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import orders from '../../../../api/services/orders';
 import { usePrivileges } from '../../../../hooks/usePrivileges';
@@ -23,6 +22,7 @@ import * as Styled from './OrderPayments.styles';
 
 export type OrderPaymentsProps = {
   orderId: number;
+  payments: Payment[];
   isAddingDisabled?: boolean;
 };
 
@@ -38,18 +38,14 @@ const initialPaymentModalConfig: PaymentModalConfig = {
 
 const OrderPayments = ({
   orderId,
+  payments,
   isAddingDisabled = false,
 }: OrderPaymentsProps) => {
   const { t } = useTranslation();
 
   const privileges = usePrivileges();
 
-  const {
-    payments,
-    arePaymentsLoading,
-    fetchPayments,
-    updatePaymentInOverview,
-  } = useContext(OrdersContext);
+  const { updatePaymentInOverview } = useContext(OrdersContext);
 
   const [paymentModalConfig, setPaymentModalConfig] =
     useState<PaymentModalConfig>(initialPaymentModalConfig);
@@ -84,18 +80,6 @@ const OrderPayments = ({
     }
     setConfirmModalConfig(initialPaymentModalConfig);
   }, [confirmModalConfig?.paymentToUpdate, orderId, updatePaymentInOverview]);
-
-  useEffect(() => {
-    fetchPayments(orderId);
-  }, [fetchPayments, orderId]);
-
-  if (arePaymentsLoading) {
-    return (
-      <div className="loader-wrapper">
-        <CircularProgress />
-      </div>
-    );
-  }
 
   return (
     <Styled.OrderPaymentsContainer className="order-payments">

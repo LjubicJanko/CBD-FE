@@ -8,7 +8,19 @@
       "Bash(Out-String)",
       "PowerShell(npm run build)",
       "PowerShell(npx tsc -b)",
-      "PowerShell(npx tsc -b 2>&1)"
+      "PowerShell(npx tsc -b 2>&1)",
+      "PowerShell(npm run build 2>&1)",
+      "Bash(git --no-pager diff --stat)",
+      "Bash(git --no-pager status --short)",
+      "Bash(git --no-pager diff)",
+      "Bash(command -v python python3 py)",
+      "Bash(/c/Python313/python /tmp/wcag.py)",
+      "Bash(cat)",
+      "Bash(/c/Python313/python /tmp/chroma.py)",
+      "Bash(node -e ' *)",
+      "Bash(python3)",
+      "Bash(python _verify_theme.py)",
+      "Bash(python _fix_theme.py)"
     ]
   }
 }

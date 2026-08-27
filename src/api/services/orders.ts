@@ -204,12 +204,6 @@ const deletePayment = async (id: number, paymentId: number) =>
     .put(`/orders/deletePayment/${id}?paymentId=${paymentId}`)
     .then((res) => res.data);
 
-const getPayments = async (id: number) =>
-  privateClient.get(`/orders/payments/${id}`).then((res) => res.data);
-
-const getHistory = async (id: number) =>
-  privateClient.get(`/orders/history/${id}`).then((res) => res.data);
-
 // order extension
 const createOrderExtension = async (tenantSlug: string, data: OrderExtensionReqDto) =>
   client.post(`/orderExtend/${tenantSlug}/create`, data).then((res) => res.data);
@@ -246,8 +240,6 @@ export default {
   editPayment,
   deletePayment,
   fetchPaginated,
-  getPayments,
-  getHistory,
   createOrderExtension,
   editContactInfo,
   editExtension,

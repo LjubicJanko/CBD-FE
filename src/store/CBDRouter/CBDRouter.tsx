@@ -1,12 +1,9 @@
 import {
-  AttendanceHubPage,
   DashboardPage,
   HomePage,
   IdTrackingPage,
   LoginPage,
   ProfilePage,
-  ReportsPage,
-  SelectTenantPage,
 } from '../../pages';
 import {
   Navigate,
@@ -20,7 +17,6 @@ import PrivateRouteWrapper from './PrivateRouteWrapper';
 import { isAuthenticated } from './helpers';
 import { HeaderComponent } from '../../components';
 import OrdersProvider from '../OrdersProvider/Orders.provider';
-import CreateOrderPage from '../../pages/create-order/CreateOrder.page';
 import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import FeatureRoute from './FeatureRoute';
@@ -30,10 +26,39 @@ import { privileges } from '../../util/util';
 import { Feature } from '../../util/features';
 import OrderExtensionPage from '../../pages/order-еxtension/OrderExtension.page';
 import PublicFooter from '../../components/public-footer/PublicFooter.component';
-import PlatformPage from '../../pages/platform/Platform.page';
 import BannerProvider from '../BannerProvider';
 import AttendanceProvider from '../AttendanceProvider';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
+import { CircularProgress } from '@mui/material';
+
+// Lazy-loaded: gated behind a feature flag/superadmin/privilege check, so
+// most sessions never need these chunks (and Reports/AttendanceHub pull in
+// recharts/leaflet, which are otherwise unconditionally bundled for everyone).
+const ReportsPage = lazy(() => import('../../pages/reports/Reports.page'));
+const PlatformPage = lazy(() => import('../../pages/platform/Platform.page'));
+const AttendanceHubPage = lazy(
+  () => import('../../pages/attendance/AttendanceHub.page')
+);
+const SelectTenantPage = lazy(
+  () => import('../../pages/select-tenant/SelectTenant.page')
+);
+const CreateOrderPage = lazy(
+  () => import('../../pages/create-order/CreateOrder.page')
+);
+
+const RouteFallback: React.FC = () => (
+  <div
+    style={{
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '4rem 0',
+    }}
+  >
+    <CircularProgress />
+  </div>
+);
 
 const PrivateLayout: React.FC = () => {
   return (
@@ -41,7 +66,9 @@ const PrivateLayout: React.FC = () => {
       <AttendanceProvider>
         <HeaderComponent />
         <main>
-          <Outlet />
+          <Suspense fallback={<RouteFallback />}>
+            <Outlet />
+          </Suspense>
         </main>
       </AttendanceProvider>
     </BannerProvider>

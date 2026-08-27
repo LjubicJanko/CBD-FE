@@ -60,6 +60,8 @@ const CreateOrderPage = () => {
       try {
         await orderService.createOrder({
           ...values,
+          acquisitionCost: Number(values.acquisitionCost),
+          salePrice: Number(values.salePrice),
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
             'YYYY-MM-DD'
           ),
@@ -165,8 +167,13 @@ const CreateOrderPage = () => {
           name="acquisitionCost"
           className="create-order--acquisition-cost-input"
           type="number"
-          value={formik.values.acquisitionCost}
-          onChange={formik.handleChange}
+          value={formik.values.acquisitionCost ?? ''}
+          onChange={(e) =>
+            formik.setFieldValue(
+              'acquisitionCost',
+              e.target.value === '' ? undefined : e.target.value
+            )
+          }
           onBlur={formik.handleBlur}
           error={
             !!formik.errors.acquisitionCost && formik.touched.acquisitionCost
@@ -181,8 +188,13 @@ const CreateOrderPage = () => {
           name="salePrice"
           className="create-order--sale-price-input"
           type="number"
-          value={formik.values.salePrice}
-          onChange={formik.handleChange}
+          value={formik.values.salePrice ?? ''}
+          onChange={(e) =>
+            formik.setFieldValue(
+              'salePrice',
+              e.target.value === '' ? undefined : e.target.value
+            )
+          }
           onBlur={formik.handleBlur}
           error={!!formik.errors.salePrice && formik.touched.salePrice}
           helperText={formik.touched.salePrice && formik.errors.salePrice}

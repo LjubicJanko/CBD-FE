@@ -3,6 +3,13 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 
+// Serve the dev server over plain HTTP by default. Opt into a self-signed HTTPS
+// cert (needed for the service worker to register when accessed over the LAN IP
+// rather than localhost) with `HTTPS=true npm run dev`.
+// `process` is Node-only and @types/node isn't installed; declare just what we use.
+declare const process: { env: Record<string, string | undefined> };
+const useHttps = process.env.HTTPS === 'true';
+
 // https://vitejs.dev/config/
 export default defineConfig({
     server: {
@@ -10,7 +17,7 @@ export default defineConfig({
     },
     plugins: [
         react(),
-        basicSsl(),
+        ...(useHttps ? [basicSsl()] : []),
         VitePWA({
             registerType: 'autoUpdate',
             manifest: {
