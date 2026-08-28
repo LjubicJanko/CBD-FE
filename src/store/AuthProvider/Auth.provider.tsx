@@ -6,12 +6,12 @@ import { AuthData, LoginData } from '../../types/Auth';
 import authBus from '../../services/bus';
 import { firstEnabledModuleRoute } from '../../util/features';
 
-// TODO remove after 2.2 — one-time migration to clear cached auth payloads
+// TODO remove after 2.2, one-time migration to clear cached auth payloads
 // from before the multi-tenant rename (missing `superadmin` field or carrying
 // the old `'admin'` role) and from before the premium-features rollout (missing
 // `features`). Without the `features` check, an already-logged-in user keeps a
 // cached payload with no features, so every module gates off and FeatureRoute
-// strands them on /profile — with a still-valid token, nothing prompts a
+// strands them on /profile, with a still-valid token, nothing prompts a
 // re-login. Forcing re-login refreshes the payload. Once the install base has
 // rolled forward this can be deleted along with its usage in the useState
 // initializer below.

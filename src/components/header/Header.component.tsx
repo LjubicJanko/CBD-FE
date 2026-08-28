@@ -54,7 +54,7 @@ const HeaderComponent = () => {
   // (window.location.href = '/dashboard'), so this component remounts on the
   // next page and re-reads the storage. If a future change introduces
   // SPA-style tenant switching, lift selectedTenantId/Slug into a context
-  // first — otherwise the dropdown will desync.
+  // first, otherwise the dropdown will desync.
   // Same constraint applies in BannerProvider and TenantContextRequired.
   const [selectedTenantId, setSelectedTenantId] = useState<number | ''>(
     localStorageService.selectedTenantId ?? ''

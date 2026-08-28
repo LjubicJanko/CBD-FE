@@ -96,7 +96,7 @@ export default {
     },
     /**
      * After a superadmin edits a tenant, refresh the cached selection IF that
-     * tenant is the one currently being impersonated — so slug/feature changes
+     * tenant is the one currently being impersonated, so slug/feature changes
      * take effect immediately (the reactive store notifies subscribers) without
      * a re-select. No-op for any other tenant. Single home for this invariant,
      * shared by the platform detail page and the /profile Premium tab.

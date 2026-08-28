@@ -25,7 +25,7 @@ export default defineConfig({
                 short_name: 'CBD',
                 start_url: '/',
                 display: 'standalone',
-                // PWA manifest colors — must match theme.PRIMARY_1 in
+                // PWA manifest colors, must match theme.PRIMARY_1 in
                 // src/styles/theme.ts. Kept as a literal here because this is
                 // build-time Node config and can't import the runtime theme.
                 background_color: '#2F2F2F',

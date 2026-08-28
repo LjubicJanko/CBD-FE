@@ -19,9 +19,9 @@ import { xxsMax } from '../../util/breakpoints';
 
 /**
  * Single attendance route hosting the previously-separate pages as tabs:
- *  - "My attendance" (check in/out) — for anyone who can check in.
- *  - "Attendance overview" (all sessions) — for ATTENDANCE_VIEW_ALL.
- *  - "Locations" — for LOCATION_MANAGE.
+ *  - "My attendance" (check in/out), for anyone who can check in.
+ *  - "Attendance overview" (all sessions), for ATTENDANCE_VIEW_ALL.
+ *  - "Locations", for LOCATION_MANAGE.
  *
  * Each tab is gated by its privilege, so a regular user sees only their own
  * attendance tab (and the tab bar is hidden entirely in that case). Reuses the
@@ -69,7 +69,7 @@ const AttendanceHub = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // No relevant privilege at all — nothing to show here.
+    // No relevant privilege at all, nothing to show here.
     if (tabs.length === 0) return <Navigate to="/dashboard" replace />;
 
     // The active tab is driven by the `tab` query param (its stable id) so a
@@ -90,7 +90,7 @@ const AttendanceHub = () => {
         );
     };
 
-    // Single accessible tab (regular user) — render the page as-is, no tab bar.
+    // Single accessible tab (regular user), render the page as-is, no tab bar.
     if (tabs.length === 1) return <>{activePanel}</>;
 
     return (

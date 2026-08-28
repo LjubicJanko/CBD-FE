@@ -62,7 +62,7 @@ const OrderExtensionPage: React.FC = () => {
             return;
         }
         // Defensive: don't fire a doomed lookup for a slug that collides with
-        // an FE route — go straight to the not-found state.
+        // an FE route, go straight to the not-found state.
         if (isReservedSlug(tenantSlug)) {
             setTenantError(true);
             setTenantLoading(false);

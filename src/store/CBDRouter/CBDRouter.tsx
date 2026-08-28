@@ -1,4 +1,5 @@
 import {
+  AttendanceScanPage,
   DashboardPage,
   HomePage,
   IdTrackingPage,
@@ -122,6 +123,15 @@ const CBDRouter: React.FC = (): JSX.Element => {
             element={<OrderExtensionPage />}
             loader={async () => await isAuthenticated()}
           />
+          {/* No isAuthenticated loader here, deliberately: unlike the other
+              public routes, an already-logged-in employee is the COMMON case
+              for this one (scanning at work) and must not be bounced to
+              /dashboard before the scan is processed. Logged-out visitors get
+              an inline login on the page itself. */}
+          <Route
+            path="attendance/scan/:tenantSlug/:token"
+            element={<AttendanceScanPage />}
+          />
           <Route
             path="login"
             element={<LoginPage />}
@@ -168,7 +178,7 @@ const CBDRouter: React.FC = (): JSX.Element => {
                   <Route path="createOrder" element={<CreateOrderPage />} />
                 </Route>
               </Route>
-              {/* Profile is always reachable — it is the landing fallback when a
+              {/* Profile is always reachable, it is the landing fallback when a
                   tenant has no other module enabled. */}
               <Route path="profile" element={<ProfilePage />} />
               {/* `reports` is feature-gated only (no per-user privilege today). */}

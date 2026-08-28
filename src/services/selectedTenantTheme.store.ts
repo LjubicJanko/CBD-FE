@@ -1,11 +1,11 @@
 /**
- * Reactive store over the selected-tenant brand colors in localStorage — the
+ * Reactive store over the selected-tenant brand colors in localStorage, the
  * theme counterpart to `selectedTenantFeatures.store`. Lets a superadmin's
  * impersonated-tenant colors be consumed reactively (see `TenantThemeSync`), so
  * picking/saving a tenant's colors re-themes the session without a reload.
  *
- * Same contract as the features store: the only writers — `setSelectedTenant` /
- * `clearSelectedTenant` / `clearData` in localStorage.service — must call
+ * Same contract as the features store: the only writers, `setSelectedTenant` /
+ * `clearSelectedTenant` / `clearData` in localStorage.service, must call
  * `notify()` after mutating the keys. `getSnapshot` returns a cached reference
  * that only changes on `notify()`, keeping `useSyncExternalStore` stable.
  */

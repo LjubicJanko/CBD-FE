@@ -39,7 +39,7 @@ export const AttendanceBtn = styled.button`
         flex-shrink: 0;
     }
 
-    /* Checked in — outline, lime text */
+    /* Checked in, outline, lime text */
     &.attendance-btn--out {
         background-color: transparent;
         color: ${(p) => p.theme.PRIMARY_2};

@@ -4,29 +4,29 @@ import { DefaultTheme } from 'styled-components';
  * Unified color system
  * =====================
  * Single source of truth for every color in the app. Nothing should hardcode a
- * hex / rgb / rgba / named color outside this file — components reference these
+ * hex / rgb / rgba / named color outside this file, components reference these
  * tokens (or derive an opacity variant with `withAlpha` / `accentAlpha`).
  *
  * The app is a committed DARK UI: a near-black base with a single lime brand
  * accent and neutral grays for text. On top of that sit a small, rational scale
  * of translucent surfaces / borders / overlays, and a semantic set (error /
  * success / warning) for conveying meaning. Color is only ever a SUPPORT for
- * meaning — icons/labels carry it too.
+ * meaning, icons/labels carry it too.
  *
  * PER-TENANT THEMING
  * ------------------
- * The two brand hues — background (`PRIMARY_1`) and accent (`PRIMARY_2`, plus
- * its hover + tints) — resolve to CSS custom properties (`var(--c-*)`) rather
+ * The two brand hues, background (`PRIMARY_1`) and accent (`PRIMARY_2`, plus
+ * its hover + tints), resolve to CSS custom properties (`var(--c-*)`) rather
  * than literal hex. Defaults for those vars live in `globalStyles` `:root`.
  * `applyTenantTheme()` overrides them on `document.documentElement` at runtime
  * when a tenant has the `theming` feature and a color set. Because the tokens
- * are `var()` strings, every consumer — including the many files that import
- * this static `theme` object — re-themes instantly via the CSS cascade, with no
+ * are `var()` strings, every consumer, including the many files that import
+ * this static `theme` object, re-themes instantly via the CSS cascade, with no
  * per-component change. Tokens that are NOT tenant-overridable (text, surfaces,
  * borders, depth, semantic) stay literal so they remain stable on any base.
  *
  * NOTE: the per-status / chart categorical palette lives in `src/util/util.ts`
- * (`statusColors`) — 8 distinct hues keyed by order status, intentionally
+ * (`statusColors`), 8 distinct hues keyed by order status, intentionally
  * separate from this semantic theme.
  */
 
@@ -52,10 +52,10 @@ export const THEME_VARS = {
 } as const;
 
 /**
- * Canonical CBD brand hues — the defaults baked into `:root` and the fallback
+ * Canonical CBD brand hues, the defaults baked into `:root` and the fallback
  * whenever a tenant has no theme (or the `theming` feature is off). Also used
  * wherever a real hex is required instead of a CSS var (canvas/SVG that can't
- * read CSS variables — e.g. the QR code, the map geofence stroke).
+ * read CSS variables, e.g. the QR code, the map geofence stroke).
  */
 export const DEFAULT_COLORS = {
     background: '#2F2F2F',
@@ -65,7 +65,7 @@ export const DEFAULT_COLORS = {
     accentRgb: '212, 255, 0',
 } as const;
 
-/** rgba() built from the accent CSS-var channels — for accent opacity variants. */
+/** rgba() built from the accent CSS-var channels, for accent opacity variants. */
 export const accentAlpha = (alpha: number): string =>
     `rgba(var(${THEME_VARS.accentRgb}), ${alpha})`;
 
@@ -111,7 +111,7 @@ const theme: DefaultTheme = {
     SHADOW: withAlpha(BASE.BLACK, 0.2), // default elevation shadow
     SHADOW_STRONG: withAlpha(BASE.BLACK, 0.4), // modal / strong elevation shadow
 
-    // ===== Accent tints (lime — track the accent var) =====
+    // ===== Accent tints (lime, track the accent var) =====
     ACCENT_SUBTLE: accentAlpha(0.04), // faint accent fill
     ACCENT_SOFT: accentAlpha(0.1), // selected / hover accent fill
 

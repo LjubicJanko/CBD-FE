@@ -30,7 +30,7 @@ const HomeComponent = () => {
             return;
         }
         // Defensive: the /:tenantSlug catch-all matches anything. Don't fire
-        // a doomed lookup for /<reserved> — render the not-found state.
+        // a doomed lookup for /<reserved>, render the not-found state.
         if (isReservedSlug(tenantSlug)) {
             setLoading(false);
             setNotFound(true);
@@ -60,8 +60,8 @@ const HomeComponent = () => {
     );
 
     // ID tracking looks up an order by its tracking id. Trackable ids come from
-    // EITHER module — regular orders (`orders`) or public order requests
-    // (`order-extension`) — so show it when either is enabled, and hide it for a
+    // EITHER module, regular orders (`orders`) or public order requests
+    // (`order-extension`), so show it when either is enabled, and hide it for a
     // tenant that has neither (e.g. an attendance-only customer). The legacy
     // no-slug home has no tenant context to gate on, so it's left untouched.
     const showIdTracking =

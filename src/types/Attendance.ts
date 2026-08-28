@@ -71,3 +71,27 @@ export type AttendanceAdminPatch = {
   checkOutAt?: string;
   notes?: string;
 };
+
+// Public, unauthenticated, just enough to render the confirm-screen chrome
+// before the caller has necessarily logged in.
+export type ScanLocationInfo = {
+  locationName: string;
+};
+
+export type ScanRequest = {
+  lat: number | null;
+  lng: number | null;
+  accuracy: number | null;
+};
+
+export type ScanAction = 'CHECK_IN' | 'CHECK_OUT';
+
+export type ScanResult = {
+  action: ScanAction;
+  sessionId: number;
+  locationId: number;
+  locationName: string;
+  checkInAt: string;
+  checkOutAt: string | null;
+  durationSeconds: number | null;
+};

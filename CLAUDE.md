@@ -4,10 +4,10 @@
 Order tracking and management SPA for a business called CBD. Built with React 18 + TypeScript + Vite. Deployed on Vercel.
 
 ## Commands
-- `npm run dev` — Start dev server (Vite, port 5173)
-- `npm run build` — TypeScript check + Vite production build (`tsc -b && vite build`)
-- `npm run lint` — ESLint (flat config, ESLint 9)
-- `npm run preview` — Preview production build locally
+- `npm run dev`, Start dev server (Vite, port 5173)
+- `npm run build`, TypeScript check + Vite production build (`tsc -b && vite build`)
+- `npm run lint`, ESLint (flat config, ESLint 9)
+- `npm run preview`, Preview production build locally
 - No test framework is configured.
 
 ## Architecture
@@ -54,11 +54,11 @@ Each component is a folder containing its `.component.tsx` and `.styles.tsx` fil
 
 ### State Management
 Five Context providers wrap the app in `App.tsx`:
-- **AuthProvider** — login/logout, token management, listens to auth bus for token expiry
-- **OrdersProvider** — orders CRUD, pagination, status history, payments
-- **BannerProvider** — active banner management
-- **SnackbarProvider** — toast notifications via MUI Snackbar
-- **CBDRouter** — route definitions with public/private layout split
+- **AuthProvider**, login/logout, token management, listens to auth bus for token expiry
+- **OrdersProvider**, orders CRUD, pagination, status history, payments
+- **BannerProvider**, active banner management
+- **SnackbarProvider**, toast notifications via MUI Snackbar
+- **CBDRouter**, route definitions with public/private layout split
 
 ### Routing
 - Public routes: `/`, `/track`, `/order-extension`, `/login`
@@ -79,9 +79,10 @@ Five Context providers wrap the app in `App.tsx`:
 - BEM class naming used alongside styled-components
 
 ### Environment
-- `VITE_API_URL` — backend API base URL (accessed via `import.meta.env.VITE_API_URL`)
-- `VITE_TENANT_SLUG` — default tenant slug for the public home page link and the legacy `/track?id=` redirect. When unset, the home page hides the order-extension entry point.
-- Translations served locally from `public/locales/{en,rs}/translation.json` (Vite exposes them at `/locales/...`). A remote mirror at `ljubicjanko.github.io/CBD-Locales` exists for reference but is no longer the runtime source — keep the local files in sync if you ever switch back.
+- `VITE_API_URL`, backend API base URL (accessed via `import.meta.env.VITE_API_URL`)
+- `VITE_TENANT_SLUG`, default tenant slug for the public home page link and the legacy `/track?id=` redirect. When unset, the home page hides the order-extension entry point.
+- `VITE_LOCAL_SCAN_ORIGIN`, dev-only (gated on `import.meta.env.DEV`, never applies to a production build). Overrides the origin encoded into the printed attendance QR code (`src/pages/locations/Locations.page.tsx`), which otherwise defaults to `window.location.origin`. Needed because a phone camera can't resolve `localhost`, set it to your machine's LAN address (e.g. `http://192.168.1.14:5173`, matching whatever port `npm run dev` reports) to test the scan flow from a real device.
+- Translations served locally from `public/locales/{en,rs}/translation.json` (Vite exposes them at `/locales/...`). A remote mirror at `ljubicjanko.github.io/CBD-Locales` exists for reference but is no longer the runtime source, keep the local files in sync if you ever switch back.
 
 ## Code Style
 - **Prettier**: single quotes, 4-space tabs, trailing commas (es5), semicolons

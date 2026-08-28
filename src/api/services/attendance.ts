@@ -6,8 +6,12 @@ import {
   AttendanceSession,
   CheckOutResponse,
   CurrentSession,
+  ScanLocationInfo,
+  ScanRequest,
+  ScanResult,
 } from '../../types/Attendance';
 import { PaginatedResponse } from '../../types/Response';
+import client from '../client';
 import privateClient from '../privateClient';
 
 const checkIn = async (
@@ -57,6 +61,21 @@ const patchSession = async (
 ): Promise<AttendanceSession> =>
   privateClient.patch(`/attendance/${id}`, data).then((res) => res.data);
 
+// Public, no auth header, so the scan landing page can render the location
+// name before the caller has necessarily logged in.
+const getScanLocation = async (
+  tenantSlug: string,
+  token: string
+): Promise<ScanLocationInfo> =>
+  client
+    .get(`/attendance/scan/${tenantSlug}/${token}`)
+    .then((res) => res.data);
+
+// Authenticated. Toggles automatically server-side: checks in if the caller
+// has no open session, checks out if they do.
+const scan = async (token: string, data: ScanRequest): Promise<ScanResult> =>
+  privateClient.post(`/attendance/scan/${token}`, data).then((res) => res.data);
+
 export default {
   checkIn,
   checkOut,
@@ -64,4 +83,6 @@ export default {
   list,
   createManual,
   patchSession,
+  getScanLocation,
+  scan,
 };

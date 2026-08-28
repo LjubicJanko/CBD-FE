@@ -24,7 +24,7 @@ const LABEL_KEY_BY_FEATURE = Object.fromEntries(
  * Presentational list of premium feature/module switches, driven by
  * `FEATURE_CATALOG`. Shared by the superadmin tenant-details form
  * (`/platform/tenants/:id`) and the superadmin "Premium features" tab in
- * `/profile`, so the two stay in lockstep. Purely controlled — the caller owns
+ * `/profile`, so the two stay in lockstep. Purely controlled, the caller owns
  * the `features` state and persistence.
  *
  * A feature whose prerequisites aren't enabled (see `FEATURE_DEPENDENCIES`) is

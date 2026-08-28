@@ -82,7 +82,7 @@ const AttendanceAdminPage = () => {
     setLoading(true);
     try {
       // Guard against NaN (e.g. a user option with no id) ever reaching the
-      // query string — the BE 500s on `userId=NaN`.
+      // query string, the BE 500s on `userId=NaN`.
       const userId =
         typeof filterUser === 'number' && !Number.isNaN(filterUser)
           ? filterUser
@@ -91,7 +91,7 @@ const AttendanceAdminPage = () => {
       const scope = { userId, locationId };
 
       if (filterOpenOnly) {
-        // "Open only" ignores the day entirely — show everyone currently on
+        // "Open only" ignores the day entirely, show everyone currently on
         // the clock, paginated.
         const response = await attendanceService.list({
           ...scope,

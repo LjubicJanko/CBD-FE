@@ -253,7 +253,7 @@
         "userCreateError": "Kreiranje korisnika nije uspelo.",
         "fetchError": "Učitavanje klijenata nije uspelo.",
         "creatingUserFor": "Kreiranje korisnika za:",
-        "noActiveTenant": "Nijedan klijent nije izabran — izaberite ga u zaglavlju."
+        "noActiveTenant": "Nijedan klijent nije izabran, izaberite ga u zaglavlju."
     },
     "tenantDetails": {
         "tab": "Podaci o kompaniji",
@@ -298,6 +298,8 @@
     "feature-banners-description": "Baneri prikazani na javnim stranicama.",
     "feature-attendance-label": "Evidencija i lokacije",
     "feature-attendance-description": "Prijava/odjava, pregled evidencije i radne lokacije.",
+    "feature-attendance-geofence-label": "GPS prijava (beta)",
+    "feature-attendance-geofence-description": "Omogućava radnim lokacijama da koriste GPS geofence umesto QR koda za prijavu/odjavu. Beta, zavisi od dozvola za lokaciju i preciznosti uređaja.",
     "feature-reports-label": "Izveštaji i analitika",
     "feature-reports-description": "Poslovni pokazatelji, profit i analiza trajanja statusa.",
     "feature-theming-label": "Boje brenda",
@@ -311,7 +313,7 @@
         "copied": "Link je kopiran u clipboard.",
         "copyFailed": "Kopiranje linka nije uspelo.",
         "downloadQR": "Preuzmi QR",
-        "noTenant": "Nije izabran klijent — izaberite ga u zaglavlju."
+        "noTenant": "Nije izabran klijent, izaberite ga u zaglavlju."
     },
     "app-name": "CBD SPORTSWEAR",
     "order-jersey-cta": "Poruči dres",
@@ -353,6 +355,21 @@
         "check-out-success": "Odlazak je zabeležen.",
         "load-failed": "Učitavanje statusa prisustva nije uspelo.",
         "accuracy": "GPS preciznost: ±{{ACCURACY}} m",
+        "qr-only-checkin-hint": "Vaša radna lokacija prijavljuje dolazak putem QR koda. Skenirajte kod postavljen na lokaciji da prijavite dolazak.",
+        "qr-only-checkout-hint": "Vaša radna lokacija prijavljuje odlazak putem QR koda. Skenirajte kod postavljen na lokaciji da prijavite odlazak.",
+        "scan": {
+            "invalid-code": "Ovaj QR kod nije važeći ili je istekao.",
+            "login-required": "Prijavite se da biste evidentirali dolazak/odlazak.",
+            "no-permission": "Nemate dozvolu za evidentiranje prisustva.",
+            "tenant-mismatch": "Ovaj kod pripada drugoj organizaciji od naloga na koji ste prijavljeni. Odjavite se i prijavite sa odgovarajućim nalogom da biste nastavili.",
+            "check-in-question": "Prijaviti dolazak na lokaciji {{LOCATION}}?",
+            "check-out-question": "Prijaviti odlazak sa lokacije {{LOCATION}}?",
+            "checked-in-result": "Dolazak je zabeležen na lokaciji {{LOCATION}} u {{TIME}}.",
+            "checked-out-result": "Odlazak je zabeležen sa lokacije {{LOCATION}}. Radno vreme {{DURATION}}.",
+            "not-now": "Ne sada",
+            "go-to-app": "Idi na prisustvo",
+            "scan-error": "Nešto je pošlo po zlu. Pokušajte ponovo."
+        },
         "error": {
             "out_of_geofence": "Niste na registrovanoj radnoj lokaciji. Priđite radnom mestu i pokušajte ponovo.",
             "already_checked_in": "Već ste prijavili dolazak.",
@@ -426,7 +443,18 @@
         "load-error": "Učitavanje lokacija nije uspelo.",
         "radius-hint": "Podrazumevano 100 m. Dozvoljen opseg 10–5000 m.",
         "radius-range": "Radijus mora biti između 10 i 5000 m.",
-        "name-required": "Naziv je obavezan."
+        "name-required": "Naziv je obavezan.",
+        "method": "Način prijave",
+        "method-geofence": "Geofence (GPS)",
+        "method-qr": "QR kod",
+        "qr-hint": "Odštampajte ovaj kod i postavite ga na lokaciji. Zaposleni ga skeniraju kamerom telefona da prijave dolazak ili odlazak.",
+        "qr-pending": "QR kod će biti generisan nakon čuvanja.",
+        "qr-scan-url": "URL za skeniranje",
+        "qr-download": "Preuzmi PNG",
+        "qr-print": "Štampaj",
+        "qr-open-sessions": "{{COUNT}} trenutno prijavljeno",
+        "geofence-feature-disabled-hint": "GPS prijava je beta funkcija koja nije omogućena za ovog klijenta. Kontaktirajte podršku da je omogućite, ili koristite QR prijavu.",
+        "switch-warning": "{{COUNT}} ljudi je trenutno prijavljeno na ovoj lokaciji. Promena načina prijave neće prekinuti njihovu otvorenu smenu, ali će im možda biti potreban novi način da prijave odlazak. Nastaviti?"
     },
     "archive": "Arhiviraj",
     "search-orders": "Pretraži porudžbine",

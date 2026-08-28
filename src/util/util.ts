@@ -1,6 +1,15 @@
 import { OrderStatus, PostServices } from '../types/Order';
 import theme from '../styles/theme';
 
+// Shared by the attendance badge, the "My attendance" card, and the QR scan
+// result — kept in one place instead of three copies.
+export const formatDuration = (seconds: number): string => {
+  if (seconds < 0) seconds = 0;
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  return `${h}h ${m}m`;
+};
+
 export const statuses: OrderStatus[] = [
   'DESIGN',
   'PRINT_READY',

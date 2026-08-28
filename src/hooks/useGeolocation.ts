@@ -34,9 +34,10 @@ const mapPositionError = (
   }
 };
 
-// Report the device's real GPS accuracy. The server no longer uses this to
-// gate check-ins (the geofence tolerance lives in WorkLocation.radiusM); we
-// keep sending it purely so it's recorded on the session for audit.
+// Report the device's real GPS accuracy. The server uses lat/lng to enforce
+// the geofence (matchGeofence in AttendanceServiceImpl, tolerance from
+// WorkLocation.radiusM) and throws out_of_geofence when no active location
+// is in range, this is a hard gate today, not audit-only.
 const toCoords = (pos: GeolocationPosition): Coords => ({
   lat: pos.coords.latitude,
   lng: pos.coords.longitude,
@@ -78,9 +79,15 @@ export const useGeolocation = () => {
       return Promise.resolve(latestRef.current);
     }
 
-    // No cached fix yet — fall back to a one-shot request.
+    // No cached fix yet, fall back to a one-shot request.
     return new Promise<Coords>((resolve, reject) => {
       const timer = setTimeout(() => {
+        // Without this, a timeout left the watch running in the background
+        // forever. Easy to hit in practice now: the scan page races this
+        // whole call against its own much shorter (4s) grace period and
+        // moves on regardless, but this 30s timer, and the watch it's
+        // guarding, was still ticking away unseen in the background.
+        navigator.geolocation.clearWatch(watchId);
         reject(new GeolocationError(watchErrorRef.current ?? 'geolocation_timeout'));
       }, WATCH_TIMEOUT_MS);
 

@@ -40,11 +40,11 @@ type TenantDetailsFormProps = {
      * includes the colors in the save payload, with a live whole-UI preview.
      * Colors are superadmin-only writes (the self-service endpoint ignores
      * them), so this is only enabled where the form writes through the platform
-     * service — the "Tenant details" tab in /profile for a superadmin.
+     * service, the "Tenant details" tab in /profile for a superadmin.
      */
     allowColorEdit?: boolean;
     /**
-     * The write operations to perform — platform endpoints for a superadmin,
+     * The write operations to perform, platform endpoints for a superadmin,
      * JWT-scoped self-service endpoints for a client admin. See
      * `tenantFormService.ts`.
      */
@@ -92,7 +92,7 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
             // The self-service /profile/tenant endpoint may not include features
             // (only superadmin edits them); default so this never blows up.
             features: tenant.features ?? [],
-            // Brand colors — superadmin-only. Empty string means "no override"
+            // Brand colors, superadmin-only. Empty string means "no override"
             // (sent as null on submit -> default palette).
             accentColor: tenant.accentColor ?? '',
             backgroundColor: tenant.backgroundColor ?? '',
@@ -204,7 +204,7 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
 
     // Live whole-UI preview for the superadmin while editing: push the in-progress
     // colors onto the document so the platform chrome shows exactly what the
-    // tenant will get — but ONLY when theming is enabled, so the preview matches
+    // tenant will get, but ONLY when theming is enabled, so the preview matches
     // what the tenant's users actually see. On unmount (or when theming is off /
     // self-service form) the baseline is restored. applyTenantTheme ignores
     // invalid/partial hex, so typing is safe.

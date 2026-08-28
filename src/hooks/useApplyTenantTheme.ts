@@ -5,7 +5,7 @@ import {
 } from '../styles/applyTenantTheme';
 
 /**
- * Apply a tenant's brand theme for the lifetime of a component — used by the
+ * Apply a tenant's brand theme for the lifetime of a component, used by the
  * public pages (track / home / order-extension), which theme by slug. On
  * unmount it restores the logged-in baseline (or clears for anonymous users),
  * so leaving a themed public page never strands its colors on the next screen.

@@ -98,7 +98,7 @@ const TenantDetails = () => {
                 service={service}
                 onSaved={(updated) => {
                     setTenant(updated);
-                    // Superadmin edits the impersonated tenant here — refresh
+                    // Superadmin edits the impersonated tenant here, refresh
                     // the cached selection so the new colors/features re-theme
                     // the session immediately (no-op for a client admin, whose
                     // selectedTenantId is null).

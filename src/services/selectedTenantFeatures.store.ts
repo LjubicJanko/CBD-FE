@@ -4,8 +4,8 @@
  * `useSyncExternalStore` (see `useFeatures`).
  *
  * localStorage is not reactive and same-tab writes don't fire the `storage`
- * event, so the only writers — `localStorage.service.setSelectedTenant` /
- * `clearSelectedTenant` / `clearData` — must call `notify()` after mutating the
+ * event, so the only writers, `localStorage.service.setSelectedTenant` /
+ * `clearSelectedTenant` / `clearData`, must call `notify()` after mutating the
  * key. `getSnapshot` returns a cached array reference that only changes on
  * `notify()`, which keeps `useSyncExternalStore` stable (no render loops).
  */
@@ -21,7 +21,7 @@ const read = (): string[] => {
         const parsed = JSON.parse(val);
         return Array.isArray(parsed) ? (parsed as string[]) : [];
     } catch {
-        // Corrupt/legacy value — fail safe to "no features" rather than throwing
+        // Corrupt/legacy value, fail safe to "no features" rather than throwing
         // on every superadmin render.
         return [];
     }

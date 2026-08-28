@@ -253,7 +253,7 @@
         "userCreateError": "Failed to create user.",
         "fetchError": "Failed to load tenants.",
         "creatingUserFor": "Creating user for:",
-        "noActiveTenant": "No tenant selected — choose one in the header."
+        "noActiveTenant": "No tenant selected, choose one in the header."
     },
     "tenantDetails": {
         "tab": "Company details",
@@ -298,6 +298,8 @@
     "feature-banners-description": "Banners shown on the public pages.",
     "feature-attendance-label": "Attendance & locations",
     "feature-attendance-description": "Check-in/out, attendance overview and work locations.",
+    "feature-attendance-geofence-label": "GPS check-in (beta)",
+    "feature-attendance-geofence-description": "Lets work locations use GPS geofencing instead of QR code check-in. Beta, relies on device location permissions and accuracy.",
     "feature-reports-label": "Reports & analytics",
     "feature-reports-description": "Business metrics, profit and status-duration analytics.",
     "feature-theming-label": "Brand colors",
@@ -311,7 +313,7 @@
         "copied": "Link copied to clipboard.",
         "copyFailed": "Failed to copy link.",
         "downloadQR": "Download QR",
-        "noTenant": "No active tenant — select one in the header first."
+        "noTenant": "No active tenant, select one in the header first."
     },
     "app-name": "CBD SPORTSWEAR",
     "order-jersey-cta": "Order a jersey",
@@ -353,6 +355,21 @@
         "check-out-success": "Checked out.",
         "load-failed": "Could not load your attendance status.",
         "accuracy": "GPS accuracy: ±{{ACCURACY}} m",
+        "qr-only-checkin-hint": "Your work location checks in by QR code. Scan the code posted there to check in.",
+        "qr-only-checkout-hint": "Your work location checks out by QR code. Scan the code posted there to check out.",
+        "scan": {
+            "invalid-code": "This QR code is invalid or has expired.",
+            "login-required": "Log in to check in here.",
+            "no-permission": "You don't have permission to check in.",
+            "tenant-mismatch": "This code belongs to a different organization than the account you're logged in as. Log out and sign in with the right account to continue.",
+            "check-in-question": "Check in at {{LOCATION}}?",
+            "check-out-question": "Check out from {{LOCATION}}?",
+            "checked-in-result": "Checked in at {{LOCATION}} at {{TIME}}.",
+            "checked-out-result": "Checked out from {{LOCATION}}. Worked {{DURATION}}.",
+            "not-now": "Not now",
+            "go-to-app": "Go to attendance",
+            "scan-error": "Something went wrong. Try again."
+        },
         "error": {
             "out_of_geofence": "You're not at a registered work location. Move closer to a work site and try again.",
             "already_checked_in": "You are already checked in.",
@@ -426,7 +443,18 @@
         "load-error": "Failed to load locations.",
         "radius-hint": "Default 100 m. Allowed range 10–5000 m.",
         "radius-range": "Radius must be between 10 and 5000 m.",
-        "name-required": "Name is required."
+        "name-required": "Name is required.",
+        "method": "Check-in method",
+        "method-geofence": "Geofence (GPS)",
+        "method-qr": "QR code",
+        "qr-hint": "Print this code and post it at the location. Employees scan it with their phone camera to check in or out.",
+        "qr-pending": "The QR code will be generated after you save.",
+        "qr-scan-url": "Scan URL",
+        "qr-download": "Download PNG",
+        "qr-print": "Print",
+        "qr-open-sessions": "{{COUNT}} checked in now",
+        "geofence-feature-disabled-hint": "GPS check-in is a beta feature not enabled for this tenant. Contact support to enable it, or use QR check-in instead.",
+        "switch-warning": "{{COUNT}} people are currently checked in at this location. Switching the check-in method won't end their open session, but they may need the new method to check out. Continue?"
     },
     "archive": "Archive",
     "search-orders": "Search orders",

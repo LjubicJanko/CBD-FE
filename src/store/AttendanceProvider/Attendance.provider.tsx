@@ -3,16 +3,18 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
-import { attendanceService } from '../../api';
+import { attendanceService, locationService } from '../../api';
 import {
   AttendanceReason,
   CheckOutResponse,
   CurrentSession,
 } from '../../types/Attendance';
+import { CheckInMethod } from '../../types/WorkLocation';
 import AttendanceContext, { AttendanceStatus } from './Attendance.context';
 import SnackbarContext from '../SnackbarProvider/Snackbar.context';
 import { GeolocationError, useGeolocation } from '../../hooks/useGeolocation';
@@ -37,6 +39,11 @@ const AttendanceProvider: React.FC<PropsWithChildren> = ({ children }) => {
   );
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<AttendanceStatus>('idle');
+  // Defaults to true (fail open) so a slow/failed locations fetch doesn't
+  // hide a working GPS flow, see the field doc in Attendance.context.ts.
+  const [hasGeofenceLocations, setHasGeofenceLocations] = useState(true);
+  const [currentSessionCheckInMethod, setCurrentSessionCheckInMethod] =
+    useState<CheckInMethod | null>(null);
 
   const refresh = useCallback(async () => {
     if (!canCheckIn) {
@@ -44,15 +51,47 @@ const AttendanceProvider: React.FC<PropsWithChildren> = ({ children }) => {
       return;
     }
     setLoading(true);
-    try {
-      const session = await attendanceService.getCurrentSession();
-      setCurrentSession(session);
-    } catch (error) {
-      console.error(error);
-      showSnackbar(t('attendance.load-failed'), 'error');
-    } finally {
-      setLoading(false);
+    // allSettled rather than all: the session fetch is the more important,
+    // more volatile piece (it changes every time the user checks in/out
+    // anywhere, including the QR scan page), a transient failure on the
+    // rarely-changing locations fetch shouldn't also discard a perfectly
+    // good session result, and vice versa.
+    const [sessionResult, locationsResult] = await Promise.allSettled([
+      attendanceService.getCurrentSession(),
+      locationService.list(true),
+    ]);
+
+    if (sessionResult.status === 'fulfilled') {
+      setCurrentSession(sessionResult.value);
+    } else {
+      console.error(sessionResult.reason);
     }
+
+    if (locationsResult.status === 'fulfilled') {
+      const locations = locationsResult.value;
+      setHasGeofenceLocations(
+        locations.some((location) => location.checkInMethod === 'GEOFENCE')
+      );
+      // Only derivable when THIS round's session fetch also succeeded, on a
+      // stale/failed session result we leave the previous value in place
+      // rather than guess.
+      if (sessionResult.status === 'fulfilled') {
+        const session = sessionResult.value;
+        setCurrentSessionCheckInMethod(
+          session
+            ? locations.find((location) => location.id === session.locationId)
+                ?.checkInMethod ?? null
+            : null
+        );
+      }
+    } else {
+      console.error(locationsResult.reason);
+    }
+
+    if (sessionResult.status === 'rejected' || locationsResult.status === 'rejected') {
+      showSnackbar(t('attendance.load-failed'), 'error');
+    }
+    setLoading(false);
   }, [canCheckIn, showSnackbar, t]);
 
   useEffect(() => {
@@ -119,10 +158,31 @@ const AttendanceProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }, [getCurrentPosition, handleError, showSnackbar, t]);
 
+  const value = useMemo(
+    () => ({
+      currentSession,
+      loading,
+      status,
+      hasGeofenceLocations,
+      currentSessionCheckInMethod,
+      refresh,
+      checkIn,
+      checkOut,
+    }),
+    [
+      currentSession,
+      loading,
+      status,
+      hasGeofenceLocations,
+      currentSessionCheckInMethod,
+      refresh,
+      checkIn,
+      checkOut,
+    ]
+  );
+
   return (
-    <AttendanceContext.Provider
-      value={{ currentSession, loading, status, refresh, checkIn, checkOut }}
-    >
+    <AttendanceContext.Provider value={value}>
       {children}
     </AttendanceContext.Provider>
   );

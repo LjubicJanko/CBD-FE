@@ -37,8 +37,8 @@ privateClient.interceptors.request.use(
 );
 
 // Phrases the BE sends in the 403 body that indicate the active tenant context
-// is gone (deactivated / removed / never existed). On any of these — or any
-// 410 (TenantInactiveException) — the FE has to drop the selection and bounce
+// is gone (deactivated / removed / never existed). On any of these, or any
+// 410 (TenantInactiveException), the FE has to drop the selection and bounce
 // the user out. Pattern-matching on the message is fragile but the BE doesn't
 // emit a stable error code; revisit if/when it does.
 const TENANT_CONTEXT_LOST_PHRASES = [
@@ -94,7 +94,7 @@ privateClient.interceptors.response.use(
             window.location.href = '/select-tenant';
           }
         } else {
-          // Regular user's tenant died mid-session — no recovery path. Force
+          // Regular user's tenant died mid-session, no recovery path. Force
           // logout via the same bus event the 498 path uses.
           authBus.emit('token-expired');
           localStorageService.clearData();

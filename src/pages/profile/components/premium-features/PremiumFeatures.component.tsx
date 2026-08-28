@@ -14,7 +14,7 @@ import * as Styled from './PremiumFeatures.styles';
  * premium modules of the CURRENTLY-SELECTED (impersonated) tenant.
  *
  * Reads and writes go through the platform endpoints (`/platform/**`), which are
- * superadmin-only — a client admin must never reach this tab (it is omitted from
+ * superadmin-only, a client admin must never reach this tab (it is omitted from
  * the tab list for non-superadmins) and could not grant their own tenant premium
  * modules even if they did. Mirrors the toggles on `/platform/tenants/:id` via
  * the shared `FeatureToggles` component.
@@ -78,7 +78,7 @@ const PremiumFeatures = () => {
         try {
             // Send the tenant's current name/slug/socialLink unchanged alongside
             // the new features so the platform PUT (full-replace) doesn't clobber
-            // them — this tab only owns the feature set.
+            // them, this tab only owns the feature set.
             const updated = await platformService.updateTenant(tenant.id, {
                 name: tenant.name,
                 slug: tenant.slug,
@@ -88,7 +88,7 @@ const PremiumFeatures = () => {
             setTenant(updated);
             setFeatures(updated.features);
             // Re-cache the impersonated tenant's features so the change takes
-            // effect immediately — the reactive store re-renders the menu, route
+            // effect immediately, the reactive store re-renders the menu, route
             // guards and privilege-derived UI without a manual refresh.
             localStorageService.recacheSelectedTenant(updated);
             showSnackbar(t('tenantDetails.saved'), 'success');

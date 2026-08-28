@@ -33,7 +33,7 @@ const PlatformPage: React.FC = () => {
         });
     }, []);
 
-    // Background refetch — does NOT touch isInitialLoading, so deactivation
+    // Background refetch, does NOT touch isInitialLoading, so deactivation
     // doesn't blank the whole table.
     const fetchTenants = useCallback(async () => {
         try {

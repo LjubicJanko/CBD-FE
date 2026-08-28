@@ -77,7 +77,7 @@ export const Container = styled.div`
       }
     }
 
-    /* Only the picker calendar icon + select arrow — not the day-step
+    /* Only the picker calendar icon + select arrow, not the day-step
        chevrons or the refresh icon, which theme themselves. */
     .MuiSelect-icon,
     .MuiInputAdornment-root .MuiSvgIcon-root {

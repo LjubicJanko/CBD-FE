@@ -9,7 +9,7 @@ import { Feature } from '../util/features';
  * - Regular user: from `authData.features` (reactive via context).
  * - Superadmin: from the selected (impersonated) tenant's features, subscribed
  *   reactively through `selectedTenantFeaturesStore`. A superadmin has no tenant
- *   of their own, so this comes from the localStorage selection — but it updates
+ *   of their own, so this comes from the localStorage selection, but it updates
  *   live, so toggling a feature in /profile re-renders the menu, route guards and
  *   privilege-derived UI without a manual refresh.
  */

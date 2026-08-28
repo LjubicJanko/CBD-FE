@@ -175,6 +175,14 @@ export const Container = styled.div`
             }
         }
 
+        &__session-chip {
+            margin-left: 8px;
+            height: 20px;
+            font-size: 11px;
+            background-color: ${theme.ACCENT_SOFT};
+            color: ${theme.PRIMARY_2};
+        }
+
         &__row-actions {
             display: flex;
             gap: 4px;
@@ -246,6 +254,60 @@ export const LocationsModal = styled(CbdModal)`
 
             .MuiFormHelperText-root {
                 color: ${theme.SECONDARY_2};
+            }
+        }
+
+        &__method {
+            .MuiToggleButton-root {
+                text-transform: none;
+                font-weight: 600;
+                color: ${theme.SECONDARY_2};
+                border-color: ${theme.BORDER_STRONG};
+
+                &.Mui-selected {
+                    color: ${theme.PRIMARY_1};
+                    background-color: ${theme.PRIMARY_2};
+
+                    &:hover {
+                        background-color: ${theme.PRIMARY_2};
+                        opacity: 0.9;
+                    }
+                }
+            }
+        }
+
+        &__qr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background-color: ${theme.SURFACE_2};
+            border-radius: 12px;
+
+            canvas {
+                border-radius: 8px;
+            }
+        }
+
+        &__qr-url {
+            font-size: 12px;
+            color: ${theme.SECONDARY_2};
+            word-break: break-all;
+            text-align: center;
+            margin: 0;
+        }
+
+        &__qr-actions {
+            display: flex;
+            gap: 12px;
+
+            .MuiButton-root {
+                text-transform: none;
+                border-radius: 8px;
+                font-weight: 600;
+                border-color: ${accentAlpha(0.4)};
+                color: ${theme.PRIMARY_2};
             }
         }
 

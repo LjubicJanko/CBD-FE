@@ -2,7 +2,7 @@ import privateClient from '../privateClient';
 import { SocialLink, Tenant } from './platform';
 
 // JWT-scoped, no-id-in-path self-service endpoints (ProfileController). A
-// company_admin manages ONLY their own tenant — name, logo and social link.
+// company_admin manages ONLY their own tenant, name, logo and social link.
 // Slug and active are not editable here (the BE doesn't accept them).
 
 export type UpdateOwnTenantData = {

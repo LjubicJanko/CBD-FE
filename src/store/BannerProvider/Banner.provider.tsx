@@ -31,7 +31,7 @@ const BannerProvider: React.FC<PropsWithChildren> = ({ children }) => {
     // (window.location.href = '/dashboard'), so this provider remounts on the
     // next page and re-reads the storage. If a future change introduces
     // SPA-style tenant switching, lift selectedTenantSlug into a context
-    // first — otherwise banners will desync.
+    // first, otherwise banners will desync.
     // Same constraint applies in Header.component and TenantContextRequired.
     const authSlug = authData?.superadmin
         ? localStorageService.selectedTenantSlug

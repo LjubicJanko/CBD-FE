@@ -78,7 +78,7 @@ const IdTrackingPage = () => {
             return;
         }
         // Defensive: don't fire a doomed lookup for a slug that collides
-        // with an FE route — go straight to the not-found state.
+        // with an FE route, go straight to the not-found state.
         if (isReservedSlug(tenantSlug)) {
             setTenant(null);
             setTenantLoading(false);
@@ -226,7 +226,7 @@ const IdTrackingPage = () => {
         );
 
     // Premium gating: tracking is meaningful only when the tenant has a module
-    // that produces trackable ids — `orders` or `order-extension`. A tenant with
+    // that produces trackable ids, `orders` or `order-extension`. A tenant with
     // neither (e.g. attendance-only) shows the not-found state so the feature
     // leaves no trace, even via a direct /track link. The backend enforces this
     // too. The legacy no-slug /track has no tenant context, so it's left alone.
