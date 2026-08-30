@@ -15,15 +15,37 @@ import { DefaultTheme } from 'styled-components';
  *
  * PER-TENANT THEMING
  * ------------------
- * The two brand hues, background (`PRIMARY_1`) and accent (`PRIMARY_2`, plus
- * its hover + tints), resolve to CSS custom properties (`var(--c-*)`) rather
- * than literal hex. Defaults for those vars live in `globalStyles` `:root`.
- * `applyTenantTheme()` overrides them on `document.documentElement` at runtime
- * when a tenant has the `theming` feature and a color set. Because the tokens
- * are `var()` strings, every consumer, including the many files that import
- * this static `theme` object, re-themes instantly via the CSS cascade, with no
- * per-component change. Tokens that are NOT tenant-overridable (text, surfaces,
- * borders, depth, semantic) stay literal so they remain stable on any base.
+ * Five brand hues, background (`PRIMARY_1`), accent (`PRIMARY_2`, plus its
+ * hover + tints), and all three text tiers (`SECONDARY_1/2/3`, primary/muted/
+ * subtle), resolve to CSS custom properties (`var(--c-*)`) rather than
+ * literal hex. Defaults for those vars live in `globalStyles` `:root`.
+ * `applyTenantTheme()` overrides them on `document.documentElement` at
+ * runtime when a tenant has the `theming` feature and a color set. Because
+ * the tokens are `var()` strings, every consumer, including the many files
+ * that import this static `theme` object, re-themes instantly via the CSS
+ * cascade, with no per-component change. Tokens that are NOT
+ * tenant-overridable (surfaces, borders, depth, semantic error/success/
+ * warning) stay literal so they remain stable on any base, semantic colors
+ * in particular are left alone deliberately, they signal danger/success/
+ * caution the same way for every tenant, not brand identity.
+ *
+ * The three text tiers are gated by contrast checks against the background
+ * at save time (see `TenantDetailsForm` + `util/contrast.ts`), each against
+ * its own WCAG-derived floor, and each also capped below the tier above it
+ * (muted <= primary, subtle <= muted) so a tenant can't pick colors that
+ * invert the intended visual hierarchy even if each one passes its own
+ * floor in isolation.
+ *
+ * KNOWN LIMITATION: SECONDARY_1/2/3 are also reused throughout the app as
+ * fill/border colors, not just text (e.g. ConfirmModal fills its container
+ * with SECONDARY_2 and draws its heading in SECONDARY_1; ShareLink's QR
+ * container fills with SECONDARY_1). The contrast checks only validate each
+ * tier against `backgroundColor`, never against every actual fill+text pair
+ * that exists elsewhere in the app, so a tenant can pick colors that pass
+ * validation and look fine in the live `/profile` preview yet render
+ * illegibly (or make the QR code unscannable) somewhere not visible while
+ * editing. Accepted as a known risk; a real fix needs separate tokens for
+ * "text" vs. "fill/border" roles across the whole app, not just this form.
  *
  * NOTE: the per-status / chart categorical palette lives in `src/util/util.ts`
  * (`statusColors`), 8 distinct hues keyed by order status, intentionally
@@ -49,6 +71,9 @@ export const THEME_VARS = {
     accent: '--c-accent',
     accentRgb: '--c-accent-rgb',
     accentHover: '--c-accent-hover',
+    text: '--c-text',
+    textMuted: '--c-text-muted',
+    textSubtle: '--c-text-subtle',
 } as const;
 
 /**
@@ -63,6 +88,9 @@ export const DEFAULT_COLORS = {
     accentHover: '#C2EB00',
     /** RGB channels of `accent`, for the `:root` default of `--c-accent-rgb`. */
     accentRgb: '212, 255, 0',
+    text: '#FFFFFF',
+    textMuted: '#979797',
+    textSubtle: '#717171',
 } as const;
 
 /** rgba() built from the accent CSS-var channels, for accent opacity variants. */
@@ -72,8 +100,6 @@ export const accentAlpha = (alpha: number): string =>
 // Literal base hues for the NON-themeable tokens.
 const BASE = {
     WHITE: '#FFFFFF',
-    GRAY: '#979797',
-    GRAY_DARK: '#717171',
     SURFACE: '#3A3A3A', // opaque elevated surface
     BLACK: '#000000', // for shadows / scrims only
     RED: '#F44336', // danger
@@ -91,9 +117,9 @@ const theme: DefaultTheme = {
     PRIMARY_2_HOVER: `var(${THEME_VARS.accentHover})`,
 
     // ===== Neutrals / text =====
-    SECONDARY_1: BASE.WHITE, // primary text
-    SECONDARY_2: BASE.GRAY, // muted text
-    SECONDARY_3: BASE.GRAY_DARK, // subtle / disabled text
+    SECONDARY_1: `var(${THEME_VARS.text})`, // primary text (tenant-overridable)
+    SECONDARY_2: `var(${THEME_VARS.textMuted})`, // muted text (tenant-overridable)
+    SECONDARY_3: `var(${THEME_VARS.textSubtle})`, // subtle / disabled text (tenant-overridable)
 
     // ===== Surfaces (translucent white over the dark base) =====
     SURFACE_1: withAlpha(BASE.WHITE, 0.04), // subtle fill (inputs, low cards)

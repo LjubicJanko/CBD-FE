@@ -15,6 +15,22 @@ import { firstEnabledModuleRoute } from '../../util/features';
 // re-login. Forcing re-login refreshes the payload. Once the install base has
 // rolled forward this can be deleted along with its usage in the useState
 // initializer below.
+//
+// Also covers every tenant brand-color field (accent/background/text/muted/
+// subtle): without this, a user logged in before a given color field shipped
+// keeps a cached payload simply missing that key, so their tenant's real
+// color never applies (silently falls back to the default palette) until an
+// unrelated event forces a re-login. Checked by key presence (`in`), not by
+// value, since `null` is a legitimate "tenant has no override" value and
+// must NOT be treated as stale.
+const TENANT_COLOR_KEYS = [
+  'tenantAccentColor',
+  'tenantBackgroundColor',
+  'tenantTextColor',
+  'tenantMutedTextColor',
+  'tenantSubtleTextColor',
+] as const;
+
 const isStaleAuthShape = (
   cached: Omit<AuthData, 'token'> | null
 ): boolean => {
@@ -26,6 +42,9 @@ const isStaleAuthShape = (
     return true;
   }
   if (Array.isArray(cached.roles) && (cached.roles as string[]).includes('admin')) {
+    return true;
+  }
+  if (TENANT_COLOR_KEYS.some((key) => !(key in cached))) {
     return true;
   }
   return false;
@@ -55,14 +74,19 @@ const AuthProvider: React.FC<PropsWithChildren> = (props) => {
       setIsLoading(true);
       try {
         const response = await authService.login(data);
-        const { token, id, roles, privileges, name, username, tenantId, tenantSlug, tenantLogoUrl, tenantAccentColor, tenantBackgroundColor, superadmin } = response;
+        // Destructure only what's used directly below; everything else
+        // (including every tenant color field) rides through via spread, so
+        // adding a field to LoginResponse/AuthData can never silently drop
+        // out of one side of this assignment the way a hand-written field
+        // list could.
+        const { token, superadmin, ...rest } = response;
         // Defensively normalize features to an array: a superadmin has no tenant
         // so the BE may legitimately send no features. Storing a guaranteed array
         // keeps the cached payload shape valid (isStaleAuthShape would otherwise
         // flag a missing `features` and force a re-login loop).
-        const features = response.features ?? [];
+        const features = rest.features ?? [];
         setToken(token);
-        setAuthData({ id, roles, privileges, features, name, username, tenantId, tenantSlug, tenantLogoUrl, tenantAccentColor, tenantBackgroundColor, superadmin });
+        setAuthData({ ...rest, features, superadmin });
         localStorageService.saveData({ ...response, features });
         // Always reset the selected-tenant keys on login: a previous superadmin
         // session in this browser may have left selectedTenantId / Slug behind,

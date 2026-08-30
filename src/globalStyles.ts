@@ -11,6 +11,9 @@ export const GlobalStyle = createGlobalStyle`
     --c-accent: #D4FF00;
     --c-accent-rgb: 212, 255, 0;
     --c-accent-hover: #C2EB00;
+    --c-text: #FFFFFF;
+    --c-text-muted: #979797;
+    --c-text-subtle: #717171;
   }
 
   * {

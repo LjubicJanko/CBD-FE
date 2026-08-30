@@ -35,6 +35,9 @@ const SelectTenantPage: React.FC = () => {
                 {
                     accentColor: picked?.accentColor ?? null,
                     backgroundColor: picked?.backgroundColor ?? null,
+                    textColor: picked?.textColor ?? null,
+                    mutedTextColor: picked?.mutedTextColor ?? null,
+                    subtleTextColor: picked?.subtleTextColor ?? null,
                 }
             );
             // Hard navigation: drops in-memory caches (OrdersProvider, fetched

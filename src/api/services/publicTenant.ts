@@ -13,6 +13,9 @@ export type PublicTenant = {
     // public pages only when `features` includes 'theming'.
     accentColor: string | null;
     backgroundColor: string | null;
+    textColor: string | null;
+    mutedTextColor: string | null;
+    subtleTextColor: string | null;
 };
 
 const getTenantBySlug = async (slug: string): Promise<PublicTenant> =>

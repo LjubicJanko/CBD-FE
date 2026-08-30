@@ -5,7 +5,7 @@ import { selectedTenantFeaturesStore } from '../../services/selectedTenantFeatur
 import { selectedTenantThemeStore } from '../../services/selectedTenantTheme.store';
 
 /**
- * Applies the session's tenant theme (accent + background) reactively. Renders
+ * Applies the session's tenant theme (accent + background + text) reactively. Renders
  * nothing. The actual resolution lives in `resolveBaselineColors`:
  *  - regular user: their own tenant's colors from auth state;
  *  - superadmin: the impersonated tenant's colors (from the selected-tenant
@@ -37,6 +37,9 @@ const TenantThemeSync = (): null => {
         authData?.features,
         authData?.tenantAccentColor,
         authData?.tenantBackgroundColor,
+        authData?.tenantTextColor,
+        authData?.tenantMutedTextColor,
+        authData?.tenantSubtleTextColor,
         selectedTheme,
         selectedFeatures,
     ]);

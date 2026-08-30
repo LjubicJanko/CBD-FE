@@ -19,8 +19,26 @@ import {
     applyTenantTheme,
     restoreBaselineTheme,
 } from '../../styles/applyTenantTheme';
+import {
+    contrastRatio,
+    MIN_TEXT_CONTRAST,
+    MIN_MUTED_TEXT_CONTRAST,
+    MIN_SUBTLE_TEXT_CONTRAST,
+} from '../../util/contrast';
 import { TenantFormService } from './tenantFormService';
 import * as Styled from './TenantDetailsForm.styles';
+import ColorPreviewCard from './ColorPreviewCard.component';
+
+/**
+ * Shape of the sibling fields the color cross-field Yup tests read off
+ * `this.parent`, typed explicitly so a typo'd field name is a compile error
+ * instead of silently reading `undefined` off an untyped `any`.
+ */
+type ColorSiblingValues = {
+    backgroundColor?: string;
+    textColor?: string;
+    mutedTextColor?: string;
+};
 
 type TenantDetailsFormProps = {
     tenant: Tenant;
@@ -36,8 +54,9 @@ type TenantDetailsFormProps = {
      */
     allowFeatureEdit?: boolean;
     /**
-     * Superadmin-only. Renders the brand-color picker (accent + background) and
-     * includes the colors in the save payload, with a live whole-UI preview.
+     * Superadmin-only. Renders the brand-color picker (accent + background +
+     * text) and includes the colors in the save payload, with a live
+     * whole-UI preview.
      * Colors are superadmin-only writes (the self-service endpoint ignores
      * them), so this is only enabled where the form writes through the platform
      * service, the "Tenant details" tab in /profile for a superadmin.
@@ -96,6 +115,9 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
             // (sent as null on submit -> default palette).
             accentColor: tenant.accentColor ?? '',
             backgroundColor: tenant.backgroundColor ?? '',
+            textColor: tenant.textColor ?? '',
+            mutedTextColor: tenant.mutedTextColor ?? '',
+            subtleTextColor: tenant.subtleTextColor ?? '',
         },
         validationSchema: Yup.object({
             name: Yup.string().required(t('validation.required.name')),
@@ -134,6 +156,129 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                 message: t('tenantDetails.colorInvalid'),
                 excludeEmptyString: true,
             }),
+            // Cross-field: each text tier must stay legible against the
+            // chosen (or default) background, at its own WCAG-derived floor,
+            // and must stay less prominent than the tier above it (muted <=
+            // primary, subtle <= muted) so a tenant can't invert the intended
+            // hierarchy even if each color passes its own floor alone. Runs
+            // after the format check, so an invalid hex shows the format
+            // error rather than this one. Error messages report the actual
+            // ratio/color compared, via Yup's createError + i18next
+            // interpolation, so it's visible which color/tier tripped it.
+            //
+            // Each test resolves its OWN value with `|| DEFAULT_COLORS...`
+            // rather than skipping when blank: an empty field means "use the
+            // default", and that default is exactly what needs checking
+            // against a custom background, an untouched text field is not a
+            // safe field, it's a field about to render the default color.
+            textColor: Yup.string()
+                .matches(/^#[0-9A-Fa-f]{6}$/, {
+                    message: t('tenantDetails.colorInvalid'),
+                    excludeEmptyString: true,
+                })
+                .test({
+                    name: 'contrast',
+                    test: function (value) {
+                        const effective = value || DEFAULT_COLORS.text;
+                        const parent = this.parent as ColorSiblingValues;
+                        const background =
+                            parent.backgroundColor || DEFAULT_COLORS.background;
+                        const ratio = contrastRatio(effective, background);
+                        if (ratio === null || ratio >= MIN_TEXT_CONTRAST) {
+                            return true;
+                        }
+                        return this.createError({
+                            message: t('tenantDetails.colorContrastError', {
+                                ratio: ratio.toFixed(1),
+                                required: MIN_TEXT_CONTRAST,
+                                background,
+                            }),
+                        });
+                    },
+                }),
+            mutedTextColor: Yup.string()
+                .matches(/^#[0-9A-Fa-f]{6}$/, {
+                    message: t('tenantDetails.colorInvalid'),
+                    excludeEmptyString: true,
+                })
+                .test({
+                    name: 'contrast',
+                    test: function (value) {
+                        const effective = value || DEFAULT_COLORS.textMuted;
+                        const parent = this.parent as ColorSiblingValues;
+                        const background =
+                            parent.backgroundColor || DEFAULT_COLORS.background;
+                        const ratio = contrastRatio(effective, background);
+                        if (ratio === null) return true;
+                        if (ratio < MIN_MUTED_TEXT_CONTRAST) {
+                            return this.createError({
+                                message: t('tenantDetails.colorContrastError', {
+                                    ratio: ratio.toFixed(1),
+                                    required: MIN_MUTED_TEXT_CONTRAST,
+                                    background,
+                                }),
+                            });
+                        }
+                        const primary = parent.textColor || DEFAULT_COLORS.text;
+                        const primaryRatio = contrastRatio(primary, background);
+                        if (primaryRatio !== null && ratio > primaryRatio) {
+                            return this.createError({
+                                message: t(
+                                    'tenantDetails.colorContrastErrorCeiling',
+                                    {
+                                        ratio: ratio.toFixed(1),
+                                        maxRatio: primaryRatio.toFixed(1),
+                                        against: t('tenantDetails.textColor'),
+                                    }
+                                ),
+                            });
+                        }
+                        return true;
+                    },
+                }),
+            subtleTextColor: Yup.string()
+                .matches(/^#[0-9A-Fa-f]{6}$/, {
+                    message: t('tenantDetails.colorInvalid'),
+                    excludeEmptyString: true,
+                })
+                .test({
+                    name: 'contrast',
+                    test: function (value) {
+                        const effective = value || DEFAULT_COLORS.textSubtle;
+                        const parent = this.parent as ColorSiblingValues;
+                        const background =
+                            parent.backgroundColor || DEFAULT_COLORS.background;
+                        const ratio = contrastRatio(effective, background);
+                        if (ratio === null) return true;
+                        if (ratio < MIN_SUBTLE_TEXT_CONTRAST) {
+                            return this.createError({
+                                message: t('tenantDetails.colorContrastError', {
+                                    ratio: ratio.toFixed(1),
+                                    required: MIN_SUBTLE_TEXT_CONTRAST,
+                                    background,
+                                }),
+                            });
+                        }
+                        const muted =
+                            parent.mutedTextColor || DEFAULT_COLORS.textMuted;
+                        const mutedRatio = contrastRatio(muted, background);
+                        if (mutedRatio !== null && ratio > mutedRatio) {
+                            return this.createError({
+                                message: t(
+                                    'tenantDetails.colorContrastErrorCeiling',
+                                    {
+                                        ratio: ratio.toFixed(1),
+                                        maxRatio: mutedRatio.toFixed(1),
+                                        against: t(
+                                            'tenantDetails.mutedTextColor'
+                                        ),
+                                    }
+                                ),
+                            });
+                        }
+                        return true;
+                    },
+                }),
         }),
         onSubmit: async (values, { setErrors }) => {
             try {
@@ -161,6 +306,15 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                         : undefined,
                     backgroundColor: allowColorEdit
                         ? values.backgroundColor || null
+                        : undefined,
+                    textColor: allowColorEdit
+                        ? values.textColor || null
+                        : undefined,
+                    mutedTextColor: allowColorEdit
+                        ? values.mutedTextColor || null
+                        : undefined,
+                    subtleTextColor: allowColorEdit
+                        ? values.subtleTextColor || null
                         : undefined,
                 });
                 showSnackbar(t('tenantDetails.saved'), 'success');
@@ -208,16 +362,32 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
     // what the tenant's users actually see. On unmount (or when theming is off /
     // self-service form) the baseline is restored. applyTenantTheme ignores
     // invalid/partial hex, so typing is safe.
-    const { accentColor: accentValue, backgroundColor: backgroundValue } =
-        formik.values;
+    const {
+        accentColor: accentValue,
+        backgroundColor: backgroundValue,
+        textColor: textValue,
+        mutedTextColor: mutedTextValue,
+        subtleTextColor: subtleTextValue,
+    } = formik.values;
     useEffect(() => {
         if (!allowColorEdit || !tenantHasTheming) return;
         applyTenantTheme({
             accentColor: accentValue || null,
             backgroundColor: backgroundValue || null,
+            textColor: textValue || null,
+            mutedTextColor: mutedTextValue || null,
+            subtleTextColor: subtleTextValue || null,
         });
         return () => restoreBaselineTheme();
-    }, [allowColorEdit, tenantHasTheming, accentValue, backgroundValue]);
+    }, [
+        allowColorEdit,
+        tenantHasTheming,
+        accentValue,
+        backgroundValue,
+        textValue,
+        mutedTextValue,
+        subtleTextValue,
+    ]);
 
     const handleLogoSelected = useCallback(
         async (file: File | undefined) => {
@@ -262,17 +432,47 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
 
     const absoluteLogoUrl = getLogoAbsoluteUrl(logoUrl, logoCacheBust);
 
+    // The 5 brand-color fields cross-validate each other (text tiers are
+    // checked against backgroundColor, and against the tier above them), so
+    // changing any one of them can flip another's validity. Formik only
+    // *displays* an error for a field once it's `touched`, so without this,
+    // e.g. editing backgroundColor into a bad contrast with an untouched
+    // textColor would silently fail validation with no visible error. Touch
+    // every color field on every color change so all 5 errors stay in sync.
+    const COLOR_FIELD_NAMES = [
+        'accentColor',
+        'backgroundColor',
+        'textColor',
+        'mutedTextColor',
+        'subtleTextColor',
+    ] as const;
+    const handleColorFieldChange = (
+        name: (typeof COLOR_FIELD_NAMES)[number],
+        value: string
+    ) => {
+        formik.setFieldValue(name, value);
+        COLOR_FIELD_NAMES.forEach((field) =>
+            formik.setFieldTouched(field, true, false)
+        );
+    };
+
     // Not memoized for the same reason as toggleFeature: it reads fresh formik
     // state each render. Renders a swatch + hex field + clear for one color.
     const renderColorField = (
-        name: 'accentColor' | 'backgroundColor',
+        name: (typeof COLOR_FIELD_NAMES)[number],
         labelKey: string
     ) => {
         const value = formik.values[name];
         const fallback =
             name === 'accentColor'
                 ? DEFAULT_COLORS.accent
-                : DEFAULT_COLORS.background;
+                : name === 'backgroundColor'
+                  ? DEFAULT_COLORS.background
+                  : name === 'textColor'
+                    ? DEFAULT_COLORS.text
+                    : name === 'mutedTextColor'
+                      ? DEFAULT_COLORS.textMuted
+                      : DEFAULT_COLORS.textSubtle;
         const hasError =
             formik.touched[name] && Boolean(formik.errors[name]);
         return (
@@ -285,7 +485,7 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                         className="tenant-form__color-swatch"
                         value={value || fallback}
                         onChange={(e) =>
-                            formik.setFieldValue(
+                            handleColorFieldChange(
                                 name,
                                 e.target.value.toUpperCase()
                             )
@@ -295,22 +495,28 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                         name={name}
                         value={value}
                         placeholder={fallback}
+                        inputProps={{ 'aria-label': t(labelKey) }}
                         onChange={(e) =>
-                            formik.setFieldValue(
+                            handleColorFieldChange(
                                 name,
                                 e.target.value.toUpperCase()
                             )
                         }
                         onBlur={formik.handleBlur}
                         error={hasError}
-                        helperText={hasError ? formik.errors[name] : undefined}
+                        // Always render helperText (a space when there's no
+                        // error) so the field reserves the same vertical
+                        // space whether or not an error is showing, the
+                        // input above it shouldn't jump as errors
+                        // appear/disappear while typing.
+                        helperText={hasError ? formik.errors[name] : ' '}
                         size="small"
                     />
                     {value && (
                         <Button
                             size="small"
                             variant="outlined"
-                            onClick={() => formik.setFieldValue(name, '')}
+                            onClick={() => handleColorFieldChange(name, '')}
                         >
                             {t('tenantDetails.colorReset')}
                         </Button>
@@ -445,9 +651,22 @@ const TenantDetailsForm: React.FC<TenantDetailsFormProps> = ({
                             'backgroundColor',
                             'tenantDetails.backgroundColor'
                         )}
+                        {renderColorField(
+                            'textColor',
+                            'tenantDetails.textColor'
+                        )}
+                        {renderColorField(
+                            'mutedTextColor',
+                            'tenantDetails.mutedTextColor'
+                        )}
+                        {renderColorField(
+                            'subtleTextColor',
+                            'tenantDetails.subtleTextColor'
+                        )}
                         <span className="tenant-form__colors-hint">
                             {t('tenantDetails.colorsHint')}
                         </span>
+                        <ColorPreviewCard />
                     </div>
                 )}
 

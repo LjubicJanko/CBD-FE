@@ -33,6 +33,9 @@ const TenantRow: React.FC<TenantRowProps> = ({
             {
                 accentColor: tenant.accentColor,
                 backgroundColor: tenant.backgroundColor,
+                textColor: tenant.textColor,
+                mutedTextColor: tenant.mutedTextColor,
+                subtleTextColor: tenant.subtleTextColor,
             }
         );
         window.location.href = '/profile';

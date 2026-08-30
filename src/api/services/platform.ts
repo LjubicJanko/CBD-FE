@@ -21,6 +21,9 @@ export type Tenant = {
     // Applied at runtime only when the `theming` feature is enabled.
     accentColor: string | null;
     backgroundColor: string | null;
+    textColor: string | null;
+    mutedTextColor: string | null;
+    subtleTextColor: string | null;
 };
 
 export type CreateTenantData = {
@@ -37,6 +40,9 @@ export type CreateTenantData = {
     // Superadmin-only (the self-service endpoint ignores them).
     accentColor?: string | null;
     backgroundColor?: string | null;
+    textColor?: string | null;
+    mutedTextColor?: string | null;
+    subtleTextColor?: string | null;
 };
 
 const getTenants = async (): Promise<Tenant[]> =>

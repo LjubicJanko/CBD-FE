@@ -98,6 +98,9 @@ const HeaderComponent = () => {
         {
           accentColor: switchedTo?.accentColor ?? null,
           backgroundColor: switchedTo?.backgroundColor ?? null,
+          textColor: switchedTo?.textColor ?? null,
+          mutedTextColor: switchedTo?.mutedTextColor ?? null,
+          subtleTextColor: switchedTo?.subtleTextColor ?? null,
         }
       );
       // Hard navigation: drops in-memory caches (OrdersProvider, fetched lists)

@@ -280,10 +280,20 @@
         "colorsSection": "Brand colors",
         "accentColor": "Accent color",
         "backgroundColor": "Background color",
+        "textColor": "Text color",
+        "mutedTextColor": "Muted text color",
+        "subtleTextColor": "Subtle text color",
         "colorInvalid": "Enter a valid hex color (e.g. #1A2B3C).",
+        "colorContrastError": "{{ratio}}:1 vs {{background}} (min {{required}}:1)",
+        "colorContrastErrorCeiling": "{{ratio}}:1, stronger than {{against}} (max {{maxRatio}}:1)",
         "colorReset": "Reset",
         "colorsHint": "Applied across this tenant's app when the Brand colors feature is on. Leave empty to use the default palette.",
-        "colorsThemingOff": "The \"Brand colors\" feature is off for this tenant, so these colors are not applied anywhere. Enable it on the Premium tab to use them."
+        "colorsThemingOff": "The \"Brand colors\" feature is off for this tenant, so these colors are not applied anywhere. Enable it on the Premium tab to use them.",
+        "colorsPreviewLabel": "Preview",
+        "colorsPreviewHeading": "Sample heading",
+        "colorsPreviewMuted": "Muted description text, like a field hint or a secondary label.",
+        "colorsPreviewSubtle": "Subtle text, like a disabled option or a timestamp.",
+        "colorsPreviewButton": "Sample button"
     },
     "premiumFeatures": {
         "tab": "Premium",

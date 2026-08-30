@@ -77,6 +77,7 @@ Five Context providers wrap the app in `App.tsx`:
 - Global styles in `src/globalStyles.ts` (scrollbar, MUI overrides, layout)
 - Responsive breakpoints in `src/util/breakpoints.ts`
 - BEM class naming used alongside styled-components
+- **Known limitation**: `SECONDARY_1/2/3` (primary/muted/subtle text) are tenant-overridable brand colors (see `TenantDetailsForm`'s color pickers), but the same three tokens are also reused across ~50 style files as fill/border colors, not just text, e.g. `ConfirmModal.styles.tsx` fills its container with `SECONDARY_2` and draws its heading in `SECONDARY_1`, `TenantDetailsForm.styles.tsx`'s disabled Save button fills with `SECONDARY_3` and colors its text `PRIMARY_1`, `ShareLink.styles.tsx`'s QR container fills with `SECONDARY_1`. The contrast validation in `TenantDetailsForm` only checks each tier against the tenant's `backgroundColor` (and against the tier above it); it does NOT check every actual on-screen fill+text pairing, so a tenant can pick colors that pass validation and look fine in the live `/profile` preview, yet render illegibly (or, for the QR case, make the code unscannable) in a modal/panel that isn't visible while editing. Accepted as a known risk rather than fixed; a real fix would require splitting these tokens by semantic role (text vs. fill/border) across the whole app, a larger refactor than the color-picker feature itself.
 
 ### Environment
 - `VITE_API_URL`, backend API base URL (accessed via `import.meta.env.VITE_API_URL`)

@@ -280,10 +280,20 @@
         "colorsSection": "Boje brenda",
         "accentColor": "Akcentna boja",
         "backgroundColor": "Boja pozadine",
+        "textColor": "Boja teksta",
+        "mutedTextColor": "Boja prigušenog teksta",
+        "subtleTextColor": "Boja suptilnog teksta",
         "colorInvalid": "Unesite ispravnu hex boju (npr. #1A2B3C).",
+        "colorContrastError": "{{ratio}}:1 naspram {{background}} (min {{required}}:1)",
+        "colorContrastErrorCeiling": "{{ratio}}:1, jače od {{against}} (maks {{maxRatio}}:1)",
         "colorReset": "Poništi",
         "colorsHint": "Primenjuje se u aplikaciji ovog klijenta kada je uključena funkcija Boje brenda. Ostavite prazno za podrazumevanu paletu.",
-        "colorsThemingOff": "Funkcija „Boje brenda“ je isključena za ovog klijenta, pa se ove boje nigde ne primenjuju. Uključite je na kartici Premium da biste ih koristili."
+        "colorsThemingOff": "Funkcija „Boje brenda“ je isključena za ovog klijenta, pa se ove boje nigde ne primenjuju. Uključite je na kartici Premium da biste ih koristili.",
+        "colorsPreviewLabel": "Pregled",
+        "colorsPreviewHeading": "Primer naslova",
+        "colorsPreviewMuted": "Prigušeni opisni tekst, poput napomene ili sekundarne oznake.",
+        "colorsPreviewSubtle": "Suptilan tekst, poput onemogućene opcije ili vremenske oznake.",
+        "colorsPreviewButton": "Primer dugmeta"
     },
     "premiumFeatures": {
         "tab": "Premium",

@@ -95,8 +95,13 @@ const IdTrackingPage = () => {
     }, [tenantSlug]);
 
     useApplyTenantTheme(
-        tenant?.accentColor,
-        tenant?.backgroundColor,
+        {
+            accentColor: tenant?.accentColor,
+            backgroundColor: tenant?.backgroundColor,
+            textColor: tenant?.textColor,
+            mutedTextColor: tenant?.mutedTextColor,
+            subtleTextColor: tenant?.subtleTextColor,
+        },
         Boolean(tenant?.features?.includes(Feature.THEMING))
     );
 

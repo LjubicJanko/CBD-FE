@@ -15,6 +15,9 @@ export type AuthData = {
   // no tenant). Applied at runtime only when `features` includes 'theming'.
   tenantAccentColor: string | null;
   tenantBackgroundColor: string | null;
+  tenantTextColor: string | null;
+  tenantMutedTextColor: string | null;
+  tenantSubtleTextColor: string | null;
   superadmin: boolean;
 };
 

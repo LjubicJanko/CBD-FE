@@ -18,6 +18,9 @@ export default {
         localStorage.removeItem('selectedTenantFeatures');
         localStorage.removeItem(selectedTenantThemeStore.ACCENT_KEY);
         localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.TEXT_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.MUTED_TEXT_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.SUBTLE_TEXT_KEY);
         selectedTenantFeaturesStore.notify();
         selectedTenantThemeStore.notify();
     },
@@ -40,7 +43,13 @@ export default {
         // The impersonated tenant's brand colors, cached + exposed reactively
         // via selectedTenantThemeStore so a superadmin's session is themed to
         // the selected tenant (and re-themes on save without a reload).
-        colors: { accentColor: string | null; backgroundColor: string | null } | null = null
+        colors: {
+            accentColor: string | null;
+            backgroundColor: string | null;
+            textColor: string | null;
+            mutedTextColor: string | null;
+            subtleTextColor: string | null;
+        } | null = null
     ): void {
         if (tenantId === null) {
             localStorage.removeItem('selectedTenantId');
@@ -48,6 +57,9 @@ export default {
             localStorage.removeItem('selectedTenantFeatures');
             localStorage.removeItem(selectedTenantThemeStore.ACCENT_KEY);
             localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
+            localStorage.removeItem(selectedTenantThemeStore.TEXT_KEY);
+            localStorage.removeItem(selectedTenantThemeStore.MUTED_TEXT_KEY);
+            localStorage.removeItem(selectedTenantThemeStore.SUBTLE_TEXT_KEY);
             selectedTenantFeaturesStore.notify();
             selectedTenantThemeStore.notify();
             return;
@@ -82,6 +94,30 @@ export default {
         } else {
             localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
         }
+        if (colors?.textColor) {
+            localStorage.setItem(
+                selectedTenantThemeStore.TEXT_KEY,
+                colors.textColor
+            );
+        } else {
+            localStorage.removeItem(selectedTenantThemeStore.TEXT_KEY);
+        }
+        if (colors?.mutedTextColor) {
+            localStorage.setItem(
+                selectedTenantThemeStore.MUTED_TEXT_KEY,
+                colors.mutedTextColor
+            );
+        } else {
+            localStorage.removeItem(selectedTenantThemeStore.MUTED_TEXT_KEY);
+        }
+        if (colors?.subtleTextColor) {
+            localStorage.setItem(
+                selectedTenantThemeStore.SUBTLE_TEXT_KEY,
+                colors.subtleTextColor
+            );
+        } else {
+            localStorage.removeItem(selectedTenantThemeStore.SUBTLE_TEXT_KEY);
+        }
         selectedTenantFeaturesStore.notify();
         selectedTenantThemeStore.notify();
     },
@@ -91,6 +127,9 @@ export default {
         localStorage.removeItem('selectedTenantFeatures');
         localStorage.removeItem(selectedTenantThemeStore.ACCENT_KEY);
         localStorage.removeItem(selectedTenantThemeStore.BACKGROUND_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.TEXT_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.MUTED_TEXT_KEY);
+        localStorage.removeItem(selectedTenantThemeStore.SUBTLE_TEXT_KEY);
         selectedTenantFeaturesStore.notify();
         selectedTenantThemeStore.notify();
     },
@@ -107,11 +146,17 @@ export default {
         features: string[];
         accentColor?: string | null;
         backgroundColor?: string | null;
+        textColor?: string | null;
+        mutedTextColor?: string | null;
+        subtleTextColor?: string | null;
     }): void {
         if (this.selectedTenantId !== tenant.id) return;
         this.setSelectedTenant(tenant.id, tenant.slug, tenant.features, {
             accentColor: tenant.accentColor ?? null,
             backgroundColor: tenant.backgroundColor ?? null,
+            textColor: tenant.textColor ?? null,
+            mutedTextColor: tenant.mutedTextColor ?? null,
+            subtleTextColor: tenant.subtleTextColor ?? null,
         });
     },
     get selectedTenantId(): number | null {

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import {
     applyTenantTheme,
     restoreBaselineTheme,
+    TenantThemeColors,
 } from '../styles/applyTenantTheme';
 
 /**
@@ -14,15 +15,23 @@ import {
  * the default palette regardless of any colors set.
  */
 export const useApplyTenantTheme = (
-    accentColor: string | null | undefined,
-    backgroundColor: string | null | undefined,
+    colors: TenantThemeColors,
     enabled: boolean
 ): void => {
-    const accent = enabled ? accentColor ?? null : null;
-    const background = enabled ? backgroundColor ?? null : null;
+    const accent = enabled ? colors.accentColor ?? null : null;
+    const background = enabled ? colors.backgroundColor ?? null : null;
+    const text = enabled ? colors.textColor ?? null : null;
+    const mutedText = enabled ? colors.mutedTextColor ?? null : null;
+    const subtleText = enabled ? colors.subtleTextColor ?? null : null;
 
     useEffect(() => {
-        applyTenantTheme({ accentColor: accent, backgroundColor: background });
+        applyTenantTheme({
+            accentColor: accent,
+            backgroundColor: background,
+            textColor: text,
+            mutedTextColor: mutedText,
+            subtleTextColor: subtleText,
+        });
         return () => restoreBaselineTheme();
-    }, [accent, background]);
+    }, [accent, background, text, mutedText, subtleText]);
 };

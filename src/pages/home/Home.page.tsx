@@ -48,8 +48,13 @@ const HomeComponent = () => {
     // Brand the public page in the tenant's colors when they have the `theming`
     // feature; otherwise the default palette is used.
     useApplyTenantTheme(
-        tenant?.accentColor,
-        tenant?.backgroundColor,
+        {
+            accentColor: tenant?.accentColor,
+            backgroundColor: tenant?.backgroundColor,
+            textColor: tenant?.textColor,
+            mutedTextColor: tenant?.mutedTextColor,
+            subtleTextColor: tenant?.subtleTextColor,
+        },
         Boolean(tenant?.features?.includes(Feature.THEMING))
     );
 

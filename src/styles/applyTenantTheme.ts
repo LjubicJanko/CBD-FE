@@ -45,6 +45,9 @@ const darken = (hex: string, amount: number): string => {
 export type TenantThemeColors = {
     accentColor?: string | null;
     backgroundColor?: string | null;
+    textColor?: string | null;
+    mutedTextColor?: string | null;
+    subtleTextColor?: string | null;
 };
 
 export const applyTenantTheme = (colors: TenantThemeColors | null): void => {
@@ -62,6 +65,18 @@ export const applyTenantTheme = (colors: TenantThemeColors | null): void => {
         colors?.backgroundColor && HEX6.test(colors.backgroundColor)
             ? colors.backgroundColor
             : null;
+    const text =
+        colors?.textColor && HEX6.test(colors.textColor)
+            ? colors.textColor
+            : null;
+    const mutedText =
+        colors?.mutedTextColor && HEX6.test(colors.mutedTextColor)
+            ? colors.mutedTextColor
+            : null;
+    const subtleText =
+        colors?.subtleTextColor && HEX6.test(colors.subtleTextColor)
+            ? colors.subtleTextColor
+            : null;
 
     set(THEME_VARS.background, background);
     set(THEME_VARS.accent, accent);
@@ -70,6 +85,9 @@ export const applyTenantTheme = (colors: TenantThemeColors | null): void => {
         THEME_VARS.accentHover,
         accent ? darken(accent, 0.1) : null
     );
+    set(THEME_VARS.text, text);
+    set(THEME_VARS.textMuted, mutedText);
+    set(THEME_VARS.textSubtle, subtleText);
 };
 
 /** The default (un-themed) accent hover, exposed for parity / tests. */
@@ -99,6 +117,9 @@ export const resolveBaselineColors = (): TenantThemeColors | null => {
     return {
         accentColor: auth?.tenantAccentColor,
         backgroundColor: auth?.tenantBackgroundColor,
+        textColor: auth?.tenantTextColor,
+        mutedTextColor: auth?.tenantMutedTextColor,
+        subtleTextColor: auth?.tenantSubtleTextColor,
     };
 };
 
