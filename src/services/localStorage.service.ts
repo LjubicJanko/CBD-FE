@@ -178,4 +178,15 @@ export default {
             localStorage.getItem(`bannerDismissed_${page}`) || 'false'
         );
     },
+
+    // Not BannerLocation: that's the CMS banner feature's backend-facing enum, unrelated to this.
+    setInstallBannerDismissed(value: boolean) {
+        localStorage.setItem('installBannerDismissed', JSON.stringify(value));
+    },
+
+    getInstallBannerDismissed(): boolean {
+        return JSON.parse(
+            localStorage.getItem('installBannerDismissed') || 'false'
+        );
+    },
 };

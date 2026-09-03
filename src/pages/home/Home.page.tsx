@@ -12,6 +12,7 @@ import { PublicTenant } from '../../api/services/publicTenant';
 import { isReservedSlug } from '../../util/reservedSlugs';
 import { Feature } from '../../util/features';
 import { useApplyTenantTheme } from '../../hooks/useApplyTenantTheme';
+import { useApplyTenantBranding } from '../../hooks/useApplyTenantBranding';
 
 const HomeComponent = () => {
     const { t } = useTranslation();
@@ -47,6 +48,7 @@ const HomeComponent = () => {
 
     // Brand the public page in the tenant's colors when they have the `theming`
     // feature; otherwise the default palette is used.
+    const themingEnabled = Boolean(tenant?.features?.includes(Feature.THEMING));
     useApplyTenantTheme(
         {
             accentColor: tenant?.accentColor,
@@ -55,8 +57,9 @@ const HomeComponent = () => {
             mutedTextColor: tenant?.mutedTextColor,
             subtleTextColor: tenant?.subtleTextColor,
         },
-        Boolean(tenant?.features?.includes(Feature.THEMING))
+        themingEnabled
     );
+    useApplyTenantBranding(tenant, tenantSlug, themingEnabled);
 
     // Only surface the order-extension entry point when the tenant has the
     // `order-extension` feature enabled (matches the page-level guard).

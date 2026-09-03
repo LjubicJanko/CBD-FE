@@ -42,6 +42,12 @@
         "tenantNotFound": "Kompanija nije pronađena. Proverite link koji ste koristili.",
         "loginPrompt": "Prijavite se da nastavite."
     },
+    "pwa": {
+        "install": "Instaliraj aplikaciju",
+        "offlineReady": "Aplikacija je spremna za rad bez interneta",
+        "iosInstallPrompt": "Instaliraj aplikaciju: dodirni Share, zatim \"Add to Home Screen\".",
+        "iosInstallDismiss": "Zatvori"
+    },
     "is-legal-entity": "Da li je pravno lice",
     "last-update": "Poslednje ažurirano",
     "update": "Izmeni",

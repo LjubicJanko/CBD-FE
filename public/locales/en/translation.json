@@ -42,6 +42,12 @@
         "tenantNotFound": "Company not found. Check the link you used.",
         "loginPrompt": "Sign in to continue."
     },
+    "pwa": {
+        "install": "Install app",
+        "offlineReady": "App ready to work offline",
+        "iosInstallPrompt": "Install this app: tap Share, then \"Add to Home Screen\".",
+        "iosInstallDismiss": "Dismiss"
+    },
     "is-legal-entity": "Is legal entity",
     "last-update": "Last updated",
     "update": "update",

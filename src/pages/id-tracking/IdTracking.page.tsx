@@ -29,6 +29,7 @@ import { statuses, trackingUrl } from '../../util/util';
 import { isReservedSlug } from '../../util/reservedSlugs';
 import { Feature } from '../../util/features';
 import { useApplyTenantTheme } from '../../hooks/useApplyTenantTheme';
+import { useApplyTenantBranding } from '../../hooks/useApplyTenantBranding';
 import * as Styled from './IdTracking.styles';
 import theme from '../../styles/theme';
 import PageBanner from '../../components/page-banner/PageBanner.component';
@@ -94,6 +95,7 @@ const IdTrackingPage = () => {
             .finally(() => setTenantLoading(false));
     }, [tenantSlug]);
 
+    const themingEnabled = Boolean(tenant?.features?.includes(Feature.THEMING));
     useApplyTenantTheme(
         {
             accentColor: tenant?.accentColor,
@@ -102,8 +104,9 @@ const IdTrackingPage = () => {
             mutedTextColor: tenant?.mutedTextColor,
             subtleTextColor: tenant?.subtleTextColor,
         },
-        Boolean(tenant?.features?.includes(Feature.THEMING))
+        themingEnabled
     );
+    useApplyTenantBranding(tenant, tenantSlug, themingEnabled);
 
     const tenantLogo = tenant ? getLogoAbsoluteUrl(tenant.logoUrl) : null;
     const tenantBrand = tenant && (

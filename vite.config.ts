@@ -20,16 +20,33 @@ export default defineConfig({
         ...(useHttps ? [basicSsl()] : []),
         VitePWA({
             registerType: 'autoUpdate',
+            // Registered manually via virtual:pwa-register in main.tsx; default 'auto' would double-register.
+            injectRegister: false,
             manifest: {
+                // Fallback for tenants without `theming` - see api/manifest/[slug].ts, keep both in sync.
+                id: '/',
                 name: 'CBD',
                 short_name: 'CBD',
                 start_url: '/',
                 display: 'standalone',
+                display_override: ['standalone', 'minimal-ui'],
+                categories: ['business', 'productivity'],
+                lang: 'en',
                 // PWA manifest colors, must match theme.PRIMARY_1 in
                 // src/styles/theme.ts. Kept as a literal here because this is
                 // build-time Node config and can't import the runtime theme.
                 background_color: '#2F2F2F',
                 theme_color: '#2F2F2F',
+                shortcuts: [
+                    {
+                        name: 'Track Order',
+                        url: '/track',
+                    },
+                    {
+                        name: 'Login',
+                        url: '/login',
+                    },
+                ],
                 icons: [
                     {
                         src: 'cbd-192x192.png',

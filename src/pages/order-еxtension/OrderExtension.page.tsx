@@ -18,6 +18,7 @@ import NoContent from '../../components/no-content/NoContent.component';
 import { isReservedSlug } from '../../util/reservedSlugs';
 import { Feature } from '../../util/features';
 import { useApplyTenantTheme } from '../../hooks/useApplyTenantTheme';
+import { useApplyTenantBranding } from '../../hooks/useApplyTenantBranding';
 
 
 type OrderExtensionData = {
@@ -76,6 +77,7 @@ const OrderExtensionPage: React.FC = () => {
             .finally(() => setTenantLoading(false));
     }, [tenantSlug, envSlug]);
 
+    const themingEnabled = Boolean(tenant?.features?.includes(Feature.THEMING));
     useApplyTenantTheme(
         {
             accentColor: tenant?.accentColor,
@@ -84,8 +86,9 @@ const OrderExtensionPage: React.FC = () => {
             mutedTextColor: tenant?.mutedTextColor,
             subtleTextColor: tenant?.subtleTextColor,
         },
-        Boolean(tenant?.features?.includes(Feature.THEMING))
+        themingEnabled
     );
+    useApplyTenantBranding(tenant, tenantSlug, themingEnabled);
 
     const initialValues: OrderExtensionData = useMemo(
         () => ({
