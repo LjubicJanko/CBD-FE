@@ -7,7 +7,6 @@ import { useChangeLanguage } from '../../hooks/useChangeLanguage';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import CloseIcon from '@mui/icons-material/Close';
 import React from 'react';
 import theme from '../../styles/theme';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -18,7 +17,6 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShareButton from '../share-button/ShareButton.component';
 import AttendanceButton from '../attendance-button/AttendanceButton.component';
-import InstallButton from '../install-button/InstallButton.component';
 import { platformService, publicTenantService } from '../../api';
 import { getLogoAbsoluteUrl, Tenant } from '../../api/services/platform';
 import { PublicTenant } from '../../api/services/publicTenant';
@@ -61,22 +59,6 @@ const HeaderComponent = () => {
   const [selectedTenantId, setSelectedTenantId] = useState<number | ''>(
     localStorageService.selectedTenantId ?? ''
   );
-
-  // iOS Safari never fires `beforeinstallprompt`, so it gets its own banner instead of InstallButton.
-  const [iosBannerDismissed, setIosBannerDismissed] = useState<boolean>(() =>
-    localStorageService.getInstallBannerDismissed()
-  );
-  const isIosSafari = useMemo(
-    () =>
-      /iphone|ipad|ipod/i.test(navigator.userAgent) &&
-      !window.matchMedia('(display-mode: standalone)').matches,
-    []
-  );
-  const showIosInstallBanner = isIosSafari && !iosBannerDismissed;
-  const dismissIosBanner = useCallback(() => {
-    localStorageService.setInstallBannerDismissed(true);
-    setIosBannerDismissed(true);
-  }, []);
 
   useEffect(() => {
     if (authData?.superadmin) {
@@ -257,95 +239,77 @@ const HeaderComponent = () => {
 
   if (!token) {
     return (
-      <>
-        <Styled.PublicHeaderContainer className="public-header">
-          {showBackButton ? (
-            <div className="public-header__with-back-btn">
-              <IconButton
-                className="public-header__with-back-btn--btn"
-                onClick={() => navigate(tenantSlug ? `/${tenantSlug}` : '/')}
-                edge="end"
-              >
-                <ChevronLeftIcon />
-              </IconButton>
-              <h1 className="public-header__with-back-btn--title">
-                {t(`${titleKey}-title`)}
-              </h1>
-              <InstallButton />
-              <ShareButton />
-            </div>
-          ) : (
-            <div className="public-header__home">
-              <Select
-                id="language"
-                value={selectedLanguage}
-                className="public-header__language"
-                onChange={(e) => changeLanguage(e.target.value)}
-              >
-                <MenuItem
-                  className="public-header__language__menu-item"
-                  value="en"
-                >
-                  <img
-                    className={classNames(
-                      'public-header__language__button__flag',
-                      {
-                        'public-header__language__button__flag--selected':
-                          selectedLanguage === 'en',
-                      }
-                    )}
-                    src="/en.png"
-                    alt="english"
-                  />
-                </MenuItem>
-                <MenuItem
-                  className="public-header__language__menu-item"
-                  value="rs"
-                >
-                  <img
-                    className={classNames(
-                      'public-header__language__button__flag',
-                      {
-                        'public-header__language__button__flag--selected':
-                          selectedLanguage === 'rs',
-                      }
-                    )}
-                    src="/rs.png"
-                    alt="serbian"
-                  />
-                </MenuItem>
-              </Select>
-
-              <InstallButton />
-
-              {showHeaderLogin && (
-                <Button
-                  variant="outlined"
-                  className="public-header__home__login-btn"
-                  onClick={() =>
-                    navigate(tenantSlug ? `/login/${tenantSlug}` : '/login')
-                  }
-                >
-                  {t('login')}
-                </Button>
-              )}
-            </div>
-          )}
-        </Styled.PublicHeaderContainer>
-        {showIosInstallBanner && (
-          <Styled.IosInstallBanner>
-            <span>{t('pwa.iosInstallPrompt')}</span>
+      <Styled.PublicHeaderContainer className="public-header">
+        {showBackButton ? (
+          <div className="public-header__with-back-btn">
             <IconButton
-              className="ios-install-banner__dismiss"
-              onClick={dismissIosBanner}
-              size="small"
-              aria-label={t('pwa.iosInstallDismiss')}
+              className="public-header__with-back-btn--btn"
+              onClick={() => navigate(tenantSlug ? `/${tenantSlug}` : '/')}
+              edge="end"
             >
-              <CloseIcon fontSize="small" />
+              <ChevronLeftIcon />
             </IconButton>
-          </Styled.IosInstallBanner>
+            <h1 className="public-header__with-back-btn--title">
+              {t(`${titleKey}-title`)}
+            </h1>
+            <ShareButton />
+          </div>
+        ) : (
+          <div className="public-header__home">
+            <Select
+              id="language"
+              value={selectedLanguage}
+              className="public-header__language"
+              onChange={(e) => changeLanguage(e.target.value)}
+            >
+              <MenuItem
+                className="public-header__language__menu-item"
+                value="en"
+              >
+                <img
+                  className={classNames(
+                    'public-header__language__button__flag',
+                    {
+                      'public-header__language__button__flag--selected':
+                        selectedLanguage === 'en',
+                    }
+                  )}
+                  src="/en.png"
+                  alt="english"
+                />
+              </MenuItem>
+              <MenuItem
+                className="public-header__language__menu-item"
+                value="rs"
+              >
+                <img
+                  className={classNames(
+                    'public-header__language__button__flag',
+                    {
+                      'public-header__language__button__flag--selected':
+                        selectedLanguage === 'rs',
+                    }
+                  )}
+                  src="/rs.png"
+                  alt="serbian"
+                />
+              </MenuItem>
+            </Select>
+
+            {showHeaderLogin && (
+              <Button
+                variant="outlined"
+                className="public-header__home__login-btn"
+                onClick={() =>
+                  navigate(tenantSlug ? `/login/${tenantSlug}` : '/login')
+                }
+              >
+                {t('login')}
+              </Button>
+            )}
+          </div>
         )}
-      </>
+      </Styled.PublicHeaderContainer>
     );
   }
 

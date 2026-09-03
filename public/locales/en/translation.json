@@ -43,10 +43,7 @@
         "loginPrompt": "Sign in to continue."
     },
     "pwa": {
-        "install": "Install app",
-        "offlineReady": "App ready to work offline",
-        "iosInstallPrompt": "Install this app: tap Share, then \"Add to Home Screen\".",
-        "iosInstallDismiss": "Dismiss"
+        "offlineReady": "App ready to work offline"
     },
     "is-legal-entity": "Is legal entity",
     "last-update": "Last updated",

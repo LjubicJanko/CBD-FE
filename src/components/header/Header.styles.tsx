@@ -177,30 +177,3 @@ export const PublicHeaderContainer = styled.header`
     }
   }
 `;
-
-export const IosInstallBanner = styled.div`
-  position: fixed;
-  top: 80px;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background-color: ${theme.SURFACE_SOLID};
-  color: ${theme.SECONDARY_1};
-  font-size: 13px;
-  text-align: center;
-
-  ${mobile(css`
-    padding: 8px 12px;
-    font-size: 12px;
-  `)}
-
-  .ios-install-banner__dismiss {
-    padding: 2px;
-    color: ${theme.SECONDARY_2};
-  }
-`;

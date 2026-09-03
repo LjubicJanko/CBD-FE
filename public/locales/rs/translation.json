@@ -43,10 +43,7 @@
         "loginPrompt": "Prijavite se da nastavite."
     },
     "pwa": {
-        "install": "Instaliraj aplikaciju",
-        "offlineReady": "Aplikacija je spremna za rad bez interneta",
-        "iosInstallPrompt": "Instaliraj aplikaciju: dodirni Share, zatim \"Add to Home Screen\".",
-        "iosInstallDismiss": "Zatvori"
+        "offlineReady": "Aplikacija je spremna za rad bez interneta"
     },
     "is-legal-entity": "Da li je pravno lice",
     "last-update": "Poslednje ažurirano",
