@@ -44,6 +44,17 @@ const DashboardHeader = () => {
     [params]
   );
 
+  const executionStatusLabelKey = useMemo(() => {
+    switch (params[Q_PARAM.EXECUTION_STATUS]) {
+      case 'ARCHIVED':
+        return 'archive-orders';
+      case 'ALL':
+        return 'all-orders';
+      default:
+        return 'active-orders';
+    }
+  }, [params]);
+
   const toggleFiltersModal = useCallback(
     () => setIsFiltersModalOpen((old) => !old),
     []
@@ -94,11 +105,7 @@ const DashboardHeader = () => {
       </div>
       <div className="dashboard-header__active-filters">
         <div className="dashboard-header__active-filters--chip">
-          {t(
-            params[Q_PARAM.EXECUTION_STATUS] === 'ARCHIVED'
-              ? 'archive-orders'
-              : 'active-orders'
-          )}
+          {t(executionStatusLabelKey)}
         </div>
         {activeFilters.map((activeFilter, index) => (
           <div
