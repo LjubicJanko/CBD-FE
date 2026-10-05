@@ -83,7 +83,7 @@ Five Context providers wrap the app in `App.tsx`:
 - `VITE_API_URL`, backend API base URL (accessed via `import.meta.env.VITE_API_URL`)
 - `VITE_TENANT_SLUG`, default tenant slug for the public home page link and the legacy `/track?id=` redirect. When unset, the home page hides the order-extension entry point.
 - `VITE_LOCAL_SCAN_ORIGIN`, dev-only (gated on `import.meta.env.DEV`, never applies to a production build). Overrides the origin encoded into the printed attendance QR code (`src/pages/locations/Locations.page.tsx`), which otherwise defaults to `window.location.origin`. Needed because a phone camera can't resolve `localhost`, set it to your machine's LAN address (e.g. `http://192.168.1.14:5173`, matching whatever port `npm run dev` reports) to test the scan flow from a real device.
-- Translations served locally from `public/locales/{en,rs}/translation.json` (Vite exposes them at `/locales/...`). A remote mirror at `ljubicjanko.github.io/CBD-Locales` exists for reference but is no longer the runtime source, keep the local files in sync if you ever switch back.
+- Translations are loaded at runtime from the remote repo `ljubicjanko.github.io/CBD-Locales` (see `src/i18n.js`). `public/locales/{en,rs}/translation.json` is no longer served; the two copies are synced by hand, so new keys must also be pushed to `CBD-Locales` before the code that uses them ships (GitHub Pages caches for ~10 minutes).
 
 ## Code Style
 - **Prettier**: single quotes, 4-space tabs, trailing commas (es5), semicolons

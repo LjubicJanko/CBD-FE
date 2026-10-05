@@ -146,7 +146,7 @@ const CombineExtensionsModal = ({
         [showSnackbar, t]
     );
 
-    const useFieldFromOrder = useCallback(
+    const applyFieldFromOrder = useCallback(
         (order: Order, field: keyof ResultFields) => {
             const value = getOrderFieldValue(order, field);
             setResult((prev) => ({ ...prev, [field]: value }));
@@ -154,7 +154,7 @@ const CombineExtensionsModal = ({
         []
     );
 
-    const useAllFromOrder = useCallback(
+    const applyAllFromOrder = useCallback(
         (order: Order) => {
             const newResult: ResultFields = {} as ResultFields;
             for (const field of ALL_FIELDS) {
@@ -194,9 +194,14 @@ const CombineExtensionsModal = ({
                 },
             });
             showSnackbar(t('extensions-combined'), 'success');
+            // The source orders no longer exist, so drop the selection first;
+            // otherwise a stale, uneditable order stays open if the new one
+            // can't be selected.
+            setSelectedOrderId(-1);
             onClose();
             await fetchOrders();
-            setSelectedOrderId(response.id);
+            const newOrderId = Number(response?.id);
+            if (newOrderId > 0) setSelectedOrderId(newOrderId);
         } catch (error) {
             console.error(error);
             showSnackbar(t('error-combining-extensions'), 'error');
@@ -223,7 +228,7 @@ const CombineExtensionsModal = ({
                 </span>
                 <button
                     className="combine-view__order-card__header__copy-all"
-                    onClick={() => useAllFromOrder(order)}
+                    onClick={() => applyAllFromOrder(order)}
                 >
                     {t('use-all')}
                 </button>
@@ -250,7 +255,7 @@ const CombineExtensionsModal = ({
                     <IconButton
                         className="combine-view__order-card__field__use-btn"
                         size="small"
-                        onClick={() => useFieldFromOrder(order, field)}
+                        onClick={() => applyFieldFromOrder(order, field)}
                         title={t('use-value')}
                     >
                         <ArrowDownwardIcon sx={{ fontSize: 14 }} />

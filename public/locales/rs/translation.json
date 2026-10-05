@@ -210,6 +210,8 @@
     "overview-description": "Broj porudžbina i finansije za izabrani period",
     "status-duration-description": "Prosečno vreme koje porudžbine provedu u svakom statusu",
     "reactivated": "Reaktivirano",
+    "combined": "Objedinjeno",
+    "combined-with": "Objedinjeno sa: {{names}}",
     "tenant": "Klijent",
     "settings": "Podešavanja",
     "switchTenant": "Promeni klijenta",

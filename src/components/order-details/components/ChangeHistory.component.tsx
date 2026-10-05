@@ -18,6 +18,9 @@ export type ChangeHistoryProps = {
 };
 
 const getStatusLabel = (row: OrderStatusHistory, t: (key: string) => string): string => {
+  if (row.eventType === 'COMBINED') {
+    return t('combined');
+  }
   if (row.executionStatus === OrderExecutionStatusEnum.PAUSED) {
     return t('paused');
   }
@@ -90,7 +93,9 @@ const ChangeHistoryComponent = ({ orderId, statusHistory }: ChangeHistoryProps) 
                 {row.user}
               </TableCell>
               <TableCell data-label={t('comment')} className="change-history__cell change-history__cell--comment">
-                {row.closingComment}
+                {row.eventType === 'COMBINED' && row.relatedOrderNames?.length
+                  ? t('combined-with', { names: row.relatedOrderNames.join(', ') })
+                  : row.closingComment}
               </TableCell>
               <TableCell data-label={t('timestamp')} className="change-history__cell change-history__cell--timestamp">
                 <p>{dayjs(row.creationTime).format('DD.MM.YYYY HH:mm')}</p>

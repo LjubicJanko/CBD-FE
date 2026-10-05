@@ -205,6 +205,10 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         if (!isStale) mergeOrderIntoState(response, true);
       } catch (error) {
         console.error(error);
+        // Order no longer exists (e.g. merged into another): don't keep a stale one open.
+        if (selectedOrderIdRef.current === orderId) {
+          setSelectedOrder((old) => (old?.id === orderId ? null : old));
+        }
       } finally {
         if (selectedOrderIdRef.current === orderId) setIsLoading(false);
       }

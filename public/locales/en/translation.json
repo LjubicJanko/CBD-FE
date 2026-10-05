@@ -210,6 +210,8 @@
     "overview-description": "Order counts and financials for the selected period",
     "status-duration-description": "Average time orders spend in each status",
     "reactivated": "Reactivated",
+    "combined": "Combined",
+    "combined-with": "Combined with: {{names}}",
     "tenant": "Tenant",
     "settings": "Settings",
     "switchTenant": "Switch tenant",

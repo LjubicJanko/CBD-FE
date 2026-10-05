@@ -47,8 +47,14 @@ export const orderStatusArray = [
 
 export const orderPriorityArray = ['LOW', 'MEDIUM', 'HIGH'];
 
+export type OrderHistoryEventType = 'COMBINED';
+
 export type OrderStatusHistory = {
   id: number;
+  /** Null on legacy rows and plain status/execution-status changes. */
+  eventType?: OrderHistoryEventType | null;
+  relatedOrderIds?: number[] | null;
+  relatedOrderNames?: string[] | null;
   status: OrderStatus | null;
   executionStatus: OrderExecutionStatus | null;
   closingComment: string | null;
