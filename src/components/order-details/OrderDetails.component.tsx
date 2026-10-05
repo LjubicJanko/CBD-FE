@@ -89,7 +89,7 @@ const OrderDetailsComponent = () => {
     selectedOrder,
     setSelectedOrder,
     setSelectedOrderId,
-    updateOrderInOverviewList,
+    applyOrderResponse,
     removeOrderInOverviewList,
   } = useContext(OrdersContext);
 
@@ -237,10 +237,10 @@ const OrderDetailsComponent = () => {
           note
         );
         showSnackbar(t('status-changed'), 'success');
-        updateOrderInOverviewList(orderResponse);
-        setSelectedOrder(orderResponse);
+        applyOrderResponse(orderResponse);
       } catch (error) {
         console.error(error);
+        showSnackbar(t('execution-status-change-failed'), 'error');
       }
       resetConfirmModal();
     },
@@ -249,8 +249,7 @@ const OrderDetailsComponent = () => {
       resetConfirmModal,
       showSnackbar,
       t,
-      updateOrderInOverviewList,
-      setSelectedOrder,
+      applyOrderResponse,
     ]
   );
 

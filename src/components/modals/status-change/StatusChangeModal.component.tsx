@@ -9,7 +9,11 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { Order, OrderStatus, PostServices } from '../../../types/Order';
+import {
+  OrderMutationResponse,
+  OrderStatus,
+  PostServices,
+} from '../../../types/Order';
 import { getNextStatus } from '../../../util/util';
 import { orderService } from '../../../api';
 import { useTranslation } from 'react-i18next';
@@ -39,8 +43,7 @@ const StatusChangeModal = ({
   onClose,
 }: StatusChangeModalProps) => {
   const { t } = useTranslation();
-  const { setSelectedOrder, updateOrderInOverviewList } =
-    useContext(OrdersContext);
+  const { applyOrderResponse } = useContext(OrdersContext);
   const { showSnackbar } = useSnackbar();
   const initialValues: StatusData = {
     closingComment: '',
@@ -55,26 +58,16 @@ const StatusChangeModal = ({
   const onSubmit = useCallback(
     async (statusData: StatusData) => {
       try {
-        const response: Order = await orderService.changeStatus(
-          orderId,
-          statusData
-        );
-        setSelectedOrder(response);
-        updateOrderInOverviewList(response);
+        const response: OrderMutationResponse =
+          await orderService.changeStatus(orderId, statusData);
+        applyOrderResponse(response);
         onClose();
       } catch (error) {
         console.error(error);
         showSnackbar(t('status-change-failed'), 'error');
       }
     },
-    [
-      onClose,
-      orderId,
-      setSelectedOrder,
-      updateOrderInOverviewList,
-      showSnackbar,
-      t,
-    ]
+    [onClose, orderId, applyOrderResponse, showSnackbar, t]
   );
 
   const validationSchema = Yup.object({

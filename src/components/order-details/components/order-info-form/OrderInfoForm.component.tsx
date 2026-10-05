@@ -16,11 +16,13 @@ import { orderService } from '../../../../api';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
 import {
   Order,
+  OrderMutationResponse,
   orderPriorityArray,
   OrderPriorityEnum,
 } from '../../../../types/Order';
 import * as Styled from './OrderInfoForm.styles';
 import classNames from 'classnames';
+import { useSnackbar } from '../../../../hooks/useSnackbar';
 
 const initialOrderData: Order = {
   id: 0,
@@ -46,8 +48,8 @@ const initialOrderData: Order = {
 
 const OrderInfoForm = () => {
   const { t } = useTranslation();
-  const { selectedOrder, setSelectedOrder, updateOrderInOverviewList } =
-    useContext(OrdersContext);
+  const { selectedOrder, applyOrderResponse } = useContext(OrdersContext);
+  const { showSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t('validation.required.name')),
@@ -71,7 +73,7 @@ const OrderInfoForm = () => {
   const onSubmit = useCallback(
     async (values: Order, { resetForm }: FormikHelpers<Order>) => {
       try {
-        const res: Order = await orderService.updateOrder({
+        const res: OrderMutationResponse = await orderService.updateOrder({
           ...values,
           acquisitionCost: Number(values.acquisitionCost),
           salePrice: Number(values.salePrice),
@@ -79,16 +81,16 @@ const OrderInfoForm = () => {
             'YYYY-MM-DD'
           ),
         });
-        updateOrderInOverviewList(res);
-        setSelectedOrder(res);
+        applyOrderResponse(res);
         resetForm({
           values,
         });
       } catch (error) {
         console.error(error);
+        showSnackbar(t('order-update-failed'), 'error');
       }
     },
-    [setSelectedOrder, updateOrderInOverviewList]
+    [applyOrderResponse, showSnackbar, t]
   );
 
   const initialValues = useMemo(

@@ -1,7 +1,12 @@
 import { Button, IconButton } from '@mui/material';
 import * as Styled from './ShippedTooltip.styles';
 import theme from '../../../../styles/theme';
-import { Order, OrderStatusEnum, OrderStatusHistory, PostServices } from '../../../../types/Order';
+import {
+    OrderMutationResponse,
+    OrderStatusEnum,
+    OrderStatusHistory,
+    PostServices,
+} from '../../../../types/Order';
 import { useTranslation } from 'react-i18next';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -32,8 +37,7 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
     const { t } = useTranslation();
     const { showSnackbar } = useSnackbar();
     const { canEditData } = usePrivileges();
-    const { selectedOrder, setSelectedOrder, updateOrderInOverviewList } =
-        useContext(OrdersContext);
+    const { selectedOrder, applyOrderResponse } = useContext(OrdersContext);
 
     const isDone = selectedOrder?.status === OrderStatusEnum.DONE;
 
@@ -66,13 +70,13 @@ export const ShippedInfoTooltip = ({ row, orderId }: ShippedInfoProps) => {
         enableReinitialize: true,
         onSubmit: async (data) => {
             try {
-                const response: Order = await orderService.editShipmentInfo(
-                    orderId,
-                    data.postalService,
-                    data.postalCode
-                );
-                setSelectedOrder(response);
-                updateOrderInOverviewList(response);
+                const response: OrderMutationResponse =
+                    await orderService.editShipmentInfo(
+                        orderId,
+                        data.postalService,
+                        data.postalCode
+                    );
+                applyOrderResponse(response);
                 showSnackbar(t('shipment-info-updated'), 'success');
                 handleClose();
             } catch (error) {

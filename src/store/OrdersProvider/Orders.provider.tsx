@@ -10,6 +10,7 @@ import { orderService } from '../../api';
 import useQueryParams from '../../hooks/useQueryParams';
 import {
   Order,
+  OrderMutationResponse,
   OrderOverview,
   orderPriorityArray,
   orderStatusArray,
@@ -21,6 +22,17 @@ import {
   SortType,
 } from '../../components/modals/filters/FiltersModal.component';
 import { UpdatePaymentsResponse } from '../../types/Payment';
+
+// Mutation endpoints return payments (and, for non-admins, amountPaid) as null.
+// A null/undefined value means "not provided", so the known value is kept.
+const mergeOrderResponse = (
+  previous: Partial<Pick<Order, 'amountPaid' | 'payments'>> | undefined,
+  response: OrderMutationResponse
+): Order => ({
+  ...response,
+  amountPaid: response.amountPaid ?? previous?.amountPaid ?? 0,
+  payments: response.payments ?? previous?.payments,
+});
 
 const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
@@ -38,6 +50,11 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const [totalElements, setTotalElements] = useState(0);
   const [perPage, setPerPage] = useState(5);
 
+  // Guards against late responses overwriting newer state.
+  const selectedOrderIdRef = useRef<number>(-1);
+  const orderVersionRef = useRef(0);
+  const paymentsVersionRef = useRef(0);
+
   const mapOrderToOverview = useCallback((order: Order) => {
     const shippedHistoryStatus = order.statusHistory?.find(
       (x) => x.status === 'SHIPPED'
@@ -51,49 +68,80 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
     };
   }, []);
 
-  const updateOrderInOverviewList = useCallback(
-    (orderToUpdate: Order) =>
+  const mergeOrderIntoState = useCallback(
+    (response: OrderMutationResponse, replaceSelected: boolean) => {
+      setSelectedOrder((old) => {
+        if (old?.id === response.id) return mergeOrderResponse(old, response);
+        return replaceSelected ? mergeOrderResponse(undefined, response) : old;
+      });
       setOrders((old) =>
-        old.map((order) =>
-          order.id === orderToUpdate.id
-            ? mapOrderToOverview(orderToUpdate)
-            : order
+        old.map((row) =>
+          row.id === response.id
+            ? mapOrderToOverview(
+                mergeOrderResponse(
+                  row as OrderOverview & Partial<Order>,
+                  response
+                )
+              )
+            : row
         )
-      ),
+      );
+    },
     [mapOrderToOverview]
   );
 
+  const applyOrderResponse = useCallback(
+    (response: OrderMutationResponse) => {
+      orderVersionRef.current += 1;
+      mergeOrderIntoState(response, false);
+    },
+    [mergeOrderIntoState]
+  );
+
   const updatePaymentInOverview = useCallback(
-    (paymentResponse: UpdatePaymentsResponse) => {
-      const orderToUpdate = orders.find((x) => x.id === selectedOrder?.id);
-      if (!orderToUpdate) return;
+    (orderId: number, paymentResponse: UpdatePaymentsResponse) => {
+      orderVersionRef.current += 1;
+      paymentsVersionRef.current += 1;
 
       setOrders((old) =>
         old.map((order) =>
-          order.id === orderToUpdate.id
+          order.id === orderId
             ? {
-                ...orderToUpdate,
-                postalCode: order?.postalCode,
-                postalService: order?.postalService,
+                ...order,
                 amountLeftToPay: paymentResponse.amountLeftToPay,
+                amountPaid: paymentResponse.amountPaid,
                 payments: paymentResponse.payments,
               }
             : order
         )
       );
       setSelectedOrder((old) =>
-        old
+        old && old.id === orderId
           ? {
               ...old,
               amountLeftToPay: paymentResponse.amountLeftToPay,
               amountPaid: paymentResponse.amountPaid,
               payments: paymentResponse.payments,
             }
-          : null
+          : old
       );
     },
-    [orders, selectedOrder?.id]
+    []
   );
+
+  const fetchSelectedOrderPayments = useCallback(async (orderId: number) => {
+    const paymentsVersion = paymentsVersionRef.current;
+    const payments = await orderService.getPayments(orderId);
+    if (
+      selectedOrderIdRef.current !== orderId ||
+      paymentsVersion !== paymentsVersionRef.current
+    ) {
+      return;
+    }
+    setSelectedOrder((old) =>
+      old?.id === orderId ? { ...old, payments } : old
+    );
+  }, []);
 
   const removeOrderInOverviewList = useCallback((orderToRemove: Order) => {
     setOrders((old) => old.filter((order) => order.id !== orderToRemove.id));
@@ -145,18 +193,23 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
 
   const fetchSelectedOrder = useCallback(
     async (orderId: number) => {
+      const orderVersion = orderVersionRef.current;
+      const paymentsVersion = paymentsVersionRef.current;
       try {
         setIsLoading(true);
         const response = await orderService.getOrder(orderId);
-        setSelectedOrder(response);
-        updateOrderInOverviewList(response);
+        const isStale =
+          selectedOrderIdRef.current !== orderId ||
+          orderVersion !== orderVersionRef.current ||
+          paymentsVersion !== paymentsVersionRef.current;
+        if (!isStale) mergeOrderIntoState(response, true);
       } catch (error) {
         console.error(error);
       } finally {
-        setIsLoading(false);
+        if (selectedOrderIdRef.current === orderId) setIsLoading(false);
       }
     },
-    [updateOrderInOverviewList]
+    [mergeOrderIntoState]
   );
 
   useEffect(() => {
@@ -164,6 +217,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   }, [fetchOrders, page, perPage]);
 
   useEffect(() => {
+    selectedOrderIdRef.current = selectedOrderId;
     if (selectedOrderId > 0) {
       fetchSelectedOrder(selectedOrderId);
     } else {
@@ -179,9 +233,10 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       totalElements,
       isLoading,
       selectedOrder,
-      updateOrderInOverviewList,
+      applyOrderResponse,
       removeOrderInOverviewList,
       fetchOrders,
+      fetchSelectedOrderPayments,
       setSelectedOrder,
       setPage,
       setSelectedOrderId,
@@ -194,9 +249,10 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       totalElements,
       isLoading,
       selectedOrder,
-      updateOrderInOverviewList,
+      applyOrderResponse,
       removeOrderInOverviewList,
       fetchOrders,
+      fetchSelectedOrderPayments,
       updatePaymentInOverview,
     ]
   );

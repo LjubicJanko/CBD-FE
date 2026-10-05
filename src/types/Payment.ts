@@ -7,6 +7,8 @@ export type Payment = {
   note?: string;
 };
 
+export type NewPayment = Omit<Payment, 'id'>;
+
 export type UpdatePaymentsResponse = {
   amountPaid: number;
   amountLeftToPay: number;

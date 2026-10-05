@@ -111,11 +111,18 @@ export type Order = {
   plannedEndingDate: string;
   amountPaid: number;
   amountLeftToPay: number;
-  payments: Payment[];
+  payments?: Payment[] | null;
   pausingComment: string;
   priceDifference?: number;
   extension?: boolean;
   contactInfo?: ContactInfoData;
+};
+
+// Order mutation endpoints return payments as null, and amountPaid as null
+// for non-admin roles. Such fields must never overwrite known values.
+export type OrderMutationResponse = Omit<Order, 'amountPaid' | 'payments'> & {
+  amountPaid?: number | null;
+  payments?: Payment[] | null;
 };
 
 export type OrderTracking = {

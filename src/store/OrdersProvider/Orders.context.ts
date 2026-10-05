@@ -1,5 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
-import { Order, OrderOverview } from '../../types/Order';
+import { Order, OrderMutationResponse, OrderOverview } from '../../types/Order';
 import { UpdatePaymentsResponse } from '../../types/Payment';
 
 interface OrdersContext {
@@ -9,13 +9,17 @@ interface OrdersContext {
   totalElements: number;
   isLoading: boolean;
   selectedOrder: Order | null;
-  updateOrderInOverviewList: (orderToUpdate: Order) => void;
+  applyOrderResponse: (response: OrderMutationResponse) => void;
   removeOrderInOverviewList: (orderToUpdate: Order) => void;
   fetchOrders: () => Promise<void>;
+  fetchSelectedOrderPayments: (orderId: number) => Promise<void>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setSelectedOrder: Dispatch<SetStateAction<Order | null>>;
   setSelectedOrderId: React.Dispatch<React.SetStateAction<number>>;
-  updatePaymentInOverview: (payment: UpdatePaymentsResponse) => void;
+  updatePaymentInOverview: (
+    orderId: number,
+    payment: UpdatePaymentsResponse
+  ) => void;
 }
 
 export default createContext<OrdersContext>({
@@ -25,9 +29,10 @@ export default createContext<OrdersContext>({
   totalElements: 0,
   isLoading: false,
   selectedOrder: null,
-  updateOrderInOverviewList: () => {},
+  applyOrderResponse: () => {},
   removeOrderInOverviewList: () => {},
   fetchOrders: () => new Promise(() => {}),
+  fetchSelectedOrderPayments: () => new Promise(() => {}),
   setPage: () => {},
   setSelectedOrder: () => {},
   setSelectedOrderId: () => {},

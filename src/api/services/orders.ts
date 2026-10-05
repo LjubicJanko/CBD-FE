@@ -7,7 +7,7 @@ import {
   Order,
   OrderExecutionStatus,
 } from '../../types/Order';
-import { Payment } from '../../types/Payment';
+import { NewPayment, Payment } from '../../types/Payment';
 import { ApiError } from '../../types/Response';
 import client from '../client';
 import privateClient from '../privateClient';
@@ -189,7 +189,12 @@ const pauseOrder = async (id: number, pauseComment: string) =>
 const reactivateOrder = async (id: number) =>
   privateClient.put(`/orders/reactivate/${id}`).then((res) => res.data);
 
-const addPayment = async (payment: Payment, orderId: number) =>
+const getPayments = async (orderId: number) =>
+  privateClient
+    .get(`/orders/payments/${orderId}`)
+    .then((res) => res.data as Payment[]);
+
+const addPayment = async (payment: NewPayment, orderId: number) =>
   privateClient
     .post(`/orders/addPayment/${orderId}`, payment)
     .then((res) => res.data);
@@ -236,6 +241,7 @@ export default {
   deleteOrder,
   pauseOrder,
   reactivateOrder,
+  getPayments,
   addPayment,
   editPayment,
   deletePayment,

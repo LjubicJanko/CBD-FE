@@ -1,12 +1,23 @@
 import { Button, MenuItem, TextField } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import orders from '../../../api/services/orders';
+import { useSnackbar } from '../../../hooks/useSnackbar';
 import OrdersContext from '../../../store/OrdersProvider/Orders.context';
-import { UpdatePaymentsResponse, Payment } from '../../../types/Payment';
+import {
+  NewPayment,
+  UpdatePaymentsResponse,
+  Payment,
+} from '../../../types/Payment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import * as Styled from './AddPaymentModal.styles';
 import { BasicDatePicker } from '../..';
@@ -49,6 +60,8 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   const { t } = useTranslation();
 
   const { updatePaymentInOverview } = useContext(OrdersContext);
+  const { showSnackbar } = useSnackbar();
+  const isSubmittingRef = useRef(false);
 
   const isUpdating = Boolean(paymentToUpdate);
   const [confirmModalProps, setConfirmModalProps] =
@@ -81,8 +94,9 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
 
   const onSubmit = useCallback(
     async (values: PaymentData, { resetForm }: FormikHelpers<PaymentData>) => {
-      const newPayment: Payment = {
-        id: paymentToUpdate?.id ?? Date.now(),
+      if (isSubmittingRef.current) return;
+      isSubmittingRef.current = true;
+      const newPayment: NewPayment = {
         payer: values.payer,
         amount: parseFloat(values.amount),
         paymentDate: values.paymentDate.format('YYYY-MM-DD'),
@@ -93,20 +107,30 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         let updatePaymentsResponse: UpdatePaymentsResponse;
         if (paymentToUpdate) {
           updatePaymentsResponse = await orders.editPayment(
-            newPayment,
+            { ...newPayment, id: paymentToUpdate.id },
             orderId
           );
         } else {
           updatePaymentsResponse = await orders.addPayment(newPayment, orderId);
         }
-        updatePaymentInOverview(updatePaymentsResponse);
+        updatePaymentInOverview(orderId, updatePaymentsResponse);
         resetForm();
+        onClose();
       } catch (err) {
         console.error(err);
+        showSnackbar(t('payment-save-failed'), 'error');
+      } finally {
+        isSubmittingRef.current = false;
       }
-      onClose();
     },
-    [paymentToUpdate, onClose, updatePaymentInOverview, orderId]
+    [
+      paymentToUpdate,
+      onClose,
+      updatePaymentInOverview,
+      orderId,
+      showSnackbar,
+      t,
+    ]
   );
 
   const formik = useFormik({
@@ -133,13 +157,21 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
         orderId,
         paymentToUpdate?.id
       );
-      updatePaymentInOverview(updatePaymentsResponse);
+      updatePaymentInOverview(orderId, updatePaymentsResponse);
       onClose();
     } catch (error) {
       console.error(error);
+      showSnackbar(t('payment-delete-failed'), 'error');
     }
     setConfirmModalProps(EMPTY_CONFIRM_MODAL);
-  }, [onClose, orderId, paymentToUpdate, updatePaymentInOverview]);
+  }, [
+    onClose,
+    orderId,
+    paymentToUpdate,
+    updatePaymentInOverview,
+    showSnackbar,
+    t,
+  ]);
 
   const openConfirmModal = useCallback(() => {
     setConfirmModalProps({
@@ -152,8 +184,8 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({
   }, [handleDeletePayment, t]);
 
   const isSubmitDisabled = useMemo(
-    () => !formik.isValid || !formik.dirty,
-    [formik.isValid, formik.dirty]
+    () => !formik.isValid || !formik.dirty || formik.isSubmitting,
+    [formik.isValid, formik.dirty, formik.isSubmitting]
   );
 
   return (

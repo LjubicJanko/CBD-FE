@@ -10,10 +10,18 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useCallback, useContext, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import orders from '../../../../api/services/orders';
 import { usePrivileges } from '../../../../hooks/usePrivileges';
+import { useSnackbar } from '../../../../hooks/useSnackbar';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
 import { Payment } from '../../../../types/Payment';
 import AddPaymentModal from '../../../modals/add-payment/AddPaymentModal.component';
@@ -22,7 +30,7 @@ import * as Styled from './OrderPayments.styles';
 
 export type OrderPaymentsProps = {
   orderId: number;
-  payments: Payment[];
+  payments?: Payment[] | null;
   isAddingDisabled?: boolean;
 };
 
@@ -36,6 +44,13 @@ const initialPaymentModalConfig: PaymentModalConfig = {
   paymentToUpdate: undefined,
 };
 
+const sortPayments = (payments: Payment[]) =>
+  [...payments].sort(
+    (a, b) =>
+      dayjs(b.paymentDate).valueOf() - dayjs(a.paymentDate).valueOf() ||
+      b.id - a.id
+  );
+
 const OrderPayments = ({
   orderId,
   payments,
@@ -45,7 +60,29 @@ const OrderPayments = ({
 
   const privileges = usePrivileges();
 
-  const { updatePaymentInOverview } = useContext(OrdersContext);
+  const { showSnackbar } = useSnackbar();
+
+  const { updatePaymentInOverview, fetchSelectedOrderPayments } =
+    useContext(OrdersContext);
+
+  const sortedPayments = useMemo(
+    () => sortPayments(payments ?? []),
+    [payments]
+  );
+
+  const hasPaymentsRef = useRef(Boolean(payments));
+  hasPaymentsRef.current = Boolean(payments);
+
+  useEffect(() => {
+    fetchSelectedOrderPayments(orderId).catch((error) => {
+      console.error(error);
+      if (!hasPaymentsRef.current) {
+        showSnackbar(t('payments-load-failed'), 'error');
+      }
+    });
+    // Refetch only when the tab opens or the order changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
 
   const [paymentModalConfig, setPaymentModalConfig] =
     useState<PaymentModalConfig>(initialPaymentModalConfig);
@@ -74,17 +111,24 @@ const OrderPayments = ({
         orderId,
         confirmModalConfig?.paymentToUpdate?.id
       );
-      updatePaymentInOverview(updatePaymentsResponse);
+      updatePaymentInOverview(orderId, updatePaymentsResponse);
     } catch (error) {
       console.error(error);
+      showSnackbar(t('payment-delete-failed'), 'error');
     }
     setConfirmModalConfig(initialPaymentModalConfig);
-  }, [confirmModalConfig?.paymentToUpdate, orderId, updatePaymentInOverview]);
+  }, [
+    confirmModalConfig?.paymentToUpdate,
+    orderId,
+    updatePaymentInOverview,
+    showSnackbar,
+    t,
+  ]);
 
   return (
     <Styled.OrderPaymentsContainer className="order-payments">
       <div className="order-payments__data">
-        {payments?.length > 0 && (
+        {sortedPayments.length > 0 && (
           <Table className="order-payments__table" aria-label="payments table">
             <TableHead className="order-payments__table-header">
               <TableRow>
@@ -109,7 +153,7 @@ const OrderPayments = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {payments.map((payment) => (
+              {sortedPayments.map((payment) => (
                 <TableRow
                   key={payment.id}
                   className="order-payments__row"
@@ -157,7 +201,7 @@ const OrderPayments = ({
             </TableBody>
           </Table>
         )}
-        {payments?.length === 0 && (
+        {sortedPayments.length === 0 && (
           <img
             className="order-payments__no-content"
             src="/no_content.png"
