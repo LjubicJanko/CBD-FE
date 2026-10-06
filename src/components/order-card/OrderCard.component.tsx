@@ -9,7 +9,7 @@ import {
 import * as Styled from './OrderCard.styles';
 import theme from '../../styles/theme';
 import { statusColors } from '../../util/util';
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import CallMergeIcon from '@mui/icons-material/CallMerge';
 import dayjs from 'dayjs';
@@ -33,6 +33,30 @@ const OrderCardComponent = ({
     () => !!plannedEndingDate && dayjs(plannedEndingDate, 'YYYY.MM.DD').isBefore(dayjs()),
     [plannedEndingDate]
   );
+
+  const descriptionRef = useRef<HTMLHeadingElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  // The toggle is only needed when the clamped (collapsed) text is truncated.
+  // While expanded the text is unclamped, so keep the last measured value.
+  useLayoutEffect(() => {
+    const element = descriptionRef.current;
+    if (!element || isExpanded) return;
+
+    const measure = () =>
+      setIsOverflowing(element.scrollHeight > element.clientHeight + 1);
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [order.description, isExpanded]);
+
+  const handleToggleDescription = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsExpanded((prev) => !prev);
+  };
 
   return (
     <Styled.OrderCardContainer
@@ -59,9 +83,24 @@ const OrderCardComponent = ({
           $backgroundColor={statusColors[order.status]}
         />
       </Styled.Header>
-      <Styled.Description className="description">
+      <Styled.Description
+        ref={descriptionRef}
+        className={classNames('description', {
+          'description--expanded': isExpanded,
+        })}
+      >
         {order.description}
       </Styled.Description>
+      {(isOverflowing || isExpanded) && (
+        <Styled.DescriptionToggle
+          type="button"
+          className="description-toggle"
+          aria-expanded={isExpanded}
+          onClick={handleToggleDescription}
+        >
+          {isExpanded ? t('show-less') : t('show-more')}
+        </Styled.DescriptionToggle>
+      )}
       <Styled.Footer className="order-card__footer">
         {order.status !== OrderStatusEnum.DONE ? (
           <div className="order-card__footer__info">

@@ -68,6 +68,7 @@ export type CreateOrder = {
   name: string;
   description: string;
   note: string;
+  internalNote?: boolean;
   plannedEndingDate: string | number | Dayjs;
   legalEntity: boolean;
   acquisitionCost?: number;
@@ -103,7 +104,13 @@ export type Order = {
   trackingId: string;
   name: string;
   description: string;
-  note: string;
+  /**
+   * Admin: string (null is normalized to ""). Non-admin: a string when the
+   * note is visible, null/undefined when it is hidden (internal).
+   */
+  note?: string | null;
+  /** Only meaningful for admins; null for everyone else. */
+  internalNote?: boolean | null;
   status: OrderStatus;
   priority: OrderPriority;
   executionStatus: OrderExecutionStatus;

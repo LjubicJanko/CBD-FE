@@ -17,7 +17,7 @@ export const OrderCardContainer = styled.div`
 
   /* todo responsive */
   width: 380px;
-  height: 215px;
+  min-height: 215px;
 
   ${mobile(css`
     width: 100%;
@@ -74,6 +74,34 @@ export const Description = styled.h3`
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+
+  &.description--expanded {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+`;
+
+export const DescriptionToggle = styled.button`
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: ${theme.PRIMARY_2};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${theme.PRIMARY_2};
+    outline-offset: 2px;
+  }
 `;
 
 export const Footer = styled.div`

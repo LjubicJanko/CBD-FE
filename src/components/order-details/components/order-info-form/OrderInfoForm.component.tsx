@@ -11,7 +11,8 @@ import { FormikHelpers, useFormik } from 'formik';
 import { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import { BasicDatePicker } from '../../..';
+import { BasicDatePicker, InternalNoteCheckbox } from '../../..';
+import { useIsCompanyAdmin } from '../../../../hooks/useRole';
 import { orderService } from '../../../../api';
 import OrdersContext from '../../../../store/OrdersProvider/Orders.context';
 import {
@@ -50,6 +51,11 @@ const OrderInfoForm = () => {
   const { t } = useTranslation();
   const { selectedOrder, applyOrderResponse } = useContext(OrdersContext);
   const { showSnackbar } = useSnackbar();
+  const isAdmin = useIsCompanyAdmin();
+
+  // Admins always see the note; others only when the response carried a string
+  // (null/undefined means the note is hidden/internal).
+  const isNoteVisible = isAdmin || typeof selectedOrder?.note === 'string';
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t('validation.required.name')),
@@ -73,8 +79,14 @@ const OrderInfoForm = () => {
   const onSubmit = useCallback(
     async (values: Order, { resetForm }: FormikHelpers<Order>) => {
       try {
+        // Payload rules: admin sends note + internalNote; non-admin never sends
+        // internalNote and sends note only when it is visible (even if unchanged).
+        const { note, internalNote, ...rest } = values;
         const res: OrderMutationResponse = await orderService.updateOrder({
-          ...values,
+          ...rest,
+          ...(isAdmin
+            ? { note: note ?? '', internalNote: !!internalNote }
+            : isNoteVisible && { note: note ?? '' }),
           acquisitionCost: Number(values.acquisitionCost),
           salePrice: Number(values.salePrice),
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
@@ -90,7 +102,7 @@ const OrderInfoForm = () => {
         showSnackbar(t('order-update-failed'), 'error');
       }
     },
-    [applyOrderResponse, showSnackbar, t]
+    [applyOrderResponse, isAdmin, isNoteVisible, showSnackbar, t]
   );
 
   const initialValues = useMemo(
@@ -98,10 +110,14 @@ const OrderInfoForm = () => {
       selectedOrder
         ? {
             ...selectedOrder,
+            ...(isAdmin && {
+              note: selectedOrder.note ?? '',
+              internalNote: selectedOrder.internalNote ?? false,
+            }),
             plannedEndingDate: selectedOrder?.plannedEndingDate,
           }
         : initialOrderData,
-    [selectedOrder]
+    [isAdmin, selectedOrder]
   );
 
   const formik = useFormik<Order>({
@@ -150,21 +166,29 @@ const OrderInfoForm = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           multiline
-          maxRows={4}
         />
-        <TextField
-          className="order-info__note"
-          label={t('note')}
-          name="note"
-          type="text"
-          value={formik.values.note}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={!!formik.errors.note}
-          helperText={formik.errors.note ?? ''}
-          multiline
-          maxRows={4}
-        />
+        {isNoteVisible && (
+          <TextField
+            className={classNames('order-info__note', {
+              'note--internal': isAdmin && formik.values.internalNote,
+            })}
+            label={t('note')}
+            name="note"
+            type="text"
+            value={formik.values.note ?? ''}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={!!formik.errors.note}
+            helperText={formik.errors.note ?? ''}
+            multiline
+          />
+        )}
+        {isAdmin && (
+          <InternalNoteCheckbox
+            checked={!!formik.values.internalNote}
+            onChange={formik.handleChange}
+          />
+        )}
         <BasicDatePicker
           label={t('expected')}
           value={formik.values.plannedEndingDate}

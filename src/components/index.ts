@@ -7,3 +7,4 @@ export { default as BasicDatePicker } from './date-picker/BasicDatePicker.compon
 export { default as BannerCard } from './banner-card/BannerCard.component';
 export { default as AttendanceButton } from './attendance-button/AttendanceButton.component';
 export { default as TenantDetailsForm } from './tenant-details-form/TenantDetailsForm.component';
+export { default as InternalNoteCheckbox } from './internal-note-checkbox/InternalNoteCheckbox.component';

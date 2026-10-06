@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { tablet } from '../../../../util/breakpoints';
 import theme from '../../../../styles/theme';
+import { internalNoteHighlight } from '../../../internal-note-checkbox/internalNoteHighlight.styles';
 
 export const OrderInfoFormContainer = styled.form`
   display: flex;
@@ -73,6 +74,8 @@ export const OrderInfoFormContainer = styled.form`
       }
     }
   }
+
+  ${internalNoteHighlight}
 
   .MuiTextField-root {
     color: ${theme.SECONDARY_1};

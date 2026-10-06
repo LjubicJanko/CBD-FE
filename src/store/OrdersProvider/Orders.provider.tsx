@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { orderService } from '../../api';
 import useQueryParams from '../../hooks/useQueryParams';
+import { useIsCompanyAdmin } from '../../hooks/useRole';
 import {
   Order,
   OrderMutationResponse,
@@ -26,17 +27,36 @@ import { UpdatePaymentsResponse } from '../../types/Payment';
 // Mutation endpoints return payments (and, for non-admins, amountPaid) as null.
 // A null/undefined value means "not provided", so the known value is kept.
 const mergeOrderResponse = (
-  previous: Partial<Pick<Order, 'amountPaid' | 'payments'>> | undefined,
-  response: OrderMutationResponse
-): Order => ({
-  ...response,
-  amountPaid: response.amountPaid ?? previous?.amountPaid ?? 0,
-  payments: response.payments ?? previous?.payments,
-});
+  previous:
+    | Partial<Pick<Order, 'amountPaid' | 'payments' | 'note' | 'internalNote'>>
+    | undefined,
+  response: OrderMutationResponse,
+  isAdmin: boolean
+): Order => {
+  const merged: Order = {
+    ...response,
+    amountPaid: response.amountPaid ?? previous?.amountPaid ?? 0,
+    payments: response.payments ?? previous?.payments,
+  };
+  // Non-admins take note/internalNote as-is: a null note means hidden.
+  if (!isAdmin) return merged;
+  // Admins: null becomes "" / false, while fields that are absent entirely
+  // (undefined) must not overwrite the known values.
+  return {
+    ...merged,
+    note:
+      response.note === undefined ? previous?.note : (response.note ?? ''),
+    internalNote:
+      response.internalNote === undefined
+        ? previous?.internalNote
+        : (response.internalNote ?? false),
+  };
+};
 
 const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
   const { params } = useQueryParams();
+  const isAdmin = useIsCompanyAdmin();
 
   const [orders, setOrders] = useState<OrderOverview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,8 +91,11 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const mergeOrderIntoState = useCallback(
     (response: OrderMutationResponse, replaceSelected: boolean) => {
       setSelectedOrder((old) => {
-        if (old?.id === response.id) return mergeOrderResponse(old, response);
-        return replaceSelected ? mergeOrderResponse(undefined, response) : old;
+        if (old?.id === response.id)
+          return mergeOrderResponse(old, response, isAdmin);
+        return replaceSelected
+          ? mergeOrderResponse(undefined, response, isAdmin)
+          : old;
       });
       setOrders((old) =>
         old.map((row) =>
@@ -80,14 +103,15 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
             ? mapOrderToOverview(
                 mergeOrderResponse(
                   row as OrderOverview & Partial<Order>,
-                  response
+                  response,
+                  isAdmin
                 )
               )
             : row
         )
       );
     },
-    [mapOrderToOverview]
+    [isAdmin, mapOrderToOverview]
   );
 
   const applyOrderResponse = useCallback(

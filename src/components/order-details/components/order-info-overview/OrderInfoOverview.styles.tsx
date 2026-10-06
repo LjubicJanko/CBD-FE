@@ -34,6 +34,12 @@ export const MobileContainer = styled.div`
     }
   }
 
+  .internal-note-badge {
+    margin-right: 4px;
+    vertical-align: text-bottom;
+    color: ${theme.PRIMARY_2};
+  }
+
   .pause {
     font-weight: 800;
     color: ${theme.SECONDARY_1};
@@ -53,6 +59,11 @@ export const DesktopContainer = styled(TableContainer)`
     .pause {
       font-weight: 800;
       font-size: 18px;
+    }
+    .internal-note-badge {
+      margin-right: 4px;
+      vertical-align: text-bottom;
+      color: ${theme.PRIMARY_2};
     }
   }
   .pausing-value {

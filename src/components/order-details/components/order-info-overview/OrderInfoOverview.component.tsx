@@ -1,7 +1,9 @@
 import { ReactNode, useMemo } from 'react';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Rating, Table, TableBody, TableRow } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useResponsiveWidth from '../../../../hooks/useResponsiveWidth';
+import { useIsCompanyAdmin } from '../../../../hooks/useRole';
 import {
     Order,
     OrderExecutionStatusEnum,
@@ -25,6 +27,12 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
     const { t } = useTranslation();
     const width = useResponsiveWidth();
     const isMobile = width < xxsMax;
+    const isAdmin = useIsCompanyAdmin();
+    const note = selectedOrder?.note;
+    const isInternalNote = isAdmin && !!selectedOrder?.internalNote;
+    // Admins always see the note; others only when it is a string (null or
+    // undefined means hidden, so no row is rendered).
+    const isNoteVisible = isAdmin || typeof note === 'string';
     const isPaused =
         selectedOrder?.executionStatus === OrderExecutionStatusEnum.PAUSED;
 
@@ -40,7 +48,27 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
                         </span>
                     ) : undefined,
                 },
-                { label: t('note'), value: selectedOrder?.note },
+                ...(isNoteVisible
+                    ? [
+                          {
+                              label: t('note'),
+                              value: (
+                                  <>
+                                      {isInternalNote && (
+                                          <LockOutlinedIcon
+                                              fontSize="small"
+                                              titleAccess={t('internal-note')}
+                                              className="internal-note-badge"
+                                          />
+                                      )}
+                                      <span style={{ whiteSpace: 'pre-line' }}>
+                                          {note ?? ''}
+                                      </span>
+                                  </>
+                              ),
+                          },
+                      ]
+                    : []),
                 {
                     label: t('acquisition-cost'),
                     value: selectedOrder?.acquisitionCost,
@@ -89,7 +117,9 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
             t,
             selectedOrder?.name,
             selectedOrder?.description,
-            selectedOrder?.note,
+            isNoteVisible,
+            isInternalNote,
+            note,
             selectedOrder?.acquisitionCost,
             selectedOrder?.salePrice,
             selectedOrder?.legalEntity,

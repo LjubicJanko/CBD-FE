@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { tablet } from '../../util/breakpoints';
 import theme from '../../styles/theme';
+import { internalNoteHighlight } from '../../components/internal-note-checkbox/internalNoteHighlight.styles';
 
 export const CreateOrderPageContainer = styled.div`
   display: flex;
@@ -38,6 +39,8 @@ export const CreateOrderPageContainer = styled.div`
       width: 100%;
       padding: 16px;
     `)}
+
+    ${internalNoteHighlight}
 
     p {
       font-size: 12px;

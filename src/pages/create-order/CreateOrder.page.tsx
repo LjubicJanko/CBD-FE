@@ -6,6 +6,7 @@ import {
   Rating,
   TextField,
 } from '@mui/material';
+import classNames from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
 import { useCallback, useMemo } from 'react';
@@ -13,7 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { orderService } from '../../api';
-import { BasicDatePicker } from '../../components';
+import { BasicDatePicker, InternalNoteCheckbox } from '../../components';
+import { useIsCompanyAdmin } from '../../hooks/useRole';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import {
   CreateOrder,
@@ -26,6 +28,7 @@ const emptyOrderData: CreateOrder = {
   name: '',
   description: '',
   note: '',
+  internalNote: false,
   plannedEndingDate: dayjs().add(2, 'week'),
   legalEntity: false,
   acquisitionCost: undefined,
@@ -39,6 +42,8 @@ const CreateOrderPage = () => {
   const { t } = useTranslation();
 
   const { showSnackbar } = useSnackbar();
+
+  const isAdmin = useIsCompanyAdmin();
 
   const initialValues = useMemo(() => emptyOrderData, []);
 
@@ -58,8 +63,11 @@ const CreateOrderPage = () => {
   const onSubmit = useCallback(
     async (values: CreateOrder) => {
       try {
+        // Only an admin's internalNote is honored; others never send it.
+        const { internalNote, ...rest } = values;
         await orderService.createOrder({
-          ...values,
+          ...rest,
+          ...(isAdmin && { internalNote: !!internalNote }),
           acquisitionCost: Number(values.acquisitionCost),
           salePrice: Number(values.salePrice),
           plannedEndingDate: dayjs(values.plannedEndingDate).format(
@@ -72,7 +80,7 @@ const CreateOrderPage = () => {
         console.error(error);
       }
     },
-    [navigate, showSnackbar, t]
+    [isAdmin, navigate, showSnackbar, t]
   );
 
   const formik = useFormik<CreateOrder>({
@@ -143,7 +151,9 @@ const CreateOrderPage = () => {
           maxRows={4}
         />
         <TextField
-          className="create-order--note-input"
+          className={classNames('create-order--note-input', {
+            'note--internal': isAdmin && formik.values.internalNote,
+          })}
           label={t('note')}
           name="note"
           type="text"
@@ -155,6 +165,12 @@ const CreateOrderPage = () => {
           multiline
           maxRows={4}
         />
+        {isAdmin && (
+          <InternalNoteCheckbox
+            checked={!!formik.values.internalNote}
+            onChange={formik.handleChange}
+          />
+        )}
         <BasicDatePicker
           label={t('expected')}
           onChange={handleDateChange}
