@@ -2,6 +2,11 @@ import { createContext, Dispatch, SetStateAction } from 'react';
 import { Order, OrderMutationResponse, OrderOverview } from '../../types/Order';
 import { UpdatePaymentsResponse } from '../../types/Payment';
 
+export type SelectedOrderError = {
+  orderId: number;
+  status: number | undefined;
+};
+
 interface OrdersContext {
   orders: OrderOverview[];
   page: number;
@@ -9,6 +14,7 @@ interface OrdersContext {
   totalElements: number;
   isLoading: boolean;
   selectedOrder: Order | null;
+  selectedOrderError: SelectedOrderError | null;
   applyOrderResponse: (response: OrderMutationResponse) => void;
   removeOrderInOverviewList: (orderToUpdate: Order) => void;
   fetchOrders: () => Promise<void>;
@@ -29,6 +35,7 @@ export default createContext<OrdersContext>({
   totalElements: 0,
   isLoading: false,
   selectedOrder: null,
+  selectedOrderError: null,
   applyOrderResponse: () => {},
   removeOrderInOverviewList: () => {},
   fetchOrders: () => new Promise(() => {}),

@@ -171,7 +171,9 @@ const OrderPayments = ({
                     {payment.amount.toFixed(2)}
                   </TableCell>
                   <TableCell data-label={t('payment-method')} className="order-payments__cell order-payments__cell--method">
-                    {t(payment.paymentMethod)}
+                    {payment.paymentMethod
+                      ? t(payment.paymentMethod)
+                      : t('method-unspecified')}
                   </TableCell>
                   <TableCell data-label={t('transaction-date')} className="order-payments__cell order-payments__cell--date">
                     {dayjs(payment.paymentDate).format('DD.MM.YYYY')}

@@ -16,13 +16,23 @@ import {
   orderPriorityArray,
   orderStatusArray,
 } from '../../types/Order';
-import OrdersContext from './Orders.context';
+import OrdersContext, { SelectedOrderError } from './Orders.context';
+import axios from 'axios';
 import { Q_PARAM } from '../../util/constants';
 import {
   SortCriteriaType,
   SortType,
 } from '../../components/modals/filters/FiltersModal.component';
 import { UpdatePaymentsResponse } from '../../types/Payment';
+
+const FILTER_QUERY_KEYS: string[] = [
+  ...orderStatusArray,
+  ...orderPriorityArray,
+  Q_PARAM.EXECUTION_STATUS,
+  Q_PARAM.SEARCH_TERM,
+  Q_PARAM.SORT_CRITERIA,
+  Q_PARAM.SORT,
+];
 
 // Mutation endpoints return payments (and, for non-admins, amountPaid) as null.
 // A null/undefined value means "not provided", so the known value is kept.
@@ -65,14 +75,33 @@ const mergeOrderResponse = (
 
 const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
-  const { params } = useQueryParams();
+  const { params: queryParams } = useQueryParams();
   const isAdmin = useIsCompanyAdmin();
+
+  // Only the keys the list filters on: unrelated query params (for example the
+  // one-shot `orderId` deep link) must not recreate fetchOrders, which would
+  // refetch the list and reset it to the first page.
+  const filterParamsKey = useMemo(
+    () =>
+      JSON.stringify(
+        Object.entries(queryParams)
+          .filter(([key]) => FILTER_QUERY_KEYS.includes(key))
+          .sort(([a], [b]) => a.localeCompare(b))
+      ),
+    [queryParams]
+  );
+  const params = useMemo<Record<string, string>>(
+    () => Object.fromEntries(JSON.parse(filterParamsKey)),
+    [filterParamsKey]
+  );
 
   const [orders, setOrders] = useState<OrderOverview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<number>(-1);
+  const [selectedOrderError, setSelectedOrderError] =
+    useState<SelectedOrderError | null>(null);
 
   const [page, setPage] = useState(0);
   const lastPageValueRef = useRef<number>(page);
@@ -239,8 +268,14 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
         if (!isStale) mergeOrderIntoState(response, true);
       } catch (error) {
         console.error(error);
-        // Order no longer exists (e.g. merged into another): don't keep a stale one open.
         if (selectedOrderIdRef.current === orderId) {
+          setSelectedOrderError({
+            orderId,
+            status: axios.isAxiosError(error)
+              ? error.response?.status
+              : undefined,
+          });
+          // Order no longer exists (e.g. merged into another): don't keep a stale one open.
           setSelectedOrder((old) => (old?.id === orderId ? null : old));
         }
       } finally {
@@ -256,6 +291,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     selectedOrderIdRef.current = selectedOrderId;
+    setSelectedOrderError(null);
     if (selectedOrderId > 0) {
       fetchSelectedOrder(selectedOrderId);
     } else {
@@ -271,6 +307,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       totalElements,
       isLoading,
       selectedOrder,
+      selectedOrderError,
       applyOrderResponse,
       removeOrderInOverviewList,
       fetchOrders,
@@ -287,6 +324,7 @@ const OrdersProvider: React.FC<PropsWithChildren> = (props) => {
       totalElements,
       isLoading,
       selectedOrder,
+      selectedOrderError,
       applyOrderResponse,
       removeOrderInOverviewList,
       fetchOrders,

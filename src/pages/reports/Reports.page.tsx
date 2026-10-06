@@ -8,6 +8,7 @@ import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import dayjs, { Dayjs } from 'dayjs';
 import { statusColors } from '../../util/util';
+import { formatCurrency, formatNonNegativeCurrency } from '../../util/currency';
 import useQueryParams from '../../hooks/useQueryParams';
 import {
     PieChart,
@@ -20,15 +21,6 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
-const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat('sr-RS', {
-        style: 'currency',
-        currency: 'RSD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(value);
-};
 
 const formatDuration = (hours: number): string => {
     if (hours < 1) {
@@ -127,7 +119,10 @@ const renderCustomLabel = ((props: {
 
 const ReportsPage = () => {
     const { t } = useTranslation();
-    const { params, setMultipleQParams } = useQueryParams<{ from: string; to: string }>();
+    const { params, setMultipleQParams } = useQueryParams<{
+        from: string;
+        to: string;
+    }>();
 
     const [from, setFrom] = useState<Dayjs>(
         params.from ? dayjs(params.from) : dayjs().startOf('month')
@@ -140,10 +135,36 @@ const ReportsPage = () => {
         useState<StatusDurationReport | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [bankTotal, setBankTotal] = useState<number | null>(null);
+
     const isAdmin = useIsCompanyAdmin();
 
     const fromStr = useMemo(() => from.format('YYYY-MM-DD'), [from]);
     const toStr = useMemo(() => to.format('YYYY-MM-DD'), [to]);
+
+    const paymentsReportLink = (tab: 'payments' | 'unpaid') =>
+        `/reports/payments?tab=${tab}&from=${fromStr}&to=${toStr}`;
+
+    // Admin-only: a single row is enough, only totals.bankTotal is used. A
+    // failure just hides the figure, the link to the full page still renders.
+    useEffect(() => {
+        if (!isAdmin || from.isAfter(to, 'day')) {
+            setBankTotal(null);
+            return;
+        }
+        let isCurrent = true;
+        reportsService
+            .getPaymentsReport({ from: fromStr, to: toStr, perPage: 1 })
+            .then((res) => {
+                if (isCurrent) setBankTotal(res.totals.bankTotal);
+            })
+            .catch(() => {
+                if (isCurrent) setBankTotal(null);
+            });
+        return () => {
+            isCurrent = false;
+        };
+    }, [isAdmin, from, to, fromStr, toStr]);
 
     const fetchReports = useCallback(async () => {
         setIsLoading(true);
@@ -187,7 +208,10 @@ const ReportsPage = () => {
                             onChange={(val) => {
                                 if (!val) return;
                                 setFrom(val);
-                                setMultipleQParams({ from: val.format('YYYY-MM-DD'), to: to.format('YYYY-MM-DD') });
+                                setMultipleQParams({
+                                    from: val.format('YYYY-MM-DD'),
+                                    to: to.format('YYYY-MM-DD'),
+                                });
                             }}
                             format="DD.MM.YYYY"
                             slotProps={{
@@ -200,7 +224,10 @@ const ReportsPage = () => {
                             onChange={(val) => {
                                 if (!val) return;
                                 setTo(val);
-                                setMultipleQParams({ from: from.format('YYYY-MM-DD'), to: val.format('YYYY-MM-DD') });
+                                setMultipleQParams({
+                                    from: from.format('YYYY-MM-DD'),
+                                    to: val.format('YYYY-MM-DD'),
+                                });
                             }}
                             format="DD.MM.YYYY"
                             slotProps={{
@@ -211,9 +238,7 @@ const ReportsPage = () => {
                 </div>
 
                 {isLoading ? (
-                    <CircularProgress
-                        sx={{ alignSelf: 'center', mt: 4 }}
-                    />
+                    <CircularProgress sx={{ alignSelf: 'center', mt: 4 }} />
                 ) : (
                     <>
                         {report && (
@@ -235,7 +260,10 @@ const ReportsPage = () => {
                                             {report.orderCount}
                                         </span>
                                         <span className="stat-card__breakdown">
-                                            {report.regularOrderCount} {t('regular')} · {report.extensionOrderCount} {t('extensions')}
+                                            {report.regularOrderCount}{' '}
+                                            {t('regular')} ·{' '}
+                                            {report.extensionOrderCount}{' '}
+                                            {t('extensions')}
                                         </span>
                                     </Styled.StatCard>
                                     <Styled.StatCard>
@@ -262,7 +290,11 @@ const ReportsPage = () => {
                                     {isAdmin &&
                                         report.totalAmountPaid !== null && (
                                             <>
-                                                <Styled.StatCard>
+                                                <Styled.StatCardLink
+                                                    to={paymentsReportLink(
+                                                        'payments'
+                                                    )}
+                                                >
                                                     <span className="stat-card__label">
                                                         {t('total-collected')}
                                                     </span>
@@ -271,7 +303,7 @@ const ReportsPage = () => {
                                                             report.totalAmountPaid!
                                                         )}
                                                     </span>
-                                                </Styled.StatCard>
+                                                </Styled.StatCardLink>
                                                 <Styled.StatCard>
                                                     <span className="stat-card__label">
                                                         {t('total-sale-price')}
@@ -282,16 +314,20 @@ const ReportsPage = () => {
                                                         )}
                                                     </span>
                                                 </Styled.StatCard>
-                                                <Styled.StatCard>
+                                                <Styled.StatCardLink
+                                                    to={paymentsReportLink(
+                                                        'unpaid'
+                                                    )}
+                                                >
                                                     <span className="stat-card__label">
                                                         {t('outstanding')}
                                                     </span>
                                                     <span className="stat-card__value">
-                                                        {formatCurrency(
+                                                        {formatNonNegativeCurrency(
                                                             report.totalOutstanding!
                                                         )}
                                                     </span>
-                                                </Styled.StatCard>
+                                                </Styled.StatCardLink>
                                                 <Styled.StatCard $accent>
                                                     <span className="stat-card__label">
                                                         {t('profit-margin')}
@@ -308,6 +344,33 @@ const ReportsPage = () => {
                             </Styled.Section>
                         )}
 
+                        {isAdmin && (
+                            <Styled.Section>
+                                <Styled.SectionHeader>
+                                    <h2 className="section__title">
+                                        {t('payments')}
+                                    </h2>
+                                </Styled.SectionHeader>
+                                <Styled.PaymentsEntry>
+                                    {bankTotal !== null && (
+                                        <Styled.StatCard $accent>
+                                            <span className="stat-card__label">
+                                                {t('bank-total')}
+                                            </span>
+                                            <span className="stat-card__value">
+                                                {formatCurrency(bankTotal)}
+                                            </span>
+                                        </Styled.StatCard>
+                                    )}
+                                    <Styled.ViewAllLink
+                                        to={paymentsReportLink('payments')}
+                                    >
+                                        {t('view-all-payments')}
+                                    </Styled.ViewAllLink>
+                                </Styled.PaymentsEntry>
+                            </Styled.Section>
+                        )}
+
                         <Styled.Section>
                             <Styled.SectionHeader>
                                 <h2 className="section__title">
@@ -316,7 +379,8 @@ const ReportsPage = () => {
                                 <span className="section__subtitle">
                                     {t('status-duration-description')}
                                     {durationReport &&
-                                        durationReport.totalOrdersAnalyzed > 0 &&
+                                        durationReport.totalOrdersAnalyzed >
+                                            0 &&
                                         ` · ${t('total-orders-analyzed')}: ${durationReport.totalOrdersAnalyzed}`}
                                 </span>
                             </Styled.SectionHeader>
@@ -357,14 +421,17 @@ const ReportsPage = () => {
                                                             fill={
                                                                 STATUS_COLOR_MAP[
                                                                     entry.status
-                                                                ] || theme.SECONDARY_2
+                                                                ] ||
+                                                                theme.SECONDARY_2
                                                             }
                                                         />
                                                     )
                                                 )}
                                             </Pie>
                                             <Tooltip
-                                                content={<CustomTooltip t={t} />}
+                                                content={
+                                                    <CustomTooltip t={t} />
+                                                }
                                             />
                                             <Legend
                                                 verticalAlign="bottom"

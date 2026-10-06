@@ -22,6 +22,7 @@ import ErrorPage from './error/ErrorPage';
 import ProtectedRoute from './ProtectedRoute';
 import FeatureRoute from './FeatureRoute';
 import SuperadminRoute from './SuperadminRoute';
+import AdminRoute from './AdminRoute';
 import TenantContextRequired from './TenantContextRequired';
 import { privileges } from '../../util/util';
 import { Feature } from '../../util/features';
@@ -36,6 +37,9 @@ import { CircularProgress } from '@mui/material';
 // most sessions never need these chunks (and Reports/AttendanceHub pull in
 // recharts/leaflet, which are otherwise unconditionally bundled for everyone).
 const ReportsPage = lazy(() => import('../../pages/reports/Reports.page'));
+const ReportsPaymentsPage = lazy(
+  () => import('../../pages/reports-payments/ReportsPayments.page')
+);
 const PlatformPage = lazy(() => import('../../pages/platform/Platform.page'));
 const AttendanceHubPage = lazy(
   () => import('../../pages/attendance/AttendanceHub.page')
@@ -186,6 +190,12 @@ const CBDRouter: React.FC = (): JSX.Element => {
                 element={<FeatureRoute requiredFeature={Feature.REPORTS} />}
               >
                 <Route path="reports" element={<ReportsPage />} />
+                <Route element={<AdminRoute />}>
+                  <Route
+                    path="reports/payments"
+                    element={<ReportsPaymentsPage />}
+                  />
+                </Route>
               </Route>
               {/* `attendance` module: attendance, attendance overview and
                   locations are tabs of a single page; the hub self-gates each

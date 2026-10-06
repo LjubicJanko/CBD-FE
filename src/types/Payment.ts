@@ -1,13 +1,17 @@
+export type PaymentMethod = 'ACCOUNT' | 'CASH' | 'INVOICE' | 'ON_SHIP';
+
 export type Payment = {
   id: number;
   payer: string;
   amount: number;
   paymentDate: string;
-  paymentMethod: 'ACCOUNT' | 'CASH' | 'INVOICE' | 'ON_SHIP';
+  paymentMethod: PaymentMethod | null;
   note?: string;
 };
 
-export type NewPayment = Omit<Payment, 'id'>;
+export type NewPayment = Omit<Payment, 'id' | 'paymentMethod'> & {
+  paymentMethod: PaymentMethod;
+};
 
 export type UpdatePaymentsResponse = {
   amountPaid: number;

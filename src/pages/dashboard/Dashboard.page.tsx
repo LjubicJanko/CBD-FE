@@ -7,9 +7,11 @@ import {
 import OrdersContext from '../../store/OrdersProvider/Orders.context';
 import * as Styled from './Dashboard.styles';
 import DashboardHeader from '../../components/dashboard-header/DashboardHeader.component';
+import { useOrderDeepLink } from '../../hooks/useOrderDeepLink';
 
 const DashboardPage = () => {
   const { selectedOrder, isLoading } = useContext(OrdersContext);
+  useOrderDeepLink();
 
   return (
     <Styled.DashboardContainer className="dashboard-page">

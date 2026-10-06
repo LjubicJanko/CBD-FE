@@ -1,16 +1,17 @@
 import styled, { css } from 'styled-components';
+import { Link } from 'react-router-dom';
 import theme, { accentAlpha } from '../../styles/theme';
-import { mobile, belowTablet, tablet } from '../../util/breakpoints';
+import { mobile, belowTablet } from '../../util/breakpoints';
 
 export const ReportsContainer = styled.div`
-    padding: 32px;
+    padding: 24px 32px;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 28px;
 
     ${mobile(css`
         padding: 16px;
-        gap: 24px;
+        gap: 20px;
     `)}
 
     .reports-page__header {
@@ -82,17 +83,17 @@ export const ReportsContainer = styled.div`
 export const Section = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
 `;
 
 export const SectionHeader = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
 
     .section__title {
         margin: 0;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
         color: ${theme.SECONDARY_1};
     }
@@ -106,27 +107,25 @@ export const SectionHeader = styled.div`
 
 export const StatsGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-
-    ${tablet(css`
-        grid-template-columns: repeat(2, 1fr);
-    `)}
+    grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+    gap: 12px;
 
     ${mobile(css`
         grid-template-columns: 1fr;
     `)}
 `;
 
-export const StatCard = styled.div<{ $accent?: boolean }>`
+const statCardStyles = css<{ $accent?: boolean }>`
     background-color: ${theme.SURFACE_2};
     border-radius: 12px;
     border: 1px solid ${theme.BORDER};
-    padding: 20px 24px;
+    padding: 12px 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    transition: border-color 0.2s, background-color 0.2s;
+    gap: 4px;
+    transition:
+        border-color 0.2s,
+        background-color 0.2s;
 
     &:hover {
         border-color: ${accentAlpha(0.25)};
@@ -149,18 +148,69 @@ export const StatCard = styled.div<{ $accent?: boolean }>`
     }
 
     .stat-card__value {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700;
         color: ${theme.SECONDARY_1};
+        font-variant-numeric: tabular-nums;
 
         ${belowTablet(css`
-            font-size: 20px;
+            font-size: 18px;
         `)}
     }
 
     .stat-card__breakdown {
-        font-size: 13px;
+        font-size: 12px;
+        line-height: 1.3;
         color: ${theme.SECONDARY_2};
+    }
+`;
+
+export const StatCard = styled.div<{ $accent?: boolean }>`
+    ${statCardStyles}
+`;
+
+// Real link (focusable, keyboard-activatable) for the admin-only drill-downs.
+export const StatCardLink = styled(Link)<{ $accent?: boolean }>`
+    ${statCardStyles}
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        border-color: ${accentAlpha(0.6)};
+    }
+
+    &:focus-visible {
+        outline: 2px solid ${theme.PRIMARY_2};
+        outline-offset: 2px;
+    }
+`;
+
+export const PaymentsEntry = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+`;
+
+export const ViewAllLink = styled(Link)`
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: ${theme.PRIMARY_2};
+    color: ${theme.PRIMARY_1};
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+
+    &:hover {
+        background-color: ${accentAlpha(0.85)};
+    }
+
+    &:focus-visible {
+        outline: 2px solid ${theme.SECONDARY_1};
+        outline-offset: 2px;
     }
 `;
 
