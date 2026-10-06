@@ -577,5 +577,6 @@
     "unpaid-orders-load-failed": "Could not load the unpaid orders.",
     "retry": "Retry",
     "order-link-not-found": "The order from the link was not found.",
-    "order-load-failed": "Could not load the order."
+    "order-load-failed": "Could not load the order.",
+    "show-all-history": "Show all history"
 }

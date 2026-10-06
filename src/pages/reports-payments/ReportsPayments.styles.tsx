@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import theme from '../../styles/theme';
 import { mobile, tablet } from '../../util/breakpoints';
 import { ReportsContainer } from '../reports/Reports.styles';
+import reportChipStyles from '../../components/report-table/reportChip.styles';
 
 // Compact variant of the Reports page shell: title and date range share a row
 // so the table starts as high on the screen as possible.
@@ -54,6 +55,8 @@ export const PaymentsReportContainer = styled(ReportsContainer)`
         font-size: 13px;
         color: ${theme.ERROR_TEXT};
     }
+
+    ${reportChipStyles}
 
     .reports-page__tabs {
         border-bottom: 1px solid ${theme.BORDER};

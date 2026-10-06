@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import PaymentsTab from '../../components/payments-tab/PaymentsTab.component';
 import UnpaidOrdersTab from '../../components/unpaid-orders-tab/UnpaidOrdersTab.component';
+import ReportFilterChip from '../../components/report-table/ReportFilterChip.component';
 import useQueryParams from '../../hooks/useQueryParams';
 import theme from '../../styles/theme';
 import * as Styled from './ReportsPayments.styles';
@@ -17,38 +18,47 @@ type ReportTab = 'payments' | 'unpaid';
 const DATE_FORMAT = 'YYYY-MM-DD';
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-const parseDate = (value: string | undefined, fallback: Dayjs): Dayjs => {
-    if (!value || !ISO_DATE.test(value)) return fallback;
+const parseDate = (value: string | undefined): Dayjs | null => {
+    if (!value || !ISO_DATE.test(value)) return null;
     const parsed = dayjs(value);
-    return parsed.isValid() ? parsed : fallback;
+    return parsed.isValid() ? parsed : null;
 };
 
 const ReportsPaymentsPage = () => {
     const { t } = useTranslation();
-    const { params, setQParam, setMultipleQParams } = useQueryParams<{
-        tab: string;
-        from: string;
-        to: string;
-    }>();
+    const { params, setQParam, setMultipleQParams, removeMultipleQParams } =
+        useQueryParams<{
+            tab: string;
+            from: string;
+            to: string;
+        }>();
 
     const tab: ReportTab = params.tab === 'unpaid' ? 'unpaid' : 'payments';
-    const from = useMemo(
-        () => parseDate(params.from, dayjs().startOf('month')),
-        [params.from]
-    );
-    const to = useMemo(
-        () => parseDate(params.to, dayjs().endOf('month')),
-        [params.to]
-    );
-    const fromStr = from.format(DATE_FORMAT);
-    const toStr = to.format(DATE_FORMAT);
-    const isRangeValid = !from.isAfter(to, 'day');
 
-    const setRange = (nextFrom: Dayjs, nextTo: Dayjs) =>
+    // Default view is the whole history: no `from`, and `to` is today. Neither
+    // bound can be after today.
+    const todayStr = dayjs().format(DATE_FORMAT);
+    const today = useMemo(() => dayjs(todayStr), [todayStr]);
+    const from = useMemo(() => {
+        const parsed = parseDate(params.from);
+        return parsed && parsed.isAfter(today, 'day') ? today : parsed;
+    }, [params.from, today]);
+    const to = useMemo(() => {
+        const parsed = parseDate(params.to);
+        return parsed && !parsed.isAfter(today, 'day') ? parsed : today;
+    }, [params.to, today]);
+    const fromStr = from?.format(DATE_FORMAT);
+    const toStr = to.format(DATE_FORMAT);
+    const isRangeValid = !from || !from.isAfter(to, 'day');
+
+    const setBound = (key: 'from' | 'to', value: Dayjs) =>
         setMultipleQParams({
-            from: nextFrom.format(DATE_FORMAT),
-            to: nextTo.format(DATE_FORMAT),
+            [key]: (value.isAfter(today, 'day') ? today : value).format(
+                DATE_FORMAT
+            ),
         });
+
+    const showAllHistory = () => removeMultipleQParams(['from', 'to']);
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -66,8 +76,9 @@ const ReportsPaymentsPage = () => {
                         <DatePicker
                             label={t('from')}
                             value={from}
+                            maxDate={today}
                             onChange={(val) => {
-                                if (val?.isValid()) setRange(val, to);
+                                if (val?.isValid()) setBound('from', val);
                             }}
                             format="DD.MM.YYYY"
                             slotProps={{ textField: { size: 'small' } }}
@@ -75,11 +86,17 @@ const ReportsPaymentsPage = () => {
                         <DatePicker
                             label={t('to')}
                             value={to}
+                            maxDate={today}
                             onChange={(val) => {
-                                if (val?.isValid()) setRange(from, val);
+                                if (val?.isValid()) setBound('to', val);
                             }}
                             format="DD.MM.YYYY"
                             slotProps={{ textField: { size: 'small' } }}
+                        />
+                        <ReportFilterChip
+                            label={t('show-all-history')}
+                            isActive={!from}
+                            onClick={showAllHistory}
                         />
                     </div>
                     {!isRangeValid && (

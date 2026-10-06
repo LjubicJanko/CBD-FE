@@ -28,7 +28,7 @@ import { DEFAULT_PER_PAGE } from '../report-table/reportPagination.constants';
 import * as TableStyled from '../report-table/ReportTable.styles';
 
 export type PaymentsTabProps = {
-    from: string;
+    from: string | undefined;
     to: string;
     isRangeValid: boolean;
 };

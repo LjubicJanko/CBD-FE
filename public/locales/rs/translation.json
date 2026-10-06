@@ -577,5 +577,6 @@
     "unpaid-orders-load-failed": "Učitavanje neplaćenih porudžbina nije uspelo.",
     "retry": "Pokušaj ponovo",
     "order-link-not-found": "Porudžbina iz linka nije pronađena.",
-    "order-load-failed": "Učitavanje porudžbine nije uspelo."
+    "order-load-failed": "Učitavanje porudžbine nije uspelo.",
+    "show-all-history": "Prikaži svu istoriju"
 }

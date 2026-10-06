@@ -363,7 +363,7 @@ const ReportsPage = () => {
                                         </Styled.StatCard>
                                     )}
                                     <Styled.ViewAllLink
-                                        to={paymentsReportLink('payments')}
+                                        to="/reports/payments?tab=payments"
                                     >
                                         {t('view-all-payments')}
                                     </Styled.ViewAllLink>
