@@ -62,6 +62,7 @@ export type OrderStatusHistory = {
   user: string | null;
   postalCode?: string;
   postalService?: string;
+  printFilesUrl?: string | null;
 };
 
 export type CreateOrder = {
@@ -97,6 +98,7 @@ export type OrderOverview = {
   postalCode?: string;
   postalService?: string;
   extension?: boolean;
+  printFilesUrl?: string | null;
 };
 
 export type Order = {
@@ -129,6 +131,7 @@ export type Order = {
   priceDifference?: number;
   extension?: boolean;
   contactInfo?: ContactInfoData;
+  printFilesUrl?: string | null;
 };
 
 // Order mutation endpoints return payments as null, and amountPaid as null

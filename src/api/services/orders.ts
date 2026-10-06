@@ -136,6 +136,7 @@ const changeStatus = async (id?: number, statusData?: StatusData) => {
     closingComment = '',
     postalCode = '',
     postalService = '',
+    printFilesUrl,
   } = statusData ?? {};
 
   return privateClient
@@ -143,9 +144,15 @@ const changeStatus = async (id?: number, statusData?: StatusData) => {
       closingComment,
       postalCode,
       postalService,
+      printFilesUrl: printFilesUrl ?? null,
     })
     .then((res) => res.data);
 };
+
+const editPrintFilesUrl = async (id: number, printFilesUrl: string | null) =>
+  privateClient
+    .put(`/orders/editPrintFilesUrl/${id}`, { printFilesUrl })
+    .then((res) => res.data);
 
 const searchOrders = async (props: SearchProps) =>
   privateClient
@@ -251,4 +258,5 @@ export default {
   editExtension,
   editShipmentInfo,
   combineExtensions,
+  editPrintFilesUrl,
 };

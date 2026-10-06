@@ -32,6 +32,10 @@ export const ChangeHistoryContainer = styled.div`
       }
     }
 
+    &__print-files {
+      margin-top: 4px;
+    }
+
     &__cell {
       color: ${theme.SECONDARY_1};
       padding: 16px;

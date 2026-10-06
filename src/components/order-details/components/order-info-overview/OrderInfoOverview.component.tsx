@@ -13,6 +13,10 @@ import { xxsMax } from '../../../../util/breakpoints';
 import * as Styled from './OrderInfoOverview.styles';
 import classNames from 'classnames';
 import theme from '../../../../styles/theme';
+import { useCanEditPrintFiles } from '../../../../hooks/useCanEditPrintFiles';
+import { isSafeHttpsHref } from '../../../../util/util';
+import PrintFilesLink from '../../../print-files-link/PrintFilesLink.component';
+import PrintFilesEdit from '../print-files-edit/PrintFilesEdit.component';
 
 export type OrderInfoOverviewProps = {
     selectedOrder?: Order;
@@ -33,6 +37,8 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
     // Admins always see the note; others only when it is a string (null or
     // undefined means hidden, so no row is rendered).
     const isNoteVisible = isAdmin || typeof note === 'string';
+    const printFilesUrl = selectedOrder?.printFilesUrl;
+    const canEditPrintFiles = useCanEditPrintFiles(selectedOrder);
     const isPaused =
         selectedOrder?.executionStatus === OrderExecutionStatusEnum.PAUSED;
 
@@ -112,23 +118,29 @@ const OrderInfoOverview = ({ selectedOrder }: OrderInfoOverviewProps) => {
                         ''
                     ),
                 },
+                ...((isSafeHttpsHref(printFilesUrl) || canEditPrintFiles) &&
+                selectedOrder
+                    ? [
+                          {
+                              label: t('print-files'),
+                              value: (
+                                  <>
+                                      <PrintFilesLink url={printFilesUrl} />
+                                      <PrintFilesEdit order={selectedOrder} />
+                                  </>
+                              ),
+                          },
+                      ]
+                    : []),
             ].filter(Boolean) as OrderInfoConfigType[],
         [
-            t,
-            selectedOrder?.name,
-            selectedOrder?.description,
+            t,
             isNoteVisible,
             isInternalNote,
-            note,
-            selectedOrder?.acquisitionCost,
-            selectedOrder?.salePrice,
-            selectedOrder?.legalEntity,
-            selectedOrder?.salePriceWithTax,
-            selectedOrder?.priceDifference,
-            selectedOrder?.amountPaid,
-            selectedOrder?.amountLeftToPay,
-            selectedOrder?.plannedEndingDate,
-            selectedOrder?.priority,
+            note,
+            printFilesUrl,
+            canEditPrintFiles,
+            selectedOrder,
         ]
     );
 

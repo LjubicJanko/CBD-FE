@@ -24,6 +24,10 @@ import {
 import * as Styled from './OrderInfoForm.styles';
 import classNames from 'classnames';
 import { useSnackbar } from '../../../../hooks/useSnackbar';
+import { useCanEditPrintFiles } from '../../../../hooks/useCanEditPrintFiles';
+import { isSafeHttpsHref } from '../../../../util/util';
+import PrintFilesLink from '../../../print-files-link/PrintFilesLink.component';
+import PrintFilesEdit from '../print-files-edit/PrintFilesEdit.component';
 
 const initialOrderData: Order = {
   id: 0,
@@ -52,6 +56,7 @@ const OrderInfoForm = () => {
   const { selectedOrder, applyOrderResponse } = useContext(OrdersContext);
   const { showSnackbar } = useSnackbar();
   const isAdmin = useIsCompanyAdmin();
+  const canEditPrintFiles = useCanEditPrintFiles(selectedOrder);
 
   // Admins always see the note; others only when the response carried a string
   // (null/undefined means the note is hidden/internal).
@@ -81,7 +86,9 @@ const OrderInfoForm = () => {
       try {
         // Payload rules: admin sends note + internalNote; non-admin never sends
         // internalNote and sends note only when it is visible (even if unchanged).
-        const { note, internalNote, ...rest } = values;
+        // printFilesUrl is edited through its own endpoint, never via PUT /orders/{id}.
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { note, internalNote, printFilesUrl, ...rest } = values;
         const res: OrderMutationResponse = await orderService.updateOrder({
           ...rest,
           ...(isAdmin
@@ -262,6 +269,21 @@ const OrderInfoForm = () => {
               }
             />
           </dd>
+          {selectedOrder &&
+            (canEditPrintFiles ||
+              isSafeHttpsHref(selectedOrder.printFilesUrl)) && (
+            <>
+              <dt className="order-info__print-files-label">
+                {t('print-files')}:
+              </dt>
+              <dd className="order-info__print-files">
+                {isSafeHttpsHref(selectedOrder.printFilesUrl) && (
+                  <PrintFilesLink url={selectedOrder.printFilesUrl} />
+                )}
+                <PrintFilesEdit order={selectedOrder} />
+              </dd>
+            </>
+          )}
           <dt>{t('priority')}</dt>
           <dd>
             <Rating

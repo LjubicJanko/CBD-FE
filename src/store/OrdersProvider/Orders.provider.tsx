@@ -28,7 +28,12 @@ import { UpdatePaymentsResponse } from '../../types/Payment';
 // A null/undefined value means "not provided", so the known value is kept.
 const mergeOrderResponse = (
   previous:
-    | Partial<Pick<Order, 'amountPaid' | 'payments' | 'note' | 'internalNote'>>
+    | Partial<
+        Pick<
+          Order,
+          'amountPaid' | 'payments' | 'note' | 'internalNote' | 'printFilesUrl'
+        >
+      >
     | undefined,
   response: OrderMutationResponse,
   isAdmin: boolean
@@ -37,6 +42,11 @@ const mergeOrderResponse = (
     ...response,
     amountPaid: response.amountPaid ?? previous?.amountPaid ?? 0,
     payments: response.payments ?? previous?.payments,
+    // undefined keeps the previous value, null clears it.
+    printFilesUrl:
+      response.printFilesUrl === undefined
+        ? previous?.printFilesUrl
+        : response.printFilesUrl,
   };
   // Non-admins take note/internalNote as-is: a null note means hidden.
   if (!isAdmin) return merged;

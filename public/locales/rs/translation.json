@@ -133,7 +133,8 @@
             "sale-price": "Prodajna cena mora biti pozitivan broj",
             "acquisition-cost": "Nabavna cena mora biti pozitivan broj",
             "zipCode": "Poštanski broj nije validan",
-            "phone": "Broj telefona nije validan"
+            "phone": "Broj telefona nije validan",
+            "print-files-url": "Unesite ispravan https link"
         },
         "required": {
             "name": "Naziv je obavezno polje.",
@@ -541,5 +542,14 @@
     "tenant-not-found": "Tenant nije pronađen",
     "extension-update-error": "Greška pri ažuriranju zahteva za doradu",
     "extension-updated": "Zahtev za doradu je ažuriran",
-    "edit-extension": "Izmeni zahtev za doradu"
+    "edit-extension": "Izmeni zahtev za doradu",
+    "print-files-url": "Link ka fajlovima za štampu",
+    "print-files": "Fajlovi za štampu",
+    "open-print-files": "Otvori fajlove za štampu",
+    "edit-print-files-link": "Izmeni link ka fajlovima",
+    "add-print-files-link": "Dodaj link ka fajlovima",
+    "clear-print-files-link": "Ukloni link",
+    "clear-print-files-confirm": "Ukloniti link ka fajlovima za štampu?",
+    "print-files-updated": "Link ka fajlovima je ažuriran",
+    "print-files-update-failed": "Izmena linka nije uspela"
 }

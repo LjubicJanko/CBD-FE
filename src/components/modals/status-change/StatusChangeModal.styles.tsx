@@ -22,6 +22,7 @@ export const StatusChangeModalContainer = styled(CbdModal)`
     .comment-input {
     }
     .comment-input,
+    .print-files-input,
     .postal-service-input,
     .postal-code-input {
       width: 100%;

@@ -131,3 +131,29 @@ export const trackingUrl: Record<PostServices, string> = {
   post: 'https://www.posta.rs/cir/alati/pracenje-posiljke.aspx',
   bex: 'https://bexexpress.rs/pracenje-posiljke',
 };
+
+const PRINT_FILES_URL_MAX_LENGTH = 2048;
+// eslint-disable-next-line no-control-regex
+const WHITESPACE_OR_CONTROL = /[\s\u0000-\u001f\u007f]/;
+
+// Mirrors the backend rule: absolute https, no userinfo, no whitespace or
+// control characters, at most 2048 characters. Expects a trimmed value.
+export const isValidPrintFilesUrl = (value: string): boolean => {
+  if (value.length > PRINT_FILES_URL_MAX_LENGTH) return false;
+  if (WHITESPACE_OR_CONTROL.test(value)) return false;
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === 'https:' &&
+      url.username === '' &&
+      url.password === '' &&
+      url.hostname !== ''
+    );
+  } catch {
+    return false;
+  }
+};
+
+// Render guard for stored values: only https:// may ever become an href.
+export const isSafeHttpsHref = (value?: string | null): value is string =>
+  typeof value === 'string' && /^https:\/\//i.test(value);

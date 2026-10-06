@@ -14,7 +14,7 @@ import {
   OrderStatus,
   PostServices,
 } from '../../../types/Order';
-import { getNextStatus } from '../../../util/util';
+import { getNextStatus, isValidPrintFilesUrl } from '../../../util/util';
 import { orderService } from '../../../api';
 import { useTranslation } from 'react-i18next';
 import OrdersContext from '../../../store/OrdersProvider/Orders.context';
@@ -32,6 +32,7 @@ export type StatusData = {
   closingComment?: string;
   postalCode?: string;
   postalService?: string;
+  printFilesUrl?: string | null;
 };
 
 const postServices: PostServices[] = ['d', 'city', 'aks', 'post', 'bex'];
@@ -49,17 +50,24 @@ const StatusChangeModal = ({
     closingComment: '',
     postalCode: '',
     postalService: '',
+    printFilesUrl: '',
   };
 
   const nextStatus = getNextStatus(currentStatus);
 
   const isShipReady = currentStatus === 'SHIP_READY';
+  const canAttachPrintFiles =
+    currentStatus === 'DESIGN' || currentStatus === 'PENDING';
 
   const onSubmit = useCallback(
     async (statusData: StatusData) => {
       try {
+        const trimmedUrl = statusData.printFilesUrl?.trim();
         const response: OrderMutationResponse =
-          await orderService.changeStatus(orderId, statusData);
+          await orderService.changeStatus(orderId, {
+            ...statusData,
+            printFilesUrl: canAttachPrintFiles && trimmedUrl ? trimmedUrl : null,
+          });
         applyOrderResponse(response);
         onClose();
       } catch (error) {
@@ -67,7 +75,7 @@ const StatusChangeModal = ({
         showSnackbar(t('status-change-failed'), 'error');
       }
     },
-    [onClose, orderId, applyOrderResponse, showSnackbar, t]
+    [onClose, orderId, canAttachPrintFiles, applyOrderResponse, showSnackbar, t]
   );
 
   const validationSchema = Yup.object({
@@ -81,6 +89,14 @@ const StatusChangeModal = ({
         ? schema.required(t('validation.required.postal-service'))
         : schema.notRequired();
     }),
+    printFilesUrl: Yup.string().test(
+      'print-files-url',
+      t('validation.invalid.print-files-url'),
+      (value) => {
+        const trimmed = (value ?? '').trim();
+        return trimmed === '' || isValidPrintFilesUrl(trimmed);
+      }
+    ),
   });
 
   const formik = useFormik<StatusData>({
@@ -113,6 +129,25 @@ const StatusChangeModal = ({
             multiline
             rows={4}
           />
+          {canAttachPrintFiles && (
+            <TextField
+              className="print-files-input"
+              label={t('print-files-url')}
+              name="printFilesUrl"
+              type="text"
+              value={formik.values.printFilesUrl ?? ''}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={!!formik.errors.printFilesUrl}
+              helperText={formik.errors.printFilesUrl}
+              inputProps={{
+                'aria-describedby': formik.errors.printFilesUrl
+                  ? 'print-files-input-error'
+                  : undefined,
+              }}
+              FormHelperTextProps={{ id: 'print-files-input-error' }}
+            />
+          )}
           {isShipReady && (
             <>
               <FormControl fullWidth>

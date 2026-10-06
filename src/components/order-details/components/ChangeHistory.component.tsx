@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { OrderExecutionStatusEnum, OrderStatusEnum, OrderStatusHistory } from '../../../types/Order';
 import * as Styled from './ChangeHistory.styles';
+import PrintFilesLink from '../../print-files-link/PrintFilesLink.component';
+import { isSafeHttpsHref } from '../../../util/util';
 import { ShippedInfoTooltip } from './shipped-tooltip/ShippedTooltip.component';
 
 export type ChangeHistoryProps = {
@@ -96,6 +98,13 @@ const ChangeHistoryComponent = ({ orderId, statusHistory }: ChangeHistoryProps) 
                 {row.eventType === 'COMBINED' && row.relatedOrderNames?.length
                   ? t('combined-with', { names: row.relatedOrderNames.join(', ') })
                   : row.closingComment}
+                {row.status === OrderStatusEnum.PRINT_READY &&
+                  row.eventType !== 'COMBINED' &&
+                  isSafeHttpsHref(row.printFilesUrl) && (
+                    <div className="change-history__print-files">
+                      <PrintFilesLink url={row.printFilesUrl} />
+                    </div>
+                  )}
               </TableCell>
               <TableCell data-label={t('timestamp')} className="change-history__cell change-history__cell--timestamp">
                 <p>{dayjs(row.creationTime).format('DD.MM.YYYY HH:mm')}</p>

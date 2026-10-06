@@ -133,7 +133,8 @@
             "sale-price": "Sale price must be positive number",
             "acquisition-cost": "Acquisition cost must be positive number",
             "zipCode": "Zip code is invalid",
-            "phone": "Phone number is invalid"
+            "phone": "Phone number is invalid",
+            "print-files-url": "Enter a valid https link"
         },
         "required": {
             "name": "Name is a required field.",
@@ -541,5 +542,14 @@
     "tenant-not-found": "Tenant not found",
     "extension-update-error": "Failed to update extension request",
     "extension-updated": "Extension request updated",
-    "edit-extension": "Edit extension request"
+    "edit-extension": "Edit extension request",
+    "print-files-url": "Print files link",
+    "print-files": "Print files",
+    "open-print-files": "Open print files",
+    "edit-print-files-link": "Edit print files link",
+    "add-print-files-link": "Add print files link",
+    "clear-print-files-link": "Remove link",
+    "clear-print-files-confirm": "Remove the print files link?",
+    "print-files-updated": "Print files link updated",
+    "print-files-update-failed": "Could not update the print files link"
 }
